@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:hsr="http://schemas.android.com/apk/res/ch.hsr.rocketcolibri"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FF001B"
+    android:orientation="vertical"
+    android:padding="0px" >
+
+    <SurfaceView
+        android:id="@+id/camView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+    </SurfaceView>
+
+    <ch.hsr.rocketcolibri.widget.Circle
+        android:id="@+id/circle1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        hsr:backgroundResource="@drawable/cross"
+        hsr:diameterInDP="220"
+        hsr:orientationSide="Left"
+        hsr:positionInPercentX="20"
+        hsr:positionInPercentY="60" />
+
+    <ch.hsr.rocketcolibri.widget.Circle
+        android:id="@+id/circle2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        hsr:backgroundResource="@drawable/cross"
+        hsr:diameterInDP="120"
+        hsr:orientationSide="Right"
+        hsr:positionInPercentX="20"
+        hsr:positionInPercentY="60" />
+
+    <Button
+        android:id="@+id/btnHotter"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:padding="0px"
+        android:text="Hotter" />
+
+    <Button
+        android:id="@+id/btnColder"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:padding="0px"
+        android:text="Colder" />
+
+
+
+</FrameLayout>

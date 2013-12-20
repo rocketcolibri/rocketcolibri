@@ -54,7 +54,7 @@
 
 
 <!--            </FrameLayout> -->
-           <ch.hsr.rocketcolibri.SwipeInMenu
+           <ch.hsr.rocketcolibri.widget.SwipeInMenu
                 android:id="@+id/meter1"
                 android:translationX="0dp"
                 android:translationY="120dp"

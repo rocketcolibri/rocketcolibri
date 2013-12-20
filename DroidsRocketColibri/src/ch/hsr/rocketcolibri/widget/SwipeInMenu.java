@@ -1,6 +1,7 @@
-package ch.hsr.rocketcolibri;
+package ch.hsr.rocketcolibri.widget;
 
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.R.styleable;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.gesture.GestureOverlayView;
@@ -21,7 +22,7 @@ public class SwipeInMenu extends FrameLayout{
 
 	private GestureOverlayView touchContent;
 	private float lastPosition;
-	private int moveOffset = 200;
+	private int moveOffset = 100;
 	
 	private boolean isVisible = false;
 	
@@ -82,8 +83,8 @@ public class SwipeInMenu extends FrameLayout{
 		touchContent.setTranslationY(0);
 		touchContent.setTranslationX(0);
 		touchContent.setBackgroundColor(Color.BLACK);
-		touchContent.setLayoutParams(new LayoutParams(getScreenWidth(), 40));
-		setTranslationY(getScreenHeight()-40);
+		touchContent.setLayoutParams(new LayoutParams(getScreenWidth(), 70));
+		setTranslationY(getScreenHeight()-70);
 		setTranslationX(0);
 		setLayoutParams(new LayoutParams(getScreenWidth(), 200));
 
@@ -161,7 +162,7 @@ public class SwipeInMenu extends FrameLayout{
 	
 	private TranslateAnimation createYAnimation(final float yTo){
 		 TranslateAnimation animation = new TranslateAnimation( 0, this.getX() , 0, yTo - SwipeInMenu.this.getY());
-		 animation.setDuration(500);
+		 animation.setDuration(300);
 		 animation.setAnimationListener(new AnimationListener() {
             public void onAnimationStart(Animation animation) {
             }
