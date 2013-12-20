@@ -1,6 +1,7 @@
-package ch.hsr.flightcontroller;
+package ch.hsr.rocketcolibri;
 
-import ch.hsr.flightcontroller.util.SystemUiHider;
+import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.util.SystemUiHider;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;

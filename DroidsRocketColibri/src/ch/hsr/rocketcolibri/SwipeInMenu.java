@@ -1,8 +1,8 @@
-package ch.hsr.flightcontroller;
+package ch.hsr.rocketcolibri;
 
 import java.util.ArrayList;
 
-import ch.hsr.flightcontroller.R;
+import ch.hsr.rocketcolibri.R;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;

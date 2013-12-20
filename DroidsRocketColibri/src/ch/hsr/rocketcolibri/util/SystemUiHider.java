@@ -1,4 +1,4 @@
-package ch.hsr.flightcontroller.util;
+package ch.hsr.rocketcolibri.util;
 
 import android.app.Activity;
 import android.os.Build;
