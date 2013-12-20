@@ -148,6 +148,7 @@ public class SwipeInMenu extends FrameLayout{
 //	            Log.d("onTouchonTouchonTouch", String.valueOf((int) event.getX()));
 //	            Log.d("onTouchonTouchonTouch", String.valueOf((int) event.getX()));
             	float y = event.getY();
+
 	            switch (action & MotionEvent.ACTION_MASK) {
 
 	                case MotionEvent.ACTION_DOWN: {
@@ -156,17 +157,18 @@ public class SwipeInMenu extends FrameLayout{
 //	                    Log.d("ACTION_DOWN xCoord", String.valueOf((int) event.getX()));
 	                    Log.d("ACTION_DOWN yCoord", String.valueOf((int) event.getY()));
 	                    beginDragging = true;
-	                    lastPosition = SwipeInMenu.this.getTranslationY();
+	                    lastPosition = SwipeInMenu.this.getY();
 	                    Log.d("move", String.valueOf(lastPosition));
 	                    break;
 	                }case MotionEvent.ACTION_MOVE:{
-
+	            		Log.d("getTranslationY", String.valueOf(SwipeInMenu.this.getTranslationY()));
+	            		Log.d("getY", String.valueOf(SwipeInMenu.this.getY()));
 //	                    xCoord.setText(String.valueOf((int) event.getX()));
 //	                    yCoord.setText(String.valueOf((int) event.getY()));
 //	                    Log.d("ACTION_MOVE xCoord", String.valueOf((int) event.getX()));
 	                    Log.d("ACTION_MOVE yCoord", String.valueOf((int) event.getY()));
-	                    SwipeInMenu.this.setTranslationY(SwipeInMenu.this.getTranslationY()+event.getY());
-	                    Log.d("move", String.valueOf(SwipeInMenu.this.getTranslationY()));
+	                    SwipeInMenu.this.setY(SwipeInMenu.this.getY()+event.getY());
+	                    Log.d("move", String.valueOf(SwipeInMenu.this.getY()));
 	                    break;
 	                }
 	                case MotionEvent.ACTION_OUTSIDE:{
@@ -184,11 +186,12 @@ public class SwipeInMenu extends FrameLayout{
 	                }case MotionEvent.ACTION_UP:{
 	                	Log.d("ACTION_UP", String.valueOf(getResources().getDisplayMetrics().heightPixels));
 	                	Log.d("ACTION_UP","ACTION_HOVER_EXIT" + String.valueOf(lastPosition) +  " " + String.valueOf(SwipeInMenu.this.getTranslationY()));
-	                	SwipeInMenu.this.setTranslationY(SwipeInMenu.this.getTranslationY()+event.getY());
+//	                	SwipeInMenu.this.setTranslationY(SwipeInMenu.this.getTranslationY()+event.getY());
+
 	                	if(lastPosition+100<SwipeInMenu.this.getTranslationY()){
-	                		animateIn();
-	                	}else if(lastPosition-100>SwipeInMenu.this.getTranslationY()){
 	                		animateOut();
+	                	}else if(lastPosition-100>SwipeInMenu.this.getTranslationY()){
+	                		animateIn();
 	                	}
 	                	break;
 	                }case MotionEvent.ACTION_MASK:{
@@ -205,47 +208,26 @@ public class SwipeInMenu extends FrameLayout{
 
 	    });
 		
-		
-//		if(positionInDefaultPortrait.toLowerCase().equals("left")){
-//			setTranslationX(percentInDP(dpWidth, positionInPercentX)-getMeasuredWidth()/2);
-//		}else if(orientationSide.toLowerCase().equals("right")){
-//			setTranslationX(dpWidth-percentInDP(dpWidth, positionInPercentX)-getMeasuredWidth()/2);
-//		}else if(positionInDefaultPortrait.toLowerCase().equals("bottom")){
-//			
-//		}else if(positionInDefaultPortrait.toLowerCase().equals("top")){
-//			
-//		}
-	}
-	
-	private void animateIn(){
-		
-		float yTo = percentInDP(getResources().getDisplayMetrics().heightPixels,80);
-		Log.d("animateIn", String.valueOf("from: "+SwipeInMenu.this.getTranslationY())+ " to: "+String.valueOf(yTo));
-		//public TranslateAnimation (int fromXType, float fromXValue, int toXType, float toXValue, int fromYType, float fromYValue, int toYType, float toYValue)
-		TranslateAnimation animation = createYAnimation(0.5f);
-//    				new TranslateAnimation(
-//    				SwipeInMenu.this.getTranslationX(),
-//    				SwipeInMenu.this.getTranslationX(),
-//    				SwipeInMenu.this.getTranslationY(),
-//    				yTo);
-    		animation.setDuration(3300);
-//    		animation.setFillAfter(true); 
-    		SwipeInMenu.this.startAnimation(animation);
 	}
 	
 	private void animateOut(){
-		blaa();
-//		float yTo = percentInDP(getResources().getDisplayMetrics().heightPixels,5);
-//		Log.d("animateOut", String.valueOf("from: "+SwipeInMenu.this.getTranslationY())+ " to: "+String.valueOf(yTo));
-//    		TranslateAnimation animation = createYAnimation(0.8f);
-////    				new TranslateAnimation(
-////    				SwipeInMenu.this.getTranslationX(),
-////    				SwipeInMenu.this.getTranslationX(),
-////    				SwipeInMenu.this.getTranslationY(),
-////    				yTo);
-//    		animation.setDuration(3300);
-////    		animation.setFillAfter(true); 
-//    		SwipeInMenu.this.startAnimation(animation);
+		Log.d("heightPixels", String.valueOf(getResources().getDisplayMetrics().heightPixels));
+		Log.d("widthPixels", String.valueOf(getResources().getDisplayMetrics().widthPixels));
+		Log.d("ydpi", String.valueOf(getResources().getDisplayMetrics().ydpi));
+		Log.d("xdpi", String.valueOf(getResources().getDisplayMetrics().xdpi));
+
+		final float yTo = percentInDP(getResources().getDisplayMetrics().heightPixels,90);
+		Log.d("animateIn", String.valueOf("from: "+SwipeInMenu.this.getTranslationY())+ " to: "+String.valueOf(yTo));
+		Log.d("getBottom",""+SwipeInMenu.this.getBottom());
+		//public TranslateAnimation (int fromXType, float fromXValue, int toXType, float toXValue, int fromYType, float fromYValue, int toYType, float toYValue)
+		TranslateAnimation animation = createYAnimationOut(yTo);
+    	SwipeInMenu.this.startAnimation(animation);
+	}
+	
+	private void animateIn(){
+		final float yTo = percentInDP(getResources().getDisplayMetrics().heightPixels,30);
+		TranslateAnimation animation = createYAnimationOut(yTo);
+    	SwipeInMenu.this.startAnimation(animation);
 	}
 	
 	
@@ -291,9 +273,48 @@ public class SwipeInMenu extends FrameLayout{
          isUp = !isUp;
 	}
 	
-	private TranslateAnimation createYAnimation(float yTo){
+	private TranslateAnimation createYAnimationOut(final float yTo){
 		Log.d("createYAnimation", " to: "+String.valueOf(yTo));
-		return new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, yTo);
+		 TranslateAnimation animation = new TranslateAnimation( 0, this.getX() , 0, yTo - SwipeInMenu.this.getY());
+		 animation.setDuration(500);
+//		 animation.setFillAfter( true );
+		 animation.setAnimationListener(new AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+            }
+            public void onAnimationRepeat(Animation animation) {
+            }
+            public void onAnimationEnd(Animation animation) {
+                SwipeInMenu.this.setY(yTo);
+                TranslateAnimation anim = new TranslateAnimation(0.0f, 0.0f, 0.0f, 0.0f);
+                anim.setDuration(1);
+                startSwipeAnimation(anim);
+            }
+        });
+		return animation;
+		
+//		return new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, yTo);
+	}
+	
+	private TranslateAnimation createYAnimationIn(final float yTo){
+		Log.d("createYAnimation", " to: "+String.valueOf(yTo));
+		 TranslateAnimation animation = new TranslateAnimation( 0, this.getX() , 0, SwipeInMenu.this.getY() - yTo);
+		 animation.setDuration(500);
+//		 animation.setFillAfter( true );
+		 animation.setAnimationListener(new AnimationListener() {
+            public void onAnimationStart(Animation animation) {
+            }
+            public void onAnimationRepeat(Animation animation) {
+            }
+            public void onAnimationEnd(Animation animation) {
+                SwipeInMenu.this.setY(yTo);
+                TranslateAnimation anim = new TranslateAnimation(0.0f, 0.0f, 0.0f, 0.0f);
+                anim.setDuration(1);
+                startSwipeAnimation(anim);
+            }
+        });
+		return animation;
+		
+//		return new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, yTo);
 	}
 	
 	private float percentInDP(float displayDP, int percent){
