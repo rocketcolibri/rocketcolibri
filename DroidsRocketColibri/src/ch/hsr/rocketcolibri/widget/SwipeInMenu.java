@@ -3,6 +3,7 @@ package ch.hsr.rocketcolibri.widget;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.R.styleable;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.gesture.GestureOverlayView;
 import android.graphics.Color;
@@ -75,16 +76,16 @@ public class SwipeInMenu extends FrameLayout{
 	}
 	
 	public void initSwiping() {
-		
+    	Log.d("ACTION_UP", String.valueOf(getScreenHeight()));
 	    float density  = getResources().getDisplayMetrics().density;
 	    float dpHeight = getScreenHeight() / density;
 	    float dpWidth  = getScreenWidth() / density;
 
 		touchContent.setTranslationY(0);
 		touchContent.setTranslationX(0);
-		touchContent.setBackgroundColor(Color.BLACK);
-		touchContent.setLayoutParams(new LayoutParams(getScreenWidth(), 70));
-		setTranslationY(getScreenHeight()-70);
+		touchContent.setBackgroundColor(Color.GREEN);
+		touchContent.setLayoutParams(new LayoutParams(getScreenWidth(), 60));
+		setTranslationY(getYOut());
 		setTranslationX(0);
 		setLayoutParams(new LayoutParams(getScreenWidth(), 200));
 
@@ -146,17 +147,25 @@ public class SwipeInMenu extends FrameLayout{
 	}
 	
 	private void animateOut(){
-		final float yTo = percentInDP(getScreenHeight(),90);
+		final float yTo = getYOut();
 		TranslateAnimation animation = createYAnimation(yTo);
     	SwipeInMenu.this.startAnimation(animation);
     	isVisible = true;
 	}
 	
 	private void animateIn(){
-		final float yTo = percentInDP(getScreenHeight(),20);
+		final float yTo = getYIn();
 		TranslateAnimation animation = createYAnimation(yTo);
     	SwipeInMenu.this.startAnimation(animation);
     	isVisible = false;
+	}
+	
+	private float getYOut(){
+		return percentInDP(getScreenHeight(),80);
+	}
+	
+	private float getYIn(){
+		return percentInDP(getScreenHeight(),20);
 	}
 	
 	
@@ -196,5 +205,13 @@ public class SwipeInMenu extends FrameLayout{
 	
 	private void startSwipeAnimation(Animation animation){
 		startAnimation(animation);
+	}
+	
+	public int getOrientationHeight(){
+		switch(getResources().getConfiguration().orientation){
+			case Configuration.ORIENTATION_PORTRAIT: return getScreenHeight();
+			case Configuration.ORIENTATION_LANDSCAPE: return getScreenWidth();
+			default: return getScreenHeight();
+		}
 	}
 }

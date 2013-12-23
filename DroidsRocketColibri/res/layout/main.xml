@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:hsr="http://schemas.android.com/apk/res/ch.hsr.rocketcolibri"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#FF001B"
-    android:orientation="vertical"
-    android:padding="0px" >
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:hsr="http://schemas.android.com/apk/res/ch.hsr.rocketcolibri"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0099cc"
+    tools:context=".CircleTestActivity" >
 
     <SurfaceView
         android:id="@+id/camView"
@@ -33,6 +33,15 @@
         hsr:positionInPercentX="20"
         hsr:positionInPercentY="60" />
 
+    <ch.hsr.rocketcolibri.widget.SwipeInMenu
+        android:id="@+id/meter1"
+        android:layout_width="fill_parent"
+        android:layout_height="120dp"
+        android:background="#F5E6A2"
+        android:translationX="0dp"
+        android:translationY="120dp"
+        hsr:positionInDefaultPortrait="bottom" />
+
     <Button
         android:id="@+id/btnHotter"
         android:layout_width="0px"
@@ -48,7 +57,5 @@
         android:layout_weight="0.5"
         android:padding="0px"
         android:text="Colder" />
-
-
 
 </FrameLayout>
