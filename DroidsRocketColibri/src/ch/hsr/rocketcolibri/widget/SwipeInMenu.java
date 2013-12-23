@@ -102,7 +102,7 @@ public class SwipeInMenu extends FrameLayout{
 	            		Log.d("getTranslationY", String.valueOf(SwipeInMenu.this.getTranslationY()));
 	            		Log.d("getY", String.valueOf(SwipeInMenu.this.getY()));
 	                    Log.d("ACTION_MOVE yCoord", String.valueOf((int) event.getY()));
-	                    SwipeInMenu.this.setY(SwipeInMenu.this.getY()+event.getY());
+	                    SwipeInMenu.this.setY(event.getRawY()-(float)SwipeInMenu.this.getHeight());
 	                    Log.d("move", String.valueOf(SwipeInMenu.this.getY()));
 	                    break;
 	                }
