@@ -26,6 +26,14 @@ public class ProtocolChannelData {
 	private int[] allChannels;
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	private Future<?> executorFuture=null;
+	
+	/**
+	 * opens a UDP socket for the communication with the ServoController
+	 *  
+	 * @param port 30001
+	 * @param ia, IP address of the ServoController is normally 192.168.200.1
+	 * @param numberOfChannels, how many channels must be controlled by this instance
+	 */
 	ProtocolChannelData(int port, String ia, int numberOfChannels)
 	{
 		// initialize unicast datagram socket
