@@ -18,7 +18,6 @@ import android.util.Log;
 
 public class ProtocolChannelData {
 	final String TAG = this.getClass().getName();
-	
 	int port;
 	InetAddress address;
 	DatagramSocket channelDataSocket;
@@ -52,7 +51,6 @@ public class ProtocolChannelData {
 		} 
 
 		// create & initialize channel array
-		
 		allChannels = new int[numberOfChannels];
 		for(int c=0; c < numberOfChannels; c++)
 			allChannels[c] = 0;
@@ -135,13 +133,16 @@ public class ProtocolChannelData {
 	/**
 	 * set channel
 	 * @param channel channel number
-	 * @param channel value
+	 * @param channel value 0..1000
 	 */
 	public void setChannel(int channel, int value)
 	{
-		if(channel < this.allChannels.length)
+		
+		if((channel < this.allChannels.length) && (value >= 0 && value <= 1000))
 		{
 			this.allChannels[channel] = value;
 		}
+		else
+			Log.d(TAG, "invalid channel" + channel + " or value " + value);
 	}
 }
