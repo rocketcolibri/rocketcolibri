@@ -102,8 +102,8 @@ public class CircleTestActivity extends Activity implements OnClickListener,
 		
 		// Start Rocket ColibriProtocol service
 		// TODO
-		// Intent intent = new Intent(this, RocketColibriProtocol.class);
-		// bindService(intent, mRocketColibriProtocolService, Context.BIND_AUTO_CREATE);
+		Intent intent = new Intent(this, RocketColibriProtocol.class);
+		bindService(intent, mRocketColibriProtocolService, Context.BIND_AUTO_CREATE);
 	}
 
 	@Override

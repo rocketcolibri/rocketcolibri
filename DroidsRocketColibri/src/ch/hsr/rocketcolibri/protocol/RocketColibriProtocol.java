@@ -28,16 +28,11 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-
-
 public class RocketColibriProtocol extends  Service
 {
-	public static final long CHECK_CONNECTION_INTERVAL = 3 * 1000; // 3 seconds
-	final String SSID_NAME = new String("RocketColibri");
-	
-	 // Binder given to clients
-    private final IBinder mBinder = new RocketColibriProtocolBinder();
-   
+	private static final long CHECK_CONNECTION_INTERVAL = 3 * 1000; // 3 seconds
+	private final String SSID_NAME = new String("RocketColibri");
+	private final IBinder mBinder = new RocketColibriProtocolBinder(); 
 
     /**
      * Class used for the client Binder.  Because we know this service always
@@ -61,7 +56,7 @@ public class RocketColibriProtocol extends  Service
 	private Future<?> executorFuture=null;
 	private Timer mTimer = null;
 	private Handler mHandler = new Handler();
-
+	private boolean isConnected = false; 
 	
     @Override
     public IBinder onBind(Intent intent) 
@@ -88,23 +83,24 @@ public class RocketColibriProtocol extends  Service
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
-//		startBackgroundTask(intent, startId);
 		return Service.START_STICKY;
 	}
 	 
+	// timer task, checks periodically the connection to the ServoController
     class CheckRocketColibriConnection extends TimerTask 
     {
         @Override
         public void run() {
             // run on another thread
             mHandler.post(new Runnable() {
- 
+            	
                 @Override
-                public void run() {
-                	boolean isConnected = false;
-                	
+                public void run() 
+                {
                 	if(isConnected != isRocketColibriConnected())
                 	{
+                		// TODO send broadcast here
+                    	Log.d(TAG, "RocketColibri connection changed");
                 		Toast.makeText(getApplicationContext(), "changed", Toast.LENGTH_SHORT).show();
             			isConnected = !isConnected;
                 	}                    
@@ -113,29 +109,26 @@ public class RocketColibriProtocol extends  Service
         }
     }
     
+    /**
+     * Checks the connection to the ServoController which has the SSID RocketColibri
+     * @return true if connected, false if not
+     */
 	public boolean isRocketColibriConnected()
 	{
-		
 		WifiManager mainWifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 	    WifiInfo currentWifi = mainWifi.getConnectionInfo();
 	    boolean connected = true;
 	    if(currentWifi != null)
 	    {
 	        if(currentWifi.getSSID() != null) 
-	        {
 	            connected =(currentWifi.getSSID().equals(SSID_NAME));
-	        }
 	    }
 
         if (connected)
-        {
         	Log.d(TAG, "RocketColibri connected");
-        }
         else
-        {
         	Log.d(TAG, "RocketColibri not connected");
-        }
-        
+
 	    return connected;
 	}
 	
@@ -150,15 +143,21 @@ public class RocketColibriProtocol extends  Service
 	{
 		// initialize unicast datagram socket
 		this.port = port;
-		try {
+		try 
+		{
 			this.address = InetAddress.getByName( ia );
-		} catch (UnknownHostException e1) {
+		}
+		catch (UnknownHostException e1) 
+		{
 			e1.printStackTrace();
 	        Log.d( TAG, "Failed to resolve ip address due to UnknownException: " + e1.getMessage() );       
 		}
-		try {
+		try
+		{
 			channelDataSocket = new DatagramSocket();
-		} catch (SocketException e) {
+		}
+		catch (SocketException e) 
+		{
 			Log.d( TAG, "Failed to create socket due to SocketException: " + e.getMessage() );
 			e.printStackTrace();
 		} 
@@ -182,9 +181,9 @@ public class RocketColibriProtocol extends  Service
 	/**
 	 * sends a ChannelDataCommand every 20ms
 	 */
-	public void sendChannelDataCommand() {
+	public void sendChannelDataCommand() 
+	{
 		cancelOldCommandJob();
-		
 		final Runnable every20ms = new Runnable() {
 			public void run() {
 				JSONObject cdcMsg = new JSONObject();
@@ -209,7 +208,9 @@ public class RocketColibriProtocol extends  Service
 		this.executorFuture = scheduler.scheduleAtFixedRate(every20ms, 0, 20, TimeUnit.MILLISECONDS);
 	}
 
-	/** cancel the running command Executor */
+	/**
+	 *  cancel the running command Executor
+	 */
 	private void cancelOldCommandJob()
 	{
 		if(null != this.executorFuture)
@@ -222,24 +223,29 @@ public class RocketColibriProtocol extends  Service
 	/**
 	 * sends a Hello Command every 100ms
 	 */
-	public void sendHelloCommand() {
+	public void sendHelloCommand() 
+	{
 		cancelOldCommandJob();
-		final Runnable every100ms = new Runnable() {
-			public void run() {
+		final Runnable every100ms = new Runnable() 
+		{
+			public void run() 
+			{
 				JSONObject cdcMsg = new JSONObject();
-				try {
+				try 
+				{
 					cdcMsg.put("v", 1);
 					cdcMsg.put("cmd", "hello");
 					cdcMsg.put("sequence", sequenceNumber++);
 					cdcMsg.put("name", "Lorenz");
-				} catch (JSONException e) {
+				}
+				catch (JSONException e) 
+				{
 					Log.d( "JSON", "Failed to compose message: " + e.getMessage() );
 					e.printStackTrace();
 				}
 				sendJsonMsgString(cdcMsg.toString());
 			}
 		};
-
 		this.executorFuture = scheduler.scheduleAtFixedRate(every100ms, 0, 100, TimeUnit.MILLISECONDS);
 	}
 
@@ -250,7 +256,6 @@ public class RocketColibriProtocol extends  Service
 	 */
 	public void setChannel(int channel, int value)
 	{
-		
 		if((channel < this.allChannels.length) && (value >= 0 && value <= 1000))
 		{
 			this.allChannels[channel] = value;
