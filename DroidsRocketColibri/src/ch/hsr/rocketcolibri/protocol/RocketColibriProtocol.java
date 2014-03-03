@@ -6,17 +6,51 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.os.Binder;
+import android.os.Handler;
+import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
-public class ProtocolChannelData {
+
+
+public class RocketColibriProtocol extends  Service
+{
+	public static final long CHECK_CONNECTION_INTERVAL = 3 * 1000; // 3 seconds
+	final String SSID_NAME = new String("RocketColibri");
+	
+	 // Binder given to clients
+    private final IBinder mBinder = new RocketColibriProtocolBinder();
+   
+
+    /**
+     * Class used for the client Binder.  Because we know this service always
+     * runs in the same process as its clients, we don't need to deal with IPC.
+     */
+    public class RocketColibriProtocolBinder extends Binder
+    {
+    	public RocketColibriProtocol getService() {
+            // Return this instance of RocketColibriProtocol so clients can call public methods
+            return RocketColibriProtocol.this;
+        }
+    }
+
 	final String TAG = this.getClass().getName();
 	int port;
 	InetAddress address;
@@ -25,6 +59,85 @@ public class ProtocolChannelData {
 	private int[] allChannels;
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	private Future<?> executorFuture=null;
+	private Timer mTimer = null;
+	private Handler mHandler = new Handler();
+
+	
+    @Override
+    public IBinder onBind(Intent intent) 
+    {
+        return mBinder;
+    }
+	
+	 @Override
+	 public void onCreate() 
+	 {
+		 super.onCreate();
+		Log.d(TAG, "started");
+        // cancel if already existed
+        if(mTimer != null) {
+            mTimer.cancel();
+        } else {
+            // recreate new
+            mTimer = new Timer();
+        }
+        // schedule task
+        mTimer.scheduleAtFixedRate(new CheckRocketColibriConnection(), 0, CHECK_CONNECTION_INTERVAL);
+    }
+	 
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId)
+	{
+//		startBackgroundTask(intent, startId);
+		return Service.START_STICKY;
+	}
+	 
+    class CheckRocketColibriConnection extends TimerTask 
+    {
+        @Override
+        public void run() {
+            // run on another thread
+            mHandler.post(new Runnable() {
+ 
+                @Override
+                public void run() {
+                	boolean isConnected = false;
+                	
+                	if(isConnected != isRocketColibriConnected())
+                	{
+                		Toast.makeText(getApplicationContext(), "changed", Toast.LENGTH_SHORT).show();
+            			isConnected = !isConnected;
+                	}                    
+                }
+            });
+        }
+    }
+    
+	public boolean isRocketColibriConnected()
+	{
+		
+		WifiManager mainWifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+	    WifiInfo currentWifi = mainWifi.getConnectionInfo();
+	    boolean connected = true;
+	    if(currentWifi != null)
+	    {
+	        if(currentWifi.getSSID() != null) 
+	        {
+	            connected =(currentWifi.getSSID().equals(SSID_NAME));
+	        }
+	    }
+
+        if (connected)
+        {
+        	Log.d(TAG, "RocketColibri connected");
+        }
+        else
+        {
+        	Log.d(TAG, "RocketColibri not connected");
+        }
+        
+	    return connected;
+	}
 	
 	/**
 	 * opens a UDP socket for the communication with the ServoController
@@ -33,7 +146,7 @@ public class ProtocolChannelData {
 	 * @param ia, IP address of the ServoController is normally 192.168.200.1
 	 * @param numberOfChannels, how many channels must be controlled by this instance
 	 */
-	ProtocolChannelData(int port, String ia, int numberOfChannels)
+	public void ProtocolChannelData(int port, String ia, int numberOfChannels)
 	{
 		// initialize unicast datagram socket
 		this.port = port;

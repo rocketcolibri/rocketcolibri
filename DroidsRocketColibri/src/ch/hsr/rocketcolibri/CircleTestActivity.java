@@ -3,11 +3,18 @@ package ch.hsr.rocketcolibri;
 import java.io.IOException;
 
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
+import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol.RocketColibriProtocolBinder;
 import ch.hsr.rocketcolibri.widget.Circle;
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -58,7 +65,20 @@ public class CircleTestActivity extends Activity implements OnClickListener,
 	Button btnColder;
 	Circle meter1;
 	Circle meter2;
-
+	private RocketColibriProtocol protocolService;
+	private ServiceConnection mRocketColibriProtocolService = new ServiceConnection()	{
+		public void onServiceConnected(ComponentName className, IBinder binder)
+		{
+			protocolService = ((RocketColibriProtocol.RocketColibriProtocolBinder)binder).getService();
+			protocolService.ProtocolChannelData(30001, "192.168.200.1", 4);
+			protocolService.sendChannelDataCommand();
+		}
+		public void onServiceDisconnected(ComponentName className)
+		{
+			protocolService = null;
+		}
+	};
+		
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -79,6 +99,11 @@ public class CircleTestActivity extends Activity implements OnClickListener,
 
 		sh_callback = my_callback();
 		surface_holder.addCallback(sh_callback);
+		
+		// Start Rocket ColibriProtocol service
+		// TODO
+		// Intent intent = new Intent(this, RocketColibriProtocol.class);
+		// bindService(intent, mRocketColibriProtocolService, Context.BIND_AUTO_CREATE);
 	}
 
 	@Override
