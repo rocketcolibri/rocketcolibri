@@ -45,6 +45,13 @@ public final class Circle extends View {
 
 	private static final float rimSize       = 0.02f;
 
+	OnCircleEventListener mListener;
+	
+	public void setOnCircleEventListener(OnCircleEventListener onCircleEventListener) 
+	{
+		mListener=onCircleEventListener;
+	}
+	
 	public Circle(Context context) {
 		super(context);
 		init(context, null);
@@ -265,15 +272,12 @@ public final class Circle extends View {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		float scale = (float) getWidth();		
+		float scale = (float) getWidth();
 		canvas.save(Canvas.MATRIX_SAVE_FLAG);
 		canvas.scale(scale, scale);
-
 		drawRim(canvas);
 		drawFace(canvas);
-		
 		canvas.restore();
-	
 	}
 
 //	@Override

@@ -4,17 +4,21 @@ import java.io.IOException;
 
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
-import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol.RocketColibriProtocolBinder;
 import ch.hsr.rocketcolibri.widget.Circle;
+import ch.hsr.rocketcolibri.widget.OnCircleEventListener;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -24,12 +28,42 @@ import android.widget.Button;
 
 public class CircleTestActivity extends Activity implements OnClickListener,
 		OnLongClickListener {
+	private static final String TAG = "CircleTestActivity";
 	private SurfaceView surface_view;
 	private Camera mCamera;
 	SurfaceHolder.Callback sh_ob = null;
 	SurfaceHolder surface_holder = null;
 	SurfaceHolder.Callback sh_callback = null;
 
+
+	// handler for received Intents for the "my-event" event 
+	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+	  @Override
+	  public void onReceive(Context context, Intent intent) {
+	    // Extract data included in the Intent
+	    Log.d(TAG, "Got intent: " + intent.getDataString());
+	  }
+	};
+	
+	@Override
+	public void onResume() 
+	{
+	  super.onResume();
+	  // Register mMessageReceiver to receive messages.
+	  LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+	      new IntentFilter("protocol.online"));
+	  LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+		      new IntentFilter("protocol.offline"));
+	}
+
+	@Override
+	protected void onPause()
+	{
+	  // Unregister since the activity is not visible
+	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+	  super.onPause();
+	}
+	
 	SurfaceHolder.Callback my_callback() {
 		SurfaceHolder.Callback ob1 = new SurfaceHolder.Callback() {
 
@@ -101,9 +135,25 @@ public class CircleTestActivity extends Activity implements OnClickListener,
 		surface_holder.addCallback(sh_callback);
 		
 		// Start Rocket ColibriProtocol service
-		// TODO
 		Intent intent = new Intent(this, RocketColibriProtocol.class);
 		bindService(intent, mRocketColibriProtocolService, Context.BIND_AUTO_CREATE);
+		
+		meter1.setOnCircleEventListener(new OnCircleEventListener()
+		{
+			@Override
+			public void onOnCircleEventMove(int x, int y)
+			{
+				Log.d(TAG, "received new position from meter1 x:" + x + " y:" + y);
+			}
+		});
+		meter2.setOnCircleEventListener(new OnCircleEventListener()
+		{
+			@Override
+			public void onOnCircleEventMove(int x, int y)
+			{
+				Log.d(TAG, "received new position from meter1 x:" + x + " y:" + y);
+			}
+		});
 	}
 
 	@Override

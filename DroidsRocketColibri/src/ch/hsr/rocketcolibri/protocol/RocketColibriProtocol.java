@@ -99,10 +99,19 @@ public class RocketColibriProtocol extends  Service
                 {
                 	if(isConnected != isRocketColibriConnected())
                 	{
-                		// TODO send broadcast here
-                    	Log.d(TAG, "RocketColibri connection changed");
-                		Toast.makeText(getApplicationContext(), "changed", Toast.LENGTH_SHORT).show();
             			isConnected = !isConnected;
+            			Intent intent = new Intent();
+            			if(isConnected)
+            			{
+            				Log.d(TAG, "RocketColibri connection changed");
+            				intent.setAction("protocol.online");
+            			}
+            			else
+            			{
+            				Log.d(TAG, "RocketColibri connection offline");
+            				intent.setAction("protocol.offline");
+            			}
+            			sendBroadcast(intent); 
                 	}                    
                 }
             });
