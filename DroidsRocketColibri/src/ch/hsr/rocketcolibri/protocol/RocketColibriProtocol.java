@@ -224,7 +224,7 @@ public class RocketColibriProtocol extends  Service
 	/**
 	 *  cancel the running command Executor
 	 */
-	private void cancelOldCommandJob()
+	public void cancelOldCommandJob()
 	{
 		if(null != this.executorFuture)
 		{

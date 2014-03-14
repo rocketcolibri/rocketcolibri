@@ -2,7 +2,6 @@ package ch.hsr.rocketcolibri.widget;
 
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
-import android.app.Service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,10 +21,7 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.view.accessibility.AccessibilityNodeInfo;
 import android.content.res.TypedArray;
 
 public final class Circle extends View {
@@ -49,16 +45,16 @@ public final class Circle extends View {
 
 	/**
 	 * converts the position read from the event to the channel position
-	 * @param p (event position)
+	 * @param eventPos (event position)
 	 * @return channel position
 	 */
-	public int eventPoistionToChannelValue(float p)
+	public int eventPoistionToChannelValue(float eventPos)
 	{
-		p = p * RocketColibriProtocol.MAX_CHANNEL_VALUE / diameterInDP;
-		if (p > RocketColibriProtocol.MAX_CHANNEL_VALUE) return RocketColibriProtocol.MAX_CHANNEL_VALUE;
-		else if (p < RocketColibriProtocol.MIN_CHANNEL_VALUE) return RocketColibriProtocol.MIN_CHANNEL_VALUE;
+		int channelPos = (int)(eventPos * RocketColibriProtocol.MAX_CHANNEL_VALUE / diameterInDP);
+		if (channelPos > RocketColibriProtocol.MAX_CHANNEL_VALUE) return RocketColibriProtocol.MAX_CHANNEL_VALUE;
+		else if (channelPos < RocketColibriProtocol.MIN_CHANNEL_VALUE) return RocketColibriProtocol.MIN_CHANNEL_VALUE;
 		else 
-			return (int)p;
+			return channelPos;
 	}
 	
 	/**

@@ -36,31 +36,40 @@ public class CircleTestActivity extends Activity implements OnClickListener,
 	SurfaceHolder.Callback sh_callback = null;
 
 
-	// handler for received Intents for the "my-event" event 
-	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+	// handler for received Intents for the online message event 
+	private BroadcastReceiver mOnlineMessageReceiver = new BroadcastReceiver() {
 	  @Override
 	  public void onReceive(Context context, Intent intent) {
 	    // Extract data included in the Intent
-	    Log.d(TAG, "Got intent: " + intent.getDataString());
+		if(protocolService != null) protocolService.sendChannelDataCommand();
+		Log.d(TAG, "online message received");
 	  }
 	};
-	
+
+	// handler for received Intents for the offline message event 
+	private BroadcastReceiver mOfflineMessageReceiver = new BroadcastReceiver() {
+	  @Override
+	  public void onReceive(Context context, Intent intent) {
+	    // Extract data included in the Intent
+		if(protocolService != null) protocolService.cancelOldCommandJob();
+	    Log.d(TAG, "offline message received");
+	  }
+	};
+
 	@Override
 	public void onResume() 
 	{
 	  super.onResume();
-	  // Register mMessageReceiver to receive messages.
-	  LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
-	      new IntentFilter("protocol.online"));
-	  LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
-		      new IntentFilter("protocol.offline"));
+	  LocalBroadcastManager.getInstance(this).registerReceiver(mOnlineMessageReceiver, new IntentFilter("protocol.online"));
+	  LocalBroadcastManager.getInstance(this).registerReceiver(mOfflineMessageReceiver, new IntentFilter("protocol.offline"));
 	}
 
 	@Override
 	protected void onPause()
 	{
 	  // Unregister since the activity is not visible
-	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mOnlineMessageReceiver);
+	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mOfflineMessageReceiver);
 	  super.onPause();
 	}
 	
@@ -105,7 +114,7 @@ public class CircleTestActivity extends Activity implements OnClickListener,
 		{
 			protocolService = ((RocketColibriProtocol.RocketColibriProtocolBinder)binder).getService();
 			protocolService.ProtocolChannelData(30001, "192.168.200.1", 4);
-			protocolService.sendChannelDataCommand();
+			
 		}
 		public void onServiceDisconnected(ComponentName className)
 		{
@@ -144,6 +153,7 @@ public class CircleTestActivity extends Activity implements OnClickListener,
 			public void onChannelChange(int position) 
 			{
 				Log.d(TAG, "received new H position from meter1:" + position);
+				if (protocolService != null) protocolService.setChannel(3, position);
 			}
 		});
 		meter1.setOnVChannelChangeListener(new OnChannelChangeListener ()
@@ -152,6 +162,7 @@ public class CircleTestActivity extends Activity implements OnClickListener,
 			public void onChannelChange(int position) 
 			{
 				Log.d(TAG, "received new V position from meter1:" + position);
+				if (protocolService != null) protocolService.setChannel(2, position);
 			}
 		});		
 		meter2.setOnHChannelChangeListener(new OnChannelChangeListener ()
@@ -160,6 +171,7 @@ public class CircleTestActivity extends Activity implements OnClickListener,
 			public void onChannelChange(int position) 
 			{
 				Log.d(TAG, "received new H position from meter2:" + position);
+				if (protocolService != null) protocolService.setChannel(0, position);
 			}
 		});
 		meter2.setOnVChannelChangeListener(new OnChannelChangeListener ()
@@ -168,6 +180,7 @@ public class CircleTestActivity extends Activity implements OnClickListener,
 			public void onChannelChange(int position) 
 			{
 				Log.d(TAG, "received new V position from meter2:" + position);
+				if (protocolService != null) protocolService.setChannel(1, position);
 			}
 		});
 	}
