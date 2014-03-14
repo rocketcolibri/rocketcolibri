@@ -1,6 +1,8 @@
 package ch.hsr.rocketcolibri.widget;
 
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
+import android.app.Service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -41,15 +43,75 @@ public final class Circle extends View {
 	private int positionInPercentX;
 	private int positionInPercentY;
 	private String orientationSide = "left";
-	private int diameterInDP;
-
+	public int diameterInDP;
+	public static final int maxChannel = 1000;
 	private static final float rimSize       = 0.02f;
 
-	public static OnCircleEventListener mListener;
-	
-	public void setOnCircleEventListener(OnCircleEventListener onCircleEventListener) 
+	/**
+	 * converts the position read from the event to the channel position
+	 * @param p (event position)
+	 * @return channel position
+	 */
+	public int eventPoistionToChannelValue(float p)
 	{
-		mListener=onCircleEventListener;
+		p = p * RocketColibriProtocol.MAX_CHANNEL_VALUE / diameterInDP;
+		if (p > RocketColibriProtocol.MAX_CHANNEL_VALUE) return RocketColibriProtocol.MAX_CHANNEL_VALUE;
+		else if (p < RocketColibriProtocol.MIN_CHANNEL_VALUE) return RocketColibriProtocol.MIN_CHANNEL_VALUE;
+		else 
+			return (int)p;
+	}
+	
+	/**
+	 * the MyOnTouchListener holds a horizontal an vertical channel listener
+	 */
+	class MyOnTouchListener implements OnTouchListener
+	{
+		private OnChannelChangeListener hChannel;
+		private OnChannelChangeListener vChannel;
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			Log.d("onTouchListener", 
+					String.valueOf(event.getAxisValue(MotionEvent.AXIS_Y)) + "," + 
+				    String.valueOf(event.getAxisValue(MotionEvent.AXIS_X)));
+	
+			if (hChannel != null)
+				hChannel.onChannelChange(eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_X)));
+			
+			if (vChannel != null)
+				vChannel.onChannelChange(eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_Y)));
+			
+			return false;
+		}
+		
+		public void setHOnChangeListener(OnChannelChangeListener cl)
+		{
+			hChannel = cl;
+		}
+		
+		public void setVOnChangeListener(OnChannelChangeListener cl)
+		{
+			vChannel = cl;
+		}
+	}
+	
+	private MyOnTouchListener mListener = new MyOnTouchListener();
+	
+	/**
+	 * set the onChannelChangeListener for the horizontal channel control
+	 * @param onChannelChangeListener
+	 */
+	public void setOnHChannelChangeListener(OnChannelChangeListener onChannelChangeListener) 
+	{
+		mListener.setHOnChangeListener(onChannelChangeListener);
+	}
+
+	/**
+	 * set the onChannelChangeListener for the vertical channel control
+	 * @param onChannelChangeListener
+	 */
+	public void setOnVChannelChangeListener(OnChannelChangeListener onChannelChangeListener) 
+	{
+		mListener.setVOnChangeListener(onChannelChangeListener);
 	}
 	
 	public Circle(Context context) {
@@ -143,19 +205,8 @@ public final class Circle extends View {
 				return false;
 			}
 		});
-		this.setOnTouchListener(new OnTouchListener(){
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				Log.d("onTouchListener", String.valueOf(event.getAxisValue(MotionEvent.AXIS_Y)));
-				if(Circle.mListener != null)
-				{
-					Circle.mListener.onOnCircleEventMove(MotionEvent.AXIS_X, MotionEvent.AXIS_Y);
-				}
-				return false;
-			}
-			
-		}); 
+		
+		this.setOnTouchListener(mListener); 
 	}
 
 	private void initDrawingTools() {

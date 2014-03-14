@@ -5,7 +5,7 @@ import java.io.IOException;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
 import ch.hsr.rocketcolibri.widget.Circle;
-import ch.hsr.rocketcolibri.widget.OnCircleEventListener;
+import ch.hsr.rocketcolibri.widget.OnChannelChangeListener;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -138,20 +138,36 @@ public class CircleTestActivity extends Activity implements OnClickListener,
 		Intent intent = new Intent(this, RocketColibriProtocol.class);
 		bindService(intent, mRocketColibriProtocolService, Context.BIND_AUTO_CREATE);
 		
-		meter1.setOnCircleEventListener(new OnCircleEventListener()
+		meter1.setOnHChannelChangeListener(new OnChannelChangeListener ()
 		{
 			@Override
-			public void onOnCircleEventMove(int x, int y)
+			public void onChannelChange(int position) 
 			{
-				Log.d(TAG, "received new position from meter1 x:" + x + " y:" + y);
+				Log.d(TAG, "received new H position from meter1:" + position);
 			}
 		});
-		meter2.setOnCircleEventListener(new OnCircleEventListener()
+		meter1.setOnVChannelChangeListener(new OnChannelChangeListener ()
 		{
 			@Override
-			public void onOnCircleEventMove(int x, int y)
+			public void onChannelChange(int position) 
 			{
-				Log.d(TAG, "received new position from meter1 x:" + x + " y:" + y);
+				Log.d(TAG, "received new V position from meter1:" + position);
+			}
+		});		
+		meter2.setOnHChannelChangeListener(new OnChannelChangeListener ()
+		{
+			@Override
+			public void onChannelChange(int position) 
+			{
+				Log.d(TAG, "received new H position from meter2:" + position);
+			}
+		});
+		meter2.setOnVChannelChangeListener(new OnChannelChangeListener ()
+		{
+			@Override
+			public void onChannelChange(int position) 
+			{
+				Log.d(TAG, "received new V position from meter2:" + position);
 			}
 		});
 	}

@@ -31,6 +31,8 @@ import android.widget.Toast;
 
 public class RocketColibriProtocol extends  Service
 {
+	public static final int MAX_CHANNEL_VALUE = 1000;
+	public static final int MIN_CHANNEL_VALUE = 0;
 	private static final long CHECK_CONNECTION_INTERVAL = 3 * 1000; // 3 seconds
 	private final String SSID_NAME = new String("RocketColibri");
 	private final String SSID_NAME_ALT = new String("gg"); // alternative SSID
