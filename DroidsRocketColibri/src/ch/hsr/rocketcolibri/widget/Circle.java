@@ -45,7 +45,7 @@ public final class Circle extends View {
 
 	private static final float rimSize       = 0.02f;
 
-	OnCircleEventListener mListener;
+	public static OnCircleEventListener mListener;
 	
 	public void setOnCircleEventListener(OnCircleEventListener onCircleEventListener) 
 	{
@@ -148,6 +148,10 @@ public final class Circle extends View {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				Log.d("onTouchListener", String.valueOf(event.getAxisValue(MotionEvent.AXIS_Y)));
+				if(Circle.mListener != null)
+				{
+					Circle.mListener.onOnCircleEventMove(MotionEvent.AXIS_X, MotionEvent.AXIS_Y);
+				}
 				return false;
 			}
 			

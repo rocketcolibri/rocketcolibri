@@ -25,6 +25,7 @@ import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ public class RocketColibriProtocol extends  Service
 {
 	private static final long CHECK_CONNECTION_INTERVAL = 3 * 1000; // 3 seconds
 	private final String SSID_NAME = new String("RocketColibri");
+	private final String SSID_NAME_ALT = new String("gg"); // alternative SSID
 	private final IBinder mBinder = new RocketColibriProtocolBinder(); 
 
     /**
@@ -111,7 +113,7 @@ public class RocketColibriProtocol extends  Service
             				Log.d(TAG, "RocketColibri connection offline");
             				intent.setAction("protocol.offline");
             			}
-            			sendBroadcast(intent); 
+            			LocalBroadcastManager.getInstance(RocketColibriProtocol.this).sendBroadcast(intent); 
                 	}                    
                 }
             });
@@ -130,7 +132,7 @@ public class RocketColibriProtocol extends  Service
 	    if(currentWifi != null)
 	    {
 	        if(currentWifi.getSSID() != null) 
-	            connected =(currentWifi.getSSID().equals(SSID_NAME));
+	            connected =(currentWifi.getSSID().equals(SSID_NAME) || currentWifi.getSSID().equals(SSID_NAME_ALT) );
 	    }
 
         if (connected)
