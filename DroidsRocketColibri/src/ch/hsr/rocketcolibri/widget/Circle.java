@@ -257,9 +257,9 @@ public final class Circle extends View {
 					@Override
 					public void onGlobalLayout() {
 					    float density  = getResources().getDisplayMetrics().density;
-					    float dpHeight = getResources().getDisplayMetrics().heightPixels / density;
-					    float dpWidth  = getResources().getDisplayMetrics().widthPixels / density;
-
+					    // FIXME @artan I fixed that but I'm not sure if we have am mess with dp an pixels 
+					    float dpHeight = getResources().getDisplayMetrics().heightPixels; /* removed / density */
+					    float dpWidth  = getResources().getDisplayMetrics().widthPixels; /* removed / density */
 						Circle.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 						setTranslationY(percentInDP(dpHeight, positionInPercentY)-getMeasuredHeight()/2);
 						if(orientationSide.toLowerCase().equals("left")){

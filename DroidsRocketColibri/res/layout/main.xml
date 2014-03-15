@@ -18,8 +18,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         hsr:backgroundResource="@drawable/cross"
-        hsr:diameterInDP="220"
-        hsr:orientationSide="Left"
+        hsr:diameterInDP="380"
+        hsr:orientationSide="left"
         hsr:positionInPercentX="20"
         hsr:positionInPercentY="60" />
 
@@ -28,8 +28,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         hsr:backgroundResource="@drawable/cross"
-        hsr:diameterInDP="120"
-        hsr:orientationSide="Right"
+        hsr:diameterInDP="380"
+        hsr:orientationSide="right"
         hsr:positionInPercentX="20"
         hsr:positionInPercentY="60" />
 
