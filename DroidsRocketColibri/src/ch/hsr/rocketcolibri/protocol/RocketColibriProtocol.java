@@ -204,7 +204,7 @@ public class RocketColibriProtocol extends  Service
 					cdcMsg.put("v", 1);
 					cdcMsg.put("cmd", "cdc");
 					cdcMsg.put("sequence", sequenceNumber++);
-					cdcMsg.put("name", "Lorenz");
+					cdcMsg.put("user", "Lorenz");
 					JSONArray channels = new JSONArray();
 					for (int channel : allChannels)
 						channels.put(channel);			
