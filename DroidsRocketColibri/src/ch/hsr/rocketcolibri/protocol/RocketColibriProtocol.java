@@ -1,5 +1,6 @@
 package ch.hsr.rocketcolibri.protocol;
 
+
 import java.io.IOException; 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -17,6 +18,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
+import ch.hsr.rocketcolibri.protocol.fsm.StateMachine;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -38,6 +41,8 @@ public class RocketColibriProtocol extends  Service
 	private final String SSID_NAME_ALT = new String("gg"); // alternative SSID
 	private final IBinder mBinder = new RocketColibriProtocolBinder(); 
 
+	RocketColibriProtocolFsm fsm = new RocketColibriProtocolFsm(s.IDLE);
+	
     /**
      * Class used for the client Binder.  Because we know this service always
      * runs in the same process as its clients, we don't need to deal with IPC.
