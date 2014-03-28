@@ -87,6 +87,8 @@ public class RocketColibriProtocol extends  Service
         }
         // schedule task
         mTimer.scheduleAtFixedRate(new CheckRocketColibriConnection(), 0, CHECK_CONNECTION_INTERVAL);
+        
+        
     }
 	 
 	@Override
