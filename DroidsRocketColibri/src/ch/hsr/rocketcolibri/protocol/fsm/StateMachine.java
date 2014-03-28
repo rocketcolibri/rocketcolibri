@@ -78,7 +78,7 @@ public class StateMachine
 		if (indexOfEvent >= 0) 
 		{
 			// don't ignore loopback event in column zero
-			Log.d(TAG, "{} received event type:[{}]" + event);
+			//Log.d(TAG, "{} received event type:[{}]" + event);
 
 			List<?> list = _plan._transitions.get(_currentState);
 			if (list != null) {
