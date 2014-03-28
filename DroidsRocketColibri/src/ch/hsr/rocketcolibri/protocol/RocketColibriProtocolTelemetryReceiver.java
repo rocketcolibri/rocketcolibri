@@ -19,19 +19,22 @@ public class RocketColibriProtocolTelemetryReceiver
 		new Thread(new Runnable()
 		{
 			final String TAG =  RocketColibriProtocolTelemetryReceiver.this.TAG;
+			RocketColibriMessageFactory msgFactory = new RocketColibriMessageFactory();
+			
 			@Override
 			public void run() 
 			{    
 				try 
 				{	
 					DatagramSocket serverSocket = new DatagramSocket(RocketColibriProtocolTelemetryReceiver.this.port);
-					byte[] receiveData = new byte[512];
+					byte[] receiveData = new byte[1500];
 			        Log.d(TAG, "Listening on udp " + InetAddress.getLocalHost().getHostAddress() + ":" + RocketColibriProtocolTelemetryReceiver.this.port);     
 			        DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 			       
 			        while(true)
 			        {
 			        	serverSocket.receive(receivePacket);
+			        	RocketColibriMessage msg = msgFactory.Create(receivePacket);
 			        }
 				}
 				catch (IOException e)
