@@ -1,6 +1,7 @@
-package ch.hsr.rocketcolibri;
+package ch.hsr.rocketcolibri.activity;
 
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.R.layout;
 import ch.hsr.rocketcolibri.util.SystemUiHider;
 import android.annotation.TargetApi;
 import android.app.Activity;

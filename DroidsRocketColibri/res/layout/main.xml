@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ch.hsr.rocketcolibri.view.draggable.DragLayer xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:hsr="http://schemas.android.com/apk/res/ch.hsr.rocketcolibri"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drag_layer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
-    tools:context=".CircleTestActivity" >
+    android:background="#0099cc" >
 
     <SurfaceView
         android:id="@+id/camView"
@@ -42,20 +42,4 @@
         android:translationY="120dp"
         hsr:positionInDefaultPortrait="bottom" />
 
-    <Button
-        android:id="@+id/btnHotter"
-        android:layout_width="0px"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5"
-        android:padding="0px"
-        android:text="Hotter" />
-
-    <Button
-        android:id="@+id/btnColder"
-        android:layout_width="0px"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5"
-        android:padding="0px"
-        android:text="Colder" />
-
-</FrameLayout>
+</ch.hsr.rocketcolibri.view.draggable.DragLayer>
