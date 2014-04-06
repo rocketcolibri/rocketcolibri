@@ -267,7 +267,7 @@ A4, A1</panel_attributes>
     </coordinates>
     <panel_attributes>Transiotion on E3
 from all states
-(except from state CONN_CAT)</panel_attributes>
+(except from state CONN_ACT)</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>
