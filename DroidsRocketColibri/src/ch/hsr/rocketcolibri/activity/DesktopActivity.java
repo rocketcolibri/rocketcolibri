@@ -4,16 +4,6 @@ import java.io.IOException;
 
 import org.neodatis.odb.OID;
 
-import ch.hsr.rocketcolibri.R;
-import ch.hsr.rocketcolibri.R.id;
-import ch.hsr.rocketcolibri.R.layout;
-import ch.hsr.rocketcolibri.dbService.DBService;
-import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
-import ch.hsr.rocketcolibri.view.MyAbsoluteLayout.LayoutParams;
-import ch.hsr.rocketcolibri.view.draggable.DragController;
-import ch.hsr.rocketcolibri.view.draggable.DragLayer;
-import ch.hsr.rocketcolibri.widget.Circle;
-import ch.hsr.rocketcolibri.widget.OnChannelChangeListener;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -34,10 +24,18 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.widget.Button;
 import android.widget.Toast;
+import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.dbService.DBService;
+import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
+import ch.hsr.rocketcolibri.view.MyAbsoluteLayout.LayoutParams;
+import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
+import ch.hsr.rocketcolibri.view.draggable.DragController;
+import ch.hsr.rocketcolibri.view.draggable.DragLayer;
+import ch.hsr.rocketcolibri.widget.Circle;
+import ch.hsr.rocketcolibri.widget.OnChannelChangeListener;
 
 public class DesktopActivity extends Activity implements View.OnLongClickListener, View.OnClickListener, View.OnTouchListener {
 	private static final String TAG = "CircleTestActivity";
@@ -341,9 +339,22 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	        String message = mLongClickStartsDrag ? "Changed touch mode. Drag now starts on long touch (click)." 
 	                                              : "Changed touch mode. Drag now starts on touch (click).";
 	        Toast.makeText (getApplicationContext(), message, Toast.LENGTH_LONG).show ();
+	        updateModusOfCustomizableViews();
 	        return true;
 	    }
 	    return super.onOptionsItemSelected (item);
+	}
+	
+	private void updateModusOfCustomizableViews(){
+    	int size = mDragLayer.getChildCount();
+    	ICustomizableView view = null;
+    	for(int i = 0; i < size; ++i){
+    		try{
+    			view = (ICustomizableView) mDragLayer.getChildAt(i);
+    			view.setCustomizeModus(mLongClickStartsDrag);
+    		}catch(Exception e){
+    		}
+    	}
 	}
 	
 	/**
@@ -394,24 +405,24 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	    mDragLayer.setDragController(dragController);
 	    dragController.addDropTarget (mDragLayer);
 	
-	    View view = new View(this);
+	    CustomizableView view = new CustomizableView(this);
 	    LayoutParams lp = new LayoutParams(300, 300, 700, 300);
 	    view.setLayoutParams(lp);
 	    view.setBackgroundColor(Color.CYAN);
 	    view.setOnLongClickListener(this);
 	    mDragLayer.addView(view);
 	    
-	    view = new View(this);
+	    view = new CustomizableView(this);
 	    lp = new LayoutParams(500, 300, 100, 200);
 	    view.setLayoutParams(lp);
 	    view.setBackgroundColor(Color.RED);
 	    view.setOnLongClickListener(this);
 	    mDragLayer.addView(view);
 	    
-	    view = new View(this);
+	    view = new CustomizableView(this);
 	    lp = new LayoutParams(500, 300, 0, 0);
 	    view.setLayoutParams(lp);
-	    view.setBackgroundColor(Color.RED);
+	    view.setBackgroundColor(Color.LTGRAY);
 	    view.setOnLongClickListener(this);
 	    mDragLayer.addView(view);
 	    
@@ -421,7 +432,7 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	    String message = mLongClickStartsDrag ? "Press and hold to start dragging." 
 	                                          : "Touch a view to start dragging.";
 	    Toast.makeText (getApplicationContext(), message, Toast.LENGTH_LONG).show ();
-	
+	    updateModusOfCustomizableViews();
 	}
 	
 	/**
