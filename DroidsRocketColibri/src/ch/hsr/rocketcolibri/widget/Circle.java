@@ -2,6 +2,8 @@ package ch.hsr.rocketcolibri.widget;
 
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
+import ch.hsr.rocketcolibri.view.MyAbsoluteLayout.LayoutParams;
+import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,7 +26,7 @@ import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.content.res.TypedArray;
 
-public final class Circle extends View {
+public final class Circle extends CustomizableView {
 
 //	private static final String TAG = Circle.class.getSimpleName();
 	private RectF rimRect;
@@ -261,12 +263,15 @@ public final class Circle extends View {
 					    float dpHeight = getResources().getDisplayMetrics().heightPixels; /* removed / density */
 					    float dpWidth  = getResources().getDisplayMetrics().widthPixels; /* removed / density */
 						Circle.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-						setTranslationY(percentInDP(dpHeight, positionInPercentY)-getMeasuredHeight()/2);
+						int y = (int) (percentInDP(dpHeight, positionInPercentY)-getMeasuredHeight()/2);
+						int x = 0;
 						if(orientationSide.toLowerCase().equals("left")){
-							setTranslationX(percentInDP(dpWidth, positionInPercentX)-getMeasuredWidth()/2);
+							x = (int) (percentInDP(dpWidth, positionInPercentX)-getMeasuredWidth()/2);
 						}else if(orientationSide.toLowerCase().equals("right")){
-							setTranslationX(dpWidth-percentInDP(dpWidth, positionInPercentX)-getMeasuredWidth()/2);
+							x = (int) (dpWidth-percentInDP(dpWidth, positionInPercentX)-getMeasuredWidth()/2);
 						}
+						LayoutParams lp = new LayoutParams(getMeasuredWidth(), getMeasuredHeight(), x, y);
+						Circle.this.setLayoutParams(lp);
 					}
 				}
 			);
@@ -329,6 +334,7 @@ public final class Circle extends View {
 		drawRim(canvas);
 		drawFace(canvas);
 		canvas.restore();
+		super.onDraw(canvas);
 	}
 
 //	@Override

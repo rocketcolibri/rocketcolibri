@@ -4,6 +4,7 @@ import ch.hsr.rocketcolibri.R;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.util.AttributeSet;
 import android.view.View;
 
 public class CustomizableView extends View implements ICustomizableView{
@@ -13,6 +14,14 @@ public class CustomizableView extends View implements ICustomizableView{
 		super(context);
 	}
 
+	public CustomizableView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
+
+	public CustomizableView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+	}
+	
     @Override
     protected void onDraw(Canvas canvas) {
     	if(!customizeModusActive)return;
