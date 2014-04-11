@@ -18,9 +18,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.protocol.fsm.StateMachine;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiInfo;
@@ -32,28 +32,15 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
-public class RocketColibriProtocol extends  Service
+public class RocketColibriProtocol
 {
 	public static final int MAX_CHANNEL_VALUE = 1000;
 	public static final int MIN_CHANNEL_VALUE = 0;
-	private static final long CHECK_CONNECTION_INTERVAL = 3 * 1000; // 3 seconds
-	private final String SSID_NAME = new String("RocketColibri");
-	private final String SSID_NAME_ALT = new String("gg"); // alternative SSID
-	private final IBinder mBinder = new RocketColibriProtocolBinder(); 
+	 
 
-	RocketColibriProtocolFsm fsm = new RocketColibriProtocolFsm(s.IDLE);
+	private RocketColibriProtocolFsm fsm;
 	
-    /**
-     * Class used for the client Binder.  Because we know this service always
-     * runs in the same process as its clients, we don't need to deal with IPC.
-     */
-    public class RocketColibriProtocolBinder extends Binder
-    {
-    	public RocketColibriProtocol getService() {
-            // Return this instance of RocketColibriProtocol so clients can call public methods
-            return RocketColibriProtocol.this;
-        }
-    }
+    
 
 	final String TAG = this.getClass().getName();
 	int port;
@@ -63,95 +50,12 @@ public class RocketColibriProtocol extends  Service
 	private int[] allChannels;
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	private Future<?> executorFuture=null;
-	private Timer mTimer = null;
-	private Handler mHandler = new Handler();
-	private boolean isConnected = false; 
 	
-    @Override
-    public IBinder onBind(Intent intent) 
-    {
-        return mBinder;
-    }
-	
-	 @Override
-	 public void onCreate() 
-	 {
-		 super.onCreate();
-		Log.d(TAG, "started");
-        // cancel if already existed
-        if(mTimer != null) {
-            mTimer.cancel();
-        } else {
-            // recreate new
-            mTimer = new Timer();
-        }
-        // schedule task
-        mTimer.scheduleAtFixedRate(new CheckRocketColibriConnection(), 0, CHECK_CONNECTION_INTERVAL);
-        
-        
-    }
-	 
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId)
+	public RocketColibriProtocol(RocketColibriProtocolFsm fsm) 
 	{
-		return Service.START_STICKY;
+		this.fsm = fsm;
 	}
-	 
-	// timer task, checks periodically the connection to the ServoController
-    class CheckRocketColibriConnection extends TimerTask 
-    {
-        @Override
-        public void run() {
-            // run on another thread
-            mHandler.post(new Runnable() {
-            	
-                @Override
-                public void run() 
-                {
-                	if(isConnected != isRocketColibriConnected())
-                	{
-            			isConnected = !isConnected;
-            			Intent intent = new Intent();
-            			if(isConnected)
-            			{
-            				Log.d(TAG, "RocketColibri connection changed");
-            				intent.setAction("protocol.online");
-            			}
-            			else
-            			{
-            				Log.d(TAG, "RocketColibri connection offline");
-            				intent.setAction("protocol.offline");
-            			}
-            			LocalBroadcastManager.getInstance(RocketColibriProtocol.this).sendBroadcast(intent); 
-                	}                    
-                }
-            });
-        }
-    }
     
-    /**
-     * Checks the connection to the ServoController which has the SSID RocketColibri
-     * @return true if connected, false if not
-     */
-	public boolean isRocketColibriConnected()
-	{
-		WifiManager mainWifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-	    WifiInfo currentWifi = mainWifi.getConnectionInfo();
-	    boolean connected = true;
-	    if(currentWifi != null)
-	    {
-	        if(currentWifi.getSSID() != null) 
-	            connected =(currentWifi.getSSID().equals(SSID_NAME) || currentWifi.getSSID().equals(SSID_NAME_ALT) );
-	    }
-
-        if (connected)
-        	Log.d(TAG, "RocketColibri connected");
-        else
-        	Log.d(TAG, "RocketColibri not connected");
-
-	    return connected;
-	}
-	
 	/**
 	 * opens a UDP socket for the communication with the ServoController
 	 *  

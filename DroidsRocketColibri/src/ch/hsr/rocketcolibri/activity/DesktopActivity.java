@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.dbService.DBService;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
 import ch.hsr.rocketcolibri.view.MyAbsoluteLayout.LayoutParams;
@@ -51,6 +52,9 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	                                                // Otherwise, any touch event starts a drag.
 	
 	private static final int CHANGE_TOUCH_MODE_MENU_ID = Menu.FIRST;
+	private static final int CONNECT_MENU_ID = Menu.FIRST+1;
+	private static final int DISCONNECT_MENU_ID = Menu.FIRST+2;
+	
 	public static final boolean Debugging = false;
 
 	private DBService theDB = null;
@@ -61,7 +65,7 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	  @Override
 	  public void onReceive(Context context, Intent intent) {
 	    // Extract data included in the Intent
-		if(protocolService != null) protocolService.sendChannelDataCommand();
+		if(rcService != null) rcService.protocol.sendChannelDataCommand();
 		Log.d(TAG, "online message received");
 	  }
 	};
@@ -71,7 +75,7 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	  @Override
 	  public void onReceive(Context context, Intent intent) {
 	    // Extract data included in the Intent
-		if(protocolService != null) protocolService.cancelOldCommandJob();
+		if(rcService != null) rcService.protocol.cancelOldCommandJob();
 	    Log.d(TAG, "offline message received");
 	  }
 	};
@@ -128,17 +132,17 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	Button btnColder;
 	Circle meter1;
 	Circle meter2;
-	private RocketColibriProtocol protocolService;
-	private ServiceConnection mRocketColibriProtocolService = new ServiceConnection()	{
+	private RocketColibriService rcService;
+	private ServiceConnection mRocketColibriService = new ServiceConnection()	{
+		@Override
 		public void onServiceConnected(ComponentName className, IBinder binder)
 		{
-			protocolService = ((RocketColibriProtocol.RocketColibriProtocolBinder)binder).getService();
-			protocolService.ProtocolChannelData(30001, "192.168.200.1", 4);
-			
+			rcService = ((RocketColibriService.RocketColibriServiceBinder)binder).getService();
+			rcService.protocol.ProtocolChannelData(30001, "192.168.200.1", 4);
 		}
 		public void onServiceDisconnected(ComponentName className)
 		{
-			protocolService = null;
+			rcService = null;
 		}
 	};
 	
@@ -210,8 +214,8 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
         theDB.ShowInfo(strStoredString.getMyString() + " - " + strStoredString.getOID());
 
         // Start Rocket ColibriProtocol service
-		Intent intent = new Intent(this, RocketColibriProtocol.class);
-		bindService(intent, mRocketColibriProtocolService, Context.BIND_AUTO_CREATE);
+		Intent intent = new Intent(this, RocketColibriService.class);
+		bindService(intent, mRocketColibriService, Context.BIND_AUTO_CREATE);
 		
 		meter1.setOnHChannelChangeListener(new OnChannelChangeListener ()
 		{
@@ -219,7 +223,7 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 			public void onChannelChange(int position) 
 			{
 				Log.d(TAG, "received new H position from meter1:" + position);
-				if (protocolService != null) protocolService.setChannel(3, position);
+				if (rcService != null) rcService.protocol.setChannel(3, position);
 			}
 		});
 		meter1.setOnVChannelChangeListener(new OnChannelChangeListener ()
@@ -228,7 +232,7 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 			public void onChannelChange(int position) 
 			{
 				Log.d(TAG, "received new V position from meter1:" + position);
-				if (protocolService != null) protocolService.setChannel(2, position);
+				if (rcService != null) rcService.protocol.setChannel(2, position);
 			}
 		});		
 		meter2.setOnHChannelChangeListener(new OnChannelChangeListener ()
@@ -237,7 +241,7 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 			public void onChannelChange(int position) 
 			{
 				Log.d(TAG, "received new H position from meter2:" + position);
-				if (protocolService != null) protocolService.setChannel(0, position);
+				if (rcService != null) rcService.protocol.setChannel(0, position);
 			}
 		});
 		meter2.setOnVChannelChangeListener(new OnChannelChangeListener ()
@@ -246,7 +250,7 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 			public void onChannelChange(int position) 
 			{
 				Log.d(TAG, "received new V position from meter2:" + position);
-				if (protocolService != null) protocolService.setChannel(1, position);
+				if (rcService != null) rcService.protocol.setChannel(1, position);
 			}
 		});
 		
@@ -284,7 +288,10 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	public boolean onCreateOptionsMenu (Menu menu){
 	    super.onCreateOptionsMenu(menu);
 	    
-	    menu.add (0, CHANGE_TOUCH_MODE_MENU_ID, 0, "Change Touch Mode");
+	    int order=0;
+	    menu.add (0, CHANGE_TOUCH_MODE_MENU_ID, order++, "Change Touch Mode");
+	    menu.add (0, CONNECT_MENU_ID, order++, "Connect to RocketColibri");
+	    menu.add (0, DISCONNECT_MENU_ID, order++, "Disconnect to RocketColibri");
 	    return true;
 	}
 	
@@ -341,6 +348,17 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	        Toast.makeText (getApplicationContext(), message, Toast.LENGTH_LONG).show ();
 	        updateModusOfCustomizableViews();
 	        return true;
+
+	      case CONNECT_MENU_ID:
+		    Toast.makeText (getApplicationContext(), "Try Connect", Toast.LENGTH_LONG).show ();
+		    if(rcService != null) rcService.wifi.Connect();
+		    return true;
+
+	      case DISCONNECT_MENU_ID:
+		    Toast.makeText (getApplicationContext(), "Try Disonnect", Toast.LENGTH_LONG).show ();
+		    if(rcService != null) rcService.wifi.Disconnect();
+		    return true;
+
 	    }
 	    return super.onOptionsItemSelected (item);
 	}

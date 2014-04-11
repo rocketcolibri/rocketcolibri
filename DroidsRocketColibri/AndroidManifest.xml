@@ -10,6 +10,7 @@
     
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
         
@@ -29,8 +30,16 @@
             </intent-filter>
         </activity>
         
-        <service android:enabled="true" android:name=".protocol.RocketColibriProtocol"></service>
+        <service android:enabled="true" android:name=".RocketColibriService"></service>
         
+         <receiver
+            android:name="ch.hsr.rocketcolibri.protocol.WifiConnection$NetworkChangeReceiver"
+            android:label="NetworkChangeReceiver" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
     	
 
     	<uses-library android:name="android.test.runner" />
