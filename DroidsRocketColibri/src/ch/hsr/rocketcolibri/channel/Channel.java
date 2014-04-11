@@ -31,22 +31,22 @@ public class Channel
 	}
 	
 	/** setter */
-	void setMinRange(int r)	{ minRange = r;	}
-	void setMaxRange(int r)	{ maxRange = r;	}
-	void setTrimm(int t)	{ trimm = t;	}
-	void setInverted(boolean i)	{ inverted = i;	}
-	void setDefaultChannelValue(int d)	{ defaultChannelValue = d;	}
+	public void setMinRange(int r)	{ minRange = r;	}
+	public void setMaxRange(int r)	{ maxRange = r;	}
+	public void setTrimm(int t)	{ trimm = t;	}
+	public void setInverted(boolean i)	{ inverted = i;	}
+	public void setDefaultChannelValue(int d)	{ defaultChannelValue = d;	}
 	/** getter */
-	int getMinRange()	{ return minRange;	}
-	int getMaxRange()	{ return maxRange;	}
-	int getTrimm()	{ return trimm;	}
-	boolean getInverted()	{ return inverted;	}
-	int getDefaultChannelValue() { return defaultChannelValue;	}
+	public int getMinRange()	{ return minRange;	}
+	public int getMaxRange()	{ return maxRange;	}
+	public int getTrimm()	{ return trimm;	}
+	public boolean getInverted()	{ return inverted;	}
+	public int getDefaultChannelValue() { return defaultChannelValue;	}
 	
 	/**
 	 * set the value from the control widget
 	 */
-	void setControl(int inputFromWidget)
+	public void setControl(int inputFromWidget)
 	{
 		inputFromWidget = inputFromWidget + trimm;
 		
@@ -72,7 +72,7 @@ public class Channel
 	 * get the value to be transimte in the cdc message
 	 * @return channel value
 	 */
-	int getChannelValue()
+	public int getChannelValue()
 	{
 		return currentChannelValue;
 	}

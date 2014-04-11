@@ -138,7 +138,6 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 		public void onServiceConnected(ComponentName className, IBinder binder)
 		{
 			rcService = ((RocketColibriService.RocketColibriServiceBinder)binder).getService();
-			rcService.protocol.ProtocolChannelData(30001, "192.168.200.1", 4);
 		}
 		public void onServiceDisconnected(ComponentName className)
 		{
@@ -223,7 +222,7 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 			public void onChannelChange(int position) 
 			{
 				Log.d(TAG, "received new H position from meter1:" + position);
-				if (rcService != null) rcService.protocol.setChannel(3, position);
+				if (rcService != null) rcService.channel[3].setControl(position);
 			}
 		});
 		meter1.setOnVChannelChangeListener(new OnChannelChangeListener ()
@@ -232,7 +231,7 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 			public void onChannelChange(int position) 
 			{
 				Log.d(TAG, "received new V position from meter1:" + position);
-				if (rcService != null) rcService.protocol.setChannel(2, position);
+				if (rcService != null) rcService.channel[2].setControl(position);
 			}
 		});		
 		meter2.setOnHChannelChangeListener(new OnChannelChangeListener ()
@@ -241,7 +240,7 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 			public void onChannelChange(int position) 
 			{
 				Log.d(TAG, "received new H position from meter2:" + position);
-				if (rcService != null) rcService.protocol.setChannel(0, position);
+				if (rcService != null) rcService.channel[0].setControl(position);
 			}
 		});
 		meter2.setOnVChannelChangeListener(new OnChannelChangeListener ()
@@ -250,7 +249,7 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 			public void onChannelChange(int position) 
 			{
 				Log.d(TAG, "received new V position from meter2:" + position);
-				if (rcService != null) rcService.protocol.setChannel(1, position);
+				if (rcService != null) rcService.channel[1].setControl(position);
 			}
 		});
 		

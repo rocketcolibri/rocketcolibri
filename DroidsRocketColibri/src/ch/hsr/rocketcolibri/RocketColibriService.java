@@ -1,5 +1,6 @@
 package ch.hsr.rocketcolibri;
 
+import ch.hsr.rocketcolibri.channel.Channel;
 import ch.hsr.rocketcolibri.dbService.DBService;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm;
@@ -10,7 +11,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
-import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
@@ -37,7 +37,8 @@ public class RocketColibriService extends  Service
 	public WifiConnection wifi;
 	
 	// channels
-	public Channel[] channel = new Channel[NOF_CHANNEL];
+	public Channel[] channel = { new Channel(), new Channel(), new Channel(), new Channel(), 
+			                      new Channel(), new Channel(), new Channel(), new Channel()};
 	
 	// references to the database service
 	public DBService database;
@@ -52,11 +53,12 @@ public class RocketColibriService extends  Service
 	public void onCreate() 
 	{
 		super.onCreate();
-		Log.d(TAG, "started");
-		 
+		Log.d(TAG, "RocketColibriService started");
+
 		// create a protocol instance
 		this.protocolFsm = new RocketColibriProtocolFsm(s.DISC);
 		this.protocol = new RocketColibriProtocol(protocolFsm);
+		this.protocol.setChannels(channel);
 		this.wifi = new WifiConnection(protocolFsm, (WifiManager) getSystemService(Context.WIFI_SERVICE));
 		 
 		// create database instance

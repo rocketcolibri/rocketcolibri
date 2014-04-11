@@ -36,6 +36,7 @@ public class WifiConnection
 	
 	public WifiConnection(RocketColibriProtocolFsm fsm, WifiManager wifiManager)
 	{
+		// TODO
 		this.wifiManager = wifiManager;
 		this.fsm = fsm;
 	}

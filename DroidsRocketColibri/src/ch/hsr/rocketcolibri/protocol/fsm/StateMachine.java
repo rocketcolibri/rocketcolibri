@@ -32,6 +32,11 @@ public class StateMachine
 		return _currentState;
 	}
 
+	public StateMachinePlan getStateMachinePlan()
+	{
+		return _plan;
+	}
+	
 	/**
 	 * @param event will cause a runtime exception
 	 */

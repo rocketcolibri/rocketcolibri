@@ -42,22 +42,6 @@ at(s.CONN_TRY_ACT, null, 	s.DISC, 		null, 					s.CONN_LCK_OUT,			s.CONN_ACT,			n
 at(s.CONN_ACT, null, 		s.DISC, 		null, 					null, 					null, 				null, 				s.TRY_CONN,			null);
 // @formatter:on
 
-			Action<RocketColibriProtocolFsm> startBeepTimer = new Action<RocketColibriProtocolFsm>() {
-				public void apply(RocketColibriProtocolFsm fsm, Object event,
-						Object nextState) {
-				}
-			};
-
-			Action<RocketColibriProtocolFsm> startWaitTimer = new Action<RocketColibriProtocolFsm>() {
-				public void apply(RocketColibriProtocolFsm fsm, Object event,
-						Object nextState) {
-				}
-			};
-
-			// TODO
-			//			entryAction(s.Red, startBeepTimer);
-			//			entryAction(s.RedAmber, startWaitTimer);
-			//			entryAction(s.Amber, startWaitTimer);
 
 		}
 	};

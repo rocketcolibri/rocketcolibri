@@ -7,8 +7,6 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
@@ -18,42 +16,48 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ch.hsr.rocketcolibri.RocketColibriService;
+import ch.hsr.rocketcolibri.channel.Channel;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
-import ch.hsr.rocketcolibri.protocol.fsm.StateMachine;
-import android.content.Context;
-import android.content.Intent;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
-import android.os.Binder;
-import android.os.Handler;
-import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
+import ch.hsr.rocketcolibri.protocol.fsm.Action;
 import android.util.Log;
-import android.widget.Toast;
 
+
+/**
+ * @short implementation of the RocketColibri protocol 
+ */
 public class RocketColibriProtocol
 {
 	public static final int MAX_CHANNEL_VALUE = 1000;
 	public static final int MIN_CHANNEL_VALUE = 0;
-	 
 
 	private RocketColibriProtocolFsm fsm;
-	
-    
 
 	final String TAG = this.getClass().getName();
 	int port;
 	InetAddress address;
+	
 	DatagramSocket channelDataSocket;
 	private int sequenceNumber;
-	private int[] allChannels;
+	private Channel[] allChannels;
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	private Future<?> executorFuture=null;
 	
 	public RocketColibriProtocol(RocketColibriProtocolFsm fsm) 
 	{
 		this.fsm = fsm;
+		// don't send any message
+		this.fsm.getStateMachinePlan().entryAction(s.DISC, stopSendMessage);
+				
+		// send hello message
+		this.fsm.getStateMachinePlan().entryAction(s.TRY_CONN, startSendHelloMessage);
+		this.fsm.getStateMachinePlan().entryAction(s.CONN_LCK_OUT, startSendHelloMessage);
+		this.fsm.getStateMachinePlan().entryAction(s.CONN_PASSIV, startSendHelloMessage);
+		
+		// send channel message
+		this.fsm.getStateMachinePlan().entryAction(s.CONN_TRY_ACT, startSendChannelMessage);
+		this.fsm.getStateMachinePlan().entryAction(s.CONN_ACT, startSendChannelMessage);
+		
+		InitSocket();
 	}
     
 	/**
@@ -61,15 +65,14 @@ public class RocketColibriProtocol
 	 *  
 	 * @param port 30001
 	 * @param ia, IP address of the ServoController is normally 192.168.200.1
-	 * @param numberOfChannels, how many channels must be controlled by this instance
 	 */
-	public void ProtocolChannelData(int port, String ia, int numberOfChannels)
+	private void InitSocket()
 	{
 		// initialize unicast datagram socket
-		this.port = port;
+		this.port = 30001;
 		try 
 		{
-			this.address = InetAddress.getByName( ia );
+			this.address = InetAddress.getByName( "192.168.200.1");
 		}
 		catch (UnknownHostException e1) 
 		{
@@ -85,13 +88,13 @@ public class RocketColibriProtocol
 			Log.d( TAG, "Failed to create socket due to SocketException: " + e.getMessage() );
 			e.printStackTrace();
 		} 
-
-		// create & initialize channel array
-		allChannels = new int[numberOfChannels];
-		for(int c=0; c < numberOfChannels; c++)
-			allChannels[c] = 0;
 	}
 
+	public void setChannels(Channel[] channels)
+	{
+		this.allChannels = channels;
+	}
+	
 	private void sendJsonMsgString(String msg)
 	{
 		try {
@@ -108,19 +111,24 @@ public class RocketColibriProtocol
 	public void sendChannelDataCommand() 
 	{
 		cancelOldCommandJob();
-		final Runnable every20ms = new Runnable() {
-			public void run() {
+		final Runnable every20ms = new Runnable() 
+		{
+			public void run() 
+			{
 				JSONObject cdcMsg = new JSONObject();
-				try {
+				try 
+				{
 					cdcMsg.put("v", 1);
 					cdcMsg.put("cmd", "cdc");
 					cdcMsg.put("sequence", sequenceNumber++);
 					cdcMsg.put("user", "Lorenz");
 					JSONArray channels = new JSONArray();
-					for (int channel : allChannels)
-						channels.put(channel);			
+					for (Channel channel : allChannels)
+						channels.put(channel.getChannelValue());			
 					cdcMsg.put("channels", channels);
-				} catch (JSONException e) {
+				} 
+				catch (JSONException e) 
+				{
 					Log.d( TAG, "Failed to compose message: " + e.getMessage() );
 					e.printStackTrace();
 				}
@@ -173,18 +181,31 @@ public class RocketColibriProtocol
 		this.executorFuture = scheduler.scheduleAtFixedRate(every100ms, 0, 100, TimeUnit.MILLISECONDS);
 	}
 
-	/**
-	 * set channel
-	 * @param channel channel number
-	 * @param channel value 0..1000
-	 */
-	public void setChannel(int channel, int value)
-	{
-		if((channel < this.allChannels.length) && (value >= 0 && value <= 1000))
+	// action from the state machine
+	Action<RocketColibriProtocolFsm> startSendHelloMessage = new Action<RocketColibriProtocolFsm>() {
+		public void apply(RocketColibriProtocolFsm fsm, Object event,
+				Object nextState) 
 		{
-			this.allChannels[channel] = value;
+			Log.d(TAG, "execute action startSendHelloMessage");
+			sendHelloCommand();			
 		}
-		else
-			Log.d(TAG, "invalid channel" + channel + " or value " + value);
-	}
+	};
+	
+	Action<RocketColibriProtocolFsm> startSendChannelMessage = new Action<RocketColibriProtocolFsm>() {
+		public void apply(RocketColibriProtocolFsm fsm, Object event,
+				Object nextState) 
+		{
+			Log.d(TAG, "execute action startSendChannelMessage");
+			sendChannelDataCommand();
+		}
+	};
+	
+	Action<RocketColibriProtocolFsm> stopSendMessage = new Action<RocketColibriProtocolFsm>() {
+		public void apply(RocketColibriProtocolFsm fsm, Object event,
+				Object nextState) 
+		{
+			Log.d(TAG, "execute action stopSendMessage");
+			cancelOldCommandJob();
+		}
+	};
 }
