@@ -11,15 +11,17 @@ import android.widget.Toast;
 
 /**
  * For the connection to NeoDatis database. The connection must
- * be a singleton, because only one instance can exist. The connection
- * to the database will be created at start of the activity and closed
- * at finish..
+ * be a singleton, because only one instance can exist. Thus will be
+ * granted from the service. Service will be create an instance and
+ * take care after being a singleton. The connection to the database
+ * will be created at start of the activity and closed at finish..
  */
 public class DBService {
 	/**
-	 * For the one and only existing instance
+	 * Handle to the NeoDatis database, all
+	 * access will be done over this handle.
 	 */
-	private static DBService instance = null;
+	private Context mActiveContext = null;
 
 	/**
 	 * Handle to the NeoDatis database, all
@@ -28,36 +30,10 @@ public class DBService {
 	private ODB activeDB = null;
 
 	/**
-	 * To find out if the connection to database was successful
+	 * Constructor for a new instance.
 	 */
-	private Boolean isConnected = false;
-
-	/**
-	 * This class is static and sometimes non static methods like getting
-	 * android "data" directory must be executed. The active context can't be 
-	 * accessed, therefore the active context should be given as a parameter
-	 * and stored in this variable 
-	 */
-	private Context activeContext = null;
-
-	/**
-	 * Exists only to defeat instantiation.
-	 */
-	protected DBService() {
-	      // Exists only to defeat instantiation.
-	}
-
-	/**
-	 * For receiving the single instance of the DBService
-	 *
-	 * @return	The instance of DBService
-	 */
-	public static DBService getInstance() {
-		if (instance == null) {
-	    	instance = new DBService();
-	    }
-
-		return instance;
+	public DBService(Context theContext) {
+		this.mActiveContext = theContext;
 	}
 
 	/**
@@ -66,27 +42,26 @@ public class DBService {
 	 * The database file will be stored in android data directory:
 	 * "/data/data/ch.hsr.rocketcolibri/app_data/rocketcolibri.neodatis" 
 	 *
-	 * @param theContext	active context for getting android data directory
 	 * @return Boolean		true, for successful connection. 
 	 */
-	public Boolean ConnectToDatabase(Context theContext) {
+	public Boolean ConnectToDatabase () {
 		try {
-            // Set active context
-			activeContext = theContext;
+	        if (this.activeDB == null) {
+				// Ask Android where we can store our file
+				File directory = mActiveContext.getDir("data", Context.MODE_PRIVATE);
+	            String fileName = directory.getAbsolutePath() + "/rocketcolibri.neodatis";
+	 
+	            // Opens the NeoDatis database
+	            this.activeDB = ODBFactory.open(fileName);
 
-			// Ask Android where we can store our file
-			File directory = activeContext.getDir("data", Context.MODE_PRIVATE);
-            String fileName = directory.getAbsolutePath() + "/rocketcolibri.neodatis";
- 
-            // Opens the NeoDatis database
-            activeDB = ODBFactory.open(fileName);
-
-            isConnected = true;
-
-            ShowInfo("NeoDatis DB opened!");
+	            this.ShowInfo("NeoDatis DB opened!");
+			}
+			else {
+	            this.ShowInfo("NeoDatis DB already opened!");
+			}
         } catch (Throwable e) {
-            if (activeDB != null) {
-            	activeDB.rollback();
+            if (this.activeDB != null) {
+            	this.activeDB.rollback();
             }
 
             return false;
@@ -100,10 +75,10 @@ public class DBService {
 	 */
 	public void CloseDatabase () {
 		// Close the database
-        if (activeDB != null) {
-        	activeDB.close();
+        if (this.activeDB != null) {
+        	this.activeDB.close();
 
-            ShowInfo("NeoDatis DB closed!");
+            this.ShowInfo("NeoDatis DB is closed!");
         }
 	}
 
@@ -113,7 +88,12 @@ public class DBService {
 	 * @return	Boolean		true, if connection was successful
 	 */
 	public Boolean IsConnectedToDB () {
-		return isConnected;
+        if (this.activeDB != null) {
+        	return true;
+        }
+        else {
+        	return false;
+        }
 	}
 
 	/**
@@ -123,11 +103,11 @@ public class DBService {
 	 * @return OID			the object ID
 	 */
 	public OID StoreToDatabase (Object theObject) {
-        if (activeDB != null) {
+        if (this.activeDB != null) {
 	        // Stores the object in DB
-	        OID oid = activeDB.store(theObject);
+	        OID oid = this.activeDB.store(theObject);
 
-            ShowInfo("NeoDatis DB object stored!");
+            this.ShowInfo("NeoDatis DB object stored!");
             return oid;
         }
         
@@ -141,11 +121,11 @@ public class DBService {
 	 * @return Object	the complete object from database
 	 */
 	public Object ReadFromDatabase (OID oid) {
-        if (activeDB != null) {
+        if (this.activeDB != null) {
 	        // Retrieve an object with the specific id 
-	        Object theObject = activeDB.getObjectFromId(oid);
+	        Object theObject = this.activeDB.getObjectFromId(oid);
 	
-            ShowInfo("NeoDatis DB object read!");
+            this.ShowInfo("NeoDatis DB object read!");
 			return theObject;
         }
         
@@ -160,7 +140,7 @@ public class DBService {
 	public void ShowInfo (String strInfo) {
         int duration = Toast.LENGTH_SHORT;
 
-        Toast toast = Toast.makeText(activeContext, strInfo, duration);
+        Toast toast = Toast.makeText(mActiveContext, strInfo, duration);
         toast.show();
 	}
 }

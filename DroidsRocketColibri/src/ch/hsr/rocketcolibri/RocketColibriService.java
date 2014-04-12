@@ -37,11 +37,12 @@ public class RocketColibriService extends  Service
 	public WifiConnection wifi;
 	
 	// channels
-	public Channel[] channel = { new Channel(), new Channel(), new Channel(), new Channel(), 
-			                      new Channel(), new Channel(), new Channel(), new Channel()};
+	public Channel[] channel = {new Channel(), new Channel(), new Channel(), new Channel(), 
+			                    new Channel(), new Channel(), new Channel(), new Channel()};
 	
 	// references to the database service
-	public DBService database;
+	public DBService database = null;
+	private Boolean isConnected = false;
 
 	@Override
 	public IBinder onBind(Intent intent) 
@@ -62,12 +63,25 @@ public class RocketColibriService extends  Service
 		this.wifi = new WifiConnection(protocolFsm, (WifiManager) getSystemService(Context.WIFI_SERVICE));
 		 
 		// create database instance
-		// TODO
-		//this.database = new
+		if (!this.isConnected) {
+			this.database = new DBService(this);
+
+			this.isConnected = this.database.ConnectToDatabase();
+		}
    }
 	 
-	
-	@Override
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // The activity is about to be destroyed.
+        
+        // Destroying the app close database
+        this.database.CloseDatabase();
+        this.isConnected = false;
+        this.database = null;
+    }
+
+    @Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
 		return Service.START_STICKY;
