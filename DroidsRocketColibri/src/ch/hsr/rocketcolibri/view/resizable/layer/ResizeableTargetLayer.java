@@ -11,35 +11,34 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Toast;
 
 public class ResizeableTargetLayer extends MyAbsoluteLayout {
 
-    Point point1, point3;
-    Point point2, point4;
+	private Point point0, point2;
+	private Point point1, point3;
 
     /**
-     * point1 and point 3 are of same group and same as point 2 and point4
+     * point0 and point 2 are of same group and same as point 1 and point3
      */
-    int groupId = -1;
+    private short groupId = -1;
     private ArrayList<CornerBall> colorballs = new ArrayList<CornerBall>();
-    // array that holds the balls
-    private int balID = 0;
-    // variable to know what ball is being dragged
+    private short ballID = 0;// variable to know what ball is being dragged
+    
     private Paint borderPaint;
     private Paint ballPaint = new Paint();
-    Canvas canvas;
+    private Canvas canvas;
     private View resizeTarget;
-    int ballSpacing = 100;
-    LayoutParams resizeTargetLP;
+    private int ballSpacing = 100;
+    private LayoutParams resizeTargetLP;
     private IResizeListener listener;
+    private int topLeftCornerX;
+    private int topLeftCornerY;
+    private int bottomRightCornerX;
+    private int bottomRightCornerY;
+
     
     public ResizeableTargetLayer(final Context context, View resizeTarget, LayoutParams layoutParams, final IResizeListener listener) {
         super(context);
@@ -58,27 +57,27 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
         setFocusable(true); // necessary for getting the touch events
         canvas = new Canvas();
         // setting the start point for the balls
-        point1 = new Point(); //top left
-        point1.x = resizeTargetLP.x-ballSpacing;
-        point1.y = resizeTargetLP.y-ballSpacing;
+        point0 = new Point(); //top left
+        point0.x = resizeTargetLP.x-ballSpacing;
+        point0.y = resizeTargetLP.y-ballSpacing;
 
-        point2 = new Point(); 
-        point2.x = (int)resizeTargetLP.x-ballSpacing; // bottom left
+        point1 = new Point(); 
+        point1.x = (int)resizeTargetLP.x-ballSpacing; // bottom left
+        point1.y = (int)resizeTargetLP.y+resizeTargetLP.height;
+
+        point2 = new Point();// bottom right
+        point2.x = (int)resizeTargetLP.x+resizeTargetLP.width;
         point2.y = (int)resizeTargetLP.y+resizeTargetLP.height;
 
-        point3 = new Point();// bottom right
-        point3.x = (int)resizeTargetLP.x+resizeTargetLP.width;
-        point3.y = (int)resizeTargetLP.y+resizeTargetLP.height;
-
-        point4 = new Point();/// top right
-        point4.x = (int) (resizeTargetLP.x+resizeTargetLP.width);
-        point4.y = (int)resizeTargetLP.y-ballSpacing;
+        point3 = new Point();/// top right
+        point3.x = (int) (resizeTargetLP.x+resizeTargetLP.width);
+        point3.y = (int)resizeTargetLP.y-ballSpacing;
 
         // declare each ball with the ColorBall class
-        colorballs.add(new CornerBall(context, R.drawable.square, point1, ballSpacing, 0));
-        colorballs.add(new CornerBall(context, R.drawable.square, point2, ballSpacing, 1));
-        colorballs.add(new CornerBall(context, R.drawable.square, point3, ballSpacing, 2));
-        colorballs.add(new CornerBall(context, R.drawable.square, point4, ballSpacing, 3));
+        colorballs.add(new CornerBall(context, R.drawable.square, point0, ballSpacing, 0));
+        colorballs.add(new CornerBall(context, R.drawable.square, point1, ballSpacing, 1));
+        colorballs.add(new CornerBall(context, R.drawable.square, point2, ballSpacing, 2));
+        colorballs.add(new CornerBall(context, R.drawable.square, point3, ballSpacing, 3));
     }
 
     
@@ -93,9 +92,9 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
         borderPaint.setStrokeWidth(5);
         borderPaint.setColor(Color.parseColor("#55FFFFFF"));
 
-            canvas.drawRect(point2.x + colorballs.get(1).getWidthOfBall() / 2,
-                    point4.y + colorballs.get(3).getWidthOfBall() / 2, point4.x
-                            + colorballs.get(3).getWidthOfBall() / 2, point2.y
+            canvas.drawRect(point1.x + colorballs.get(1).getWidthOfBall() / 2,
+                    point3.y + colorballs.get(3).getWidthOfBall() / 2, point3.x
+                            + colorballs.get(3).getWidthOfBall() / 2, point1.y
                             + colorballs.get(1).getWidthOfBall() / 2, borderPaint);
 
         for (CornerBall ball : colorballs) {
@@ -116,13 +115,11 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
 
         case MotionEvent.ACTION_DOWN: // touch down so check if the finger is on
                                         // a ball
-            balID = -1;
+            ballID = -1;
             groupId = -1;
             for (CornerBall ball : colorballs) {
                 // check if inside the bounds of the ball (circle)
                 // get the center for the ball
-                Log.d("","Id : " + ball.getID());
-                Log.d("","getX : " + ball.getX() + " getY() : " + ball.getY());
                 int centerX = ball.getX() + ball.getWidthOfBall();
                 int centerY = ball.getY() + ball.getHeightOfBall();
                 borderPaint.setColor(Color.CYAN);
@@ -131,19 +128,15 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
                         .sqrt((double) (((centerX - X) * (centerX - X)) + (centerY - Y)
                                 * (centerY - Y)));
 
-                Log.d("","X : " + X + " Y : " + Y + " centerX : " + centerX
-                        + " CenterY : " + centerY + " radCircle : " + radCircle);
-
                 if (radCircle < ball.getWidthOfBall()) {
-                    balID = ball.getID();
-                    Log.d("","Selected ball : " + balID);
-                    if (balID == 1 || balID == 3) {
+                    ballID = (short) ball.getID();
+                    if (ballID == 1 || ballID == 3) {
                         groupId = 2;
-                        canvas.drawRect(point1.x, point3.y, point3.x, point1.y,
+                        canvas.drawRect(point0.x, point2.y, point2.x, point0.y,
                                 borderPaint);
                     } else {
                         groupId = 1;
-                        canvas.drawRect(point2.x, point4.y, point4.x, point2.y,
+                        canvas.drawRect(point1.x, point3.y, point3.x, point1.y,
                                 borderPaint);
                     }
                     invalidate();
@@ -155,10 +148,9 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
 
         case MotionEvent.ACTION_MOVE: // touch drag with the ball
             // move the balls the same as the finger
-            if (balID > -1 && balID<4) {
-            	Log.d("","Moving Ball : " + balID);
-                colorballs.get(balID).setX(X);
-                colorballs.get(balID).setY(Y);
+            if (ballID > -1 && ballID<4) {
+                colorballs.get(ballID).setX(X);
+                colorballs.get(ballID).setY(Y);
 
                 borderPaint.setColor(Color.CYAN);
 
@@ -167,35 +159,23 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
                     /*bottom left*/ colorballs.get(1).setY(colorballs.get(2).getY());//bottom right
                     /*top right  */ colorballs.get(3).setX(colorballs.get(2).getX());//bottom right
                     /*top right  */ colorballs.get(3).setY(colorballs.get(0).getY());//top left
-                    canvas.drawRect(point1.x, point3.y, point3.x, point1.y, borderPaint);
-                   	int topLeftCornerX = colorballs.get(0).getX()+ballSpacing;
-                	int topLeftCornerY = colorballs.get(0).getY()+ballSpacing;
-                   	int bottomRightCornerX = colorballs.get(2).getX();
-                	int bottomRightCornerY = colorballs.get(2).getY();
-                	
-                 	resizeTargetLP.width = bottomRightCornerX-topLeftCornerX;
-                	resizeTargetLP.height = bottomRightCornerY-topLeftCornerY;
-                	resizeTargetLP.x = topLeftCornerX;
-                	resizeTargetLP.y = topLeftCornerY;
-
-                    Log.d("","moving balls : bottom left + top right");
+                    canvas.drawRect(point0.x, point2.y, point2.x, point0.y, borderPaint);
                 } else {
                    /*top left    */ colorballs.get(0).setX(colorballs.get(1).getX());//bottom left
                    /*top left    */ colorballs.get(0).setY(colorballs.get(3).getY());//top right
                    /*bottom right*/ colorballs.get(2).setX(colorballs.get(3).getX());//top right
                    /*bottom right*/ colorballs.get(2).setY(colorballs.get(1).getY());//bottom left
-                    canvas.drawRect(point2.x, point4.y, point4.x, point2.y, borderPaint);
-                    Log.d("","moving balls : top left  + bottom right");
-                   	int topLeftCornerX = colorballs.get(0).getX()+ballSpacing;
-                	int topLeftCornerY = colorballs.get(0).getY()+ballSpacing;
-                   	int bottomRightCornerX = colorballs.get(2).getX();
-                	int bottomRightCornerY = colorballs.get(2).getY();
-                	
-                 	resizeTargetLP.width = bottomRightCornerX-topLeftCornerX;
-                	resizeTargetLP.height = bottomRightCornerY-topLeftCornerY;
-                	resizeTargetLP.x = topLeftCornerX;
-                	resizeTargetLP.y = topLeftCornerY;
+                    canvas.drawRect(point1.x, point3.y, point3.x, point1.y, borderPaint);
                 }
+               	topLeftCornerX = colorballs.get(0).getX()+ballSpacing;
+            	topLeftCornerY = colorballs.get(0).getY()+ballSpacing;
+               	bottomRightCornerX = colorballs.get(2).getX();
+            	bottomRightCornerY = colorballs.get(2).getY();
+            	
+             	resizeTargetLP.width = bottomRightCornerX-topLeftCornerX;
+            	resizeTargetLP.height = bottomRightCornerY-topLeftCornerY;
+            	resizeTargetLP.x = topLeftCornerX;
+            	resizeTargetLP.y = topLeftCornerY;
                 invalidate();
             }
 
@@ -222,6 +202,6 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
     }
 
     public void shade_region_between_points() {
-        canvas.drawRect(point1.x, point3.y, point3.x, point1.y, borderPaint);
+        canvas.drawRect(point0.x, point2.y, point2.x, point0.y, borderPaint);
     }
 }

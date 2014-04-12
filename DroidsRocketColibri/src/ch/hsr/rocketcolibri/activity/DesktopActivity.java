@@ -369,7 +369,6 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	 */    
 	
 	public boolean onTouch (View v, MotionEvent ev){
-		Log.d("", ev.toString());
 		if (!customizeModeOn) return false;
         switch(ev.getAction() & MotionEvent.ACTION_MASK)
         {
@@ -383,11 +382,8 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
             clickCount++;
             break;
         case MotionEvent.ACTION_UP:
-            
-           
             if(clickCount == 2){
             	duration = System.currentTimeMillis() - startTime;
-            	 toast(""+duration);
                 if(duration<= MAX_DURATION)
                 {
                     resizeView(v);
@@ -468,9 +464,7 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 			
 			@Override
 			public void done(View resizedView) {
-				toast("resize done");
 				mDragLayer.addView(resizedView);
-				
 			}
 		});
 	    mDragLayer.addView(viewResizer);
