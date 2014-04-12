@@ -25,7 +25,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
-import android.graphics.drawable.Drawable;
 import android.os.IBinder;
 import android.view.Gravity;
 import android.view.View;
@@ -46,10 +45,10 @@ public class DragView extends View
 
     private Bitmap mBitmap;
     private Paint mPaint;
+    private Paint mBgPaint;
     private int mRegistrationX;
     private int mRegistrationY;
 
-    private float mScale;
     private float mAnimationScale = 1.0f;
 
     private WindowManager.LayoutParams mLayoutParams;
@@ -70,20 +69,21 @@ public class DragView extends View
             int left, int top, int width, int height) {
         super(context);
 
-        // mWindowManager = WindowManagerImpl.getDefault();
         mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);        
   
         Matrix scale = new Matrix();
         float scaleFactor = width;
-        scaleFactor = mScale = (scaleFactor + DRAG_SCALE) / scaleFactor;
+        scaleFactor = (scaleFactor + DRAG_SCALE) / scaleFactor;
         scale.setScale(scaleFactor, scaleFactor);
         mBitmap = Bitmap.createBitmap(bitmap, left, top, width, height, scale, true);
 
         // The point in our scaled bitmap that the touch events are located
         mRegistrationX = registrationX + (DRAG_SCALE / 2);
         mRegistrationY = registrationY + (DRAG_SCALE / 2);
-        
-        
+        mBgPaint = new Paint();
+        mBgPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        mBgPaint.setColor(0x88dd0011);
+        mBgPaint.setAlpha(50);
     }
 
     @Override
@@ -93,13 +93,9 @@ public class DragView extends View
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (true) {
-            // for debugging
-            Paint p = new Paint();
-            p.setStyle(Paint.Style.FILL_AND_STROKE);
-            p.setColor(0x88dd0011);
-            canvas.drawRect(0, 0, getWidth(), getHeight(), p);
-        }
+        // draw background
+        canvas.drawRect(0, 0, getWidth(), getHeight(), mBgPaint);
+        
         float scale = mAnimationScale;
         if (scale < 0.999f) { // allow for some float error
             float width = mBitmap.getWidth();
@@ -107,26 +103,7 @@ public class DragView extends View
             canvas.translate(offset, offset);
             canvas.scale(scale, scale);
         }
-        canvas.drawBitmap(mBitmap, 3.5f, 5.3f, mPaint);
-        
-        
-//        final Drawable foreground = getResources().getDrawable(R.drawable.dragforeground);
-//        if (foreground != null) {
-//            foreground.setBounds(0, 0, getRight() - getLeft(), getBottom() - getTop());
-// 
-//            final int scrollX = getScrollX();
-//            final int scrollY = getScrollY();
-// 
-//            if ((scrollX | scrollY) == 0) {
-//                foreground.draw(canvas);
-//            }
-//            else {
-//                canvas.translate(scrollX, scrollY);
-//                foreground.draw(canvas);
-//                canvas.translate(-scrollX, -scrollY);
-//            }
-//        }
-        
+        canvas.drawBitmap(mBitmap, 0f, 0f, mPaint);
     }
 
     @Override

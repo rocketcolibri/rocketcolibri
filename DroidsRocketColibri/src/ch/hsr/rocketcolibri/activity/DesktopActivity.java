@@ -34,8 +34,8 @@ import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.draggable.DragController;
 import ch.hsr.rocketcolibri.view.draggable.DragLayer;
-import ch.hsr.rocketcolibri.view.resizable.IResizeListener;
-import ch.hsr.rocketcolibri.view.resizable.ViewResizer;
+import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
+import ch.hsr.rocketcolibri.view.resizable.ResizeController;
 import ch.hsr.rocketcolibri.view.widget.Circle;
 import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
 
@@ -47,7 +47,8 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	SurfaceHolder surface_holder = null;
 	SurfaceHolder.Callback sh_callback = null;
 
-	private DragController mDragController;   // Object that sends out drag-drop events while a view is being moved.
+	private DragController tDragController;
+	private ResizeController tResizeController;
 	private DragLayer mDragLayer;             // The ViewGroup that supports drag-drop.
 	private boolean customizeModeOn = true;    // If true, it takes a long click to start the drag operation.
 	                                                // Otherwise, any touch event starts a drag.
@@ -148,13 +149,9 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-//		btnHotter = (Button) findViewById(R.id.btnHotter);
-//		btnColder = (Button) findViewById(R.id.btnColder);
 		meter1 = (Circle) findViewById(R.id.circle1);
 		meter2 = (Circle) findViewById(R.id.circle2);
 
-//		btnHotter.setOnClickListener(this);
-//		btnColder.setOnClickListener(this);
 		getWindow().setFormat(PixelFormat.TRANSLUCENT);
 		surface_view = (SurfaceView) findViewById(R.id.camView);
 		if (surface_holder == null) {
@@ -205,7 +202,8 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 			}
 		});
 		
-		mDragController = new DragController(this);
+		tDragController = new DragController(this);
+		tResizeController = new ResizeController(this);
 		setupViews();
 	}
 	
@@ -362,15 +360,19 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	    // I use the dragInfo to pass along the object being dragged.
 	    // I'm not sure how the Launcher designers do this.
 	    Object dragInfo = v;
-	    mDragController.startDrag (v, mDragLayer, dragInfo, DragController.DRAG_ACTION_MOVE);
+	    tDragController.startDrag (v, mDragLayer, dragInfo, DragController.DRAG_ACTION_MOVE);
 	    return true;
+	}
+ 	
+	private void resizeView(View targetView){
+		tResizeController.startResize(mDragLayer, targetView);
 	}
 	
 	/**
 	 * Finds all the views we need and configure them to send click events to the activity.
 	 */
 	private void setupViews(){
-	    DragController dragController = mDragController;
+	    DragController dragController = tDragController;
 	
 	    mDragLayer = (DragLayer) findViewById(R.id.drag_layer);
 	    mDragLayer.setDragController(dragController);
@@ -404,17 +406,6 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	                                          : "Touch a view to start dragging.";
 	    Toast.makeText (getApplicationContext(), message, Toast.LENGTH_LONG).show ();
 	    updateModusOfCustomizableViews();
-	}
-	
-	private void resizeView(View view){
-	    final ViewResizer viewResizer = new ViewResizer(this, view, new IResizeListener() {
-			
-			@Override
-			public void done(View resizedView) {
-				mDragLayer.addView(resizedView);
-			}
-		});
-	    mDragLayer.addView(viewResizer);
 	}
 	
 	/**

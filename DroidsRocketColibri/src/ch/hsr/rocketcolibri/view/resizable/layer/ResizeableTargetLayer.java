@@ -5,13 +5,12 @@ import java.util.ArrayList;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.view.MyAbsoluteLayout;
 import ch.hsr.rocketcolibri.view.resizable.CornerBall;
-import ch.hsr.rocketcolibri.view.resizable.IResizeListener;
+import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -31,16 +30,14 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
     private Paint ballPaint = new Paint();
     private Canvas canvas;
     private View resizeTarget;
-    private int ballSpacing = 100;
     private LayoutParams resizeTargetLP;
-    private IResizeListener listener;
+    private IResizeDoneListener listener;
     private int topLeftCornerX;
     private int topLeftCornerY;
     private int bottomRightCornerX;
     private int bottomRightCornerY;
-
     
-    public ResizeableTargetLayer(final Context context, View resizeTarget, LayoutParams layoutParams, final IResizeListener listener) {
+    public ResizeableTargetLayer(final Context context, View resizeTarget, LayoutParams layoutParams, final IResizeDoneListener listener) {
         super(context);
         this.resizeTarget = resizeTarget;
         resizeTargetLP = (LayoutParams) resizeTarget.getLayoutParams();
@@ -56,13 +53,16 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
         borderPaint = new Paint();
         setFocusable(true); // necessary for getting the touch events
         canvas = new Canvas();
-        // setting the start point for the balls
+        int cornerItemResource = R.drawable.circle;
+
         point0 = new Point(); //top left
-        point0.x = resizeTargetLP.x-ballSpacing;
-        point0.y = resizeTargetLP.y-ballSpacing;
+        CornerBall cBall = new CornerBall(context, cornerItemResource, point0, 0);// predefine to get the dimension of the corner item
+        
+        point0.x = resizeTargetLP.x-cBall.getWidthOfBall();
+        point0.y = resizeTargetLP.y-cBall.getHeightOfBall();
 
         point1 = new Point(); 
-        point1.x = (int)resizeTargetLP.x-ballSpacing; // bottom left
+        point1.x = (int)resizeTargetLP.x-cBall.getWidthOfBall(); // bottom left
         point1.y = (int)resizeTargetLP.y+resizeTargetLP.height;
 
         point2 = new Point();// bottom right
@@ -71,13 +71,12 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
 
         point3 = new Point();/// top right
         point3.x = (int) (resizeTargetLP.x+resizeTargetLP.width);
-        point3.y = (int)resizeTargetLP.y-ballSpacing;
+        point3.y = (int)resizeTargetLP.y-cBall.getHeightOfBall();
 
-        // declare each ball with the ColorBall class
-        colorballs.add(new CornerBall(context, R.drawable.square, point0, ballSpacing, 0));
-        colorballs.add(new CornerBall(context, R.drawable.square, point1, ballSpacing, 1));
-        colorballs.add(new CornerBall(context, R.drawable.square, point2, ballSpacing, 2));
-        colorballs.add(new CornerBall(context, R.drawable.square, point3, ballSpacing, 3));
+        colorballs.add(cBall);
+        colorballs.add(new CornerBall(context, cornerItemResource, point1, 1));
+        colorballs.add(new CornerBall(context, cornerItemResource, point2, 2));
+        colorballs.add(new CornerBall(context, cornerItemResource, point3, 3));
     }
 
     
@@ -167,8 +166,8 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
                    /*bottom right*/ colorballs.get(2).setY(colorballs.get(1).getY());//bottom left
                     canvas.drawRect(point1.x, point3.y, point3.x, point1.y, borderPaint);
                 }
-               	topLeftCornerX = colorballs.get(0).getX()+ballSpacing;
-            	topLeftCornerY = colorballs.get(0).getY()+ballSpacing;
+               	topLeftCornerX = colorballs.get(0).getX()+colorballs.get(0).getWidthOfBall();
+            	topLeftCornerY = colorballs.get(0).getY()+colorballs.get(0).getHeightOfBall();
                	bottomRightCornerX = colorballs.get(2).getX();
             	bottomRightCornerY = colorballs.get(2).getY();
             	

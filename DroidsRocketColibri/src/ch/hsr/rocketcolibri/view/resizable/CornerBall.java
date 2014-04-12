@@ -13,11 +13,11 @@ public class CornerBall {
         Point point;
         int id;
 
-        public CornerBall(Context context, int resourceId, Point point, int size, int id) {
+        public CornerBall(Context context, int resourceId, Point point, int id) {
             this.id = id;
             bitmap = BitmapFactory.decodeResource(context.getResources(),
                     resourceId);
-            bitmap = Bitmap.createScaledBitmap(bitmap, size, size, false);
+//            bitmap = Bitmap.createScaledBitmap(bitmap, size, size, false);
             mContext = context;
             this.point = point;
         }

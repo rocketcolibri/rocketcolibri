@@ -8,31 +8,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import ch.hsr.rocketcolibri.view.MyAbsoluteLayout;
-import ch.hsr.rocketcolibri.view.resizable.IResizeListener;
+import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
 
 public class ResizableMainLayer extends MyAbsoluteLayout{
 
-	public ResizableMainLayer(Context context, View resizeTarget, final IResizeListener listener) {
+	public ResizableMainLayer(Context context, View resizeTarget, final IResizeDoneListener listener, LayoutParams lp) {
 		super(context);
-		((MyAbsoluteLayout)resizeTarget.getParent()).removeView(resizeTarget);
-		
-		IResizeListener mainListener = new IResizeListener() {
+		IResizeDoneListener mainListener = new IResizeDoneListener() {
 			
 			@Override
 			public void done(View resizedView) {
 				ResizableMainLayer.this.removeAllViews();
-				((ViewGroup)getParent()).removeView(ResizableMainLayer.this);
 				listener.done(resizedView);
 			}
 		};
 		setBackgroundColor(Color.TRANSPARENT);
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        int height = size.y;
-        LayoutParams lp = new LayoutParams(width, height, 0, 0);
         setLayoutParams(lp);
         ResizableBackgroundLayer bgLayer = new ResizableBackgroundLayer(context, lp);
         addView(bgLayer);
