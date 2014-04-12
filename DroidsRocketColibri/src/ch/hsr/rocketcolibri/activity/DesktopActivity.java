@@ -35,6 +35,8 @@ import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.draggable.DragController;
 import ch.hsr.rocketcolibri.view.draggable.DragLayer;
+import ch.hsr.rocketcolibri.view.resizable.IResizeListener;
+import ch.hsr.rocketcolibri.view.resizable.ViewResizer;
 import ch.hsr.rocketcolibri.widget.Circle;
 import ch.hsr.rocketcolibri.widget.OnChannelChangeListener;
 
@@ -48,7 +50,7 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 
 	private DragController mDragController;   // Object that sends out drag-drop events while a view is being moved.
 	private DragLayer mDragLayer;             // The ViewGroup that supports drag-drop.
-	private boolean mLongClickStartsDrag = true;    // If true, it takes a long click to start the drag operation.
+	private boolean customizeModeOn = true;    // If true, it takes a long click to start the drag operation.
 	                                                // Otherwise, any touch event starts a drag.
 	
 	private static final int CHANGE_TOUCH_MODE_MENU_ID = Menu.FIRST;
@@ -256,28 +258,6 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 		mDragController = new DragController(this);
 		setupViews();
 	}
-//
-//	@Override
-//	public void onClick(View view) {
-//		switch (view.getId()) {
-//		case R.id.btnColder:
-//			break;
-//		case R.id.btnHotter:
-//			break;
-//		}
-//		return;
-//	}
-//
-//	@Override
-//	public boolean onLongClick(View view) {
-//		switch (view.getId()) {
-//		case R.id.btnColder:
-//			break;
-//		case R.id.btnHotter:
-//			break;
-//		}
-//		return true;
-//	}
 	
 	/**
 	 * Build a menu for the activity.
@@ -300,7 +280,7 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	 */    
 	
 	public void onClick(View v){
-	    if (mLongClickStartsDrag) {
+	    if (customizeModeOn) {
 	       // Tell the user that it takes a long click to start dragging.
 	       toast ("Press and hold to drag an image.");
 	    }
@@ -315,7 +295,7 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	 */    
 	
 	public boolean onLongClick(View v){
-	    if (mLongClickStartsDrag) {
+	    if (customizeModeOn) {
 	       
 	        //trace ("onLongClick in view: " + v + " touchMode: " + v.isInTouchMode ());
 	
@@ -341,8 +321,8 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	public boolean onOptionsItemSelected (MenuItem item){
 	    switch (item.getItemId()) {
 	      case CHANGE_TOUCH_MODE_MENU_ID:
-	        mLongClickStartsDrag = !mLongClickStartsDrag;
-	        String message = mLongClickStartsDrag ? "Changed touch mode. Drag now starts on long touch (click)." 
+	        customizeModeOn = !customizeModeOn;
+	        String message = customizeModeOn ? "Changed touch mode. Drag now starts on long touch (click)." 
 	                                              : "Changed touch mode. Drag now starts on touch (click).";
 	        Toast.makeText (getApplicationContext(), message, Toast.LENGTH_LONG).show ();
 	        updateModusOfCustomizableViews();
@@ -368,12 +348,19 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
     	for(int i = 0; i < size; ++i){
     		try{
     			view = (ICustomizableView) mDragLayer.getChildAt(i);
-    			view.setCustomizeModus(mLongClickStartsDrag);
+    			view.setCustomizeModus(customizeModeOn);
     		}catch(Exception e){
     		}
     	}
 	}
 	
+	//double tab and long click variables
+	int clickCount = 0;
+	long startTime;
+	long endTime;
+	long duration;
+	static final int MAX_DURATION = 500;
+		
 	/**
 	 * This is the starting point for a drag operation if mLongClickStartsDrag is false.
 	 * It looks for the down event that gets generated when a user touches the screen.
@@ -382,19 +369,43 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	 */    
 	
 	public boolean onTouch (View v, MotionEvent ev){
-	    // If we are configured to start only on a long click, we are not going to handle any events here.
-	    if (mLongClickStartsDrag) return false;
-	
-	    boolean handledHere = false;
-	
-	    final int action = ev.getAction();
-	
-	    // In the situation where a long click is not needed to initiate a drag, simply start on the down event.
-	    if (action == MotionEvent.ACTION_DOWN) {
-	       handledHere = startDrag (v);
-	    }
-	    
-	    return handledHere;
+		Log.d("", ev.toString());
+		if (!customizeModeOn) return false;
+        switch(ev.getAction() & MotionEvent.ACTION_MASK)
+        {
+        case MotionEvent.ACTION_DOWN:
+        	if(System.currentTimeMillis() - startTime>MAX_DURATION){
+        		clickCount=0;
+        	}
+            if(clickCount == 0){
+            	startTime = System.currentTimeMillis();
+            }
+            clickCount++;
+            break;
+        case MotionEvent.ACTION_UP:
+            
+           
+            if(clickCount == 2){
+            	duration = System.currentTimeMillis() - startTime;
+            	 toast(""+duration);
+                if(duration<= MAX_DURATION)
+                {
+                    resizeView(v);
+                }
+                clickCount = 0;
+                duration = 0;
+                break;             
+            }
+        case MotionEvent.ACTION_MOVE:
+        	if(clickCount==1){
+            	duration = System.currentTimeMillis() - startTime;
+            	if(duration>=MAX_DURATION){
+            		clickCount = 0;
+            		return onLongClick(v);
+            	}
+            }
+        }
+        return true;  
 	}
 	
 	/**
@@ -426,30 +437,43 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	    LayoutParams lp = new LayoutParams(300, 300, 700, 300);
 	    view.setLayoutParams(lp);
 	    view.setBackgroundColor(Color.CYAN);
-	    view.setOnLongClickListener(this);
+	    view.setOnTouchListener(this);
 	    mDragLayer.addView(view);
 	    
 	    view = new CustomizableView(this);
 	    lp = new LayoutParams(500, 300, 100, 200);
 	    view.setLayoutParams(lp);
 	    view.setBackgroundColor(Color.RED);
-	    view.setOnLongClickListener(this);
+	    view.setOnTouchListener(this);
 	    mDragLayer.addView(view);
 	    
 	    view = new CustomizableView(this);
 	    lp = new LayoutParams(500, 300, 0, 0);
 	    view.setLayoutParams(lp);
 	    view.setBackgroundColor(Color.LTGRAY);
-	    view.setOnLongClickListener(this);
+	    view.setOnTouchListener(this);
 	    mDragLayer.addView(view);
 	    
-	    meter1.setOnLongClickListener(this);
-	    meter2.setOnLongClickListener(this);
+	    meter1.setOnTouchListener(this);
+	    meter2.setOnTouchListener(this);
 	    
-	    String message = mLongClickStartsDrag ? "Press and hold to start dragging." 
+	    String message = customizeModeOn ? "Press and hold to start dragging." 
 	                                          : "Touch a view to start dragging.";
 	    Toast.makeText (getApplicationContext(), message, Toast.LENGTH_LONG).show ();
 	    updateModusOfCustomizableViews();
+	}
+	
+	private void resizeView(View view){
+	    final ViewResizer viewResizer = new ViewResizer(this, view, new IResizeListener() {
+			
+			@Override
+			public void done(View resizedView) {
+				toast("resize done");
+				mDragLayer.addView(resizedView);
+				
+			}
+		});
+	    mDragLayer.addView(viewResizer);
 	}
 	
 	/**

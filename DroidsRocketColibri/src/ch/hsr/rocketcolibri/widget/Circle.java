@@ -173,6 +173,7 @@ public final class Circle extends CustomizableView {
 			positionInPercentY = a.getInteger(R.styleable.Circle_positionInPercentY, positionInPercentY);
 			orientationSide = a.getString(R.styleable.Circle_orientationSide);
 			diameterInDP = a.getInt(R.styleable.Circle_diameterInDP, diameterInDP);
+			setMeasuredDimension(diameterInDP, diameterInDP);
 			initPosition();
 		}
 		initDrawingTools();
@@ -278,24 +279,14 @@ public final class Circle extends CustomizableView {
 		}
 	}
 	
-	@Override
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//		Log.d(TAG, "Width spec: " + MeasureSpec.toString(widthMeasureSpec));
-//		Log.d(TAG, "Height spec: " + MeasureSpec.toString(heightMeasureSpec));
-//		
-//		int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-//		int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-//		
-//		int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-//		int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-//		
-//		int chosenWidth = chooseDimension(widthMode, widthSize);
-//		int chosenHeight = chooseDimension(heightMode, heightSize);
-//		
-//		int chosenDimension = Math.min(chosenWidth, chosenHeight);
-//		
-		setMeasuredDimension(diameterInDP, diameterInDP);
-	}
+//	@Override
+//	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+////		Log.d(TAG, "Width spec: " + MeasureSpec.toString(widthMeasureSpec));
+////		Log.d(TAG, "Height spec: " + MeasureSpec.toString(heightMeasureSpec));
+////		
+//		diameterInDP = widthMeasureSpec;
+//		setMeasuredDimension(diameterInDP, diameterInDP);
+//	}
 	
 	private int chooseDimension(int mode, int size) {
 		if (mode == MeasureSpec.AT_MOST || mode == MeasureSpec.EXACTLY) {
