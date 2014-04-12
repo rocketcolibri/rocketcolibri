@@ -28,7 +28,6 @@ import android.widget.Button;
 import android.widget.Toast;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
-import ch.hsr.rocketcolibri.dbService.DBService;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
 import ch.hsr.rocketcolibri.view.MyAbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
@@ -59,9 +58,6 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	
 	public static final boolean Debugging = false;
 
-	private DBService theDB = null;
-	private Boolean isConnected = false;
-	
 	// handler for received Intents for the online message event 
 	private BroadcastReceiver mOnlineMessageReceiver = new BroadcastReceiver() {
 	  @Override
@@ -147,32 +143,6 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 		}
 	};
 	
-	/**
-	 * Test class for NeoDatis database connection, will be removed very soon..
-	 * @author Haluk
-	 *
-	 */
-	class MyString {
-		String strString = null;
-		OID myOID = null;
-		
-		public String getMyString () {
-			return strString;
-		}
-
-		public void setMyString (String theString) {
-			strString = theString;
-		}
-		
-		public OID getOID () {
-			return myOID;
-		}
-		
-		public void setOID (OID theOID) {
-			myOID = theOID;
-		}
-	}
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -193,26 +163,6 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 
 		sh_callback = my_callback();
 		surface_holder.addCallback(sh_callback);
-		
-		// Store the DB instance
-		theDB = DBService.getInstance();
-
-		// Connect to the DB
-		isConnected = theDB.ConnectToDatabase(getApplicationContext());
-		
-    	MyString myString = new MyString();
-    	MyString strStoredString = new MyString();
-    	myString.setMyString("My first test");
-
-		if (theDB != null) {
-			myString.setOID(theDB.StoreToDatabase(myString));
-		}
-
-		if (theDB != null) {
-			strStoredString = (MyString)theDB.ReadFromDatabase(myString.getOID());
-		}
-
-        theDB.ShowInfo(strStoredString.getMyString() + " - " + strStoredString.getOID());
 
         // Start Rocket ColibriProtocol service
 		Intent intent = new Intent(this, RocketColibriService.class);
