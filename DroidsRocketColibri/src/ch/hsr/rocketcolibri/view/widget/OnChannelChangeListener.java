@@ -1,4 +1,4 @@
-package ch.hsr.rocketcolibri.widget;
+package ch.hsr.rocketcolibri.view.widget;
 
 
 public interface OnChannelChangeListener

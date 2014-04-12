@@ -23,7 +23,7 @@
         android:textColor="#33b5e5"
         android:textSize="50sp"
         android:textStyle="bold" />
-    <ch.hsr.rocketcolibri.widget.SwipeInMenu
+    <ch.hsr.rocketcolibri.view.widget.SwipeInMenu
         android:id="@+id/meter1"
         android:layout_width="fill_parent"
         android:layout_height="120dp"

@@ -1,4 +1,4 @@
-package ch.hsr.rocketcolibri.widget.circleController;
+package ch.hsr.rocketcolibri.view.widget.circleController;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;

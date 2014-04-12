@@ -1,4 +1,4 @@
-package ch.hsr.rocketcolibri.widget;
+package ch.hsr.rocketcolibri.view.widget;
 
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;

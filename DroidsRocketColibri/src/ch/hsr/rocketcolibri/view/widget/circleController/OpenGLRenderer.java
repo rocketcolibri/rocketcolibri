@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ch.hsr.rocketcolibri.widget.circleController;
+package ch.hsr.rocketcolibri.view.widget.circleController;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import ch.hsr.rocketcolibri.widget.circleController.mesh.Group;
-import ch.hsr.rocketcolibri.widget.circleController.mesh.Mesh;
+import ch.hsr.rocketcolibri.view.widget.circleController.mesh.Group;
+import ch.hsr.rocketcolibri.view.widget.circleController.mesh.Mesh;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
 

@@ -37,8 +37,8 @@ import ch.hsr.rocketcolibri.view.draggable.DragController;
 import ch.hsr.rocketcolibri.view.draggable.DragLayer;
 import ch.hsr.rocketcolibri.view.resizable.IResizeListener;
 import ch.hsr.rocketcolibri.view.resizable.ViewResizer;
-import ch.hsr.rocketcolibri.widget.Circle;
-import ch.hsr.rocketcolibri.widget.OnChannelChangeListener;
+import ch.hsr.rocketcolibri.view.widget.Circle;
+import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
 
 public class DesktopActivity extends Activity implements View.OnLongClickListener, View.OnClickListener, View.OnTouchListener {
 	private static final String TAG = "CircleTestActivity";
@@ -406,10 +406,8 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	
 	/**
 	 * Start dragging a view.
-	 *
 	 */    
-	
-	public boolean startDrag (View v){
+ 	public boolean startDrag (View v){
 	    // Let the DragController initiate a drag-drop sequence.
 	    // I use the dragInfo to pass along the object being dragged.
 	    // I'm not sure how the Launcher designers do this.
@@ -420,7 +418,6 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	
 	/**
 	 * Finds all the views we need and configure them to send click events to the activity.
-	 *
 	 */
 	private void setupViews(){
 	    DragController dragController = mDragController;
