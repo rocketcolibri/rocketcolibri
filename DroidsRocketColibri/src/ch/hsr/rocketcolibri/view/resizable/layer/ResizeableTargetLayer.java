@@ -16,6 +16,15 @@ import android.view.View;
 
 public class ResizeableTargetLayer extends MyAbsoluteLayout {
 
+	/**
+	 *  point0
+	 *  O--------------O point2
+	 *  -              -
+	 *  - View Element -
+	 *  -              -
+	 *  O--------------O point3
+	 *  point1
+	 */
 	private Point point0, point2;
 	private Point point1, point3;
 
