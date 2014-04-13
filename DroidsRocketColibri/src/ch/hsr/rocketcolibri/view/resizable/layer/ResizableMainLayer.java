@@ -9,10 +9,11 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import ch.hsr.rocketcolibri.view.MyAbsoluteLayout;
 import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
+import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 
 public class ResizableMainLayer extends MyAbsoluteLayout{
 
-	public ResizableMainLayer(Context context, View resizeTarget, final IResizeDoneListener listener, LayoutParams lp) {
+	public ResizableMainLayer(Context context, View resizeTarget, final IResizeDoneListener listener, LayoutParams lp, ResizeConfig config) {
 		super(context);
 		IResizeDoneListener mainListener = new IResizeDoneListener() {
 			
@@ -26,7 +27,7 @@ public class ResizableMainLayer extends MyAbsoluteLayout{
         setLayoutParams(lp);
         ResizableBackgroundLayer bgLayer = new ResizableBackgroundLayer(context, lp);
         addView(bgLayer);
-        ResizeableTargetLayer targetLayer = new ResizeableTargetLayer(context, resizeTarget, lp, mainListener);
+        ResizeableTargetLayer targetLayer = new ResizeableTargetLayer(context, resizeTarget, lp, mainListener, config);
         addView(targetLayer);
 	}
 

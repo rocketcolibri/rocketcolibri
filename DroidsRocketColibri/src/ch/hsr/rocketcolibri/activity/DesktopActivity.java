@@ -163,44 +163,44 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 
         // Start Rocket ColibriProtocol service
 		Intent intent = new Intent(this, RocketColibriService.class);
-		bindService(intent, mRocketColibriService, Context.BIND_AUTO_CREATE);
-		
-		meter1.setOnHChannelChangeListener(new OnChannelChangeListener ()
-		{
-			@Override
-			public void onChannelChange(int position) 
-			{
-				Log.d(TAG, "received new H position from meter1:" + position);
-				if (rcService != null) rcService.channel[3].setControl(position);
-			}
-		});
-		meter1.setOnVChannelChangeListener(new OnChannelChangeListener ()
-		{
-			@Override
-			public void onChannelChange(int position) 
-			{
-				Log.d(TAG, "received new V position from meter1:" + position);
-				if (rcService != null) rcService.channel[2].setControl(position);
-			}
-		});		
-		meter2.setOnHChannelChangeListener(new OnChannelChangeListener ()
-		{
-			@Override
-			public void onChannelChange(int position) 
-			{
-				Log.d(TAG, "received new H position from meter2:" + position);
-				if (rcService != null) rcService.channel[0].setControl(position);
-			}
-		});
-		meter2.setOnVChannelChangeListener(new OnChannelChangeListener ()
-		{
-			@Override
-			public void onChannelChange(int position) 
-			{
-				Log.d(TAG, "received new V position from meter2:" + position);
-				if (rcService != null) rcService.channel[1].setControl(position);
-			}
-		});
+//		bindService(intent, mRocketColibriService, Context.BIND_AUTO_CREATE);
+//		
+//		meter1.setOnHChannelChangeListener(new OnChannelChangeListener ()
+//		{
+//			@Override
+//			public void onChannelChange(int position) 
+//			{
+//				Log.d(TAG, "received new H position from meter1:" + position);
+//				if (rcService != null) rcService.channel[3].setControl(position);
+//			}
+//		});
+//		meter1.setOnVChannelChangeListener(new OnChannelChangeListener ()
+//		{
+//			@Override
+//			public void onChannelChange(int position) 
+//			{
+//				Log.d(TAG, "received new V position from meter1:" + position);
+//				if (rcService != null) rcService.channel[2].setControl(position);
+//			}
+//		});		
+//		meter2.setOnHChannelChangeListener(new OnChannelChangeListener ()
+//		{
+//			@Override
+//			public void onChannelChange(int position) 
+//			{
+//				Log.d(TAG, "received new H position from meter2:" + position);
+//				if (rcService != null) rcService.channel[0].setControl(position);
+//			}
+//		});
+//		meter2.setOnVChannelChangeListener(new OnChannelChangeListener ()
+//		{
+//			@Override
+//			public void onChannelChange(int position) 
+//			{
+//				Log.d(TAG, "received new V position from meter2:" + position);
+//				if (rcService != null) rcService.channel[1].setControl(position);
+//			}
+//		});
 		
 		tDragController = new DragController(this);
 		tResizeController = new ResizeController(this);

@@ -14,6 +14,6 @@ public class ResizableBackgroundLayer extends MyAbsoluteLayout{
 		super(context);
 		setLayoutParams(layoutParams);
     	setBackgroundColor(Color.BLACK);
-    	setAlpha(0.6f);
+    	setAlpha(0.8f);
 	}
 }
