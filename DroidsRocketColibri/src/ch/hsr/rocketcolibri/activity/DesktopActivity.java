@@ -164,7 +164,7 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 
         // Start Rocket ColibriProtocol service
 		Intent intent = new Intent(this, RocketColibriService.class);
-//		bindService(intent, mRocketColibriService, Context.BIND_AUTO_CREATE);
+		bindService(intent, mRocketColibriService, Context.BIND_AUTO_CREATE);
 //		
 //		meter1.setOnHChannelChangeListener(new OnChannelChangeListener ()
 //		{

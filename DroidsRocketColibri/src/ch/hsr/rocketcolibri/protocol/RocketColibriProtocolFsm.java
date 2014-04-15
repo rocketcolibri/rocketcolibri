@@ -1,6 +1,5 @@
 package ch.hsr.rocketcolibri.protocol;
 
-import ch.hsr.rocketcolibri.protocol.fsm.Action;
 import ch.hsr.rocketcolibri.protocol.fsm.StateMachine;
 import ch.hsr.rocketcolibri.protocol.fsm.StateMachinePlan;
 

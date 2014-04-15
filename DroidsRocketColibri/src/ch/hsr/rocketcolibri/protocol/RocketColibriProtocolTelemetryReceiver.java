@@ -6,7 +6,10 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import android.util.Log;
 
-
+/**
+ * 
+ *
+ */
 public class RocketColibriProtocolTelemetryReceiver 
 {	
 	final String TAG = this.getClass().getName();

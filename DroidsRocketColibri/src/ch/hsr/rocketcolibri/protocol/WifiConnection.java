@@ -2,6 +2,7 @@ package ch.hsr.rocketcolibri.protocol;
 
 import java.util.List;
 
+import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,6 +12,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 /**
@@ -29,16 +31,12 @@ import android.widget.Toast;
 public class WifiConnection 
 {
 	final static String TAG = "WifiConnection";
-	
 	final static String networkSSID = "RocketColibri";
-	private static WifiManager wifiManager;
-	private static RocketColibriProtocolFsm fsm;
+	private WifiManager wifiManager;
 	
-	public WifiConnection(RocketColibriProtocolFsm fsm, WifiManager wifiManager)
+	public WifiConnection(WifiManager wifiManager)
 	{
-		// TODO
 		this.wifiManager = wifiManager;
-		this.fsm = fsm;
 	}
 	
 	/**
@@ -91,8 +89,9 @@ public class WifiConnection
      * Checks the connection to the ServoController which has the SSID RocketColibri
      * @return true if connected, false if not
      */
-	public static boolean isConnectedToRocketColibri()
+	public static boolean isConnectedToRocketColibri(Context context)
 	{
+		WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
 	    WifiInfo currentWifi = wifiManager.getConnectionInfo();
 	    boolean connected = true;
 	    if(currentWifi != null)
@@ -118,7 +117,7 @@ public class WifiConnection
         {
             if(activeNetwork.getType() == ConnectivityManager.TYPE_WIFI)
             {
-            	retval = isConnectedToRocketColibri();
+            	retval = isConnectedToRocketColibri( context );
             }
         } 
         return retval;
@@ -130,17 +129,25 @@ public class WifiConnection
 		@Override
 	    public void onReceive(final Context context, final Intent intent) 
 	    {
-	    	if(getConnectivityStatus(context))
-	    	{
-	    		fsm.queue(e.E1_CONN_SSID);
-	    		Toast.makeText(context, "connected to Rocket colibri", Toast.LENGTH_LONG).show();	
-	    	}
-	    	else
-	    	{
-	    		fsm.queue(e.E2_DISC_SSID);
-	    		Toast.makeText(context, "not connected", Toast.LENGTH_LONG).show();
-	    	}
-	    	fsm.processOutstandingEvents();
+			IBinder serviceBinder = peekService(context, new Intent(context, RocketColibriService.class));
+			RocketColibriService rcService = ((RocketColibriService.RocketColibriServiceBinder)serviceBinder).getService();
+
+			if(rcService != null)
+			{
+		    	if(getConnectivityStatus(context))
+		    	{
+		    		rcService.protocolFsm.queue(e.E1_CONN_SSID);
+		    		Toast.makeText(context, "connected to Rocket colibri", Toast.LENGTH_LONG).show();	
+		    	}
+		    	else
+		    	{
+		    		rcService.protocolFsm.queue(e.E2_DISC_SSID);
+		    		Toast.makeText(context, "not connected", Toast.LENGTH_LONG).show();
+		    	}
+		    	rcService.protocolFsm.processOutstandingEvents();
+			}
+			else
+				Log.d(TAG, "RocketColibri service not found");
 	    }
 	}
 }

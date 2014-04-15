@@ -60,7 +60,7 @@ public class RocketColibriService extends  Service
 		this.protocolFsm = new RocketColibriProtocolFsm(s.DISC);
 		this.protocol = new RocketColibriProtocol(protocolFsm);
 		this.protocol.setChannels(channel);
-		this.wifi = new WifiConnection(protocolFsm, (WifiManager) getSystemService(Context.WIFI_SERVICE));
+		this.wifi = new WifiConnection( (WifiManager) getSystemService(Context.WIFI_SERVICE));
 		 
 		// create database instance
 		if (!this.isConnected) {
