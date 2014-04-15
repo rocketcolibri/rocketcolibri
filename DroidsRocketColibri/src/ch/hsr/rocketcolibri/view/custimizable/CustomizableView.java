@@ -1,14 +1,18 @@
 package ch.hsr.rocketcolibri.view.custimizable;
 
-import ch.hsr.rocketcolibri.R;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
+import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 
 public class CustomizableView extends View implements ICustomizableView{
 	private boolean customizeModusActive = false;
+	//temporarly for testing with the resize config
+	//will be removed soon
+	private ResizeConfig tRConfig;
 	
     public CustomizableView(Context context) {
 		super(context);
@@ -48,6 +52,14 @@ public class CustomizableView extends View implements ICustomizableView{
 		if(customizeModusActive!=enabled)
 			invalidate();
 		customizeModusActive = enabled;
+	}
+	
+	public void setResizeConfig(ResizeConfig resizeConfig){
+		tRConfig = resizeConfig;
+	}
+	
+	public ResizeConfig getResizeConfig(){
+		return tRConfig;
 	}
 }
 

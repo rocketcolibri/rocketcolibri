@@ -12,6 +12,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -44,18 +45,23 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
     private LayoutParams tResizeTargetLP;
     private IResizeDoneListener tListener;
     private ResizeConfig tConfig;
-    private int tTopLeftCornerX;
-    private int tTopLeftCornerY;
-    private int tBottomRightCornerX;
-    private int tBottomRightCornerY;
+    private int tTopLeftOrRightX;
+    private int tTopLeftOrRightY;
+    private int tBottomLeftOrRightX;
+    private int tBottomLeftOrRightY;
+    private int tHeight;
+    private int tWidth;
     private int tCenterX;
     private int tCenterY;
     private double tRadCircle;
     private int tCurrentX;
     private int tCurrentY;
-    private double tRation;
+    private double tRatio;
 
-
+    
+    public ResizeableTargetLayer(final Context context, View resizeTarget, LayoutParams layoutParams, final IResizeDoneListener listener) {
+    	this(context, resizeTarget, layoutParams, listener, new ResizeConfig());
+    }
     
     public ResizeableTargetLayer(final Context context, View resizeTarget, LayoutParams layoutParams, final IResizeDoneListener listener, ResizeConfig config) {
         super(context);
@@ -70,7 +76,7 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
         this.tListener = listener;
         tConfig = config;
         if(tConfig.keepRatio){
-        	tRation = tResizeTargetLP.width/tResizeTargetLP.height;
+        	tRatio = tResizeTargetLP.width/tResizeTargetLP.height;
         }
     }
     
@@ -80,7 +86,7 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
         int cornerItemResource = R.drawable.square;
 
         tPoint0 = new Point(); //top left
-        CornerBall cBall = new CornerBall(context, cornerItemResource, tPoint0, 0);// predefine to get the dimension of the corner item
+        CornerBall cBall = new CornerBall(context, cornerItemResource, tPoint0, (short)0);// predefine to get the dimension of the corner item
         
         tPoint0.x = tResizeTargetLP.x-cBall.getWidthOfBall();
         tPoint0.y = tResizeTargetLP.y-cBall.getHeightOfBall();
@@ -98,9 +104,9 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
         tPoint3.y = (int)tResizeTargetLP.y-cBall.getHeightOfBall();
 
         tColorballs.add(cBall);
-        tColorballs.add(new CornerBall(context, cornerItemResource, tPoint1, 1));
-        tColorballs.add(new CornerBall(context, cornerItemResource, tPoint2, 2));
-        tColorballs.add(new CornerBall(context, cornerItemResource, tPoint3, 3));
+        tColorballs.add(new CornerBall(context, cornerItemResource, tPoint1, (short)1));
+        tColorballs.add(new CornerBall(context, cornerItemResource, tPoint2, (short)2));
+        tColorballs.add(new CornerBall(context, cornerItemResource, tPoint3, (short)3));
     }
     
     private void setBorderPaintSettings(){
@@ -108,7 +114,6 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
         tOuterBorderPaint.setDither(true);
         tOuterBorderPaint.setStyle(Paint.Style.STROKE);
         tOuterBorderPaint.setStrokeJoin(Paint.Join.ROUND);
-//        tOuterBorderPaint.setStrokeCap(Paint.Cap.ROUND);
         tOuterBorderPaint.setStrokeWidth(3);
         tOuterBorderPaint.setColor(Color.parseColor("#FF9500"));
         
@@ -116,7 +121,6 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
         tInnerBorderPaint.setDither(true);
         tInnerBorderPaint.setStyle(Paint.Style.STROKE);
         tInnerBorderPaint.setStrokeJoin(Paint.Join.ROUND);
-        // tInnerBorderPaint.setStrokeCap(Paint.Cap.ROUND);
         tInnerBorderPaint.setStrokeWidth(2);
         tInnerBorderPaint.setColor(Color.GREEN);
     }
@@ -146,7 +150,6 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
         tCurrentX = (int) event.getX();
         tCurrentY = (int) event.getY();
         switch (event.getAction()) {
-
         case MotionEvent.ACTION_DOWN: // touch down so check if the finger is on a ball
             tBallID = -1;
             tGroupId = -1;
@@ -157,9 +160,8 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
                 tCenterY = ball.getY() + ball.getHeightOfBall();
                 // calculate the radius from the touch to the center of the ball
                 tRadCircle = Math.sqrt((double) (((tCenterX - tCurrentX) * (tCenterX - tCurrentX)) + (tCenterY - tCurrentY) * (tCenterY - tCurrentY)));
-
                 if (tRadCircle < ball.getWidthOfBall()) {
-                    tBallID = (short) ball.getID();
+                    tBallID = ball.getID();
                     if (tBallID == 1 || tBallID == 3) {
                         tGroupId = 2;
                         tCanvas.drawRect(tPoint0.x, tPoint2.y, tPoint2.x, tPoint0.y, tOuterBorderPaint);
@@ -174,54 +176,17 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
             }
             break;
 
-        case MotionEvent.ACTION_MOVE: // touch drag with the ball
+        case MotionEvent.ACTION_MOVE:
             // move the balls the same as the finger
             if (tBallID > -1 && tBallID<4) {
-                tColorballs.get(tBallID).setX(tCurrentX);
-                tColorballs.get(tBallID).setY(tCurrentY);
-                
-                if (tGroupId == 1) {
-                    /*bottom left*/ tColorballs.get(1).setX(tColorballs.get(0).getX());//top left
-                    /*bottom left*/ tColorballs.get(1).setY(tColorballs.get(2).getY());//bottom right
-                    /*top right  */ tColorballs.get(3).setX(tColorballs.get(2).getX());//bottom right
-                    /*top right  */ tColorballs.get(3).setY(tColorballs.get(0).getY());//top left
-                    tCanvas.drawRect(tPoint0.x, tPoint2.y, tPoint2.x, tPoint0.y, tOuterBorderPaint);
-                } else {
-                   /*top left    */ tColorballs.get(0).setX(tColorballs.get(1).getX());//bottom left
-                   /*top left    */ tColorballs.get(0).setY(tColorballs.get(3).getY());//top right
-                   /*bottom right*/ tColorballs.get(2).setX(tColorballs.get(3).getX());//top right
-                   /*bottom right*/ tColorballs.get(2).setY(tColorballs.get(1).getY());//bottom left
-                    tCanvas.drawRect(tPoint1.x, tPoint3.y, tPoint3.x, tPoint1.y, tOuterBorderPaint);
-                }
-                
                 if(tConfig.keepRatio){
-	                //calculate the new dimension of the resize target
-	               	tTopLeftCornerX = tColorballs.get(0).getX()+tColorballs.get(0).getWidthOfBall();
-	            	tTopLeftCornerY = tColorballs.get(0).getY()+tColorballs.get(0).getHeightOfBall();
-	               	tBottomRightCornerX = tColorballs.get(2).getX();
-	            	tBottomRightCornerY = tColorballs.get(2).getY();
-	            	
-	             	tResizeTargetLP.width = tBottomRightCornerX-tTopLeftCornerX;
-	            	tResizeTargetLP.height = tBottomRightCornerY-tTopLeftCornerY;
-	            	tResizeTargetLP.x = tTopLeftCornerX;
-	            	tResizeTargetLP.y = tTopLeftCornerY;
+                	calculationWithRatio();
                 }else{
-	                //calculate the new dimension of the resize target
-	               	tTopLeftCornerX = tColorballs.get(0).getX()+tColorballs.get(0).getWidthOfBall();
-	            	tTopLeftCornerY = tColorballs.get(0).getY()+tColorballs.get(0).getHeightOfBall();
-	               	tBottomRightCornerX = tColorballs.get(2).getX();
-	            	tBottomRightCornerY = tColorballs.get(2).getY();
-	            	
-	             	tResizeTargetLP.width = tBottomRightCornerX-tTopLeftCornerX;
-	            	tResizeTargetLP.height = tBottomRightCornerY-tTopLeftCornerY;
-	            	tResizeTargetLP.x = tTopLeftCornerX;
-	            	tResizeTargetLP.y = tTopLeftCornerY;
+                	calculationWithoutRatio();
                 }
                 invalidate();
             }
-
             break;
-
         case MotionEvent.ACTION_UP:
           if(tGroupId==-1){
         	  finish();
@@ -233,9 +198,192 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
         tResizeTarget.setLayoutParams(tResizeTargetLP);
         this.updateViewLayout(tResizeTarget, tResizeTargetLP);
         return true;
-
     }
     
+    private void calculationWithRatio(){
+        if (tGroupId == 1) {
+        	if(tBallID==0){
+            	tTopLeftOrRightX = tCurrentX+tColorballs.get(0).getWidthOfBall();
+            	tBottomLeftOrRightX = tColorballs.get(2).getX();
+        	}else{
+        		tBottomLeftOrRightX = tCurrentX;
+               	tTopLeftOrRightX = tColorballs.get(0).getX()+tColorballs.get(0).getWidthOfBall();
+        	}
+        	tWidth = tBottomLeftOrRightX-tTopLeftOrRightX;
+
+        	//break if min or max size is reached
+        	if(!isWithInPermittedRange())return;
+        	setXAndYToTheTargetPoint();
+        	setWidthToTargetViewAndCalculateRatio();
+        	tResizeTargetLP.x = tTopLeftOrRightX;
+        	if(tBallID==0){
+        		tColorballs.get(0).setY(tColorballs.get(2).getY()-tResizeTargetLP.height-tColorballs.get(2).getHeightOfBall());
+        	}else{
+        		tColorballs.get(2).setY(tResizeTargetLP.height+tColorballs.get(0).getY()+tColorballs.get(0).getHeightOfBall());
+        	}
+        	tResizeTargetLP.y = tColorballs.get(0).getY()+tColorballs.get(0).getHeightOfBall();
+        	changePointsOnBottomLeftAndTopRightAndDraw();
+        } else {
+        	if(tBallID==1){
+            	tTopLeftOrRightX = tColorballs.get(3).getX();
+            	tBottomLeftOrRightX = tCurrentX+tColorballs.get(1).getHeightOfBall();
+        	}else{
+            	tTopLeftOrRightX = tCurrentX;
+            	tBottomLeftOrRightX = tColorballs.get(1).getX()+tColorballs.get(1).getHeightOfBall();
+        	}
+        	tWidth = tTopLeftOrRightX-tBottomLeftOrRightX;
+        	
+        	//break if min or max size is reached
+        	if(!isWithInPermittedRange())return;
+        	setXAndYToTheTargetPoint();
+        	setWidthToTargetViewAndCalculateRatio();
+        	if(tBallID==1){
+        		tColorballs.get(1).setY(tColorballs.get(3).getHeightOfBall()+tResizeTargetLP.height+tColorballs.get(3).getY());
+        	}else{
+        		tColorballs.get(3).setY(tColorballs.get(1).getY()-tResizeTargetLP.height-tColorballs.get(3).getHeightOfBall());
+        	}
+        	tResizeTargetLP.x = tTopLeftOrRightX-tResizeTargetLP.width;
+        	tResizeTargetLP.y = tColorballs.get(3).getY()+tColorballs.get(3).getHeightOfBall();
+        	changePointsOnTopLeftAndBottomRightAndDraw();
+        }
+    }
+    
+    private void setWidthToTargetViewAndCalculateRatio(){
+    	tResizeTargetLP.width = tWidth;
+    	tResizeTargetLP.height = (int) (tResizeTargetLP.width*tRatio);
+    }
+    
+    private void calculationWithoutRatio(){
+        if (tGroupId == 1) {
+        	if(tBallID==0){
+               	tTopLeftOrRightX = tCurrentX+tColorballs.get(0).getWidthOfBall();
+            	tTopLeftOrRightY = tCurrentY+tColorballs.get(0).getHeightOfBall();
+               	tBottomLeftOrRightX = tColorballs.get(2).getX();
+            	tBottomLeftOrRightY = tColorballs.get(2).getY();
+        	}else{
+               	tTopLeftOrRightX = tColorballs.get(0).getX()+tColorballs.get(0).getWidthOfBall();
+            	tTopLeftOrRightY = tColorballs.get(0).getY()+tColorballs.get(0).getHeightOfBall();
+               	tBottomLeftOrRightX = tCurrentX;
+            	tBottomLeftOrRightY = tCurrentY;
+        	}
+         	tWidth = tBottomLeftOrRightX-tTopLeftOrRightX;
+         	if(isWithInPermittedRange()){
+         		tColorballs.get(tBallID).setX(tCurrentX);
+            	changePointsOnBottomLeftAndTopRight_X_AndDraw();
+            	tResizeTargetLP.width = tWidth;
+            	tResizeTargetLP.x = tTopLeftOrRightX;
+         	}
+//         	if(ratio){
+//         		tHeight = (int) (tWidth*tRatio);
+//         	}else{
+         		tHeight = tBottomLeftOrRightY-tTopLeftOrRightY;
+//         	}
+         	if(isHeightInPermittedRange()){
+         		tColorballs.get(tBallID).setY(tCurrentY);
+            	changePointsOnBottomLeftAndTopRight_Y_AndDraw();
+            	tResizeTargetLP.height = tHeight;
+            	tResizeTargetLP.y = tTopLeftOrRightY;
+         	}
+         	tCanvas.drawRect(tPoint1.x, tPoint3.y, tPoint3.x, tPoint1.y, tOuterBorderPaint);
+        } else {
+        	if(tBallID==1){
+               	tTopLeftOrRightX = tCurrentX+tColorballs.get(1).getWidthOfBall();
+            	tTopLeftOrRightY = tCurrentY;
+               	tBottomLeftOrRightX = tColorballs.get(3).getX();
+            	tBottomLeftOrRightY = tColorballs.get(3).getY()+tColorballs.get(3).getHeightOfBall();
+        	}else{
+               	tTopLeftOrRightX = tColorballs.get(1).getX()+tColorballs.get(1).getWidthOfBall();
+            	tTopLeftOrRightY = tColorballs.get(1).getY();
+               	tBottomLeftOrRightX = tCurrentX;
+            	tBottomLeftOrRightY = tCurrentY+tColorballs.get(3).getHeightOfBall();
+        	}
+         	tWidth = tBottomLeftOrRightX-tTopLeftOrRightX;
+         	if(isWithInPermittedRange()){
+         		tColorballs.get(tBallID).setX(tCurrentX);
+         		changePointsOnTopLeftAndBottomRight_X_AndDraw();
+         		tResizeTargetLP.width = tWidth;
+         		tResizeTargetLP.x = tTopLeftOrRightX;
+         	}
+         	
+//         	if(ratio){
+//         		tHeight = (int) (tWidth*tRatio);
+//         	}else{
+            	tHeight = tTopLeftOrRightY-tBottomLeftOrRightY;
+//         	}
+          	if(isHeightInPermittedRange()){
+         		tColorballs.get(tBallID).setY(tCurrentY);
+         		changePointsOnTopLeftAndBottomRight_Y_AndDraw();
+            	tResizeTargetLP.height = tHeight;
+            	tResizeTargetLP.y = tBottomLeftOrRightY;
+         	}
+         	tCanvas.drawRect(tPoint0.x, tPoint2.y, tPoint2.x, tPoint0.y, tOuterBorderPaint);
+        }
+    }
+    
+    private boolean isWithInPermittedRange(){
+    	return tWidth >= tConfig.minWidth && tWidth <= tConfig.maxWidth;
+    }
+    
+    private boolean isHeightInPermittedRange(){
+    	return tHeight >= tConfig.minHeight && tHeight <= tConfig.maxHeight;
+    }
+    
+    /**
+     * x = could be the target
+     * c = will be changed
+     *  [x]--------------[c]
+     *   |                |
+     *   |Resizing Target |
+     *   |                |
+     *  [c]--------------[x]
+     */
+    private void changePointsOnBottomLeftAndTopRightAndDraw(){
+    	changePointsOnBottomLeftAndTopRight_X_AndDraw();
+    	changePointsOnBottomLeftAndTopRight_Y_AndDraw();
+    	tCanvas.drawRect(tPoint1.x, tPoint3.y, tPoint3.x, tPoint1.y, tOuterBorderPaint);
+    }
+    
+    private void changePointsOnBottomLeftAndTopRight_X_AndDraw(){
+        /*bottom left*/ tColorballs.get(1).setX(tColorballs.get(0).getX());//top left
+        /*top right  */ tColorballs.get(3).setX(tColorballs.get(2).getX());//bottom right
+    }
+    
+    private void changePointsOnBottomLeftAndTopRight_Y_AndDraw(){
+        /*bottom left*/ tColorballs.get(1).setY(tColorballs.get(2).getY());//bottom right
+        /*top right  */ tColorballs.get(3).setY(tColorballs.get(0).getY());//top left
+    }
+    
+    
+    /**
+     * x = could be the target
+     * c = will be changed
+     *  [c]--------------[x]
+     *   |                |
+     *   |Resizing Target |
+     *   |                |
+     *  [x]--------------[c]
+     */
+    private void changePointsOnTopLeftAndBottomRightAndDraw(){
+    	changePointsOnTopLeftAndBottomRight_X_AndDraw();
+    	changePointsOnTopLeftAndBottomRight_Y_AndDraw();
+        tCanvas.drawRect(tPoint0.x, tPoint2.y, tPoint2.x, tPoint0.y, tOuterBorderPaint);
+    }
+    
+    private void changePointsOnTopLeftAndBottomRight_X_AndDraw(){
+        /*top left    */ tColorballs.get(0).setX(tColorballs.get(1).getX());//bottom left
+        /*bottom right*/ tColorballs.get(2).setX(tColorballs.get(3).getX());//top right
+   }
+    
+    private void changePointsOnTopLeftAndBottomRight_Y_AndDraw(){
+        /*top left    */ tColorballs.get(0).setY(tColorballs.get(3).getY());//top right
+        /*bottom right*/ tColorballs.get(2).setY(tColorballs.get(1).getY());//bottom left
+    }
+    
+    private void setXAndYToTheTargetPoint(){
+        tColorballs.get(tBallID).setX(tCurrentX);
+        tColorballs.get(tBallID).setY(tCurrentY);
+    }
+
     private void finish(){
     	setEnabled(false);
     	tResizeTarget.setEnabled(true);

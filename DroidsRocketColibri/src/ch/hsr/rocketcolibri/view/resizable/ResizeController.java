@@ -29,12 +29,16 @@ public class ResizeController {
 	}
 	
 	public void startResize(MyAbsoluteLayout parent, View resizeTarget){
+		startResize(parent, resizeTarget, new ResizeConfig());
+	}
+	
+	public void startResize(MyAbsoluteLayout parent, View resizeTarget, ResizeConfig rConfg){
 		if(tIsResizing)return;
 		tTargetParent = parent;
 		LayoutParams parentLayoutParams = new MyAbsoluteLayout.LayoutParams(tTargetParent.getLayoutParams().width, tTargetParent.getLayoutParams().height, 0, 0);
 		tTargetParent.removeView(resizeTarget);
-		tViewResizer = new ResizableMainLayer(tContext, resizeTarget, tInternalResizeDoneListener, parentLayoutParams, new ResizeConfig());
-	    tTargetParent.addView(tViewResizer);//add resize stuff to the targets parent to make it visible
+		tViewResizer = new ResizableMainLayer(tContext, resizeTarget, tInternalResizeDoneListener, parentLayoutParams, rConfg);
+	    tTargetParent.addView(tViewResizer);//add resize view to the targets parent to make it visible
 	    tIsResizing = true;
 	}
 	

@@ -3,7 +3,6 @@ package ch.hsr.rocketcolibri.view.resizable;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.BitmapFactory.Options;
 import android.graphics.Point;
 
 public class CornerBall {
@@ -11,9 +10,9 @@ public class CornerBall {
         Bitmap bitmap;
         Context mContext;
         Point point;
-        int id;
+        short id;
 
-        public CornerBall(Context context, int resourceId, Point point, int id) {
+        public CornerBall(Context context, int resourceId, Point point, short id) {
             this.id = id;
             bitmap = BitmapFactory.decodeResource(context.getResources(),
                     resourceId);
@@ -42,7 +41,7 @@ public class CornerBall {
             return point.y;
         }
 
-        public int getID() {
+        public short getID() {
             return id;
         }
 

@@ -35,6 +35,7 @@ import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.draggable.DragController;
 import ch.hsr.rocketcolibri.view.draggable.DragLayer;
 import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
+import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeController;
 import ch.hsr.rocketcolibri.view.widget.Circle;
 import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
@@ -332,18 +333,18 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
         case MotionEvent.ACTION_UP:
             if(clickCount == 2){
             	duration = System.currentTimeMillis() - startTime;
-                if(duration<= MAX_DURATION)
-                {
+                if(duration<= MAX_DURATION){
+                	startTime=0;
                     resizeView(v);
                 }
                 clickCount = 0;
-                duration = 0;
                 break;             
             }
         case MotionEvent.ACTION_MOVE:
         	if(clickCount==1){
             	duration = System.currentTimeMillis() - startTime;
             	if(duration>=MAX_DURATION){
+            		startTime=0;
             		clickCount = 0;
             		return onLongClick(v);
             	}
@@ -365,7 +366,13 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	}
  	
 	private void resizeView(View targetView){
-		tResizeController.startResize(mDragLayer, targetView);
+		ResizeConfig rConfig = null;
+		try{
+			rConfig = ((CustomizableView)targetView).getResizeConfig();
+			tResizeController.startResize(mDragLayer, targetView, rConfig);
+		}catch(Exception e){
+			tResizeController.startResize(mDragLayer, targetView);
+		}
 	}
 	
 	/**
@@ -378,29 +385,57 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	    mDragLayer.setDragController(dragController);
 	    dragController.addDropTarget (mDragLayer);
 	
+	    ResizeConfig rc = new ResizeConfig();
+	    rc.maxHeight=745;
+	    rc.minHeight=50;
+	    rc.maxWidth=400;
+	    rc.minWidth=30;
 	    CustomizableView view = new CustomizableView(this);
+	    view.setResizeConfig(rc);
 	    LayoutParams lp = new LayoutParams(300, 300, 700, 300);
 	    view.setLayoutParams(lp);
 	    view.setBackgroundColor(Color.CYAN);
 	    view.setOnTouchListener(this);
 	    mDragLayer.addView(view);
 	    
+	    rc = new ResizeConfig();
+	    rc.keepRatio=false;
+	    rc.maxHeight=700;
+	    rc.minHeight=10;
+	    rc.maxWidth=900;
+	    rc.minWidth=10;
 	    view = new CustomizableView(this);
 	    lp = new LayoutParams(500, 300, 100, 200);
+	    view.setResizeConfig(rc);
 	    view.setLayoutParams(lp);
 	    view.setBackgroundColor(Color.RED);
 	    view.setOnTouchListener(this);
 	    mDragLayer.addView(view);
 	    
+	    rc = new ResizeConfig();
+	    rc.keepRatio=false;
+	    rc.maxHeight=900;
+	    rc.minHeight=120;
+	    rc.maxWidth=900;
+	    rc.minWidth=40;
 	    view = new CustomizableView(this);
+	    view.setResizeConfig(rc);
 	    lp = new LayoutParams(500, 300, 0, 0);
 	    view.setLayoutParams(lp);
 	    view.setBackgroundColor(Color.LTGRAY);
 	    view.setOnTouchListener(this);
 	    mDragLayer.addView(view);
 	    
+	    rc = new ResizeConfig();
+	    rc.keepRatio=true;
+	    rc.maxHeight=500;
+	    rc.minHeight=160;
+	    rc.maxWidth=500;
+	    rc.minWidth=160;
 	    meter1.setOnTouchListener(this);
+	    meter1.setResizeConfig(rc);
 	    meter2.setOnTouchListener(this);
+	    meter2.setResizeConfig(rc);
 	    
 	    String message = customizeModeOn ? "Press and hold to start dragging." 
 	                                          : "Touch a view to start dragging.";
