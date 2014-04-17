@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.3">
+  <zoom_level>5</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>350</x>
+      <y>175</y>
+      <w>155</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>CustomizableView
+--
++ setCustomizeModus(boolean enabled)
++ setResizeConfig(ResizeConfig resizeConfig)
++ setOnTouchListener(Activity)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>350</x>
+      <y>120</y>
+      <w>155</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>/ICustomizableView/
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>390</x>
+      <y>120</y>
+      <w>75</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>40;15;40;55</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>245</x>
+      <y>305</y>
+      <w>155</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>Circle</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>430</x>
+      <y>305</y>
+      <w>155</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>WidgetConnectionStatus</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>305</x>
+      <y>215</y>
+      <w>74</w>
+      <h>99</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>65;15;15;90</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>465</x>
+      <y>215</y>
+      <w>49</w>
+      <h>99</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>15;15;40;90</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>555</x>
+      <y>180</y>
+      <w>115</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>ResizeConfig
+--
+Responsibilities
+min/max size of the view</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>490</x>
+      <y>195</y>
+      <w>74</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..1</panel_attributes>
+    <additional_attributes>65;15;15;15</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>50</x>
+      <y>60</y>
+      <w>165</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>DragController
+--
++addView(CustomizableView)
++addDropTarget(DropTaget)
+ 
+Responsibilities
+- Handles Drag&amp;Drop of view to a DragLayer
+  (may be the same)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>200</x>
+      <y>185</y>
+      <w>159</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..n</panel_attributes>
+    <additional_attributes>150;15;15;15</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>50</x>
+      <y>180</y>
+      <w>165</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>DragLayer
+--
++addView(CustomizableView)
++setDragController(DropTaget)
+ 
+Responsibilites
+Holds a list of view.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>60</x>
+      <y>125</y>
+      <w>24</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>15;15;15;55</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>140</x>
+      <y>125</y>
+      <w>62</w>
+      <h>64</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..1
+dragTarget</panel_attributes>
+    <additional_attributes>35;55;35;15</additional_attributes>
+  </element>
+</diagram>
