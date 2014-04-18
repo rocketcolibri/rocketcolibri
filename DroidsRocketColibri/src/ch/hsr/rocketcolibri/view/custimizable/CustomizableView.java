@@ -24,10 +24,6 @@ public class CustomizableView extends View implements ICustomizableView{
 		tViewElementConfig = cElementConfig;
 		setLayoutParams(tViewElementConfig.getLayoutParams());
 	}
-    
-    public CustomizableView(Context context) {
-		super(context);
-	}
 
 	public CustomizableView(Context context, AttributeSet attrs) {
 		super(context, attrs);

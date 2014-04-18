@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 
 /**
  * @short widget to display the telemetry data received from the ServoController 
@@ -17,9 +18,9 @@ public class TelemetryWidget extends CustomizableView
 	static final int fontSize = 20;
 	static final int borderSize = 10;
 
-	public TelemetryWidget(Context context)
+	public TelemetryWidget(Context context, ViewElementConfig elementConfig)
 	{
-		super(context);
+		super(context, elementConfig);
 		init(context, null);
 	}
 	

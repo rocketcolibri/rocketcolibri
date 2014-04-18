@@ -13,6 +13,7 @@ import android.util.AttributeSet;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 
 /**
  * @short widget to display the connection status received from the ServoController
@@ -26,9 +27,9 @@ public class ConnectionStatusWidget extends CustomizableView
 	private Bitmap connectionIconBitmap;
 	
 	
-	public ConnectionStatusWidget(Context context) 
+	public ConnectionStatusWidget(Context context, ViewElementConfig elementConfig) 
 	{
-		super(context);
+		super(context, elementConfig);
 		init(context, null);
 	}
 	

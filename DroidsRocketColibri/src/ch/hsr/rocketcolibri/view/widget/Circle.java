@@ -4,6 +4,7 @@ import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
 import ch.hsr.rocketcolibri.view.MyAbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -112,8 +113,8 @@ public final class Circle extends CustomizableView {
 		mListener.setVOnChangeListener(onChannelChangeListener);
 	}
 	
-	public Circle(Context context) {
-		super(context);
+	public Circle(Context context, ViewElementConfig elementConfig) {
+		super(context, elementConfig);
 		init(context, null);
 	}
 
