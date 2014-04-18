@@ -42,6 +42,8 @@ import ch.hsr.rocketcolibri.view.resizable.ResizeController;
 import ch.hsr.rocketcolibri.view.widget.Circle;
 import ch.hsr.rocketcolibri.view.widget.TelemetryWidget;
 import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
+import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
+import ch.hsr.rocketcolibri.view.widget.TelemetryWidget;
 
 public class DesktopActivity extends Activity{
 	private static final String TAG = "CircleTestActivity";
@@ -272,7 +274,6 @@ public class DesktopActivity extends Activity{
 		    rc.maxWidth=900;
 		    rc.minWidth=10;
 		    
-		    view = new CustomizableView(this);
 		    lp = new LayoutParams(500, 300, 100, 200);
 		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
 		    view = tDesktopViewManager.createView(elementConfig);
@@ -295,15 +296,22 @@ public class DesktopActivity extends Activity{
 		    rc.minHeight=160;
 		    rc.maxWidth=500;
 		    rc.minWidth=160;
-//		    meter1.setOnTouchListener(this);
-//		    meter1.setResizeConfig(rc);
-//		    meter2.setOnTouchListener(this);
-//		    meter2.setResizeConfig(rc);
+		    
+		    rc = new ResizeConfig();
+		    rc.maxHeight=300;
+		    rc.minHeight=50;
+		    rc.maxWidth=200;
+		    rc.minWidth=100;
+		    lp = new LayoutParams(400, 100 , 100, 0);
+		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.TelemetryWidget", lp, rc);
+		    view = tDesktopViewManager.createView(elementConfig);
+		    view.setBackgroundColor(Color.CYAN);
+		    ((TelemetryWidget)view).setTelemetryData("Telemetry data");
+		    
 		}catch(Exception e){
 		}
 	    
-	    String message = tDesktopViewManager.isInCustomizeModus() ? "Press and hold to start dragging." 
-	                                          : "Touch a view to start dragging.";
+	    String message = tDesktopViewManager.isInCustomizeModus() ? "Press and hold to start dragging.": "Touch a view to start dragging.";
 	    Toast.makeText (getApplicationContext(), message, Toast.LENGTH_LONG).show ();
 	}
 	

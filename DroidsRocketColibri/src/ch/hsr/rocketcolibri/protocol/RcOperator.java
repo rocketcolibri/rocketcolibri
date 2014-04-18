@@ -12,4 +12,11 @@ public class RcOperator {
 	public void setIpAddress(String ipAddress) { this.ipAddress = ipAddress; }
 	public String getName() { return this.name; }
 	public String getIpAddress() { return this.ipAddress; }
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		RcOperator other = (RcOperator)obj;
+		return this.getName().equals(other.getName());
+	}
 }

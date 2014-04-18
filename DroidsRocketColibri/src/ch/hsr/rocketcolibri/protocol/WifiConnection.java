@@ -14,7 +14,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
+
 /**
  * @short initiates and handles to the RocketColibri Wifi network
  * 
@@ -137,12 +137,10 @@ public class WifiConnection
 		    	if(getConnectivityStatus(context))
 		    	{
 		    		rcService.protocolFsm.queue(e.E1_CONN_SSID);
-		    		Toast.makeText(context, "connected to Rocket colibri", Toast.LENGTH_LONG).show();	
 		    	}
 		    	else
 		    	{
 		    		rcService.protocolFsm.queue(e.E2_DISC_SSID);
-		    		Toast.makeText(context, "not connected", Toast.LENGTH_LONG).show();
 		    	}
 		    	rcService.protocolFsm.processOutstandingEvents();
 			}

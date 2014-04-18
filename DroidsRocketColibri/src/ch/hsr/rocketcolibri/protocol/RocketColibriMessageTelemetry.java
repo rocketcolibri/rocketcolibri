@@ -7,8 +7,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
+
 public class RocketColibriMessageTelemetry extends RocketColibriMessage
 {
+	public static final String ActionTelemetryUpdate = "telemetry.update";
+	public static final String KeyTelemetryDataActiveUser = "key.telemetry.activeuser";
+	public static final String KeyTelemetryDataPassiveUser = "key.telemetry.passivuser";
+	public static final String KeyTelemetryData = "key.telemetry.data";
+	
 	private RcOperator activeuser = new RcOperator();
 	private List<RcOperator> passivuser = new ArrayList<RcOperator>() ;
 	private int sequence;
@@ -48,4 +58,30 @@ public class RocketColibriMessageTelemetry extends RocketColibriMessage
 	{
 		return sequence;
 	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		RocketColibriMessageTelemetry other = (RocketColibriMessageTelemetry)obj;
+		if(this.activeuser.equals(other.activeuser))
+		{
+			if (this.passivuser.equals(other.passivuser))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public void sendChangeBroadcast(Context service)
+	{
+		Log.d(TAG, "execute action sendBroadcast");
+		Intent intent = new Intent(ActionTelemetryUpdate);
+			
+		intent.putExtra(KeyTelemetryDataActiveUser, activeuser.getName()+"("+activeuser.getIpAddress()+")");
+		LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+	}
+	
+	
 }

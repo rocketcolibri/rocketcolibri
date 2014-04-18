@@ -6,6 +6,7 @@ import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
+import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolTelemetryReceiver;
 import ch.hsr.rocketcolibri.protocol.WifiConnection;
 import android.app.Service;
 import android.content.Context;
@@ -34,6 +35,7 @@ public class RocketColibriService extends  Service
 	// reference to the protocol components
 	public RocketColibriProtocolFsm protocolFsm;
 	public RocketColibriProtocol protocol;
+	public RocketColibriProtocolTelemetryReceiver telemetryReceiver;
 	public WifiConnection wifi;
 	
 	// channels
@@ -58,7 +60,8 @@ public class RocketColibriService extends  Service
 
 		// create a protocol instance
 		this.protocolFsm = new RocketColibriProtocolFsm(s.DISC);
-		this.protocol = new RocketColibriProtocol(protocolFsm);
+		this.protocol = new RocketColibriProtocol(protocolFsm, this);
+		this.telemetryReceiver = new RocketColibriProtocolTelemetryReceiver(this, 30001);
 		this.protocol.setChannels(channel);
 		this.wifi = new WifiConnection( (WifiManager) getSystemService(Context.WIFI_SERVICE));
 		 

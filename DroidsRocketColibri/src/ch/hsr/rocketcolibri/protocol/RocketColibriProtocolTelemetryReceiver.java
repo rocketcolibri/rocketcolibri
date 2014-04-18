@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+
+import android.content.Context;
 import android.util.Log;
 
 /**
@@ -14,11 +16,15 @@ public class RocketColibriProtocolTelemetryReceiver
 {	
 	final String TAG = this.getClass().getName();
 	DatagramSocket receiveSocket;
-	int port;
+	private int port;
+	private Context context;
+	RocketColibriMessage lastTelemetryMsg;
 	
-	public RocketColibriProtocolTelemetryReceiver(int port)
+	public RocketColibriProtocolTelemetryReceiver(final Context context, int port)
 	{	
 		this.port = port;
+		this.context = context;
+		
 		new Thread(new Runnable()
 		{
 			final String TAG =  RocketColibriProtocolTelemetryReceiver.this.TAG;
@@ -37,7 +43,12 @@ public class RocketColibriProtocolTelemetryReceiver
 			        while(true)
 			        {
 			        	serverSocket.receive(receivePacket);
-			        	RocketColibriMessage msg = msgFactory.Create(receivePacket);
+			        	RocketColibriMessage msg = msgFactory.Create(receivePacket, lastTelemetryMsg);
+			        	if(! msg.equals(lastTelemetryMsg))
+			        	{
+			        		lastTelemetryMsg = msg;
+			        		lastTelemetryMsg.sendChangeBroadcast(context);
+			        	}
 			        }
 				}
 				catch (IOException e)

@@ -16,22 +16,28 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.channel.Channel;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.protocol.fsm.Action;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 
 /**
  * @short implementation of the RocketColibri protocol 
  */
-public class RocketColibriProtocol
+public class RocketColibriProtocol 
 {
 	public static final int MAX_CHANNEL_VALUE = 1000;
 	public static final int MIN_CHANNEL_VALUE = 0;
+	public static final String ActionStateUpdate = "protocol.updatestate";
+	public static final String KeyState = "state_new";
 
+	
 	private RocketColibriProtocolFsm fsm;
-
+	private RocketColibriService service;
 	final String TAG = this.getClass().getName();
 	int port;
 	InetAddress address;
@@ -42,8 +48,9 @@ public class RocketColibriProtocol
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	private Future<?> executorFuture=null;
 	
-	public RocketColibriProtocol(RocketColibriProtocolFsm fsm) 
+	public RocketColibriProtocol(RocketColibriProtocolFsm fsm, RocketColibriService service) 
 	{
+		this.service = service;
 		this.fsm = fsm;
 		// don't send any message
 		this.fsm.getStateMachinePlan().entryAction(s.DISC, stopSendMessage);
@@ -56,6 +63,16 @@ public class RocketColibriProtocol
 		// send channel message
 		this.fsm.getStateMachinePlan().entryAction(s.CONN_TRY_ACT, startSendChannelMessage);
 		this.fsm.getStateMachinePlan().entryAction(s.CONN_ACT, startSendChannelMessage);
+		
+		
+		// send Broadcast on every state change
+		this.fsm.getStateMachinePlan().leaveAction(s.DISC, sendUpdateBroadcast);
+		this.fsm.getStateMachinePlan().leaveAction(s.TRY_CONN, sendUpdateBroadcast); 
+		this.fsm.getStateMachinePlan().leaveAction(s.CONN_PASSIV, sendUpdateBroadcast); 
+		this.fsm.getStateMachinePlan().leaveAction(s.CONN_LCK_OUT,  sendUpdateBroadcast);
+		this.fsm.getStateMachinePlan().leaveAction(s.CONN_TRY_ACT,  sendUpdateBroadcast);
+		this.fsm.getStateMachinePlan().leaveAction(s.CONN_ACT, sendUpdateBroadcast);
+		
 		
 		InitSocket();
 	}
@@ -206,6 +223,16 @@ public class RocketColibriProtocol
 		{
 			Log.d(TAG, "execute action stopSendMessage");
 			cancelOldCommandJob();
+		}
+	};
+	
+	Action<RocketColibriProtocolFsm> sendUpdateBroadcast = new Action<RocketColibriProtocolFsm>() {
+		public void apply(RocketColibriProtocolFsm fsm, Object event,	Object nextState) 
+		{
+			Log.d(TAG, "execute action sendBroadcast");
+			Intent intent = new Intent(ActionStateUpdate);
+			intent.putExtra(KeyState, nextState.toString());
+			LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
 		}
 	};
 }
