@@ -64,5 +64,6 @@ public class TelemetryWidget extends CustomizableView
 	public void setTelemetryData(String telemetryData)
 	{
 		mDisplayText = telemetryData;
+		postInvalidate();
 	}
 }

@@ -66,25 +66,21 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	
 	public static final boolean Debugging = false;
 
-	// handler for received Intents for the online message event 
-	private BroadcastReceiver mOnlineMessageReceiver = new BroadcastReceiver() {
+	/**
+	 * handler for received Intents for the state machine changes
+	 */  
+	private BroadcastReceiver mProtocolStateMessageReceiver = new BroadcastReceiver() 
+	{
 	  @Override
-	  public void onReceive(Context context, Intent intent) {
-	    // Extract data included in the Intent
-		if(rcService != null) rcService.protocol.sendChannelDataCommand();
-		if(rcService != null) connectionStatusWidget.setConnectionState((s)rcService.protocolFsm.getState());
+	  public void onReceive(Context context, Intent intent) 
+	  {
+		if(rcService != null)
+		{
+			rcService.protocol.sendChannelDataCommand();
+			connectionStatusWidget.setConnectionState((s)rcService.protocolFsm.getState());
+			telemetryWidget.setTelemetryData(intent.getStringExtra(RocketColibriProtocol.KeyState));
+		}
 		Log.d(TAG, "online message received");
-	  }
-	};
-
-	// handler for received Intents for the offline message event 
-	private BroadcastReceiver mOfflineMessageReceiver = new BroadcastReceiver() {
-	  @Override
-	  public void onReceive(Context context, Intent intent) {
-	    // Extract data included in the Intent
-		if(rcService != null) rcService.protocol.cancelOldCommandJob();
-		if(rcService != null) connectionStatusWidget.setConnectionState((s)rcService.protocolFsm.getState());
-	    Log.d(TAG, "offline message received");
 	  }
 	};
 
@@ -92,16 +88,14 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	public void onResume() 
 	{
 	  super.onResume();
-	  LocalBroadcastManager.getInstance(this).registerReceiver(mOnlineMessageReceiver, new IntentFilter("protocol.online"));
-	  LocalBroadcastManager.getInstance(this).registerReceiver(mOfflineMessageReceiver, new IntentFilter("protocol.offline"));
+	  LocalBroadcastManager.getInstance(this).registerReceiver(mProtocolStateMessageReceiver, new IntentFilter(RocketColibriProtocol.ActionStateUpdate));
 	}
 
 	@Override
 	protected void onPause()
 	{
 	  // Unregister since the activity is not visible
-	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mOnlineMessageReceiver);
-	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mOfflineMessageReceiver);
+	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mProtocolStateMessageReceiver);
 	  super.onPause();
 	}
 	

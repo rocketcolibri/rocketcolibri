@@ -76,5 +76,15 @@ public class ConnectionStatusWidget extends CustomizableView
 			connectionIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_connected);
 			break;
 		}
+		BitmapShader paperShader = new BitmapShader(connectionIconBitmap, Shader.TileMode.MIRROR, Shader.TileMode.MIRROR);
+		Matrix paperMatrix = new Matrix();
+		paperMatrix.setScale(1.0f / connectionIconBitmap.getWidth(), 1.0f / connectionIconBitmap.getHeight());
+		paperShader.setLocalMatrix(paperMatrix);
+		connectionIconPaint = new Paint();
+		connectionIconPaint.setFilterBitmap(false);
+		connectionIconPaint.setStyle(Paint.Style.FILL);
+		connectionIconPaint.setShader(paperShader);
+		postInvalidate();
+		
 	}
 }
