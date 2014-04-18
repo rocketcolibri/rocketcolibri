@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ch.hsr.rocketcolibri.view.widget.SwipeInMenu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:rc="http://schemas.android.com/apk/res/ch.hsr.rocketcolibri"
+    android:id="@+id/drawer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    rc:content="@+id/menu_content"
+    rc:handle="@+id/drag_handle"
+    rc:orientation="bottom"
+    rc:topOffset="80dp" >
+
+    <RelativeLayout
+        android:id="@id/drag_handle"
+        android:layout_width="match_parent"
+        android:layout_height="30dp" >
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/menu_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#3D3D3D"
+        android:orientation="vertical"
+        android:padding="5dp" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:layout_marginTop="-4dp"
+            android:background="#ffffff" >
+        </RelativeLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:background="#555555" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#555555"
+                android:orientation="vertical"
+                android:padding="5dp" >
+
+                <SeekBar
+                    android:id="@+id/seekBar1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <RatingBar
+                    android:id="@+id/ratingBar1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <Spinner
+                    android:id="@+id/spinner1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <CheckBox
+                    android:id="@+id/checkBox1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="CheckBox" />
+
+                <RadioButton
+                    android:id="@+id/radioButton1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="RadioButton" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4dp"
+                    android:gravity="left|center_vertical"
+                    android:text="Handle Text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4dp"
+                    android:gravity="left|center_vertical"
+                    android:text="Handle Text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4dp"
+                    android:gravity="left|center_vertical"
+                    android:text="Handle Text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="4dp"
+                    android:gravity="left|center_vertical"
+                    android:text="Handle Text" />
+
+                <Button
+                    android:id="@+id/cancelall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="test element" />
+
+                <Button
+                    android:id="@+id/cancelall1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="test element" />
+
+                <Button
+                    android:id="@+id/cancelall2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="test element" />
+
+                <Button
+                    android:id="@+id/cancelall3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="test element" />
+
+                <Button
+                    android:id="@+id/cancelall1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="test element" />
+
+                <Button
+                    android:id="@+id/cancelall2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="test element" />
+
+                <Button
+                    android:id="@+id/cancelall3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="test element" />
+
+                <Button
+                    android:id="@+id/cancelall1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="test element" />
+
+                <Button
+                    android:id="@+id/cancelall2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="test element" />
+
+                <Button
+                    android:id="@+id/cancelall3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="test element" />
+
+                <Button
+                    android:id="@+id/cancelall1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="test element" />
+
+                <Button
+                    android:id="@+id/cancelall2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="test element" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="test element" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+</ch.hsr.rocketcolibri.view.widget.SwipeInMenu>
