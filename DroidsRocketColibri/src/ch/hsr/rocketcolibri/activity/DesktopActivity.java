@@ -29,6 +29,8 @@ import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.manager.DesktopViewManager;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.view.MyAbsoluteLayout;
+import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
+import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.view.MyAbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
@@ -38,6 +40,8 @@ import ch.hsr.rocketcolibri.view.draggable.DragLayer;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeController;
 import ch.hsr.rocketcolibri.view.widget.Circle;
+import ch.hsr.rocketcolibri.view.widget.TelemetryWidget;
+import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
 
 public class DesktopActivity extends Activity{
 	private static final String TAG = "CircleTestActivity";
@@ -47,29 +51,31 @@ public class DesktopActivity extends Activity{
 	SurfaceHolder surface_holder = null;
 	SurfaceHolder.Callback sh_callback = null;
 	private IDesktopViewManager tDesktopViewManager;
+	
+	private ConnectionStatusWidget connectionStatusWidget;
+	private TelemetryWidget telemetryWidget;
+	
 	private static final int CHANGE_TOUCH_MODE_MENU_ID = Menu.FIRST;
 	private static final int CONNECT_MENU_ID = Menu.FIRST+1;
 	private static final int DISCONNECT_MENU_ID = Menu.FIRST+2;
 	
 	public static final boolean Debugging = false;
 
-	// handler for received Intents for the online message event 
-	private BroadcastReceiver mOnlineMessageReceiver = new BroadcastReceiver() {
+	/**
+	 * handler for received Intents for the state machine changes
+	 */  
+	private BroadcastReceiver mProtocolStateMessageReceiver = new BroadcastReceiver() 
+	{
 	  @Override
-	  public void onReceive(Context context, Intent intent) {
-	    // Extract data included in the Intent
-		if(rcService != null) rcService.protocol.sendChannelDataCommand();
+	  public void onReceive(Context context, Intent intent) 
+	  {
+		if(rcService != null)
+		{
+			rcService.protocol.sendChannelDataCommand();
+			connectionStatusWidget.setConnectionState((s)rcService.protocolFsm.getState());
+			telemetryWidget.setTelemetryData(intent.getStringExtra(RocketColibriProtocol.KeyState));
+		}
 		Log.d(TAG, "online message received");
-	  }
-	};
-
-	// handler for received Intents for the offline message event 
-	private BroadcastReceiver mOfflineMessageReceiver = new BroadcastReceiver() {
-	  @Override
-	  public void onReceive(Context context, Intent intent) {
-	    // Extract data included in the Intent
-		if(rcService != null) rcService.protocol.cancelOldCommandJob();
-	    Log.d(TAG, "offline message received");
 	  }
 	};
 
@@ -77,16 +83,14 @@ public class DesktopActivity extends Activity{
 	public void onResume() 
 	{
 	  super.onResume();
-	  LocalBroadcastManager.getInstance(this).registerReceiver(mOnlineMessageReceiver, new IntentFilter("protocol.online"));
-	  LocalBroadcastManager.getInstance(this).registerReceiver(mOfflineMessageReceiver, new IntentFilter("protocol.offline"));
+	  LocalBroadcastManager.getInstance(this).registerReceiver(mProtocolStateMessageReceiver, new IntentFilter(RocketColibriProtocol.ActionStateUpdate));
 	}
 
 	@Override
 	protected void onPause()
 	{
 	  // Unregister since the activity is not visible
-	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mOnlineMessageReceiver);
-	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mOfflineMessageReceiver);
+	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mProtocolStateMessageReceiver);
 	  super.onPause();
 	}
 	
