@@ -198,7 +198,7 @@ public class DesktopActivity extends Activity{
 //				if (rcService != null) rcService.channel[1].setControl(position);
 //			}
 //		});
-		
+		new DesktopMenu(this, R.id.swipeInMenu);
 		tDesktopViewManager = new DesktopViewManager(this, (MyAbsoluteLayout) findViewById(R.id.drag_layer));
 		setupViews();
 	}
