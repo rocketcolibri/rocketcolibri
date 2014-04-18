@@ -1,5 +1,8 @@
 package ch.hsr.rocketcolibri.protocol;
 
-public class RocketColibriMessage {
+import android.content.Context;
 
+public class RocketColibriMessage 
+{
+	public void sendChangeBroadcast(Context service){};
 }
