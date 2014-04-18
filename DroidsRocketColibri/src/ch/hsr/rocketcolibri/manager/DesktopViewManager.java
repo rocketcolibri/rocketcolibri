@@ -96,8 +96,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	}
 	
 	private void updateModusOfCustomizableViews(){
-		//-1 because of the menu on the last index
-    	int size = tRootView.getChildCount()-1;
+    	int size = tRootView.getChildCount();
     	ICustomizableView view = null;
     	for(int i = 0; i < size; ++i){
     		try{

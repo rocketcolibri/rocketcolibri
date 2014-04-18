@@ -127,10 +127,6 @@ public class DesktopActivity extends Activity{
 		return ob1;
 	}
 
-	Button btnHotter;
-	Button btnColder;
-	Circle meter1;
-	Circle meter2;
 	private RocketColibriService rcService;
 	private ServiceConnection mRocketColibriService = new ServiceConnection()	{
 		@Override
@@ -148,9 +144,6 @@ public class DesktopActivity extends Activity{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
-		meter1 = (Circle) findViewById(R.id.circle1);
-		meter2 = (Circle) findViewById(R.id.circle2);
 
 		getWindow().setFormat(PixelFormat.TRANSLUCENT);
 		surface_view = (SurfaceView) findViewById(R.id.camView);
@@ -307,6 +300,22 @@ public class DesktopActivity extends Activity{
 		    view = tDesktopViewManager.createView(elementConfig);
 		    view.setBackgroundColor(Color.CYAN);
 		    ((TelemetryWidget)view).setTelemetryData("Telemetry data");
+		    
+		    
+		    rc = new ResizeConfig();
+		    rc.keepRatio=true;
+		    rc.maxHeight=500;
+		    rc.minHeight=50;
+		    rc.maxWidth=500;
+		    rc.minWidth=50;
+		    lp = new LayoutParams(380, 380 , 100, 300);
+		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
+		    view = tDesktopViewManager.createView(elementConfig);
+
+		    lp = new LayoutParams(380, 380 , 600, 300);
+		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
+		    view = tDesktopViewManager.createView(elementConfig);
+
 		    
 		}catch(Exception e){
 		}
