@@ -12,8 +12,19 @@ public class CustomizableView extends View implements ICustomizableView{
 	private boolean customizeModusActive = false;
 	//temporarly for testing with the resize config
 	//will be removed soon
-	private ResizeConfig tRConfig;
+	private ViewElementConfig tViewElementConfig;
 	
+	/**
+	 * Constructor for non Android instantiation
+	 * @param context
+	 * @param cElementConfig
+	 */
+    public CustomizableView(Context context, ViewElementConfig cElementConfig) {
+		super(context);
+		tViewElementConfig = cElementConfig;
+		setLayoutParams(tViewElementConfig.getLayoutParams());
+	}
+    
     public CustomizableView(Context context) {
 		super(context);
 	}
@@ -54,12 +65,8 @@ public class CustomizableView extends View implements ICustomizableView{
 		customizeModusActive = enabled;
 	}
 	
-	public void setResizeConfig(ResizeConfig resizeConfig){
-		tRConfig = resizeConfig;
-	}
-	
-	public ResizeConfig getResizeConfig(){
-		return tRConfig;
+	public ViewElementConfig getViewElementConfig(){
+		return tViewElementConfig;
 	}
 }
 

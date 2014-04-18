@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!--
-         Declare custom theme attributes that allow changing which styles are
-         used for button bars depending on the API level.
-         ?android:attr/buttonBarStyle is new as of API 11 so this is
-         necessary to support previous API levels.
-    -->
     <declare-styleable name="ButtonBarContainerTheme">
         <attr name="buttonBarStyle" format="reference" />
         <attr name="buttonBarButtonStyle" format="reference" />
@@ -20,6 +13,20 @@
         <attr name="positionInPercentY" format="integer" />
         <attr name="diameterInDP" format="integer" />
         <attr name="orientationSide" format="string" />
+    </declare-styleable>
+    <declare-styleable name="SwipeInMenu">
+        <attr name="orientation">
+            <enum name="top" value="0" />
+            <enum name="left" value="1" />
+            <enum name="bottom" value="2" />
+            <enum name="right" value="3" />
+        </attr>
+        <attr name="handle" format="reference" />
+        <attr name="content" format="reference" />
+        <attr name="bottomOffset" format="dimension" />
+        <attr name="topOffset" format="dimension" />
+        <attr name="allowSingleTap" format="boolean" />
+        <attr name="animateOnClick" format="boolean|color" />
     </declare-styleable>
 
 </resources>
