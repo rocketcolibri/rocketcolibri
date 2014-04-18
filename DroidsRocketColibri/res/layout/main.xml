@@ -15,25 +15,10 @@
             android:layout_height="match_parent" >
         </SurfaceView>
 
-        <ch.hsr.rocketcolibri.view.widget.Circle
-            android:id="@+id/circle1"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            hsr:backgroundResource="@drawable/cross"
-            hsr:diameterInDP="380"
-            hsr:orientationSide="left"
-            hsr:positionInPercentX="20"
-            hsr:positionInPercentY="60" />
-
-        <ch.hsr.rocketcolibri.view.widget.Circle
-            android:id="@+id/circle2"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            hsr:backgroundResource="@drawable/cross"
-            hsr:diameterInDP="380"
-            hsr:orientationSide="right"
-            hsr:positionInPercentX="20"
-            hsr:positionInPercentY="60" />
+		<!-- control elements loaded from /res/value/rc.db -->
+		<!-- and created on the fly per reflaction -->
+		<!-- handled by DesktopViewManager -->
+		
     </ch.hsr.rocketcolibri.view.draggable.DragLayer>
 
     <include layout="@layout/desktop_menu" />

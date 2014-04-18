@@ -115,7 +115,13 @@ public final class Circle extends CustomizableView {
 	
 	public Circle(Context context, ViewElementConfig elementConfig) {
 		super(context, elementConfig);
+		backgroundResource = R.drawable.cross;
+		positionInPercentX = 20;
+		positionInPercentY = 100;
+		orientationSide = "left";
+		diameterInDP = elementConfig.getLayoutParams().width;
 		init(context, null);
+		
 	}
 
 	public Circle(Context context, AttributeSet attrs) {
@@ -178,7 +184,10 @@ public final class Circle extends CustomizableView {
 			initPosition();
 		}
 		initDrawingTools();
-		
+		initListener();
+	}
+	
+	private void initListener(){
 		this.setOnClickListener(new OnClickListener(){
 
 			@Override
