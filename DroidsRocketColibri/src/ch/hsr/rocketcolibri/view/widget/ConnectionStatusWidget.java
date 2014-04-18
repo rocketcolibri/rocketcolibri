@@ -11,8 +11,14 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.util.AttributeSet;
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 
+/**
+ * @short widget to display the connection status received from the ServoController
+ * 
+ *  The status of the connection is indicated with a icon according to the Systemschnittstellen document 
+ */
 public class ConnectionStatusWidget extends CustomizableView 
 {
 	private RectF connectionIconRect;
@@ -25,23 +31,11 @@ public class ConnectionStatusWidget extends CustomizableView
 		super(context);
 		init(context, null);
 	}
-
-	public ConnectionStatusWidget(Context context, AttributeSet attrs) 
-	{
-		super(context, attrs);
-		init(context, attrs);
-	}
-
-	public ConnectionStatusWidget(Context context, AttributeSet attrs, int defStyle) 
-	{
-		super(context, attrs, defStyle);
-		init(context, attrs);
-	}
 	
 	private void init(Context context, AttributeSet attrs) 
 	{
 		connectionIconRect = new RectF(0.0f, 0.0f, 1.0f, 1.0f);
-		connectionIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_connected);
+		connectionIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_disconneted);
 		BitmapShader paperShader = new BitmapShader(connectionIconBitmap, Shader.TileMode.MIRROR, Shader.TileMode.MIRROR);
 		Matrix paperMatrix = new Matrix();
 		paperMatrix.setScale(1.0f / connectionIconBitmap.getWidth(), 1.0f / connectionIconBitmap.getHeight());
@@ -52,6 +46,8 @@ public class ConnectionStatusWidget extends CustomizableView
 		connectionIconPaint.setShader(paperShader);
 	}
 	
+	
+	
 	@Override
 	protected void onDraw(Canvas canvas) 
 	{
@@ -61,5 +57,24 @@ public class ConnectionStatusWidget extends CustomizableView
 		canvas.drawOval(connectionIconRect, connectionIconPaint);
 		canvas.restore();
 		super.onDraw(canvas);
+	}
+	
+	/**
+	 * 
+	 */
+	public void setConnectionState(s state)
+	{
+		switch(state)
+		{
+		case DISC:
+			connectionIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_disconneted);	
+			break;
+		case CONN_ACT:
+			connectionIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_control);
+			break;
+		default:
+			connectionIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_connected);
+			break;
+		}
 	}
 }

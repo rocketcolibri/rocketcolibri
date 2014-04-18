@@ -29,6 +29,7 @@ import android.widget.Toast;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
+import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.view.MyAbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
@@ -40,6 +41,7 @@ import ch.hsr.rocketcolibri.view.resizable.ResizeController;
 import ch.hsr.rocketcolibri.view.widget.Circle;
 import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
 import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
+import ch.hsr.rocketcolibri.view.widget.TelemetryWidget;
 
 public class DesktopActivity extends Activity implements View.OnLongClickListener, View.OnClickListener, View.OnTouchListener {
 	private static final String TAG = "CircleTestActivity";
@@ -55,6 +57,9 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	private boolean customizeModeOn = true;    // If true, it takes a long click to start the drag operation.
 	                                                // Otherwise, any touch event starts a drag.
 	
+	private ConnectionStatusWidget connectionStatusWidget;
+	private TelemetryWidget telemetryWidget;
+	
 	private static final int CHANGE_TOUCH_MODE_MENU_ID = Menu.FIRST;
 	private static final int CONNECT_MENU_ID = Menu.FIRST+1;
 	private static final int DISCONNECT_MENU_ID = Menu.FIRST+2;
@@ -67,6 +72,7 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	  public void onReceive(Context context, Intent intent) {
 	    // Extract data included in the Intent
 		if(rcService != null) rcService.protocol.sendChannelDataCommand();
+		if(rcService != null) connectionStatusWidget.setConnectionState((s)rcService.protocolFsm.getState());
 		Log.d(TAG, "online message received");
 	  }
 	};
@@ -77,6 +83,7 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	  public void onReceive(Context context, Intent intent) {
 	    // Extract data included in the Intent
 		if(rcService != null) rcService.protocol.cancelOldCommandJob();
+		if(rcService != null) connectionStatusWidget.setConnectionState((s)rcService.protocolFsm.getState());
 	    Log.d(TAG, "offline message received");
 	  }
 	};
@@ -391,13 +398,30 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	    rc.minHeight=50;
 	    rc.maxWidth=150;
 	    rc.minWidth=50;
-	    CustomizableView view = new ConnectionStatusWidget(this);
-	    view.setResizeConfig(rc);
+	    connectionStatusWidget = new ConnectionStatusWidget(this);
+	    connectionStatusWidget.setResizeConfig(rc);
 	    LayoutParams lp = new LayoutParams(100, 100,  0, 0);
-	    view.setLayoutParams(lp);
-	    view.setBackgroundColor(Color.CYAN);
-	    view.setOnTouchListener(this);
-	    mDragLayer.addView(view);
+	    connectionStatusWidget.setLayoutParams(lp);
+	    connectionStatusWidget.setBackgroundColor(Color.CYAN);
+	    connectionStatusWidget.setOnTouchListener(this);
+	    connectionStatusWidget.setConnectionState(s.DISC);
+	    mDragLayer.addView(connectionStatusWidget);
+	    
+	    
+	    rc = new ResizeConfig();
+	    rc.maxHeight=300;
+	    rc.minHeight=50;
+	    rc.maxWidth=200;
+	    rc.minWidth=100;
+	    telemetryWidget = new TelemetryWidget(this);
+	    telemetryWidget.setResizeConfig(rc);
+	    lp = new LayoutParams(400, 100 , 100, 0);
+	    telemetryWidget.setLayoutParams(lp);
+	    telemetryWidget.setBackgroundColor(Color.CYAN);
+	    telemetryWidget.setOnTouchListener(this);
+	    telemetryWidget.setTelemetryData("Telemetry data");
+	    mDragLayer.addView(telemetryWidget);
+	    
 	    
 //	    rc = new ResizeConfig();
 //	    rc.maxHeight=745;

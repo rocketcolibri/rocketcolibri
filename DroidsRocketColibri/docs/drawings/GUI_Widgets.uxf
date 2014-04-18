@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="12.2">
-  <zoom_level>5</zoom_level>
+  <zoom_level>9</zoom_level>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>350</x>
-      <y>175</y>
-      <w>155</w>
-      <h>55</h>
+      <x>540</x>
+      <y>207</y>
+      <w>279</w>
+      <h>99</h>
     </coordinates>
     <panel_attributes>CustomizableView
 --
@@ -19,10 +19,10 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>350</x>
-      <y>120</y>
-      <w>155</w>
-      <h>15</h>
+      <x>540</x>
+      <y>108</y>
+      <w>279</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>/ICustomizableView/
 </panel_attributes>
@@ -31,22 +31,22 @@
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>380</x>
-      <y>120</y>
-      <w>92</w>
-      <h>64</h>
+      <x>603</x>
+      <y>108</y>
+      <w>153</w>
+      <h>116</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.
 &lt;&lt;implements&gt;&gt;</panel_attributes>
-    <additional_attributes>50;15;50;55</additional_attributes>
+    <additional_attributes>81;27;81;99</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>245</x>
-      <y>305</y>
-      <w>155</w>
-      <h>15</h>
+      <x>243</x>
+      <y>441</y>
+      <w>279</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>Circle</panel_attributes>
     <additional_attributes/>
@@ -54,43 +54,45 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>430</x>
-      <y>305</y>
-      <w>155</w>
-      <h>15</h>
+      <x>540</x>
+      <y>441</y>
+      <w>279</w>
+      <h>90</h>
     </coordinates>
-    <panel_attributes>ConnectionStatusWidget</panel_attributes>
+    <panel_attributes>ConnectionStatusWidget
+--
++ setConnectionState(s)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>305</x>
-      <y>215</y>
-      <w>74</w>
-      <h>99</h>
+      <x>351</x>
+      <y>279</y>
+      <w>242</w>
+      <h>179</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>65;15;15;90</additional_attributes>
+    <additional_attributes>225;27;27;162</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>465</x>
-      <y>215</y>
-      <w>49</w>
-      <h>99</h>
+      <x>648</x>
+      <y>279</y>
+      <w>44</w>
+      <h>179</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>15;15;40;90</additional_attributes>
+    <additional_attributes>27;27;27;162</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>555</x>
-      <y>180</y>
-      <w>115</w>
-      <h>45</h>
+      <x>909</x>
+      <y>216</y>
+      <w>207</w>
+      <h>81</h>
     </coordinates>
     <panel_attributes>ResizeConfig
 --
@@ -101,22 +103,22 @@ min/max size of the view</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>490</x>
-      <y>195</y>
-      <w>74</w>
-      <h>24</h>
+      <x>792</x>
+      <y>243</y>
+      <w>134</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=0..1</panel_attributes>
-    <additional_attributes>65;15;15;15</additional_attributes>
+    <additional_attributes>117;27;27;27</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>50</x>
-      <y>60</y>
-      <w>165</w>
-      <h>80</h>
+      <x>0</x>
+      <y>0</y>
+      <w>297</w>
+      <h>144</h>
     </coordinates>
     <panel_attributes>DragController
 --
@@ -132,22 +134,22 @@ Responsibilities
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>200</x>
-      <y>185</y>
-      <w>159</w>
-      <h>24</h>
+      <x>270</x>
+      <y>225</y>
+      <w>287</w>
+      <h>44</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=0..n</panel_attributes>
-    <additional_attributes>150;15;15;15</additional_attributes>
+    <additional_attributes>270;27;27;27</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>50</x>
-      <y>180</y>
-      <w>165</w>
-      <h>55</h>
+      <x>0</x>
+      <y>216</y>
+      <w>297</w>
+      <h>99</h>
     </coordinates>
     <panel_attributes>DragLayer
 --
@@ -161,25 +163,49 @@ Holds a list of view.</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>60</x>
-      <y>125</y>
-      <w>24</w>
-      <h>64</h>
+      <x>18</x>
+      <y>117</y>
+      <w>44</w>
+      <h>116</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>15;15;15;55</additional_attributes>
+    <additional_attributes>27;27;27;99</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>140</x>
-      <y>125</y>
-      <w>68</w>
-      <h>64</h>
+      <x>162</x>
+      <y>117</y>
+      <w>118</w>
+      <h>116</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 m1=0..1
 dragTarget</panel_attributes>
-    <additional_attributes>35;55;35;15</additional_attributes>
+    <additional_attributes>63;99;63;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>837</x>
+      <y>441</y>
+      <w>279</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>TelemetryWidget
+--
++ setTelemetryData(String data)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>774</x>
+      <y>279</y>
+      <w>206</w>
+      <h>179</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>27;27;189;162</additional_attributes>
   </element>
 </diagram>
