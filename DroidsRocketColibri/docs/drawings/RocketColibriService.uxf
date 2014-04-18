@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>150</x>
+      <y>180</y>
+      <w>380</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>bt=*
+RocketColibriService
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>680</x>
+      <y>180</y>
+      <w>180</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>bt=*
+DBService</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>500</x>
+      <y>170</y>
+      <w>200</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1</panel_attributes>
+    <additional_attributes>180;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>680</x>
+      <y>230</y>
+      <w>180</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>bt=*
+Channel</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>500</x>
+      <y>220</y>
+      <w>200</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=8</panel_attributes>
+    <additional_attributes>180;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>680</x>
+      <y>280</y>
+      <w>180</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>bt=*
+RocketColibriProtocol</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>500</x>
+      <y>270</y>
+      <w>200</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1</panel_attributes>
+    <additional_attributes>180;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>680</x>
+      <y>330</y>
+      <w>180</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>bt=*
+RocketColibriProtocolFsm</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>500</x>
+      <y>320</y>
+      <w>200</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1</panel_attributes>
+    <additional_attributes>180;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>680</x>
+      <y>380</y>
+      <w>180</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>bt=*
+WifiConnection</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>500</x>
+      <y>370</y>
+      <w>200</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1</panel_attributes>
+    <additional_attributes>180;30;30;30</additional_attributes>
+  </element>
+</diagram>

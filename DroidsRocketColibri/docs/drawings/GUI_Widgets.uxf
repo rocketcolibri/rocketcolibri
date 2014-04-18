@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="11.3">
+<diagram program="umlet" version="12.2">
   <zoom_level>5</zoom_level>
   <element>
     <type>com.umlet.element.Class</type>
@@ -31,14 +31,14 @@
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>390</x>
+      <x>380</x>
       <y>120</y>
-      <w>75</w>
+      <w>92</w>
       <h>64</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.
 &lt;&lt;implements&gt;&gt;</panel_attributes>
-    <additional_attributes>40;15;40;55</additional_attributes>
+    <additional_attributes>50;15;50;55</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
@@ -59,7 +59,7 @@
       <w>155</w>
       <h>15</h>
     </coordinates>
-    <panel_attributes>WidgetConnectionStatus</panel_attributes>
+    <panel_attributes>ConnectionStatusWidget</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -174,7 +174,7 @@ Holds a list of view.</panel_attributes>
     <coordinates>
       <x>140</x>
       <y>125</y>
-      <w>62</w>
+      <w>68</w>
       <h>64</h>
     </coordinates>
     <panel_attributes>lt=&lt;-

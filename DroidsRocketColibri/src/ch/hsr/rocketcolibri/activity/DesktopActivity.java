@@ -38,6 +38,7 @@ import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeController;
 import ch.hsr.rocketcolibri.view.widget.Circle;
+import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
 import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
 
 public class DesktopActivity extends Activity implements View.OnLongClickListener, View.OnClickListener, View.OnTouchListener {
@@ -386,57 +387,69 @@ public class DesktopActivity extends Activity implements View.OnLongClickListene
 	    dragController.addDropTarget (mDragLayer);
 	
 	    ResizeConfig rc = new ResizeConfig();
-	    rc.maxHeight=745;
+	    rc.maxHeight=150;
 	    rc.minHeight=50;
-	    rc.maxWidth=400;
-	    rc.minWidth=30;
-	    CustomizableView view = new CustomizableView(this);
+	    rc.maxWidth=150;
+	    rc.minWidth=50;
+	    CustomizableView view = new ConnectionStatusWidget(this);
 	    view.setResizeConfig(rc);
-	    LayoutParams lp = new LayoutParams(300, 300, 700, 300);
+	    LayoutParams lp = new LayoutParams(100, 100,  0, 0);
 	    view.setLayoutParams(lp);
 	    view.setBackgroundColor(Color.CYAN);
 	    view.setOnTouchListener(this);
 	    mDragLayer.addView(view);
 	    
-	    rc = new ResizeConfig();
-	    rc.keepRatio=false;
-	    rc.maxHeight=700;
-	    rc.minHeight=10;
-	    rc.maxWidth=900;
-	    rc.minWidth=10;
-	    view = new CustomizableView(this);
-	    lp = new LayoutParams(500, 300, 100, 200);
-	    view.setResizeConfig(rc);
-	    view.setLayoutParams(lp);
-	    view.setBackgroundColor(Color.RED);
-	    view.setOnTouchListener(this);
-	    mDragLayer.addView(view);
-	    
-	    rc = new ResizeConfig();
-	    rc.keepRatio=false;
-	    rc.maxHeight=900;
-	    rc.minHeight=120;
-	    rc.maxWidth=900;
-	    rc.minWidth=40;
-	    view = new CustomizableView(this);
-	    view.setResizeConfig(rc);
-	    lp = new LayoutParams(500, 300, 0, 0);
-	    view.setLayoutParams(lp);
-	    view.setBackgroundColor(Color.LTGRAY);
-	    view.setOnTouchListener(this);
-	    mDragLayer.addView(view);
-	    
-	    rc = new ResizeConfig();
-	    rc.keepRatio=true;
-	    rc.maxHeight=500;
-	    rc.minHeight=160;
-	    rc.maxWidth=500;
-	    rc.minWidth=160;
-	    meter1.setOnTouchListener(this);
-	    meter1.setResizeConfig(rc);
-	    meter2.setOnTouchListener(this);
-	    meter2.setResizeConfig(rc);
-	    
+//	    rc = new ResizeConfig();
+//	    rc.maxHeight=745;
+//	    rc.minHeight=50;
+//	    rc.maxWidth=400;
+//	    rc.minWidth=30;
+//	    view = new CustomizableView(this);
+//	    view.setResizeConfig(rc);
+//	    lp = new LayoutParams(300, 300, 700, 300);
+//	    view.setLayoutParams(lp);
+//	    view.setBackgroundColor(Color.CYAN);
+//	    view.setOnTouchListener(this);
+//	    mDragLayer.addView(view);
+//   
+//	    rc = new ResizeConfig();
+//	    rc.keepRatio=false;
+//	    rc.maxHeight=700;
+//	    rc.minHeight=10;
+//	    rc.maxWidth=900;
+//	    rc.minWidth=10;
+//	    view = new CustomizableView(this);
+//	    lp = new LayoutParams(500, 300, 100, 200);
+//	    view.setResizeConfig(rc);
+//	    view.setLayoutParams(lp);
+//	    view.setBackgroundColor(Color.RED);
+//	    view.setOnTouchListener(this);
+//	    mDragLayer.addView(view);
+//	    
+//	    rc = new ResizeConfig();
+//	    rc.keepRatio=false;
+//	    rc.maxHeight=900;
+//	    rc.minHeight=120;
+//	    rc.maxWidth=900;
+//	    rc.minWidth=40;
+//	    view = new CustomizableView(this);
+//	    view.setResizeConfig(rc);
+//	    lp = new LayoutParams(500, 300, 0, 0);
+//	    view.setLayoutParams(lp);
+//	    view.setBackgroundColor(Color.LTGRAY);
+//	    view.setOnTouchListener(this);
+//	    mDragLayer.addView(view);
+//	    
+//	    rc = new ResizeConfig();
+//	    rc.keepRatio=true;
+//	    rc.maxHeight=500;
+//	    rc.minHeight=160;
+//	    rc.maxWidth=500;
+//	    rc.minWidth=160;
+//	    meter1.setOnTouchListener(this);
+//	    meter1.setResizeConfig(rc);
+//	    meter2.setOnTouchListener(this);
+//	    meter2.setResizeConfig(rc);
 	    String message = customizeModeOn ? "Press and hold to start dragging." 
 	                                          : "Touch a view to start dragging.";
 	    Toast.makeText (getApplicationContext(), message, Toast.LENGTH_LONG).show ();
