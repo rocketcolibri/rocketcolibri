@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#555555"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <Button
+        android:id="@+id/editChannel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit Channel" />
+    <Button
+        android:id="@+id/resizeMode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Resize Element" />
+    <SeekBar
+        android:id="@+id/seekBar1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
+

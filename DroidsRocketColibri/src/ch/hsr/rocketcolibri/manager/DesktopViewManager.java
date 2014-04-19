@@ -1,14 +1,12 @@
 package ch.hsr.rocketcolibri.manager;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
-import ch.hsr.rocketcolibri.R;
+import android.widget.PopupWindow;
 import ch.hsr.rocketcolibri.view.MyAbsoluteLayout;
-import ch.hsr.rocketcolibri.view.MyAbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
@@ -32,7 +30,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	private boolean tCustomizeModus;
 	private CustomizeModusListener tCustomizeModusListener;
 	
-	public DesktopViewManager(Context context, MyAbsoluteLayout rootView){
+	public DesktopViewManager(Context context, MyAbsoluteLayout rootView, PopupWindow customizeModusPopup){
 		tContext = context;
 		tRootView = rootView;
 		tResizeController = new ResizeController(context);
@@ -40,7 +38,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 		DragLayer dragLayer = (DragLayer) tRootView;
 		dragLayer.setDragController(tDragController);
 	    tDragController.addDropTarget (dragLayer);
-	    tCustomizeModusListener = new CustomizeModusListener(this);
+	    tCustomizeModusListener = new CustomizeModusListener(this, customizeModusPopup);
 	}
 	
 	@Override
@@ -106,6 +104,15 @@ public class DesktopViewManager implements IDesktopViewManager{
     		}
     	}
 	}
-	
-	
+
+	@Override
+	public void release() {
+		Log.d("DesktopViewManager", "release");
+		tResizeController = null;
+		tContext = null;
+		tCustomizeModusListener.release();
+		tCustomizeModusListener = null;
+		tDragController = null;
+		tRootView = null;
+	}
 }

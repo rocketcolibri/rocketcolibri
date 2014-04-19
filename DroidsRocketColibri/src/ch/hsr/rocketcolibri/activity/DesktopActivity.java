@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -23,6 +24,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
@@ -199,10 +202,23 @@ public class DesktopActivity extends Activity{
 //			}
 //		});
 		new DesktopMenu(this, R.id.swipeInMenu);
-		tDesktopViewManager = new DesktopViewManager(this, (MyAbsoluteLayout) findViewById(R.id.drag_layer));
+		tDesktopViewManager = new DesktopViewManager(this, (MyAbsoluteLayout) findViewById(R.id.drag_layer),
+				createCustomizeModusPopup());
 		setupViews();
 	}
 	
+	private PopupWindow createCustomizeModusPopup(){
+		LayoutInflater li = LayoutInflater.from(this);
+		LinearLayout ll = (LinearLayout) li.inflate(R.layout.customize_modus_popup,null,false);
+		return new PopupWindow(ll, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		tDesktopViewManager.release();
+		tDesktopViewManager = null;
+	}
 	/**
 	 * Build a menu for the activity.
 	 *
