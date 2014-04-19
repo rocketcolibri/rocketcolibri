@@ -7,6 +7,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.PopupWindow;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
+import ch.hsr.rocketcolibri.view.MyAbsoluteLayout.LayoutParams;
 
 /**
  * This Class handles the touch events in the Customize-Mode
@@ -14,12 +15,15 @@ import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
  */
 public class CustomizeModusListener implements OnTouchListener{
 
-	private int clickCount = 0;
-	private long startTime;
-	private long duration;
+	private int tClickCount = 0;
+	private int tViewId = 0;
+	private long tStartTime;
+	private long tDuration;
 	private IDesktopViewManager tDesktopViewManger;
 	private PopupWindow tCustomizeModusPopup;
-	private View tRootView;//this is needed to dismiss the Popup
+	//this is needed to dismiss the Popup
+	private View tRootView;
+	//the single tab handler
 	private SingleTabCountDown tSingleTabCountDown = new SingleTabCountDown(this, MIN_DURATION, MIN_DURATION);
 	
 	public CustomizeModusListener(IDesktopViewManager desktopViewManager, View rootView, PopupWindow customizeModusPopup){
@@ -27,10 +31,11 @@ public class CustomizeModusListener implements OnTouchListener{
 		tRootView = rootView;
 		tCustomizeModusPopup = customizeModusPopup;
 		tRootView.setOnClickListener(new OnClickListener() {
-			
+			/**
+			 * dismiss Popup if touch outside
+			 */
 			@Override
 			public void onClick(View v) {
-				Log.d("tRootView", "tRootViewtRootViewtRootViewtRootView");
 				tSingleTabCountDown.cancel();
 				dismissPopupIfIsShowing();
 			}
@@ -45,32 +50,33 @@ public class CustomizeModusListener implements OnTouchListener{
         switch(ev.getAction() & MotionEvent.ACTION_MASK)
         {
         case MotionEvent.ACTION_DOWN:
-        	if(System.currentTimeMillis() - startTime>MAX_DURATION){
-        		clickCount=0;
-        		startTime = System.currentTimeMillis();
+        	if(tViewId!=v.hashCode() || System.currentTimeMillis() - tStartTime>MAX_DURATION){
+        		tClickCount=0;
+        		tStartTime = System.currentTimeMillis();
         	}
-            clickCount++;
+            tClickCount++;
+            tViewId = v.hashCode();
             break;
         case MotionEvent.ACTION_UP:
-        	duration = System.currentTimeMillis() - startTime;
-        	Log.d("CustomModeListener", ""+duration +" "+clickCount);
-        	if(clickCount == 2 && duration <= MAX_DURATION){
+        	tDuration = System.currentTimeMillis() - tStartTime;
+        	Log.d("CustomModeListener", ""+tDuration +" "+tClickCount);
+        	if(tClickCount == 2 && tDuration <= MAX_DURATION){
         		tSingleTabCountDown.cancel();
-            	clickCount = 0;
-            	startTime=0;
+            	tClickCount = 0;
+            	tStartTime=0;
             	dismissPopupIfIsShowing();
             	return doubleTab(v);
-        	}else if(duration < MIN_DURATION){
+        	}else if(tDuration < 80){
         		tSingleTabCountDown.cancel();
         		tSingleTabCountDown.setTargetView(v);
         		tSingleTabCountDown.start();
         	}
         case MotionEvent.ACTION_MOVE:
-        	if(clickCount==1){
-            	duration = System.currentTimeMillis() - startTime;
-            	if(duration>=MAX_DURATION){
-            		startTime=0;
-            		clickCount = 0;
+        	if(tClickCount==1){
+            	tDuration = System.currentTimeMillis() - tStartTime;
+            	if(tDuration>=MAX_DURATION){
+            		tStartTime=0;
+            		tClickCount = 0;
             		return longHold(v);
             	}
             }
@@ -80,6 +86,11 @@ public class CustomizeModusListener implements OnTouchListener{
 	
 	boolean singleTab(View tabbedView){
 		dismissPopupIfIsShowing();
+		//TODO Issue #23 
+		//replace showAsDropDown with showAtLocation(parent, gravity, x, y)
+		//to place the Popup close to the tabbedView in a visible area.
+		//To get the Position Params just remove the comment from the following line.
+		//LayoutParams lp = (LayoutParams) tabbedView.getLayoutParams();
     	tCustomizeModusPopup.showAsDropDown(tabbedView);
     	return true;
 	}
