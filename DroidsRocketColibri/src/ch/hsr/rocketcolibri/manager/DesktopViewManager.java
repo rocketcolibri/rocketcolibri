@@ -2,10 +2,12 @@ package ch.hsr.rocketcolibri.manager;
 
 import java.lang.reflect.Constructor;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.PopupWindow;
+import ch.hsr.rocketcolibri.manager.listener.CustomizeModusListener;
 import ch.hsr.rocketcolibri.view.MyAbsoluteLayout;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
@@ -23,14 +25,14 @@ import ch.hsr.rocketcolibri.view.resizable.ResizeController;
  * @author artvel
  */
 public class DesktopViewManager implements IDesktopViewManager{
-	private Context tContext;
+	private Activity tContext;
 	private ResizeController tResizeController;
 	private DragController tDragController;
 	private MyAbsoluteLayout tRootView;
 	private boolean tCustomizeModus;
 	private CustomizeModusListener tCustomizeModusListener;
 	
-	public DesktopViewManager(Context context, MyAbsoluteLayout rootView, PopupWindow customizeModusPopup){
+	public DesktopViewManager(Activity context, MyAbsoluteLayout rootView, PopupWindow customizeModusPopup){
 		tContext = context;
 		tRootView = rootView;
 		tResizeController = new ResizeController(context);
@@ -38,7 +40,8 @@ public class DesktopViewManager implements IDesktopViewManager{
 		DragLayer dragLayer = (DragLayer) tRootView;
 		dragLayer.setDragController(tDragController);
 	    tDragController.addDropTarget (dragLayer);
-	    tCustomizeModusListener = new CustomizeModusListener(this, customizeModusPopup);
+	    View view = tContext.getWindow().getDecorView().findViewById(android.R.id.content);
+	    tCustomizeModusListener = new CustomizeModusListener(this, view, customizeModusPopup);
 	}
 	
 	@Override

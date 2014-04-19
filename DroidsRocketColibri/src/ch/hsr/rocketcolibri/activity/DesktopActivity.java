@@ -23,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -202,14 +203,15 @@ public class DesktopActivity extends Activity{
 //			}
 //		});
 		new DesktopMenu(this, R.id.swipeInMenu);
-		tDesktopViewManager = new DesktopViewManager(this, (MyAbsoluteLayout) findViewById(R.id.drag_layer),
-				createCustomizeModusPopup());
+		MyAbsoluteLayout absolutLayout = (MyAbsoluteLayout) findViewById(R.id.drag_layer);
+		tDesktopViewManager = new DesktopViewManager(this, absolutLayout,
+				createCustomizeModusPopup(absolutLayout));
 		setupViews();
 	}
 	
-	private PopupWindow createCustomizeModusPopup(){
+	private PopupWindow createCustomizeModusPopup(ViewGroup root){
 		LayoutInflater li = LayoutInflater.from(this);
-		LinearLayout ll = (LinearLayout) li.inflate(R.layout.customize_modus_popup,null,false);
+		LinearLayout ll = (LinearLayout) li.inflate(R.layout.customize_modus_popup,root,false);
 		return new PopupWindow(ll, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 	}
 	

@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:hsr="http://schemas.android.com/apk/res/ch.hsr.rocketcolibri"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
+
+    <SurfaceView
+        android:id="@+id/camView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+    </SurfaceView>
 
     <ch.hsr.rocketcolibri.view.draggable.DragLayer
         android:id="@+id/drag_layer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <SurfaceView
-            android:id="@+id/camView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-        </SurfaceView>
+        <!-- control elements loaded from /res/value/rc.db -->
+        <!-- and created on the fly per reflaction -->
+        <!-- handled by DesktopViewManager -->
 
-		<!-- control elements loaded from /res/value/rc.db -->
-		<!-- and created on the fly per reflaction -->
-		<!-- handled by DesktopViewManager -->
-		
     </ch.hsr.rocketcolibri.view.draggable.DragLayer>
 
     <include layout="@layout/desktop_menu" />
