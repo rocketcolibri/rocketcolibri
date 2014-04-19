@@ -179,11 +179,11 @@ public class ResizeableTargetLayer extends MyAbsoluteLayout {
         case MotionEvent.ACTION_MOVE:
             // move the balls the same as the finger
             if (tBallID > -1 && tBallID<4) {
-                if(tConfig.keepRatio){
+                if(tConfig.keepRatio){//TODO Issue #24
                 	calculationWithRatio();
                 }else{
                 	calculationWithoutRatio();
-                }
+                }//Issue #24 end
                 invalidate();
             }
             break;
