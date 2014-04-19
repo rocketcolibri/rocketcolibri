@@ -30,6 +30,7 @@ import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.manager.DesktopViewManager;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
+import ch.hsr.rocketcolibri.menu.DesktopMenu;
 import ch.hsr.rocketcolibri.view.MyAbsoluteLayout;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
@@ -192,17 +193,10 @@ public class DesktopActivity extends Activity{
 //				if (rcService != null) rcService.channel[1].setControl(position);
 //			}
 //		});
-		new DesktopMenu(this, R.id.swipeInMenu);
+		new DesktopMenu(this, findViewById(R.id.swipeInMenu));
 		MyAbsoluteLayout absolutLayout = (MyAbsoluteLayout) findViewById(R.id.drag_layer);
-		tDesktopViewManager = new DesktopViewManager(this, absolutLayout,
-				createCustomizeModusPopup(absolutLayout));
+		tDesktopViewManager = new DesktopViewManager(this, absolutLayout);
 		setupViews();
-	}
-	
-	private PopupWindow createCustomizeModusPopup(ViewGroup root){
-		LayoutInflater li = LayoutInflater.from(this);
-		LinearLayout ll = (LinearLayout) li.inflate(R.layout.customize_modus_popup,root,false);
-		return new PopupWindow(ll, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 	}
 	
 	@Override

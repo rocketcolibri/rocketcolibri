@@ -7,6 +7,7 @@ public class ViewElementConfig {
 	private String tClassPath;
 	private LayoutParams tLayoutParams;
 	private ResizeConfig tResizeConfig;
+	private float tAlpha;
 	
 	public ViewElementConfig(){}
 	
@@ -14,6 +15,7 @@ public class ViewElementConfig {
 		tClassPath = classPath;
 		tLayoutParams = layoutParams;
 		tResizeConfig = resizeConfig;
+		tAlpha = 1;
 	}
 
 	public String getClassPath() {
@@ -38,6 +40,14 @@ public class ViewElementConfig {
 
 	public void settResizeConfig(ResizeConfig resizeConfig) {
 		tResizeConfig = resizeConfig;
+	}
+	
+	public void setAlpha(float alpha){
+		tAlpha = alpha;
+	}
+	
+	public float getAlpha(){
+		return tAlpha;
 	}
 	
 	

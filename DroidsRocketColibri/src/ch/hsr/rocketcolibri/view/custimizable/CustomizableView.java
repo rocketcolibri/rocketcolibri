@@ -6,12 +6,9 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import ch.hsr.rocketcolibri.R;
-import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 
 public class CustomizableView extends View implements ICustomizableView{
 	private boolean customizeModusActive = false;
-	//temporarly for testing with the resize config
-	//will be removed soon
 	private ViewElementConfig tViewElementConfig;
 	
 	/**
@@ -23,6 +20,7 @@ public class CustomizableView extends View implements ICustomizableView{
 		super(context);
 		tViewElementConfig = cElementConfig;
 		setLayoutParams(tViewElementConfig.getLayoutParams());
+		setAlpha(cElementConfig.getAlpha());
 	}
 
 	public CustomizableView(Context context, AttributeSet attrs) {

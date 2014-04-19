@@ -5,9 +5,13 @@ import java.lang.reflect.Constructor;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.manager.listener.CustomizeModusListener;
+import ch.hsr.rocketcolibri.menu.CustomizeModusPopupMenu;
 import ch.hsr.rocketcolibri.view.MyAbsoluteLayout;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
@@ -32,7 +36,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	private boolean tCustomizeModus;
 	private CustomizeModusListener tCustomizeModusListener;
 	
-	public DesktopViewManager(Activity context, MyAbsoluteLayout rootView, PopupWindow customizeModusPopup){
+	public DesktopViewManager(Activity context, MyAbsoluteLayout rootView){
 		tContext = context;
 		tRootView = rootView;
 		tResizeController = new ResizeController(context);
@@ -40,8 +44,11 @@ public class DesktopViewManager implements IDesktopViewManager{
 		DragLayer dragLayer = (DragLayer) tRootView;
 		dragLayer.setDragController(tDragController);
 	    tDragController.addDropTarget (dragLayer);
-	    View view = tContext.getWindow().getDecorView().findViewById(android.R.id.content);
-	    tCustomizeModusListener = new CustomizeModusListener(this, view, customizeModusPopup);
+	    
+	    LayoutInflater li = LayoutInflater.from(context);
+		LinearLayout ll = (LinearLayout) li.inflate(R.layout.customize_modus_popup, rootView, false);
+		
+	    tCustomizeModusListener = new CustomizeModusListener(this, new CustomizeModusPopupMenu(this, ll));
 	}
 	
 	@Override
@@ -117,5 +124,12 @@ public class DesktopViewManager implements IDesktopViewManager{
 		tCustomizeModusListener = null;
 		tDragController = null;
 		tRootView = null;
+	}
+
+	@Override
+	public View getRootView() {
+		//the real root
+//		View view = tContext.getWindow().getDecorView().findViewById(android.R.id.content);
+		return tRootView;
 	}
 }

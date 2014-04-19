@@ -1,7 +1,8 @@
-package ch.hsr.rocketcolibri.activity;
+package ch.hsr.rocketcolibri.menu;
 
 import ch.hsr.rocketcolibri.R;
-import android.app.Activity;
+import android.content.Context;
+import android.view.View;
 import android.widget.RatingBar;
 import android.widget.RatingBar.OnRatingBarChangeListener;
 import android.widget.SeekBar;
@@ -14,11 +15,16 @@ import android.widget.Toast;
  * @author artvel
  */
 public class DesktopMenu {
-	private Activity tActivity;
+	private View tContentView;
+	private Context tContext;
+	public DesktopMenu(Context context, View contentView){
+		tContext = context;
+		tContentView = contentView;
+		onCreate();
+	}
 	
-	public DesktopMenu(Activity activity, int resourceId){
-		tActivity = activity;
-		SeekBar sBar = (SeekBar)activity.findViewById(R.id.seekBar1);
+	private void onCreate(){
+		SeekBar sBar = (SeekBar)findViewById(R.id.seekBar1);
 		sBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			
 			@Override
@@ -33,18 +39,22 @@ public class DesktopMenu {
 			
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				Toast.makeText(tActivity, ""+progress, Toast.LENGTH_SHORT).show();
+				Toast.makeText(tContext, ""+progress, Toast.LENGTH_SHORT).show();
 			}
 		});
-		RatingBar rb = (RatingBar)activity.findViewById(R.id.ratingBar1);
+		RatingBar rb = (RatingBar)findViewById(R.id.ratingBar1);
 		rb.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
 			
 			@Override
 			public void onRatingChanged(RatingBar ratingBar, float rating,
 					boolean fromUser) {
-				Toast.makeText(tActivity, ""+rating, Toast.LENGTH_SHORT).show();
+				Toast.makeText(tContext, ""+rating, Toast.LENGTH_SHORT).show();
 			}
 		});
+	}
+	
+	private View findViewById(int id){
+		return tContentView.findViewById(id);
 	}
 	
 	

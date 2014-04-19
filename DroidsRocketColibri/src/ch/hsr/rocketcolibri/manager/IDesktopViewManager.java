@@ -9,5 +9,6 @@ public interface IDesktopViewManager {
 	View createView(ViewElementConfig cElementConfig) throws Exception;
 	boolean isInCustomizeModus();
 	void switchCustomieModus();
+	View getRootView();
 	void release();
 }
