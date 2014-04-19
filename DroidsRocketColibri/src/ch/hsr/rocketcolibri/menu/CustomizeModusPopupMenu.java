@@ -23,9 +23,10 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 	public CustomizeModusPopupMenu(IDesktopViewManager desktopViewManager, View contentView){
 		super(contentView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
 		setTouchable(true);
-		setClippingEnabled(true);
+		setClippingEnabled(false);
 		tDesktopViewManager = desktopViewManager;
 		setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+		setAnimationStyle(R.style.PopupAnimation);
 		onCreate();
 	}
 	
