@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.manager.listener.CustomizeModusListener;
+import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
 import ch.hsr.rocketcolibri.menu.CustomizeModusPopupMenu;
 import ch.hsr.rocketcolibri.view.MyAbsoluteLayout;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
@@ -18,7 +19,9 @@ import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.draggable.DragController;
 import ch.hsr.rocketcolibri.view.draggable.DragLayer;
+import ch.hsr.rocketcolibri.view.draggable.IDragListener;
 import ch.hsr.rocketcolibri.view.draggable.IDragSource;
+import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeController;
 
@@ -35,22 +38,26 @@ public class DesktopViewManager implements IDesktopViewManager{
 	private MyAbsoluteLayout tRootView;
 	private boolean tCustomizeModus;
 	private CustomizeModusListener tCustomizeModusListener;
+	private ViewChangedListener tViewChangeListener;
+	private IDragListener dragListener;
 	
-	public DesktopViewManager(Activity context, MyAbsoluteLayout rootView){
+	public DesktopViewManager(Activity context, MyAbsoluteLayout rootView, ViewChangedListener vcListener){
 		tContext = context;
 		tRootView = rootView;
+		tViewChangeListener = vcListener;
 		tResizeController = new ResizeController(context);
+		tResizeController.setResizeDoneListener(createResizeDoneListener());
 		tDragController = new DragController(context);
 		DragLayer dragLayer = (DragLayer) tRootView;
 		dragLayer.setDragController(tDragController);
 	    tDragController.addDropTarget (dragLayer);
-	    
+	    tDragController.setDragListener(createDragListener());
 	    LayoutInflater li = LayoutInflater.from(context);
 		LinearLayout ll = (LinearLayout) li.inflate(R.layout.customize_modus_popup, rootView, false);
 		
 	    tCustomizeModusListener = new CustomizeModusListener(this, new CustomizeModusPopupMenu(this, ll));
 	}
-	
+
 	@Override
 	public void resizeView(View resizeTarget){
 		ResizeConfig rConfig = null;
@@ -132,4 +139,33 @@ public class DesktopViewManager implements IDesktopViewManager{
 //		View view = tContext.getWindow().getDecorView().findViewById(android.R.id.content);
 		return tRootView;
 	}
+	
+	private IResizeDoneListener createResizeDoneListener() {
+		return new IResizeDoneListener() {
+			@Override
+			public void done(View resizedView) {
+				viewChanged(resizedView);
+			}
+		};
+	}
+
+	private IDragListener createDragListener() {
+		return new IDragListener() {
+			@Override
+			public void onDragStart(IDragSource source, Object info, int dragAction) {
+			}
+			@Override
+			public void onDragEnd(View targetView) {
+				viewChanged(targetView);
+			}
+		};
+	}
+	
+	private void viewChanged(View view){
+		try{
+			tViewChangeListener.onViewChange(((CustomizableView)view).getViewElementConfig());
+		}catch(Exception e){
+		}
+	}
+
 }

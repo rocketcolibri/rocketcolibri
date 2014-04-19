@@ -4,8 +4,10 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.view.MyAbsoluteLayout.LayoutParams;
 
 public class CustomizableView extends View implements ICustomizableView{
 	private boolean customizeModusActive = false;
@@ -60,6 +62,8 @@ public class CustomizableView extends View implements ICustomizableView{
 	}
 	
 	public ViewElementConfig getViewElementConfig(){
+		tViewElementConfig.settLayoutParams((LayoutParams) getLayoutParams());
+		tViewElementConfig.setAlpha(getAlpha());
 		return tViewElementConfig;
 	}
 }

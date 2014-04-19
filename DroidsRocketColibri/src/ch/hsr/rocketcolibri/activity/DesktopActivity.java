@@ -30,6 +30,7 @@ import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.manager.DesktopViewManager;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
+import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
 import ch.hsr.rocketcolibri.menu.DesktopMenu;
 import ch.hsr.rocketcolibri.view.MyAbsoluteLayout;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
@@ -195,7 +196,13 @@ public class DesktopActivity extends Activity{
 //		});
 		new DesktopMenu(this, findViewById(R.id.swipeInMenu));
 		MyAbsoluteLayout absolutLayout = (MyAbsoluteLayout) findViewById(R.id.drag_layer);
-		tDesktopViewManager = new DesktopViewManager(this, absolutLayout);
+		tDesktopViewManager = new DesktopViewManager(this, absolutLayout, new ViewChangedListener() {
+			
+			@Override
+			public void onViewChange(ViewElementConfig viewElementConfig) {
+				Log.d("changed", "changed");
+			}
+		});
 		setupViews();
 	}
 	

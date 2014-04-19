@@ -95,7 +95,7 @@ public class DragController {
     /** Who can receive drop events */
     private ArrayList<IDropTarget> mDropTargets = new ArrayList<IDropTarget>();
 
-    private DragListener mListener;
+    private IDragListener mListener;
 
     /** The window token used as the parent for the DragView. */
     private IBinder mWindowToken;
@@ -106,27 +106,6 @@ public class DragController {
 
     private InputMethodManager mInputMethodManager;
 
-    /**
-     * Interface to receive notifications when a drag starts or stops
-     */
-    interface DragListener {
-        
-        /**
-         * A drag has begun
-         * 
-         * @param source An object representing where the drag originated
-         * @param info The data associated with the object that is being dragged
-         * @param dragAction The drag action: either {@link DragController#DRAG_ACTION_MOVE}
-         *        or {@link DragController#DRAG_ACTION_COPY}
-         */
-        void onDragStart(IDragSource source, Object info, int dragAction);
-        
-        /**
-         * The drag has eneded
-         */
-        void onDragEnd();
-    }
-    
     /**
      * Used to create a new DragLayer from XML.
      *
@@ -291,7 +270,7 @@ public class DragController {
                 mOriginator.setVisibility(View.VISIBLE);
             }
             if (mListener != null) {
-                mListener.onDragEnd();
+                mListener.onDragEnd(mOriginator);
             }
             if (mDragView != null) {
                 mDragView.remove();
@@ -507,14 +486,14 @@ public class DragController {
     /**
      * Sets the drag listner which will be notified when a drag starts or ends.
      */
-    public void setDragListener(DragListener l) {
+    public void setDragListener(IDragListener l) {
         mListener = l;
     }
 
     /**
      * Remove a previously installed drag listener.
      */
-    public void removeDragListener(DragListener l) {
+    public void removeDragListener(IDragListener l) {
         mListener = null;
     }
 
