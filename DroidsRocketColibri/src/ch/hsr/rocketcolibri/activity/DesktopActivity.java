@@ -317,6 +317,16 @@ public class DesktopActivity extends Activity{
 		    view.setBackgroundColor(Color.CYAN);
 		    ((TelemetryWidget)view).setTelemetryData("Telemetry data");
 		    
+		    rc = new ResizeConfig();
+		    rc.maxHeight=150;
+		    rc.minHeight=50;
+		    rc.maxWidth=150;
+		    rc.minWidth=50;
+		    lp = new LayoutParams(100, 100 , 0, 0);
+		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget", lp, rc);
+		    view = tDesktopViewManager.createView(elementConfig);
+		    view.setBackgroundColor(Color.CYAN);
+		    
 		    
 		    rc = new ResizeConfig();
 		    rc.keepRatio=true;
