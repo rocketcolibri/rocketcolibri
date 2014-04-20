@@ -14,25 +14,28 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
+
 import java.util.Locale;
-import ch.hsr.rocketcolibri.RCService;
-import ch.hsr.rocketcolibri.RCService.RCServiceBinder;
+
+
+import ch.hsr.rocketcolibri.RocketColibriService;
+
 
 public abstract class RCActivity extends Activity {
-	protected RCService service;
+	protected RocketColibriService rcService;
 	protected ProgressDialog mDialog;
 	
 	private ServiceConnection bindableServiceConnection = new ServiceConnection() {
 		@Override 
 		public void onServiceDisconnected(ComponentName componentName) {
 			Log.d(getClassName(), "onServiceDisconnect");
-			service = null;
+			rcService = null;
 		}
 		@Override
 		public void onServiceConnected(ComponentName componentName, IBinder binder) {
 			Log.d(getClassName(), "onServiceConnected");
-			RCServiceBinder customerBinder = (RCServiceBinder) binder;
-			service = customerBinder.getService();
+			RocketColibriService.RocketColibriServiceBinder customerBinder = (RocketColibriService.RocketColibriServiceBinder) binder;
+			rcService = customerBinder.getService();
 			onServiceReady();
 		}
 	};
@@ -47,10 +50,10 @@ public abstract class RCActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		Log.d(getClassName(), "onResume");
-		if (!RCService.running) {
-			startService(new Intent(this, RCService.class));
+		if (!RocketColibriService.running) {
+			startService(new Intent(this, RocketColibriService.class));
 		}
-		Intent intent = new Intent(this, RCService.class);
+		Intent intent = new Intent(this, RocketColibriService.class);
 		bindService(intent, bindableServiceConnection, Context.BIND_AUTO_CREATE);
 	}
 
@@ -99,7 +102,7 @@ public abstract class RCActivity extends Activity {
 	}
 	
 	protected void toast(String msg) {
-		Toast t3 = Toast.makeText(this, msg, 100);
+		Toast t3 = Toast.makeText(this, msg, Toast.LENGTH_LONG);
 		t3.show();
 	}
 	

@@ -2,32 +2,23 @@ package ch.hsr.rocketcolibri.activity;
 
 import java.io.IOException;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.Toast;
 import ch.hsr.rocketcolibri.R;
-import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.manager.DesktopViewManager;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
@@ -41,7 +32,8 @@ import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.widget.TelemetryWidget;
 import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
 
-public class DesktopActivity extends Activity{
+public class DesktopActivity extends RCActivity
+{
 	private static final String TAG = "CircleTestActivity";
 	private SurfaceView surface_view;
 	private Camera mCamera;
@@ -122,19 +114,6 @@ public class DesktopActivity extends Activity{
 		};
 		return ob1;
 	}
-
-	private RocketColibriService rcService;
-	private ServiceConnection mRocketColibriService = new ServiceConnection()	{
-		@Override
-		public void onServiceConnected(ComponentName className, IBinder binder)
-		{
-			rcService = ((RocketColibriService.RocketColibriServiceBinder)binder).getService();
-		}
-		public void onServiceDisconnected(ComponentName className)
-		{
-			rcService = null;
-		}
-	};
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -153,10 +132,7 @@ public class DesktopActivity extends Activity{
 
 		sh_callback = my_callback();
 		surface_holder.addCallback(sh_callback);
-
-        // Start Rocket ColibriProtocol service
-//		Intent intent = new Intent(this, RocketColibriService.class);
-//		bindService(intent, mRocketColibriService, Context.BIND_AUTO_CREATE);
+		
 //		
 //		meter1.setOnHChannelChangeListener(new OnChannelChangeListener ()
 //		{
@@ -306,9 +282,10 @@ public class DesktopActivity extends Activity{
 		    rc.minWidth=100;
 		    lp = new LayoutParams(400, 100 , 100, 0);
 		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.TelemetryWidget", lp, rc);
-		    view = tDesktopViewManager.createView(elementConfig);
-		    view.setBackgroundColor(Color.CYAN);
-		    ((TelemetryWidget)view).setTelemetryData("Telemetry data");
+		    this.telemetryWidget = (TelemetryWidget) tDesktopViewManager.createView(elementConfig);
+		    this.telemetryWidget.setBackgroundColor(Color.CYAN);
+		    this.telemetryWidget.setTelemetryData("Telemetry data");
+		    this.telemetryWidget.setAlpha((float) .5);
 		    
 		    rc = new ResizeConfig();
 		    rc.maxHeight=150;
@@ -317,8 +294,8 @@ public class DesktopActivity extends Activity{
 		    rc.minWidth=50;
 		    lp = new LayoutParams(100, 100 , 0, 0);
 		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget", lp, rc);
-		    view = tDesktopViewManager.createView(elementConfig);
-		    view.setBackgroundColor(Color.CYAN);
+		    this.connectionStatusWidget = (ConnectionStatusWidget) tDesktopViewManager.createView(elementConfig);
+		    this.connectionStatusWidget.setAlpha(1);
 		    
 		    
 		    rc = new ResizeConfig();
@@ -357,11 +334,22 @@ public class DesktopActivity extends Activity{
 	 * Send a message to the debug log and display it using Toast.
 	 */
 	
-	public void trace (String msg) {
+	public void trace (String msg) 
+	{
 	    if (!Debugging) return;
 	    Log.d ("DesktopActivity", msg);
 	    toast (msg);
 	}
-	
-	
+
+	@Override
+	protected void onServiceReady() 
+	{
+		
+		
+	}
+
+	@Override
+	protected String getClassName() {
+		return TAG;
+	}
 }

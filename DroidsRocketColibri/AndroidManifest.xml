@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         
-<!--         <service android:enabled="true" android:name=".RocketColibriService"></service> -->
+        <service android:enabled="true" android:name=".RocketColibriService"></service>
         
          <receiver
             android:name="ch.hsr.rocketcolibri.protocol.WifiConnection$NetworkChangeReceiver"
