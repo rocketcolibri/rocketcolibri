@@ -28,6 +28,7 @@ import android.util.Log;
 public class RocketColibriService extends  Service 
 {
 	final String TAG = this.getClass().getName();
+	public static volatile boolean running;
 	private final IBinder mBinder = new RocketColibriServiceBinder();
 	
 	public static final int NOF_CHANNEL = 8;
@@ -56,8 +57,9 @@ public class RocketColibriService extends  Service
 	public void onCreate() 
 	{
 		super.onCreate();
-		Log.d(TAG, "RocketColibriService started");
 
+		Log.d(TAG, "RocketColibriService started");
+		RocketColibriService.running = true;
 		// create a protocol instance
 		this.protocolFsm = new RocketColibriProtocolFsm(s.DISC);
 		this.protocol = new RocketColibriProtocol(protocolFsm, this);
@@ -82,6 +84,7 @@ public class RocketColibriService extends  Service
         this.database.CloseDatabase();
         this.isConnected = false;
         this.database = null;
+        running = false;
     }
 
     @Override
@@ -102,7 +105,8 @@ public class RocketColibriService extends  Service
 	/**
 	 * Set the application to the 'Passiv' state
 	 */
-	public void setUserPassive() {
+	public void setUserPassive() 
+	{
 		this.protocolFsm.queue(e.E7_USR_OBSERVE);
 		this.protocolFsm.processOutstandingEvents();
 	}
