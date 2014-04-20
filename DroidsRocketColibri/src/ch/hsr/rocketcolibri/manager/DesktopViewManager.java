@@ -53,7 +53,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	    tDragController.addDropTarget (dragLayer);
 	    tDragController.setDragListener(createDragListener());
 	    LayoutInflater li = LayoutInflater.from(context);
-		LinearLayout ll = (LinearLayout) li.inflate(R.layout.customize_modus_popup, rootView, false);
+		LinearLayout ll = (LinearLayout) li.inflate(R.layout.customize_modus_popup, null, false);
 		
 	    tCustomizeModusListener = new CustomizeModusListener(this, new CustomizeModusPopupMenu(this, ll));
 	}

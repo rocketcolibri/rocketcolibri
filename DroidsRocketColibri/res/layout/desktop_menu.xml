@@ -43,6 +43,12 @@
                 android:orientation="vertical"
                 android:padding="5dp" >
 
+                <Button
+                    android:id="@+id/switchModus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="switch modus" />
+
                 <SeekBar
                     android:id="@+id/seekBar1"
                     android:layout_width="match_parent"
