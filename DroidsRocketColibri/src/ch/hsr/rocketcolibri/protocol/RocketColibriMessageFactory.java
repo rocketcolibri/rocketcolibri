@@ -32,7 +32,9 @@ public class RocketColibriMessageFactory
     				if(newMessage.equals(lastMessage))
     					return lastMessage;
     				else
+    				{
     					return newMessage;
+    				}
     			}
     		}
 		} 

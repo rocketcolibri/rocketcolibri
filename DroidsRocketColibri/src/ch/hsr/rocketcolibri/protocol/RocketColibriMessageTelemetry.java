@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ch.hsr.rocketcolibri.RocketColibriService;
+import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
@@ -63,11 +65,14 @@ public class RocketColibriMessageTelemetry extends RocketColibriMessage
 	public boolean equals(Object obj)
 	{
 		RocketColibriMessageTelemetry other = (RocketColibriMessageTelemetry)obj;
-		if(this.activeuser.equals(other.activeuser))
+		if(null != other)
 		{
-			if (this.passivuser.equals(other.passivuser))
+			if(this.activeuser.equals(other.activeuser))
 			{
-				return true;
+				if (this.passivuser.equals(other.passivuser))
+				{
+					return true;
+				}
 			}
 		}
 		return false;
@@ -83,5 +88,15 @@ public class RocketColibriMessageTelemetry extends RocketColibriMessage
 		LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
 	}
 	
-	
+	public void sendEvents(RocketColibriService service)
+	{
+		if(null == this.activeuser)
+			service.protocolFsm.queue(e.E3_RECV_TELE_NONE);
+		else
+		{
+			// TODO
+			service.protocolFsm.queue(e.E3_RECV_TELE_NONE);
+		}
+		service.protocolFsm.processNextEvent();
+	}
 }

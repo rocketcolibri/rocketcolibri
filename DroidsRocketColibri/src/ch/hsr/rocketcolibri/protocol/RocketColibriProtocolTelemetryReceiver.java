@@ -5,6 +5,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
+import ch.hsr.rocketcolibri.RocketColibriService;
 import android.content.Context;
 import android.util.Log;
 
@@ -17,13 +18,13 @@ public class RocketColibriProtocolTelemetryReceiver
 	final String TAG = this.getClass().getName();
 	DatagramSocket receiveSocket;
 	private int port;
-	private Context context;
+	private static RocketColibriService context;
 	RocketColibriMessage lastTelemetryMsg;
 	
-	public RocketColibriProtocolTelemetryReceiver(final Context context, int port)
+	public RocketColibriProtocolTelemetryReceiver(final RocketColibriService context, int port)
 	{	
 		this.port = port;
-		this.context = context;
+		RocketColibriProtocolTelemetryReceiver.context = context;
 		
 		new Thread(new Runnable()
 		{
@@ -44,10 +45,18 @@ public class RocketColibriProtocolTelemetryReceiver
 			        {
 			        	serverSocket.receive(receivePacket);
 			        	RocketColibriMessage msg = msgFactory.Create(receivePacket, lastTelemetryMsg);
-			        	if(! msg.equals(lastTelemetryMsg))
+			        	if(null != msg)
 			        	{
-			        		lastTelemetryMsg = msg;
-			        		lastTelemetryMsg.sendChangeBroadcast(context);
+			        		msg.sendEvents(RocketColibriProtocolTelemetryReceiver.context);
+				        	if(! msg.equals(lastTelemetryMsg))
+				        	{
+				        		lastTelemetryMsg = msg;
+				        		lastTelemetryMsg.sendChangeBroadcast(RocketColibriProtocolTelemetryReceiver.context);		        		
+				        	}
+			        	}
+			        	else
+			        	{
+			        		Log.d(TAG, "invalid message received");
 			        	}
 			        }
 				}

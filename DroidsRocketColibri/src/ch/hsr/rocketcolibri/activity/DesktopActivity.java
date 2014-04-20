@@ -26,10 +26,13 @@ import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
 import ch.hsr.rocketcolibri.menu.DesktopMenu;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
+import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
+import ch.hsr.rocketcolibri.view.widget.Circle;
+import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
 import ch.hsr.rocketcolibri.view.widget.TelemetryWidget;
 import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
 
@@ -49,6 +52,8 @@ public class DesktopActivity extends RCActivity
 	private static final int CHANGE_TOUCH_MODE_MENU_ID = Menu.FIRST;
 	private static final int CONNECT_MENU_ID = Menu.FIRST+1;
 	private static final int DISCONNECT_MENU_ID = Menu.FIRST+2;
+	private static final int CONTROL_MENU_ID = Menu.FIRST+3;
+	private static final int OBSERVE_MENU_ID = Menu.FIRST+4;
 	
 	public static final boolean Debugging = false;
 
@@ -62,7 +67,6 @@ public class DesktopActivity extends RCActivity
 	  {
 		if(rcService != null)
 		{
-			rcService.protocol.sendChannelDataCommand();
 			connectionStatusWidget.setConnectionState((s)rcService.protocolFsm.getState());
 			telemetryWidget.setTelemetryData(intent.getStringExtra(RocketColibriProtocol.KeyState));
 		}
@@ -150,43 +154,7 @@ public class DesktopActivity extends RCActivity
 		sh_callback = my_callback();
 		surface_holder.addCallback(sh_callback);
 		
-//		
-//		meter1.setOnHChannelChangeListener(new OnChannelChangeListener ()
-//		{
-//			@Override
-//			public void onChannelChange(int position) 
-//			{
-//				Log.d(TAG, "received new H position from meter1:" + position);
-//				if (rcService != null) rcService.channel[3].setControl(position);
-//			}
-//		});
-//		meter1.setOnVChannelChangeListener(new OnChannelChangeListener ()
-//		{
-//			@Override
-//			public void onChannelChange(int position) 
-//			{
-//				Log.d(TAG, "received new V position from meter1:" + position);
-//				if (rcService != null) rcService.channel[2].setControl(position);
-//			}
-//		});		
-//		meter2.setOnHChannelChangeListener(new OnChannelChangeListener ()
-//		{
-//			@Override
-//			public void onChannelChange(int position) 
-//			{
-//				Log.d(TAG, "received new H position from meter2:" + position);
-//				if (rcService != null) rcService.channel[0].setControl(position);
-//			}
-//		});
-//		meter2.setOnVChannelChangeListener(new OnChannelChangeListener ()
-//		{
-//			@Override
-//			public void onChannelChange(int position) 
-//			{
-//				Log.d(TAG, "received new V position from meter2:" + position);
-//				if (rcService != null) rcService.channel[1].setControl(position);
-//			}
-//		});
+
 		
 		AbsoluteLayout absolutLayout = (AbsoluteLayout) findViewById(R.id.drag_layer);
 		tDesktopViewManager = new DesktopViewManager(this, absolutLayout, new ViewChangedListener() {
@@ -218,6 +186,8 @@ public class DesktopActivity extends RCActivity
 	    menu.add (0, CHANGE_TOUCH_MODE_MENU_ID, order++, "Change Touch Mode");
 	    menu.add (0, CONNECT_MENU_ID, order++, "Connect to RocketColibri");
 	    menu.add (0, DISCONNECT_MENU_ID, order++, "Disconnect to RocketColibri");
+	    menu.add (0, CONTROL_MENU_ID, order++, "Control");
+	    menu.add (0, OBSERVE_MENU_ID, order++, "Observe");
 	    return true;
 	}
 	
@@ -244,6 +214,23 @@ public class DesktopActivity extends RCActivity
 		    Toast.makeText (getApplicationContext(), "Try Disonnect", Toast.LENGTH_LONG).show ();
 		    if(rcService != null) rcService.wifi.Disconnect();
 		    return true;
+		    
+	      case CONTROL_MENU_ID:
+	    	  if(rcService != null)
+	    	  {
+	    		  rcService.protocolFsm.queue(e.E6_USR_CONNECT);
+	    		  rcService.protocolFsm.processOutstandingEvents();
+	    	  }
+	    	  return true;
+	      case OBSERVE_MENU_ID:
+	    	  if(rcService != null)
+	    	  {
+	    		  rcService.protocolFsm.queue(e.E7_USR_OBSERVE);
+	    		  rcService.protocolFsm.processOutstandingEvents();
+	    	  }
+	    	  return true;
+	    	  
+	    	  
 	    }
 	    return super.onOptionsItemSelected (item);
 	}
@@ -324,11 +311,47 @@ public class DesktopActivity extends RCActivity
 		    rc.minWidth=50;
 		    lp = new LayoutParams(380, 380 , 100, 300);
 		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
-		    view = tDesktopViewManager.createView(elementConfig);
-
+		    Circle circleView = (Circle) tDesktopViewManager.createView(elementConfig);
+		    circleView.setOnHChannelChangeListener(new OnChannelChangeListener ()
+			{
+				@Override
+				public void onChannelChange(int position) 
+				{
+					Log.d(TAG, "received new H position from meter1:" + position);
+					if (rcService != null) rcService.channel[3].setControl(position);
+				}
+			});
+		    circleView.setOnVChannelChangeListener(new OnChannelChangeListener ()
+			{
+				@Override
+				public void onChannelChange(int position) 
+				{
+					Log.d(TAG, "received new V position from meter1:" + position);
+					if (rcService != null) rcService.channel[2].setControl(position);
+				}
+			});		
+		    
 		    lp = new LayoutParams(380, 380 , 600, 300);
 		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
-		    view = tDesktopViewManager.createView(elementConfig);
+		    circleView = (Circle)tDesktopViewManager.createView(elementConfig);
+		    circleView.setOnHChannelChangeListener(new OnChannelChangeListener ()
+			{
+				@Override
+				public void onChannelChange(int position) 
+				{
+					Log.d(TAG, "received new H position from meter2:" + position);
+					if (rcService != null) rcService.channel[0].setControl(position);
+				}
+			});
+		    circleView.setOnVChannelChangeListener(new OnChannelChangeListener ()
+			{
+				@Override
+				public void onChannelChange(int position) 
+				{
+					Log.d(TAG, "received new V position from meter2:" + position);
+					if (rcService != null) rcService.channel[1].setControl(position);
+				}
+			});
 
 		    
 		}catch(Exception e){
