@@ -193,6 +193,7 @@ public class DesktopActivity extends RCActivity
 			@Override
 			public void onViewChange(ViewElementConfig viewElementConfig) {
 				Log.d("changed", "changed");
+				//TODO service.store(viewElementConfig);
 			}
 		});
 		new DesktopMenu(this, findViewById(R.id.swipeInMenu), tDesktopViewManager);
@@ -201,9 +202,9 @@ public class DesktopActivity extends RCActivity
 	
 	@Override
 	protected void onDestroy() {
-		super.onDestroy();
 		tDesktopViewManager.release();
 		tDesktopViewManager = null;
+		super.onDestroy();
 	}
 	/**
 	 * Build a menu for the activity.
