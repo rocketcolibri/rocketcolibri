@@ -7,11 +7,11 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import ch.hsr.rocketcolibri.view.MyAbsoluteLayout;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 
-public class ResizableMainLayer extends MyAbsoluteLayout{
+public class ResizableMainLayer extends AbsoluteLayout{
 
 	public ResizableMainLayer(Context context, View resizeTarget, final IResizeDoneListener listener, LayoutParams lp, ResizeConfig config) {
 		super(context);

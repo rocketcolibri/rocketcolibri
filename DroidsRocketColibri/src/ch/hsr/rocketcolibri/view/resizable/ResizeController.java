@@ -1,7 +1,7 @@
 package ch.hsr.rocketcolibri.view.resizable;
 
-import ch.hsr.rocketcolibri.view.MyAbsoluteLayout;
-import ch.hsr.rocketcolibri.view.MyAbsoluteLayout.LayoutParams;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.resizable.layer.ResizableMainLayer;
 import android.content.Context;
 import android.view.View;
@@ -10,7 +10,7 @@ public class ResizeController {
 	
 	private Context tContext;
 	private volatile boolean tIsResizing;
-	private MyAbsoluteLayout tTargetParent;
+	private AbsoluteLayout tTargetParent;
 	private int indexOfResizeTargetOnParent;
 	private ResizableMainLayer tViewResizer;
 	private IResizeDoneListener tResizeDoneListener;
@@ -29,14 +29,14 @@ public class ResizeController {
 		tContext = context;
 	}
 	
-	public void startResize(MyAbsoluteLayout parent, View resizeTarget){
+	public void startResize(AbsoluteLayout parent, View resizeTarget){
 		startResize(parent, resizeTarget, new ResizeConfig());
 	}
 	
-	public void startResize(MyAbsoluteLayout parent, View resizeTarget, ResizeConfig rConfg){
+	public void startResize(AbsoluteLayout parent, View resizeTarget, ResizeConfig rConfg){
 		if(tIsResizing)return;
 		tTargetParent = parent;
-		LayoutParams parentLayoutParams = new MyAbsoluteLayout.LayoutParams(tTargetParent.getLayoutParams().width, tTargetParent.getLayoutParams().height, 0, 0);
+		LayoutParams parentLayoutParams = new AbsoluteLayout.LayoutParams(tTargetParent.getLayoutParams().width, tTargetParent.getLayoutParams().height, 0, 0);
 		indexOfResizeTargetOnParent = parent.indexOfChild(resizeTarget);
 		tTargetParent.removeViewAt(indexOfResizeTargetOnParent);
 		tViewResizer = new ResizableMainLayer(tContext, resizeTarget, tInternalResizeDoneListener, parentLayoutParams, rConfg);

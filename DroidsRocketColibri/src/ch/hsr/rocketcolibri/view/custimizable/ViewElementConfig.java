@@ -1,6 +1,6 @@
 package ch.hsr.rocketcolibri.view.custimizable;
 
-import ch.hsr.rocketcolibri.view.MyAbsoluteLayout.LayoutParams;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 
 public class ViewElementConfig {

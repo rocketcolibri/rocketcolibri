@@ -24,10 +24,10 @@ import ch.hsr.rocketcolibri.manager.DesktopViewManager;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
 import ch.hsr.rocketcolibri.menu.DesktopMenu;
-import ch.hsr.rocketcolibri.view.MyAbsoluteLayout;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
-import ch.hsr.rocketcolibri.view.MyAbsoluteLayout.LayoutParams;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.widget.TelemetryWidget;
@@ -188,7 +188,7 @@ public class DesktopActivity extends RCActivity
 //			}
 //		});
 		
-		MyAbsoluteLayout absolutLayout = (MyAbsoluteLayout) findViewById(R.id.drag_layer);
+		AbsoluteLayout absolutLayout = (AbsoluteLayout) findViewById(R.id.drag_layer);
 		tDesktopViewManager = new DesktopViewManager(this, absolutLayout, new ViewChangedListener() {
 			@Override
 			public void onViewChange(ViewElementConfig viewElementConfig) {

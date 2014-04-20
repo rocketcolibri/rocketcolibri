@@ -3,7 +3,7 @@ package ch.hsr.rocketcolibri.view.resizable.layer;
 import java.util.ArrayList;
 
 import ch.hsr.rocketcolibri.R;
-import ch.hsr.rocketcolibri.view.MyAbsoluteLayout;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.resizable.CornerBall;
 import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
@@ -16,7 +16,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class ResizeableTargetLayer extends MyAbsoluteLayout {
+public class ResizeableTargetLayer extends AbsoluteLayout {
 
 	/**
 	 *  point0

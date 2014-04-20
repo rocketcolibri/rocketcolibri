@@ -5,10 +5,10 @@ import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
-import ch.hsr.rocketcolibri.view.MyAbsoluteLayout;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
 
-public class ResizableBackgroundLayer extends MyAbsoluteLayout{
+public class ResizableBackgroundLayer extends AbsoluteLayout{
 
 	public ResizableBackgroundLayer(final Context context, LayoutParams layoutParams) {
 		super(context);

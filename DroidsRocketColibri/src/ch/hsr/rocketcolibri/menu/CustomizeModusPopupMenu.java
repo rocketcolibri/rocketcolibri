@@ -11,7 +11,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
-import ch.hsr.rocketcolibri.view.MyAbsoluteLayout.LayoutParams;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 
 public class CustomizeModusPopupMenu extends PopupWindow{

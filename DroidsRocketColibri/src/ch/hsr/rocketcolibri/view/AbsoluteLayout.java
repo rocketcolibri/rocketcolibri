@@ -40,16 +40,16 @@ import android.widget.RemoteViews.RemoteView;
  */
 
 @RemoteView
-public class MyAbsoluteLayout extends ViewGroup {
-    public MyAbsoluteLayout(Context context) {
+public class AbsoluteLayout extends ViewGroup {
+    public AbsoluteLayout(Context context) {
         super(context);
     }
 
-    public MyAbsoluteLayout(Context context, AttributeSet attrs) {
+    public AbsoluteLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public MyAbsoluteLayout(Context context, AttributeSet attrs,
+    public AbsoluteLayout(Context context, AttributeSet attrs,
             int defStyle) {
         super(context, attrs, defStyle);
     }
@@ -71,8 +71,8 @@ public class MyAbsoluteLayout extends ViewGroup {
                 int childRight;
                 int childBottom;
 
-                MyAbsoluteLayout.LayoutParams lp
-                        = (MyAbsoluteLayout.LayoutParams) child.getLayoutParams();
+                AbsoluteLayout.LayoutParams lp
+                        = (AbsoluteLayout.LayoutParams) child.getLayoutParams();
 
                 childRight = lp.x + child.getMeasuredWidth();
                 childBottom = lp.y + child.getMeasuredHeight();
@@ -120,8 +120,8 @@ public class MyAbsoluteLayout extends ViewGroup {
             View child = getChildAt(i);
             if (child.getVisibility() != GONE) {
 
-                MyAbsoluteLayout.LayoutParams lp =
-                        (MyAbsoluteLayout.LayoutParams) child.getLayoutParams();
+                AbsoluteLayout.LayoutParams lp =
+                        (AbsoluteLayout.LayoutParams) child.getLayoutParams();
 
                 int childLeft = paddingL + lp.x;
                 int childTop = paddingT + lp.y;
@@ -139,13 +139,13 @@ public class MyAbsoluteLayout extends ViewGroup {
 
     @Override
     public ViewGroup.LayoutParams generateLayoutParams(AttributeSet attrs) {
-        return new MyAbsoluteLayout.LayoutParams(getContext(), attrs);
+        return new AbsoluteLayout.LayoutParams(getContext(), attrs);
     }
 
     // Override to allow type-checking of LayoutParams. 
     @Override
     protected boolean checkLayoutParams(ViewGroup.LayoutParams p) {
-        return p instanceof MyAbsoluteLayout.LayoutParams;
+        return p instanceof AbsoluteLayout.LayoutParams;
     }
 
     @Override

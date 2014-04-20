@@ -13,7 +13,7 @@ import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.manager.listener.CustomizeModusListener;
 import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
 import ch.hsr.rocketcolibri.menu.CustomizeModusPopupMenu;
-import ch.hsr.rocketcolibri.view.MyAbsoluteLayout;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
@@ -35,13 +35,13 @@ public class DesktopViewManager implements IDesktopViewManager{
 	private Activity tContext;
 	private ResizeController tResizeController;
 	private DragController tDragController;
-	private MyAbsoluteLayout tRootView;
+	private AbsoluteLayout tRootView;
 	private boolean tCustomizeModus;
 	private CustomizeModusListener tCustomizeModusListener;
 	private ViewChangedListener tViewChangeListener;
 	private IDragListener dragListener;
 	
-	public DesktopViewManager(Activity context, MyAbsoluteLayout rootView, ViewChangedListener vcListener){
+	public DesktopViewManager(Activity context, AbsoluteLayout rootView, ViewChangedListener vcListener){
 		tContext = context;
 		tRootView = rootView;
 		tViewChangeListener = vcListener;

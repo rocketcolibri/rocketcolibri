@@ -2,7 +2,7 @@ package ch.hsr.rocketcolibri.view.widget;
 
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
-import ch.hsr.rocketcolibri.view.MyAbsoluteLayout.LayoutParams;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import android.content.Context;

@@ -20,7 +20,7 @@
 package ch.hsr.rocketcolibri.view.draggable;
 
 import ch.hsr.rocketcolibri.activity.DesktopActivity;
-import ch.hsr.rocketcolibri.view.MyAbsoluteLayout;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -37,7 +37,7 @@ import android.widget.Toast;
  * (1) It extends MyAbsoluteLayout rather than FrameLayout; (2) it implements DragSource and DropTarget methods
  * that were done in a separate Workspace class in the Launcher.
  */
-public class DragLayer extends MyAbsoluteLayout 
+public class DragLayer extends AbsoluteLayout 
     implements IDragSource, IDropTarget
 {
     DragController mDragController;

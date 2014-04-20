@@ -8,7 +8,7 @@ import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.menu.CustomizeModusPopupMenu;
-import ch.hsr.rocketcolibri.view.MyAbsoluteLayout.LayoutParams;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 
 /**

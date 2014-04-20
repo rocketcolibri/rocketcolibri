@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import ch.hsr.rocketcolibri.R;
-import ch.hsr.rocketcolibri.view.MyAbsoluteLayout.LayoutParams;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 
 public class CustomizableView extends View implements ICustomizableView{
 	private boolean customizeModusActive = false;
