@@ -12,7 +12,7 @@ public class RocketColibriProtocolFsm extends StateMachine {
 	 * States
 	 */
 	public enum s {
-		DISC, TRY_CONN, CONN_PASSIV, CONN_LCK_OUT, CONN_TRY_ACT, CONN_ACT
+		DISC, TRY_CONN, CONN_OBSERVE, CONN_LCK_OUT, CONN_TRY_CONTROL, CONN_CONTROL
 	}
 
 	/**
@@ -34,12 +34,12 @@ public class RocketColibriProtocolFsm extends StateMachine {
 // @formatter:off
 ri(null,  	e.E1_CONN_SSID,	e.E2_DISC_SSID,	e.E3_RECV_TELE_NONE,	e.E4_RECV_TELE_ALIEN,	e.E5_RECV_TELE_OWN,	e.E6_USR_CONNECT,	e.E7_USR_OBSERVE,	e.E8_TIMEOUT);
 at(s.DISC, 	s.TRY_CONN, 	null,	 		null, 					null, 					null, 				null, 				null, 				null);
-at(s.TRY_CONN,null, 		s.DISC, 		s.CONN_PASSIV, 			s.CONN_LCK_OUT, 		null,				null,				null,				s.TRY_CONN);
-at(s.CONN_PASSIV, null, 	s.DISC, 		null, 					s.CONN_LCK_OUT, 		null,				s.CONN_TRY_ACT,		null,				s.TRY_CONN);
-at(s.CONN_LCK_OUT, null, 	s.DISC,			s.CONN_PASSIV,			null,					null,				null,				null,				s.TRY_CONN);
+at(s.TRY_CONN,null, 		s.DISC, 		s.CONN_OBSERVE, 		s.CONN_LCK_OUT, 		null,				null,				null,				s.TRY_CONN);
+at(s.CONN_OBSERVE, null, 	s.DISC, 		null, 					s.CONN_LCK_OUT, 		null,				s.CONN_TRY_CONTROL,	null,				s.TRY_CONN);
+at(s.CONN_LCK_OUT, null, 	s.DISC,			s.CONN_OBSERVE,			null,					null,				null,				null,				s.TRY_CONN);
 //at(s.CONN_TRY_ACT, null, 	s.DISC, 		null, 					s.CONN_LCK_OUT,			s.CONN_ACT,			null,				s.TRY_CONN,			s.TRY_CONN);
-at(s.CONN_TRY_ACT, null, 	s.DISC, 		s.CONN_ACT, 			s.CONN_LCK_OUT,			s.CONN_ACT,			null,				s.TRY_CONN,			s.TRY_CONN);
-at(s.CONN_ACT, null, 		s.DISC, 		null, 					null, 					null, 				null, 				s.TRY_CONN,			null);
+at(s.CONN_TRY_CONTROL, null,s.DISC, 		s.CONN_CONTROL, 		s.CONN_LCK_OUT,			s.CONN_CONTROL,		null,				s.TRY_CONN,			s.TRY_CONN);
+at(s.CONN_CONTROL, null, 	s.DISC, 		null, 					null, 					null, 				null, 				s.TRY_CONN,			null);
 // @formatter:on
 
 

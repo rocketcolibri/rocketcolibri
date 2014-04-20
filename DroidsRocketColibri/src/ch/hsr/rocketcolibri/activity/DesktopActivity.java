@@ -68,7 +68,7 @@ public class DesktopActivity extends RCActivity
 		if(rcService != null)
 		{
 			connectionStatusWidget.setConnectionState((s)rcService.protocolFsm.getState());
-			telemetryWidget.setTelemetryData(intent.getStringExtra(RocketColibriProtocol.KeyState));
+			telemetryWidget.setTelemetryData(rcService.protocolFsm.getState().toString());
 		}
 		Log.d(TAG, "online message received");
 	  }

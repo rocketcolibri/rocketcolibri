@@ -70,7 +70,7 @@ public class ConnectionStatusWidget extends CustomizableView
 		case DISC:
 			connectionIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_disconneted);	
 			break;
-		case CONN_ACT:
+		case CONN_CONTROL:
 			connectionIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_control);
 			break;
 		default:

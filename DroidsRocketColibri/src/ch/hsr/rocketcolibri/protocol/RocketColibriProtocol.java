@@ -58,20 +58,20 @@ public class RocketColibriProtocol
 		// send hello message
 		this.fsm.getStateMachinePlan().entryAction(s.TRY_CONN, startSendHelloMessage);
 		this.fsm.getStateMachinePlan().entryAction(s.CONN_LCK_OUT, startSendHelloMessage);
-		this.fsm.getStateMachinePlan().entryAction(s.CONN_PASSIV, startSendHelloMessage);
+		this.fsm.getStateMachinePlan().entryAction(s.CONN_OBSERVE, startSendHelloMessage);
 		
 		// send channel message
-		this.fsm.getStateMachinePlan().entryAction(s.CONN_TRY_ACT, startSendChannelMessage);
-		this.fsm.getStateMachinePlan().entryAction(s.CONN_ACT, startSendChannelMessage);
+		this.fsm.getStateMachinePlan().entryAction(s.CONN_TRY_CONTROL, startSendChannelMessage);
+		this.fsm.getStateMachinePlan().entryAction(s.CONN_CONTROL, startSendChannelMessage);
 		
 		
 		// send Broadcast on every state change
 		this.fsm.getStateMachinePlan().leaveAction(s.DISC, sendUpdateBroadcast);
 		this.fsm.getStateMachinePlan().leaveAction(s.TRY_CONN, sendUpdateBroadcast); 
-		this.fsm.getStateMachinePlan().leaveAction(s.CONN_PASSIV, sendUpdateBroadcast); 
+		this.fsm.getStateMachinePlan().leaveAction(s.CONN_OBSERVE, sendUpdateBroadcast); 
 		this.fsm.getStateMachinePlan().leaveAction(s.CONN_LCK_OUT,  sendUpdateBroadcast);
-		this.fsm.getStateMachinePlan().leaveAction(s.CONN_TRY_ACT,  sendUpdateBroadcast);
-		this.fsm.getStateMachinePlan().leaveAction(s.CONN_ACT, sendUpdateBroadcast);
+		this.fsm.getStateMachinePlan().leaveAction(s.CONN_TRY_CONTROL,  sendUpdateBroadcast);
+		this.fsm.getStateMachinePlan().leaveAction(s.CONN_CONTROL, sendUpdateBroadcast);
 		
 		
 		InitSocket();

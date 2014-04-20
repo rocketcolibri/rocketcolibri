@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="11.3">
+<diagram program="umlet" version="12.2">
   <zoom_level>10</zoom_level>
   <element>
     <type>com.umlet.element.custom.State</type>
@@ -42,7 +42,7 @@
       <w>180</w>
       <h>80</h>
     </coordinates>
-    <panel_attributes>RC_CONNECTED_PASSIV</panel_attributes>
+    <panel_attributes>RC_CONNECTED_OBSERVE</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -53,7 +53,7 @@
       <w>180</w>
       <h>80</h>
     </coordinates>
-    <panel_attributes>RC_CONNECTED_ACTIV</panel_attributes>
+    <panel_attributes>RC_CONNECTED_CONTROL</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -61,7 +61,7 @@
     <coordinates>
       <x>350</x>
       <y>120</y>
-      <w>72</w>
+      <w>74</w>
       <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
@@ -74,7 +74,7 @@ E1
     <coordinates>
       <x>350</x>
       <y>270</y>
-      <w>74</w>
+      <w>76</w>
       <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
@@ -97,16 +97,16 @@ E3</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>340</x>
+      <x>330</x>
       <y>570</y>
-      <w>90</w>
+      <w>104</w>
       <h>120</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 E6
 A2, A3
 </panel_attributes>
-    <additional_attributes>50;100;50;30</additional_attributes>
+    <additional_attributes>60;100;60;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Note</type>
@@ -176,7 +176,7 @@ E3</panel_attributes>
       <w>180</w>
       <h>80</h>
     </coordinates>
-    <panel_attributes>RC_TRY_CONNECT_ACTIV</panel_attributes>
+    <panel_attributes>RC_TRY_CONNECT_CONTROL</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -208,15 +208,15 @@ E4</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>180</x>
+      <x>170</x>
       <y>530</y>
-      <w>140</w>
+      <w>150</w>
       <h>360</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 E7
 A4, A1</panel_attributes>
-    <additional_attributes>120;30;50;30;50;340;120;340</additional_attributes>
+    <additional_attributes>130;30;60;30;60;340;130;340</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>

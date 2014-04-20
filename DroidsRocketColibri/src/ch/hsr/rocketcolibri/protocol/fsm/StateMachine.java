@@ -51,6 +51,11 @@ public class StateMachine
 	private void performTransition(Object nextState, Object event) 
 	{
 		Action leaveAction = _plan._leaveActions.get(_currentState);
+
+		// state change
+		_currentState = nextState;
+		
+		// entry actions performed after state change		
 		if (leaveAction != null) 
 		{
 			leaveAction.apply(this, event, nextState);
@@ -61,8 +66,6 @@ public class StateMachine
 		{
 			entryAction.apply(this, event, nextState);
 		}
-		// entry actions performed before state change
-		_currentState = nextState;
 	}
 
 	/**
