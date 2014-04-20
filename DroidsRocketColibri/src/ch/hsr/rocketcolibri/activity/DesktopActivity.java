@@ -12,6 +12,7 @@ import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
@@ -84,6 +85,22 @@ public class DesktopActivity extends Activity{
 	  LocalBroadcastManager.getInstance(this).registerReceiver(mProtocolStateMessageReceiver, new IntentFilter(RocketColibriProtocol.ActionStateUpdate));
 	}
 
+	/*
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+	        super.onWindowFocusChanged(hasFocus);
+	        View mDecorView = getWindow().getDecorView().findViewById(android.R.id.content);
+	    if (hasFocus) {
+	    	mDecorView.setSystemUiVisibility(
+	                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+	                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+	                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+	                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+	                | View.SYSTEM_UI_FLAG_FULLSCREEN
+	                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
+	}
+	*/
+	
 	@Override
 	protected void onPause()
 	{
@@ -194,15 +211,15 @@ public class DesktopActivity extends Activity{
 //				if (rcService != null) rcService.channel[1].setControl(position);
 //			}
 //		});
-		new DesktopMenu(this, findViewById(R.id.swipeInMenu));
+		
 		MyAbsoluteLayout absolutLayout = (MyAbsoluteLayout) findViewById(R.id.drag_layer);
 		tDesktopViewManager = new DesktopViewManager(this, absolutLayout, new ViewChangedListener() {
-			
 			@Override
 			public void onViewChange(ViewElementConfig viewElementConfig) {
 				Log.d("changed", "changed");
 			}
 		});
+		new DesktopMenu(this, findViewById(R.id.swipeInMenu), tDesktopViewManager);
 		setupViews();
 	}
 	
