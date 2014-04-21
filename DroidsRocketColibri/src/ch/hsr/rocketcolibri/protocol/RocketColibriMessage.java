@@ -5,7 +5,7 @@ import android.content.Context;
 
 public class RocketColibriMessage 
 {
-	public void sendChangeBroadcast(Context service){};
-	public void sendEvents(RocketColibriService service){};
+	public void sendEvents(RocketColibriService service){}
+	public void sendChangeBroadcast(RocketColibriService service) {};
 	
 }

@@ -20,6 +20,9 @@ import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.channel.Channel;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.protocol.fsm.Action;
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -33,6 +36,7 @@ public class RocketColibriProtocol
 	public static final int MAX_CHANNEL_VALUE = 1000;
 	public static final int MIN_CHANNEL_VALUE = 0;
 	public static final String ActionStateUpdate = "protocol.updatestate";
+	public static final String ActionTelemetryUpdate = "protocol.updatetelemetry";
 	public static final String KeyState = "state_new";
 
 	
@@ -47,6 +51,15 @@ public class RocketColibriProtocol
 	private Channel[] allChannels;
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	private Future<?> executorFuture=null;
+	
+	private String user;
+	
+	private String getUserName(Context context)
+	{
+		AccountManager accountManager = AccountManager.get(context);
+ 	    Account[] accounts =  accountManager.getAccountsByType("com.google");
+ 	    return accounts[0].name;	
+	}
 	
 	public RocketColibriProtocol(RocketColibriProtocolFsm fsm, RocketColibriService service) 
 	{
@@ -73,6 +86,7 @@ public class RocketColibriProtocol
 		this.fsm.getStateMachinePlan().leaveAction(s.CONN_TRY_CONTROL,  sendUpdateBroadcast);
 		this.fsm.getStateMachinePlan().leaveAction(s.CONN_CONTROL, sendUpdateBroadcast);
 		
+		user = getUserName(service);
 		
 		InitSocket();
 	}
@@ -138,7 +152,7 @@ public class RocketColibriProtocol
 					cdcMsg.put("v", 1);
 					cdcMsg.put("cmd", "cdc");
 					cdcMsg.put("sequence", sequenceNumber++);
-					cdcMsg.put("user", "Lorenz");
+					cdcMsg.put("user", user);
 					JSONArray channels = new JSONArray();
 					for (Channel channel : allChannels)
 						channels.put(channel.getChannelValue());			
@@ -185,7 +199,7 @@ public class RocketColibriProtocol
 					cdcMsg.put("v", 1);
 					cdcMsg.put("cmd", "hello");
 					cdcMsg.put("sequence", sequenceNumber++);
-					cdcMsg.put("name", "Lorenz");
+					cdcMsg.put("name", user);
 				}
 				catch (JSONException e) 
 				{
@@ -230,6 +244,7 @@ public class RocketColibriProtocol
 		public void apply(RocketColibriProtocolFsm fsm, Object event,	Object nextState) 
 		{
 			Log.d(TAG, "execute action sendBroadcast");
+			service.activeuser=null;
 			Intent intent = new Intent(ActionStateUpdate);
 			intent.putExtra(KeyState, nextState.toString());
 			LocalBroadcastManager.getInstance(service).sendBroadcast(intent);

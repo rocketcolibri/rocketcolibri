@@ -17,9 +17,6 @@ import android.util.Log;
 public class RocketColibriMessageTelemetry extends RocketColibriMessage
 {
 	public static final String ActionTelemetryUpdate = "telemetry.update";
-	public static final String KeyTelemetryDataActiveUser = "key.telemetry.activeuser";
-	public static final String KeyTelemetryDataPassiveUser = "key.telemetry.passivuser";
-	public static final String KeyTelemetryData = "key.telemetry.data";
 	
 	private RcOperator activeuser = new RcOperator();
 	private List<RcOperator> passivuser = new ArrayList<RcOperator>() ;
@@ -79,12 +76,11 @@ public class RocketColibriMessageTelemetry extends RocketColibriMessage
 	}
 
 	@Override
-	public void sendChangeBroadcast(Context service)
+	public void sendChangeBroadcast(RocketColibriService service)
 	{
 		Log.d(TAG, "execute action sendBroadcast");
+		service.activeuser = this.activeuser;
 		Intent intent = new Intent(ActionTelemetryUpdate);
-			
-		intent.putExtra(KeyTelemetryDataActiveUser, activeuser.getName()+"("+activeuser.getIpAddress()+")");
 		LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
 	}
 	

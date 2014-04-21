@@ -13,7 +13,7 @@ import android.util.Log;
 public class RocketColibriMessageFactory 
 {
 	final String TAG = this.getClass().getName();
-	RocketColibriMessage Create(DatagramPacket datagram, RocketColibriMessage lastMessage)
+	RocketColibriMessage Create(DatagramPacket datagram)
 	{
 		String jsonStr = new String( datagram.getData(), 0, datagram.getLength() );
     	Log.d(TAG,"received: " + jsonStr);
@@ -29,12 +29,7 @@ public class RocketColibriMessageFactory
     				Log.d(TAG,"received telemetry");
     				
     				RocketColibriMessageTelemetry newMessage = new RocketColibriMessageTelemetry(jObject);
-    				if(newMessage.equals(lastMessage))
-    					return lastMessage;
-    				else
-    				{
-    					return newMessage;
-    				}
+    				return newMessage;
     			}
     		}
 		} 

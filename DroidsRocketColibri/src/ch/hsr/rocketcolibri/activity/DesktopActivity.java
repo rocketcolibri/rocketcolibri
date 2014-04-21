@@ -57,19 +57,55 @@ public class DesktopActivity extends RCActivity
 	
 	public static final boolean Debugging = false;
 
+	
+	
+	private void updateConnectionStateWidget()
+	{
+		if(rcService != null)
+		{
+			connectionStatusWidget.setConnectionState((s)rcService.protocolFsm.getState());
+		}		
+	}
+	
+	private void updateTelemetryWidget()
+	{
+		if(rcService != null)
+		{
+			if(null == rcService.activeuser)
+			{
+				telemetryWidget.setTelemetryData("no Operator");
+			}
+			else
+			{
+				telemetryWidget.setTelemetryData(rcService.activeuser.getName() +"(" +rcService.activeuser.getIpAddress() +")");
+			}
+		}	
+	}
+	
 	/**
 	 * handler for received Intents for the state machine changes
 	 */  
-	private BroadcastReceiver mProtocolStateMessageReceiver = new BroadcastReceiver() 
+	private BroadcastReceiver mProtocolStateUpdateReceiver = new BroadcastReceiver() 
 	{
 	  @Override
 	  public void onReceive(Context context, Intent intent) 
 	  {
-		if(rcService != null)
-		{
-			connectionStatusWidget.setConnectionState((s)rcService.protocolFsm.getState());
-			telemetryWidget.setTelemetryData(rcService.protocolFsm.getState().toString());
-		}
+		updateConnectionStateWidget();
+		updateTelemetryWidget();
+		Log.d(TAG, "online message received");
+	  }
+	};
+	
+	/**
+	 * handler TelemetryUpdate
+	 */  
+	private BroadcastReceiver mTelemetryUpdateReceiver = new BroadcastReceiver() 
+	{
+	  @Override
+	  public void onReceive(Context context, Intent intent) 
+	  {
+		updateConnectionStateWidget();
+		updateTelemetryWidget();
 		Log.d(TAG, "online message received");
 	  }
 	};
@@ -78,7 +114,8 @@ public class DesktopActivity extends RCActivity
 	public void onResume() 
 	{
 	  super.onResume();
-	  LocalBroadcastManager.getInstance(this).registerReceiver(mProtocolStateMessageReceiver, new IntentFilter(RocketColibriProtocol.ActionStateUpdate));
+	  LocalBroadcastManager.getInstance(this).registerReceiver(mProtocolStateUpdateReceiver, new IntentFilter(RocketColibriProtocol.ActionStateUpdate));
+	  LocalBroadcastManager.getInstance(this).registerReceiver(mTelemetryUpdateReceiver, new IntentFilter(RocketColibriProtocol.ActionTelemetryUpdate));
 	}
 
 	/*
@@ -101,7 +138,8 @@ public class DesktopActivity extends RCActivity
 	protected void onPause()
 	{
 	  // Unregister since the activity is not visible
-	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mProtocolStateMessageReceiver);
+	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mProtocolStateUpdateReceiver);
+	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mTelemetryUpdateReceiver);
 	  super.onPause();
 	}
 	
@@ -283,9 +321,9 @@ public class DesktopActivity extends RCActivity
 		    rc = new ResizeConfig();
 		    rc.maxHeight=300;
 		    rc.minHeight=50;
-		    rc.maxWidth=200;
+		    rc.maxWidth=800;
 		    rc.minWidth=100;
-		    lp = new LayoutParams(400, 100 , 100, 0);
+		    lp = new LayoutParams(600, 100 , 100, 0);
 		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.TelemetryWidget", lp, rc);
 		    this.telemetryWidget = (TelemetryWidget) tDesktopViewManager.createView(elementConfig);
 		    this.telemetryWidget.setBackgroundColor(Color.CYAN);
@@ -385,8 +423,8 @@ public class DesktopActivity extends RCActivity
 	@Override
 	protected void onServiceReady() 
 	{
-		
-		
+	  updateConnectionStateWidget();
+	  updateTelemetryWidget();
 	}
 
 	@Override

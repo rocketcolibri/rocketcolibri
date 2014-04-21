@@ -2,6 +2,7 @@ package ch.hsr.rocketcolibri;
 
 import ch.hsr.rocketcolibri.channel.Channel;
 import ch.hsr.rocketcolibri.dbService.DBService;
+import ch.hsr.rocketcolibri.protocol.RcOperator;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
@@ -42,6 +43,15 @@ public class RocketColibriService extends  Service
 	// channels
 	public Channel[] channel = {new Channel(), new Channel(), new Channel(), new Channel(), 
 			                    new Channel(), new Channel(), new Channel(), new Channel()};
+	
+	// telemetry data
+	
+	// active users
+	public RcOperator activeuser;
+	
+	// video URL
+	public String videoUrl = "";
+	
 	
 	// references to the database service
 	public DBService database = null;

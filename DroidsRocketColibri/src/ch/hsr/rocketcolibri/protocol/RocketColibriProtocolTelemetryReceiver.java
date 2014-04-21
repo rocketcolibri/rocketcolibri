@@ -6,7 +6,6 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 import ch.hsr.rocketcolibri.RocketColibriService;
-import android.content.Context;
 import android.util.Log;
 
 /**
@@ -19,13 +18,12 @@ public class RocketColibriProtocolTelemetryReceiver
 	DatagramSocket receiveSocket;
 	private int port;
 	private static RocketColibriService context;
-	RocketColibriMessage lastTelemetryMsg;
-	
+
 	public RocketColibriProtocolTelemetryReceiver(final RocketColibriService context, int port)
 	{	
 		this.port = port;
 		RocketColibriProtocolTelemetryReceiver.context = context;
-		
+
 		new Thread(new Runnable()
 		{
 			final String TAG =  RocketColibriProtocolTelemetryReceiver.this.TAG;
@@ -44,15 +42,11 @@ public class RocketColibriProtocolTelemetryReceiver
 			        while(true)
 			        {
 			        	serverSocket.receive(receivePacket);
-			        	RocketColibriMessage msg = msgFactory.Create(receivePacket, lastTelemetryMsg);
+			        	RocketColibriMessage msg = msgFactory.Create(receivePacket);
 			        	if(null != msg)
 			        	{
+			        		msg.sendChangeBroadcast(RocketColibriProtocolTelemetryReceiver.context);
 			        		msg.sendEvents(RocketColibriProtocolTelemetryReceiver.context);
-				        	if(! msg.equals(lastTelemetryMsg))
-				        	{
-				        		lastTelemetryMsg = msg;
-				        		lastTelemetryMsg.sendChangeBroadcast(RocketColibriProtocolTelemetryReceiver.context);		        		
-				        	}
 			        	}
 			        	else
 			        	{
