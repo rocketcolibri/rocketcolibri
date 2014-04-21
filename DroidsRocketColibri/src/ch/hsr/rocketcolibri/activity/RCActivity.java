@@ -1,5 +1,6 @@
 package ch.hsr.rocketcolibri.activity;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
@@ -7,18 +8,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.util.Locale;
 
 
+
+
+
 import ch.hsr.rocketcolibri.RocketColibriService;
+import ch.hsr.rocketcolibri.util.RocketColibriDefaults;
 
 
 public abstract class RCActivity extends Activity {
@@ -44,6 +51,7 @@ public abstract class RCActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		Log.d(getClassName(), "onCreate");
+		setWindowSettings();
 	}
 	
 	@Override
@@ -76,8 +84,18 @@ public abstract class RCActivity extends Activity {
 	protected abstract void onServiceReady();
 	
 	protected void setWindowSettings(){
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		getWindow().getDecorView().getRootView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
+		RocketColibriDefaults.setDefaultViewSettings(getWindow().getDecorView().getRootView());
+	}
+
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+	        super.onWindowFocusChanged(hasFocus);
+	        View mDecorView = getWindow().getDecorView().findViewById(android.R.id.content);
+	    if (hasFocus) {
+	    	RocketColibriDefaults.setDefaultViewSettings(mDecorView);
+	    }
 	}
 	
 	protected void showLoading(String message){

@@ -6,13 +6,15 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
+import ch.hsr.rocketcolibri.util.RocketColibriDefaults;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
+import ch.hsr.rocketcolibri.view.popup.PopupWindow;
 
 public class CustomizeModusPopupMenu extends PopupWindow{
 
@@ -21,14 +23,19 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 	private IDesktopViewManager tDesktopViewManager;
 	
 	public CustomizeModusPopupMenu(IDesktopViewManager desktopViewManager, View contentView){
-		super(contentView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
+		super((AbsoluteLayout) desktopViewManager.getRootView(), contentView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
 		setTouchable(true);
 		setClippingEnabled(false);
 		tDesktopViewManager = desktopViewManager;
 		setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 		setAnimationStyle(R.style.PopupAnimation);
+		setSoftInputMode(android.view.WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
+		RocketColibriDefaults.setDefaultViewSettings(getContentView());
 		onCreate();
+		
 	}
+	
+	
 	
 	private void onCreate(){
 		Button b = (Button) findViewById(R.id.editChannel);

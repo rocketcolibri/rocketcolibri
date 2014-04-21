@@ -117,22 +117,6 @@ public class DesktopActivity extends RCActivity
 	  LocalBroadcastManager.getInstance(this).registerReceiver(mProtocolStateUpdateReceiver, new IntentFilter(RocketColibriProtocol.ActionStateUpdate));
 	  LocalBroadcastManager.getInstance(this).registerReceiver(mTelemetryUpdateReceiver, new IntentFilter(RocketColibriProtocol.ActionTelemetryUpdate));
 	}
-
-	/*
-	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-	        super.onWindowFocusChanged(hasFocus);
-	        View mDecorView = getWindow().getDecorView().findViewById(android.R.id.content);
-	    if (hasFocus) {
-	    	mDecorView.setSystemUiVisibility(
-	                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-	                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-	                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-	                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-	                | View.SYSTEM_UI_FLAG_FULLSCREEN
-	                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
-	}
-	*/
 	
 	@Override
 	protected void onPause()

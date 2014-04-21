@@ -19,6 +19,9 @@
 
 package ch.hsr.rocketcolibri.view.draggable;
 
+import ch.hsr.rocketcolibri.util.RocketColibriDefaults;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -50,9 +53,10 @@ public class DragView extends View
     private int mRegistrationY;
 
     private float mAnimationScale = 1.0f;
-
-    private WindowManager.LayoutParams mLayoutParams;
-    private WindowManager mWindowManager;
+    private AbsoluteLayout mWindowManager;
+    private LayoutParams mLayoutParams;
+//    private WindowManager.LayoutParams mLayoutParams;
+//    private WindowManager mWindowManager;
 
     /**
      * Construct the drag view.
@@ -65,12 +69,13 @@ public class DragView extends View
      * @param registrationX The x coordinate of the registration point.
      * @param registrationY The y coordinate of the registration point.
      */
-    public DragView(Context context, Bitmap bitmap, int registrationX, int registrationY,
+    public DragView(Context context, AbsoluteLayout parent, Bitmap bitmap, int registrationX, int registrationY,
             int left, int top, int width, int height) {
         super(context);
 
-        mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);        
-  
+//        mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);        
+        mWindowManager = parent;
+        
         Matrix scale = new Matrix();
         float scaleFactor = width;
         scaleFactor = (scaleFactor + DRAG_SCALE) / scaleFactor;
@@ -80,10 +85,14 @@ public class DragView extends View
         // The point in our scaled bitmap that the touch events are located
         mRegistrationX = registrationX + (DRAG_SCALE / 2);
         mRegistrationY = registrationY + (DRAG_SCALE / 2);
+        
+        mLayoutParams = new LayoutParams(width, height, mRegistrationX, mRegistrationY);
+        
         mBgPaint = new Paint();
         mBgPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         mBgPaint.setColor(0x88dd0011);
         mBgPaint.setAlpha(50);
+//        RocketColibri.setDefaultViewSettings(this);
     }
 
     @Override
@@ -125,27 +134,28 @@ public class DragView extends View
      * @param touchY the y coordinate the user touched in screen coordinates
      */
     public void show(IBinder windowToken, int touchX, int touchY) {
-        WindowManager.LayoutParams lp;
+//        WindowManager.LayoutParams lp;
         int pixelFormat;
 
         pixelFormat = PixelFormat.TRANSLUCENT;
 
-        lp = new WindowManager.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                touchX-mRegistrationX, touchY-mRegistrationY,
-                WindowManager.LayoutParams.TYPE_APPLICATION_SUB_PANEL,
-                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
-                    | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-                    /*| WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM*/,
-                pixelFormat);
+//        lp = new WindowManager.LayoutParams(
+//                ViewGroup.LayoutParams.WRAP_CONTENT,
+//                ViewGroup.LayoutParams.WRAP_CONTENT,
+//                touchX-mRegistrationX, touchY-mRegistrationY,
+//                WindowManager.LayoutParams.TYPE_APPLICATION_SUB_PANEL,
+//                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+//                    | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+//                    /*| WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM*/,
+//                pixelFormat);
 //        lp.token = mStatusBarView.getWindowToken();
-        lp.gravity = Gravity.LEFT | Gravity.TOP;
-        lp.token = windowToken;
-        lp.setTitle("DragView");
-        mLayoutParams = lp;
-
-        mWindowManager.addView(this, lp);
+//        lp.gravity = Gravity.LEFT | Gravity.TOP;
+//        lp.token = windowToken;
+//        lp.setTitle("DragView");
+//        mLayoutParams = lp;
+        mLayoutParams.x = touchX-mRegistrationX;
+        mLayoutParams.y = touchY-mRegistrationY;
+        mWindowManager.addView(this, mLayoutParams);
 
     }
     
@@ -157,10 +167,10 @@ public class DragView extends View
      */
     void move(int touchX, int touchY) {
         // This is what was done in the Launcher code.
-        WindowManager.LayoutParams lp = mLayoutParams;
-        lp.x = touchX - mRegistrationX;
-        lp.y = touchY - mRegistrationY;
-        mWindowManager.updateViewLayout(this, lp);
+//        WindowManager.LayoutParams lp = mLayoutParams;
+    	mLayoutParams.x = touchX - mRegistrationX;
+    	mLayoutParams.y = touchY - mRegistrationY;
+        mWindowManager.updateViewLayout(this, mLayoutParams);
     }
 
     void remove() {

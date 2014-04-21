@@ -29,13 +29,13 @@ public class CustomizeModusListener implements OnTouchListener{
 	public CustomizeModusListener(IDesktopViewManager desktopViewManager, CustomizeModusPopupMenu customizeModusPopup){
 		tDesktopViewManger = desktopViewManager;
 		tCustomizeModusPopup = customizeModusPopup;
-		tCustomizeModusPopup.setOnDismissListener(new OnDismissListener() {
-			@Override
-			public void onDismiss() {
-				tSingleTabCountDown.safeCancel();
-				tViewId = 0;
-			}
-		});
+//		tCustomizeModusPopup.setOnDismissListener(new OnDismissListener() {
+//			@Override
+//			public void onDismiss() {
+//				tSingleTabCountDown.safeCancel();
+//				tViewId = 0;
+//			}
+//		});
 	}
 	
 	static final int MAX_DURATION = 500;

@@ -34,6 +34,9 @@ import android.view.inputmethod.InputMethodManager;
 
 import java.util.ArrayList;
 
+import ch.hsr.rocketcolibri.util.RocketColibriDefaults;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout;
+
 /**
  * This class is used to initiate a drag within a view or across multiple views.
  * When a drag starts it creates a special view (a DragView) that moves around the screen
@@ -114,6 +117,7 @@ public class DragController {
     public DragController(Context context) {
         mContext = context;
         mVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        recordScreenSize();
 
     }
 
@@ -132,7 +136,6 @@ public class DragController {
         // Start dragging, but only if the source has something to drag.
         boolean doDrag = source.allowDrag ();
         if (!doDrag) return;
-
         mOriginator = v;
 
         Bitmap b = getViewBitmap(v);
@@ -202,7 +205,7 @@ public class DragController {
         mDragInfo = dragInfo;
 
         mVibrator.vibrate(VIBRATE_DURATION);
-        DragView dragView = mDragView = new DragView(mContext, b, registrationX, registrationY,
+        DragView dragView = mDragView = new DragView(mContext, (AbsoluteLayout) mDropTargets.get(0), b, registrationX, registrationY,
                 textureLeft, textureTop, textureWidth, textureHeight);
         dragView.show(mWindowToken, (int)mMotionDownX, (int)mMotionDownY);
     }
@@ -285,9 +288,9 @@ public class DragController {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         final int action = ev.getAction();
 
-        if (action == MotionEvent.ACTION_DOWN) {
-            recordScreenSize();
-        }
+//        if (action == MotionEvent.ACTION_DOWN) {
+//            recordScreenSize();
+//        }
 
         final int screenX = clamp((int)ev.getRawX(), 0, mDisplayMetrics.widthPixels);
         final int screenY = clamp((int)ev.getRawY(), 0, mDisplayMetrics.heightPixels);
