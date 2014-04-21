@@ -5,11 +5,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.PopupWindow;
-import android.widget.PopupWindow.OnDismissListener;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.menu.CustomizeModusPopupMenu;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
+import ch.hsr.rocketcolibri.view.popup.PopupWindow.OnDismissListener;
 
 /**
  * This Class handles the touch events in the Customize-Mode
@@ -29,13 +29,13 @@ public class CustomizeModusListener implements OnTouchListener{
 	public CustomizeModusListener(IDesktopViewManager desktopViewManager, CustomizeModusPopupMenu customizeModusPopup){
 		tDesktopViewManger = desktopViewManager;
 		tCustomizeModusPopup = customizeModusPopup;
-//		tCustomizeModusPopup.setOnDismissListener(new OnDismissListener() {
-//			@Override
-//			public void onDismiss() {
-//				tSingleTabCountDown.safeCancel();
-//				tViewId = 0;
-//			}
-//		});
+		tCustomizeModusPopup.setOnDismissListener(new OnDismissListener() {
+			@Override
+			public void onDismiss() {
+				tSingleTabCountDown.safeCancel();
+				tViewId = 0;
+			}
+		});
 	}
 	
 	static final int MAX_DURATION = 500;

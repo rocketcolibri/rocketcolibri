@@ -15,15 +15,11 @@ package ch.hsr.rocketcolibri.view.popup;
  * limitations under the License.
  */
 
-import ch.hsr.rocketcolibri.view.AbsoluteLayout;
-import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
+import java.lang.ref.WeakReference;
 
-//import com.android.internal.R;
-
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.content.res.TypedArray;
-import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
@@ -34,14 +30,16 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnScrollChangedListener;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-
-import java.lang.ref.WeakReference;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
+//import com.android.internal.R;import android.app.Activity;
 
 /**
  * <p>A popup window that can be used to display an arbitrary view. The popup
@@ -301,6 +299,13 @@ public class PopupWindow {
 //            mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
             mWindowManager = parent;
         }
+        View view = ((Activity)mContext).getWindow().getDecorView().findViewById(android.R.id.content);
+        view.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dismiss();
+			}
+		});
         setContentView(contentView);
         setWidth(width);
         setHeight(height);
