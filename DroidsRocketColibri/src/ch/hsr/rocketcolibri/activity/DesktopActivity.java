@@ -283,7 +283,7 @@ public class DesktopActivity extends RCActivity
 		    rc.minHeight=50;
 		    rc.maxWidth=400;
 		    rc.minWidth=30;
-		    LayoutParams lp = new LayoutParams(300, 300, 700, 300);
+		    LayoutParams lp = new LayoutParams(100, 100, 50,200);
 		    ViewElementConfig elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
 		    View view = tDesktopViewManager.createView(elementConfig);
 		    view.setBackgroundColor(Color.CYAN);
@@ -294,8 +294,7 @@ public class DesktopActivity extends RCActivity
 		    rc.minHeight=10;
 		    rc.maxWidth=900;
 		    rc.minWidth=10;
-		    
-		    lp = new LayoutParams(500, 300, 100, 200);
+		    lp = new LayoutParams(50, 50, 250, 200);
 		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
 		    view = tDesktopViewManager.createView(elementConfig);
 		    view.setBackgroundColor(Color.RED);
@@ -303,10 +302,10 @@ public class DesktopActivity extends RCActivity
 		    rc = new ResizeConfig();
 		    rc.keepRatio=false;
 		    rc.maxHeight=900;
-		    rc.minHeight=120;
+		    rc.minHeight=50;
 		    rc.maxWidth=900;
-		    rc.minWidth=40;
-		    lp = new LayoutParams(500, 300, 0, 0);
+		    rc.minWidth=50;
+		    lp = new LayoutParams(70, 70, 400, 200);
 		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
 		    view = tDesktopViewManager.createView(elementConfig);
 		    view.setBackgroundColor(Color.LTGRAY);
