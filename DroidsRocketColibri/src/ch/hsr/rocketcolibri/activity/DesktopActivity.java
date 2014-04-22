@@ -1,6 +1,7 @@
 package ch.hsr.rocketcolibri.activity;
 
 import java.io.IOException;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Toast;
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.manager.DesktopViewManager;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
@@ -54,7 +56,7 @@ public class DesktopActivity extends RCActivity
 	private static final int OBSERVE_MENU_ID = Menu.FIRST+4;
 	
 	public static final boolean Debugging = false;
-
+	private DesktopMenu desktopMenu;
 	
 	
 	private void updateConnectionStateWidget()
@@ -185,7 +187,7 @@ public class DesktopActivity extends RCActivity
 				//rcService.getRocketColibriDB().store(viewElementConfig);
 			}
 		});
-		new DesktopMenu(this, findViewById(R.id.swipeInMenu), tDesktopViewManager);
+		desktopMenu = new DesktopMenu(this, findViewById(R.id.swipeInMenu), tDesktopViewManager);
 	}
 	
 	@Override
@@ -410,6 +412,7 @@ public class DesktopActivity extends RCActivity
 	protected void onServiceReady() 
 	{
 		setupViews();
+		desktopMenu.setService(rcService) ;
 //	  updateConnectionStateWidget();
 //	  updateTelemetryWidget();
 	}

@@ -49,6 +49,31 @@
                     android:layout_height="wrap_content"
                     android:text="switch modus" />
 
+                <Button
+                    android:id="@+id/connectWifi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Connect RocketColibri Wifi" />
+                
+                <Button
+                    android:id="@+id/disconnectWifi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Disconnect RocketColibri Wifi" />
+
+                 <Button
+                    android:id="@+id/observe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Change to Observe" />
+
+                 <Button
+                    android:id="@+id/operate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Change to Operate" />
+                 
+                                
                 <SeekBar
                     android:id="@+id/seekBar1"
                     android:layout_width="match_parent"
