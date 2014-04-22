@@ -1,0 +1,121 @@
+ [{
+     "process": "insert",
+     "model": {
+         "name": "Test Model",
+         "viewElementConfigs": [{
+             "resizeConfig": {
+                 "keepRatio": false,
+                 "maxHeight": 300,
+                 "maxWidth": 800,
+                 "minHeight": 50,
+                 "minWidth": 100
+             },
+             "classPath": "ch.hsr.rocketcolibri.view.widget.TelemetryWidget",
+             "layoutParams": {
+                 "layoutAnimationParameters": null,
+                 "height": 100,
+                 "width": 600,
+                 "x": 100,
+                 "y": 0
+             },
+             "id": 0,
+             "alpha": 1.0
+         }, {
+             "resizeConfig": {
+                 "keepRatio": false,
+                 "maxHeight": 150,
+                 "maxWidth": 150,
+                 "minHeight": 50,
+                 "minWidth": 50
+             },
+             "classPath": "ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget",
+             "layoutParams": {
+                 "layoutAnimationParameters": null,
+                 "height": 100,
+                 "width": 100,
+                 "x": 0,
+                 "y": 0
+             },
+             "id": 0,
+             "alpha": 1.0
+         }, {
+             "resizeConfig": {
+                 "keepRatio": true,
+                 "maxHeight": 500,
+                 "maxWidth": 500,
+                 "minHeight": 50,
+                 "minWidth": 50
+             },
+             "classPath": "ch.hsr.rocketcolibri.view.widget.Circle",
+             "layoutParams": {
+                 "layoutAnimationParameters": null,
+                 "height": 380,
+                 "width": 380,
+                 "x": 100,
+                 "y": 300
+             },
+             "id": 0,
+             "alpha": 1.0
+         }]
+     }
+ }, {
+     "process": "insert",
+     "model": {
+         "name": "Test Model2",
+         "viewElementConfigs": [{
+             "resizeConfig": {
+                 "keepRatio": false,
+                 "maxHeight": 300,
+                 "maxWidth": 800,
+                 "minHeight": 50,
+                 "minWidth": 100
+             },
+             "classPath": "ch.hsr.rocketcolibri.view.widget.TelemetryWidget",
+             "layoutParams": {
+                 "layoutAnimationParameters": null,
+                 "height": 100,
+                 "width": 600,
+                 "x": 100,
+                 "y": 0
+             },
+             "id": 0,
+             "alpha": 1.0
+         }, {
+             "resizeConfig": {
+                 "keepRatio": false,
+                 "maxHeight": 150,
+                 "maxWidth": 150,
+                 "minHeight": 50,
+                 "minWidth": 50
+             },
+             "classPath": "ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget",
+             "layoutParams": {
+                 "layoutAnimationParameters": null,
+                 "height": 100,
+                 "width": 100,
+                 "x": 0,
+                 "y": 0
+             },
+             "id": 0,
+             "alpha": 1.0
+         }, {
+             "resizeConfig": {
+                 "keepRatio": true,
+                 "maxHeight": 500,
+                 "maxWidth": 500,
+                 "minHeight": 50,
+                 "minWidth": 50
+             },
+             "classPath": "ch.hsr.rocketcolibri.view.widget.Circle",
+             "layoutParams": {
+                 "layoutAnimationParameters": null,
+                 "height": 380,
+                 "width": 380,
+                 "x": 100,
+                 "y": 300
+             },
+             "id": 0,
+             "alpha": 1.0
+         }]
+     }
+ }]

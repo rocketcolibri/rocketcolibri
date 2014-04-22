@@ -1,7 +1,6 @@
 package ch.hsr.rocketcolibri;
 
 import ch.hsr.rocketcolibri.channel.Channel;
-import ch.hsr.rocketcolibri.dbService.DBService;
 import ch.hsr.rocketcolibri.protocol.RcOperator;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm;
@@ -9,6 +8,8 @@ import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolTelemetryReceiver;
 import ch.hsr.rocketcolibri.protocol.WifiConnection;
+import db.RocketColibriDB;
+import db.RocketColibriDataHandler;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -52,10 +53,7 @@ public class RocketColibriService extends  Service
 	// video URL
 	public String videoUrl = "";
 	
-	
-	// references to the database service
-	public DBService database = null;
-	private Boolean isConnected = false;
+	public RocketColibriDB tRocketColibriDB;
 
 	@Override
 	public IBinder onBind(Intent intent) 
@@ -78,10 +76,12 @@ public class RocketColibriService extends  Service
 		this.wifi = new WifiConnection( (WifiManager) getSystemService(Context.WIFI_SERVICE));
 		 
 		// create database instance
-		if (!this.isConnected) {
-			this.database = new DBService(this);
-
-			this.isConnected = this.database.ConnectToDatabase();
+		tRocketColibriDB = new RocketColibriDB(this);
+		try {
+			//read rc.db and update the users client db
+			new RocketColibriDataHandler(this, tRocketColibriDB);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
    }
 	 
@@ -90,10 +90,8 @@ public class RocketColibriService extends  Service
         super.onDestroy();
         // The activity is about to be destroyed.
         
-        // Destroying the app close database
-        this.database.CloseDatabase();
-        this.isConnected = false;
-        this.database = null;
+        tRocketColibriDB.close();
+        tRocketColibriDB = null;
         running = false;
     }
 
@@ -102,6 +100,10 @@ public class RocketColibriService extends  Service
 	{
 		return Service.START_STICKY;
 	}
+    
+    public RocketColibriDB getRocketColibriDB(){
+    	return tRocketColibriDB;
+    }
 
 	/**
 	 * Set the application to the 'Control' state

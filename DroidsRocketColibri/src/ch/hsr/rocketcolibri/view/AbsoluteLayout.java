@@ -169,6 +169,9 @@ public class AbsoluteLayout extends ViewGroup {
          */
         public int y;
 
+        public LayoutParams(){
+        	super(0,0);
+        }
         /**
          * Creates a new set of layout parameters with the specified width,
          * height and location.

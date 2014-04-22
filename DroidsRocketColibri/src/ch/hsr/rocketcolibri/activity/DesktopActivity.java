@@ -1,7 +1,6 @@
 package ch.hsr.rocketcolibri.activity;
 
 import java.io.IOException;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.hardware.Camera;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -24,17 +22,17 @@ import ch.hsr.rocketcolibri.manager.DesktopViewManager;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
 import ch.hsr.rocketcolibri.menu.DesktopMenu;
-import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.widget.Circle;
+import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
 import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
 import ch.hsr.rocketcolibri.view.widget.TelemetryWidget;
-import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
 
 public class DesktopActivity extends RCActivity
 {
@@ -61,7 +59,7 @@ public class DesktopActivity extends RCActivity
 	
 	private void updateConnectionStateWidget()
 	{
-		if(rcService != null)
+		if(rcService != null)/*the service can't be null ...*/
 		{
 			connectionStatusWidget.setConnectionState((s)rcService.protocolFsm.getState());
 		}		
@@ -69,7 +67,7 @@ public class DesktopActivity extends RCActivity
 	
 	private void updateTelemetryWidget()
 	{
-		if(rcService != null)
+		if(rcService != null)/*the service can't be null ...*/
 		{
 			if(null == rcService.activeuser)
 			{
@@ -183,11 +181,11 @@ public class DesktopActivity extends RCActivity
 			@Override
 			public void onViewChange(ViewElementConfig viewElementConfig) {
 				Log.d("changed", "changed");
-				//TODO service.store(viewElementConfig);
+				//TODO 
+				//rcService.getRocketColibriDB().store(viewElementConfig);
 			}
 		});
 		new DesktopMenu(this, findViewById(R.id.swipeInMenu), tDesktopViewManager);
-		setupViews();
 	}
 	
 	@Override
@@ -261,6 +259,12 @@ public class DesktopActivity extends RCActivity
 	 * Finds all the views we need and configure them to send click events to the activity.
 	 */
 	private void setupViews(){
+		/**
+		RCModel model = rcService.getRocketColibriDB().fetchRCModelByName("Test Model");
+		for(ViewElementConfig vec : model.getViewElementConfigs()){
+			tDesktopViewManager.createView(vec);
+		}
+		**/
 		try{
 		    ResizeConfig rc = new ResizeConfig();
 		    rc.maxHeight=745;
@@ -323,7 +327,6 @@ public class DesktopActivity extends RCActivity
 		    this.connectionStatusWidget = (ConnectionStatusWidget) tDesktopViewManager.createView(elementConfig);
 		    this.connectionStatusWidget.setAlpha(1);
 		    
-		    
 		    rc = new ResizeConfig();
 		    rc.keepRatio=true;
 		    rc.maxHeight=500;
@@ -332,6 +335,7 @@ public class DesktopActivity extends RCActivity
 		    rc.minWidth=50;
 		    lp = new LayoutParams(380, 380 , 100, 300);
 		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
+
 		    Circle circleView = (Circle) tDesktopViewManager.createView(elementConfig);
 		    circleView.setOnHChannelChangeListener(new OnChannelChangeListener ()
 			{
@@ -374,7 +378,6 @@ public class DesktopActivity extends RCActivity
 				}
 			});
 
-		    
 		}catch(Exception e){
 		}
 	    
@@ -406,8 +409,9 @@ public class DesktopActivity extends RCActivity
 	@Override
 	protected void onServiceReady() 
 	{
-	  updateConnectionStateWidget();
-	  updateTelemetryWidget();
+		setupViews();
+//	  updateConnectionStateWidget();
+//	  updateTelemetryWidget();
 	}
 
 	@Override

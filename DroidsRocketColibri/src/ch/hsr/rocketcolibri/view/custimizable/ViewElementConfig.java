@@ -4,50 +4,64 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 
 public class ViewElementConfig {
-	private String tClassPath;
-	private LayoutParams tLayoutParams;
-	private ResizeConfig tResizeConfig;
-	private float tAlpha;
+	private int id;
+	private String classPath;
+	private LayoutParams layoutParams;
+	private ResizeConfig resizeConfig;
+	private float alpha;
 	
 	public ViewElementConfig(){}
 	
 	public ViewElementConfig(String classPath, LayoutParams layoutParams, ResizeConfig resizeConfig){
-		tClassPath = classPath;
-		tLayoutParams = layoutParams;
-		tResizeConfig = resizeConfig;
-		tAlpha = 1;
+		this(0, classPath, layoutParams, resizeConfig);
+	}
+	
+	public ViewElementConfig(int id, String classPath, LayoutParams layoutParams, ResizeConfig resizeConfig){
+		this.id = id;
+		this.classPath = classPath;
+		this.layoutParams = layoutParams;
+		this.resizeConfig = resizeConfig;
+		this.alpha = 1;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getClassPath() {
-		return tClassPath;
+		return classPath;
 	}
 
 	public void setClassPath(String classPath) {
-		this.tClassPath = classPath;
+		this.classPath = classPath;
 	}
 
 	public LayoutParams getLayoutParams(){
-		return tLayoutParams;
+		return layoutParams;
 	}
 	
 	public ResizeConfig getResizeConfig(){
-		return tResizeConfig;
+		return resizeConfig;
 	}
 
 	public void settLayoutParams(LayoutParams layoutParams) {
-		tLayoutParams = layoutParams;
+		this.layoutParams = layoutParams;
 	}
 
 	public void settResizeConfig(ResizeConfig resizeConfig) {
-		tResizeConfig = resizeConfig;
+		this.resizeConfig = resizeConfig;
 	}
 	
 	public void setAlpha(float alpha){
-		tAlpha = alpha;
+		this.alpha = alpha;
 	}
 	
 	public float getAlpha(){
-		return tAlpha;
+		return alpha;
 	}
 	
 	
