@@ -27,7 +27,8 @@ public class RocketColibriDataHandler {
 		List<JsonRCModel> models = readJsonData();
 		for(JsonRCModel m : models){
 			if(m.process.equals("insert")){
-				tRocketColibriDB.store(m.model);
+				if(tRocketColibriDB.fetchRCModelByName(m.model.getName())==null)
+					tRocketColibriDB.store(m.model);
 			}else if(m.process.equals("update")){
 				//TODO implement update process
 				tRocketColibriDB.store(tRocketColibriDB.fetchRCModelByName(m.model.getName()));
