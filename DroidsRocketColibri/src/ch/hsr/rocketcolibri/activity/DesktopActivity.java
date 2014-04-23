@@ -56,7 +56,7 @@ public class DesktopActivity extends RCActivity
 	private static final int OBSERVE_MENU_ID = Menu.FIRST+4;
 	
 	public static final boolean Debugging = false;
-	private DesktopMenu desktopMenu;
+	private DesktopMenu tDesktopMenu;
 	
 	
 	private void updateConnectionStateWidget()
@@ -187,7 +187,7 @@ public class DesktopActivity extends RCActivity
 				//rcService.getRocketColibriDB().store(viewElementConfig);
 			}
 		});
-		desktopMenu = new DesktopMenu(this, findViewById(R.id.swipeInMenu), tDesktopViewManager);
+		tDesktopMenu = new DesktopMenu(this, findViewById(R.id.swipeInMenu), tDesktopViewManager);
 	}
 	
 	@Override
@@ -409,12 +409,11 @@ public class DesktopActivity extends RCActivity
 	}
 
 	@Override
-	protected void onServiceReady() 
-	{
+	protected void onServiceReady(){
 		setupViews();
-		desktopMenu.setService(rcService) ;
-//	  updateConnectionStateWidget();
-//	  updateTelemetryWidget();
+		tDesktopMenu.setService(rcService) ;
+		updateConnectionStateWidget();
+		updateTelemetryWidget();
 	}
 
 	@Override

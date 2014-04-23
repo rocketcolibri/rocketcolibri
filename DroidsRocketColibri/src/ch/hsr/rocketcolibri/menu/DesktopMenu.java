@@ -1,9 +1,6 @@
 package ch.hsr.rocketcolibri.menu;
 
-import android.app.Service;
 import android.content.Context;
-import android.content.Intent;
-import android.os.IBinder;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -27,6 +24,7 @@ public class DesktopMenu {
 	private Context tContext;
 	private IDesktopViewManager tDesktopViewManager;
 	private RocketColibriService tRcService;
+	private int[] serviceDependentButtons = {R.id.connectWifi,R.id.disconnectWifi, R.id.observe, R.id.operate};
 	
 	public DesktopMenu(Context context, View contentView, IDesktopViewManager desktopViewManager) {
 		tRcService = null;
@@ -36,43 +34,21 @@ public class DesktopMenu {
 		onCreate();	
 	}
 	
-	private void disableButtons()
-	{
-		Button b = (Button)findViewById(R.id.connectWifi);
-		b.setEnabled(false);
-		b = (Button)findViewById(R.id.disconnectWifi);
-		b.setEnabled(false);
-		b = (Button)findViewById(R.id.observe);
-		b.setEnabled(false);
-		b = (Button)findViewById(R.id.operate);
-		b.setEnabled(false);
-	}
-
-	private void enableButtons()
-	{
-		Button b = (Button)findViewById(R.id.connectWifi);
-		b.setEnabled(true);
-		b = (Button)findViewById(R.id.disconnectWifi);
-		b.setEnabled(true);
-		b = (Button)findViewById(R.id.observe);
-		b.setEnabled(true);
-		b = (Button)findViewById(R.id.operate);
-		b.setEnabled(true);
+	private void setServiceDependentButtonsEnabled(boolean enabled){
+		Button b = null;
+		for(int i = 0; i < serviceDependentButtons.length;++i){
+			b = (Button)findViewById(serviceDependentButtons[i]);
+			b.setEnabled(enabled);
+		}
 	}
 	
 	public void setService(RocketColibriService rcService) {
 		tRcService = rcService;
-		if(null == rcService) {
-			disableButtons();
-		} else {
-			enableButtons();
-		}
+		setServiceDependentButtonsEnabled(true);
 	}
 	
 	
-	
 	private void onCreate(){
-		
 		Button b = (Button)findViewById(R.id.switchModus);
 		b.setOnClickListener(new OnClickListener() {
 			@Override
@@ -118,7 +94,6 @@ public class DesktopMenu {
 				}
 			}
 		});	
-		disableButtons();
 		SeekBar sBar = (SeekBar)findViewById(R.id.seekBar1);
 		sBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			
@@ -146,6 +121,8 @@ public class DesktopMenu {
 				Toast.makeText(tContext, ""+rating, Toast.LENGTH_SHORT).show();
 			}
 		});
+		
+		setServiceDependentButtonsEnabled(false);
 	}
 	
 	private View findViewById(int id){
