@@ -11,6 +11,7 @@ import android.content.res.Resources;
 import ch.futuretek.json.JsonTransformer;
 import ch.hsr.rocketcolibri.R;
 import db.model.JsonRCModel;
+import db.model.RCModel;
 
 public class RocketColibriDataHandler {
 
@@ -30,8 +31,15 @@ public class RocketColibriDataHandler {
 				if(tRocketColibriDB.fetchRCModelByName(m.model.getName())==null)
 					tRocketColibriDB.store(m.model);
 			}else if(m.process.equals("update")){
-				//TODO implement update process
-				tRocketColibriDB.store(tRocketColibriDB.fetchRCModelByName(m.model.getName()));
+				RCModel dbModel = tRocketColibriDB.fetchRCModelByName(m.model.getName());
+				if (dbModel == null) {
+					tRocketColibriDB.store(m.model);	// couldn't find in database, insert it
+				}
+				else {
+					dbModel.setName(m.model.getName());
+					dbModel.setViewElementConfigs(m.model.getViewElementConfigs());
+					tRocketColibriDB.store(dbModel);	// found in database, update it
+				}
 			}else if(m.process.equals("delete")){
 				tRocketColibriDB.delete(tRocketColibriDB.fetchRCModelByName(m.model.getName()));
 			}
