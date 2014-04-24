@@ -1,6 +1,8 @@
 package ch.hsr.rocketcolibri;
 
 import ch.hsr.rocketcolibri.channel.Channel;
+import ch.hsr.rocketcolibri.db.RocketColibriDB;
+import ch.hsr.rocketcolibri.db.RocketColibriDataHandler;
 import ch.hsr.rocketcolibri.protocol.RcOperator;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm;
@@ -8,8 +10,6 @@ import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolTelemetryReceiver;
 import ch.hsr.rocketcolibri.protocol.WifiConnection;
-import db.RocketColibriDB;
-import db.RocketColibriDataHandler;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;

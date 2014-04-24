@@ -1,4 +1,4 @@
-package db.model;
+package ch.hsr.rocketcolibri.db.model;
 
 import java.util.List;
 

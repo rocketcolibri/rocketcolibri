@@ -1,4 +1,4 @@
-package db;
+package ch.hsr.rocketcolibri.db;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,8 +10,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import ch.futuretek.json.JsonTransformer;
 import ch.hsr.rocketcolibri.R;
-import db.model.JsonRCModel;
-import db.model.RCModel;
+import ch.hsr.rocketcolibri.db.model.JsonRCModel;
+import ch.hsr.rocketcolibri.db.model.RCModel;
 
 public class RocketColibriDataHandler {
 

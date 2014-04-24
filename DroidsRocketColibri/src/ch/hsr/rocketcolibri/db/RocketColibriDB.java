@@ -1,4 +1,4 @@
-package db;
+package ch.hsr.rocketcolibri.db;
 
 import java.io.File;
 
@@ -10,8 +10,8 @@ import org.neodatis.odb.core.query.criteria.Where;
 import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
 
 import android.content.Context;
+import ch.hsr.rocketcolibri.db.model.RCModel;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import db.model.RCModel;
 
 public class RocketColibriDB {
 	private ODB tOdb;
