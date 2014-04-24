@@ -34,7 +34,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import java.util.ArrayList;
 
-import ch.hsr.rocketcolibri.util.RocketColibriDefaults;
+import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 
 /**

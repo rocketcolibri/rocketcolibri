@@ -22,8 +22,9 @@ import java.util.Locale;
 
 
 
+
+import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.RocketColibriService;
-import ch.hsr.rocketcolibri.util.RocketColibriDefaults;
 
 
 public abstract class RCActivity extends Activity {

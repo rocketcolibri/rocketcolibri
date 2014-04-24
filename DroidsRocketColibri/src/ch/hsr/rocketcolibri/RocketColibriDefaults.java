@@ -1,4 +1,4 @@
-package ch.hsr.rocketcolibri.util;
+package ch.hsr.rocketcolibri;
 
 import android.annotation.TargetApi;
 import android.os.Build;

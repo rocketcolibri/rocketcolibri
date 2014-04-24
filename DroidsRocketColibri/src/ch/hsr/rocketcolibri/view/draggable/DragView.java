@@ -19,7 +19,7 @@
 
 package ch.hsr.rocketcolibri.view.draggable;
 
-import ch.hsr.rocketcolibri.util.RocketColibriDefaults;
+import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import android.content.Context;
