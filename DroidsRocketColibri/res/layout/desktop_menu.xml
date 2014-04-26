@@ -21,192 +21,41 @@
         android:layout_height="wrap_content"
         android:background="#3D3D3D"
         android:orientation="vertical"
-        android:padding="5dp" >
+        android:padding="50dp" >
+	            
+        
+        
+        
+		<ToggleButton
+		    android:id="@+id/menu_action_main_settings"
+		    android:contentDescription="@string/menu_action_main_settings"
+		    android:layout_width="100dp"
+			android:layout_height="100dp"
+		    android:checked="false"
+		    android:button="@drawable/selector_main_menu_settings"
+		    android:background="@null" >
+		</ToggleButton>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="6dp"
-            android:layout_marginTop="-4dp"
-            android:background="#ffffff" >
-        </RelativeLayout>
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:background="#555555" >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#555555"
-                android:orientation="vertical"
-                android:padding="5dp" >
-
-                <Button
-                    android:id="@+id/switchModus"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="switch modus" />
-
-                <Button
-                    android:id="@+id/connectWifi"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Connect RocketColibri Wifi" />
-                
-                <Button
-                    android:id="@+id/disconnectWifi"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Disconnect RocketColibri Wifi" />
-
-                 <Button
-                    android:id="@+id/observe"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Change to Observe" />
-
-                 <Button
-                    android:id="@+id/operate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Change to Operate" />
-                 
-                                
-                <SeekBar
-                    android:id="@+id/seekBar1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <RatingBar
-                    android:id="@+id/ratingBar1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <Spinner
-                    android:id="@+id/spinner1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <CheckBox
-                    android:id="@+id/checkBox1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="CheckBox" />
-
-                <RadioButton
-                    android:id="@+id/radioButton1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="RadioButton" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="4dp"
-                    android:gravity="left|center_vertical"
-                    android:text="Handle Text" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="4dp"
-                    android:gravity="left|center_vertical"
-                    android:text="Handle Text" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="4dp"
-                    android:gravity="left|center_vertical"
-                    android:text="Handle Text" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="4dp"
-                    android:gravity="left|center_vertical"
-                    android:text="Handle Text" />
-
-                <Button
-                    android:id="@+id/cancelall"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="test element" />
-
-                <Button
-                    android:id="@+id/cancelall1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="test element" />
-
-                <Button
-                    android:id="@+id/cancelall2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="test element" />
-
-                <Button
-                    android:id="@+id/cancelall3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="test element" />
-
-                <Button
-                    android:id="@+id/cancelall1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="test element" />
-
-                <Button
-                    android:id="@+id/cancelall2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="test element" />
-
-                <Button
-                    android:id="@+id/cancelall3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="test element" />
-
-                <Button
-                    android:id="@+id/cancelall1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="test element" />
-
-                <Button
-                    android:id="@+id/cancelall2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="test element" />
-
-                <Button
-                    android:id="@+id/cancelall3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="test element" />
-
-                <Button
-                    android:id="@+id/cancelall1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="test element" />
-
-                <Button
-                    android:id="@+id/cancelall2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="test element" />
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="test element" />
-            </LinearLayout>
-        </ScrollView>
+		<ToggleButton
+		    android:id="@+id/menu_action_main_wifi"
+		    android:contentDescription="@string/menu_action_main_wifi"
+		   	android:layout_width="100dp"
+			android:layout_height="100dp"
+		    android:checked="false"
+		    android:button="@drawable/selector_main_menu_wifi"
+		    android:background="@null" >
+		</ToggleButton>
+		
+		<ToggleButton
+		    android:id="@+id/menu_action_main_mode"
+		    android:contentDescription="@string/menu_action_main_mode"
+		    android:layout_width="100dp"
+			android:layout_height="100dp"
+		    android:checked="false"
+		    android:button="@drawable/selector_main_menu_mode"
+		    android:background="@null" >
+		</ToggleButton>
+		         
     </LinearLayout>
 
 </ch.hsr.rocketcolibri.view.widget.SwipeInMenu>

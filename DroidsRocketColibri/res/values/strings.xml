@@ -3,4 +3,9 @@
     <string name="app_name">Rocket Colibri</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    
+    <!-- Main menu entries -->
+    <string name="menu_action_main_wifi">Set Wifi Mode</string>
+    <string name="menu_action_main_settings">Switch GUI between Configure and Fix</string>
+    <string name="menu_action_main_mode">Switch mode between Operate and Observe</string>
 </resources>

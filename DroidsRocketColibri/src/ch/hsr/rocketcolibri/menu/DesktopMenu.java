@@ -3,12 +3,7 @@ package ch.hsr.rocketcolibri.menu;
 import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.RatingBar;
-import android.widget.RatingBar.OnRatingBarChangeListener;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.Toast;
+import android.widget.ToggleButton;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
@@ -24,7 +19,7 @@ public class DesktopMenu {
 	private Context tContext;
 	private IDesktopViewManager tDesktopViewManager;
 	private RocketColibriService tRcService;
-	private int[] serviceDependentButtons = {R.id.connectWifi,R.id.disconnectWifi, R.id.observe, R.id.operate};
+	private int[] serviceDependentButtons = {R.id.menu_action_main_settings,R.id.menu_action_main_wifi, R.id.menu_action_main_mode};
 	
 	public DesktopMenu(Context context, View contentView, IDesktopViewManager desktopViewManager) {
 		tRcService = null;
@@ -35,9 +30,9 @@ public class DesktopMenu {
 	}
 	
 	private void setServiceDependentButtonsEnabled(boolean enabled){
-		Button b = null;
+		ToggleButton b = null;
 		for(int i = 0; i < serviceDependentButtons.length;++i){
-			b = (Button)findViewById(serviceDependentButtons[i]);
+			b = (ToggleButton)findViewById(serviceDependentButtons[i]);
 			b.setEnabled(enabled);
 		}
 	}
@@ -49,7 +44,7 @@ public class DesktopMenu {
 	
 	
 	private void onCreate(){
-		Button b = (Button)findViewById(R.id.switchModus);
+		ToggleButton b = (ToggleButton)findViewById(R.id.menu_action_main_settings);
 		b.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -57,7 +52,7 @@ public class DesktopMenu {
 			}
 		});
 		
-		b = (Button)findViewById(R.id.connectWifi);
+		b = (ToggleButton)findViewById(R.id.menu_action_main_wifi);
 		b.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -65,15 +60,8 @@ public class DesktopMenu {
 			}
 		});
 
-		b = (Button)findViewById(R.id.disconnectWifi);
-		b.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if(null != tRcService) tRcService.wifi.Disconnect();
-			}
-		});
-		
-		b = (Button)findViewById(R.id.observe);
+
+		b = (ToggleButton)findViewById(R.id.menu_action_main_mode);
 		b.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -81,44 +69,6 @@ public class DesktopMenu {
 					tRcService.protocolFsm.queue(e.E6_USR_CONNECT);
 					tRcService.protocolFsm.processOutstandingEvents();
 				}
-			}
-		});
-		
-		b = (Button)findViewById(R.id.operate);
-		b.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if(null != tRcService) {
-					tRcService.protocolFsm.queue(e.E7_USR_OBSERVE);
-		    		tRcService.protocolFsm.processOutstandingEvents();
-				}
-			}
-		});	
-		SeekBar sBar = (SeekBar)findViewById(R.id.seekBar1);
-		sBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-			
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-				
-			}
-			
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-				
-			}
-			
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				Toast.makeText(tContext, ""+progress, Toast.LENGTH_SHORT).show();
-			}
-		});
-		RatingBar rb = (RatingBar)findViewById(R.id.ratingBar1);
-		rb.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
-			
-			@Override
-			public void onRatingChanged(RatingBar ratingBar, float rating,
-					boolean fromUser) {
-				Toast.makeText(tContext, ""+rating, Toast.LENGTH_SHORT).show();
 			}
 		});
 		
