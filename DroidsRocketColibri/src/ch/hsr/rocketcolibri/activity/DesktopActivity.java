@@ -47,38 +47,28 @@ public class DesktopActivity extends RCActivity
 	
 	private ConnectionStatusWidget connectionStatusWidget;
 	private TelemetryWidget telemetryWidget;
-	
-	private static final int CHANGE_TOUCH_MODE_MENU_ID = Menu.FIRST;
-	private static final int CONNECT_MENU_ID = Menu.FIRST+1;
-	private static final int DISCONNECT_MENU_ID = Menu.FIRST+2;
-	private static final int CONTROL_MENU_ID = Menu.FIRST+3;
-	private static final int OBSERVE_MENU_ID = Menu.FIRST+4;
-	
+		
 	public static final boolean Debugging = false;
 	private DesktopMenu tDesktopMenu;
 	
 	
 	private void updateConnectionStateWidget()
 	{
-		if(rcService != null)/*the service can't be null ...*/
-		{
-			connectionStatusWidget.setConnectionState((s)rcService.protocolFsm.getState());
-		}		
+		connectionStatusWidget.setConnectionState((s)rcService.protocolFsm.getState());
+		if(rcService.protocolFsm.getState() == s.DISC)
+			rcService.activeuser = null;
 	}
 	
 	private void updateTelemetryWidget()
 	{
-		if(rcService != null)/*the service can't be null ...*/
+		if(null == rcService.activeuser)
 		{
-			if(null == rcService.activeuser)
-			{
-				telemetryWidget.setTelemetryData("no Operator");
-			}
-			else
-			{
-				telemetryWidget.setTelemetryData(rcService.activeuser.getName() +"(" +rcService.activeuser.getIpAddress() +")");
-			}
-		}	
+			telemetryWidget.setTelemetryData("no Operator");
+		}
+		else
+		{
+			telemetryWidget.setTelemetryData(rcService.activeuser.getName() +"(" +rcService.activeuser.getIpAddress() +")");
+		}
 	}
 	
 	/**
@@ -90,7 +80,6 @@ public class DesktopActivity extends RCActivity
 	  public void onReceive(Context context, Intent intent) 
 	  {
 		updateConnectionStateWidget();
-		updateTelemetryWidget();
 		Log.d(TAG, "online message received");
 	  }
 	};
@@ -103,9 +92,8 @@ public class DesktopActivity extends RCActivity
 	  @Override
 	  public void onReceive(Context context, Intent intent) 
 	  {
-		updateConnectionStateWidget();
 		updateTelemetryWidget();
-		Log.d(TAG, "online message received");
+		Log.d(TAG, "mTelemetryUpdateReceiver");
 	  }
 	};
 
@@ -195,66 +183,6 @@ public class DesktopActivity extends RCActivity
 		tDesktopViewManager = null;
 		super.onDestroy();
 	}
-	/**
-	 * Build a menu for the activity.
-	 *
-	 */    
-	
-	public boolean onCreateOptionsMenu (Menu menu){
-	    super.onCreateOptionsMenu(menu);
-	    
-	    int order=0;
-	    menu.add (0, CHANGE_TOUCH_MODE_MENU_ID, order++, "Change Touch Mode");
-	    menu.add (0, CONNECT_MENU_ID, order++, "Connect to RocketColibri");
-	    menu.add (0, DISCONNECT_MENU_ID, order++, "Disconnect to RocketColibri");
-	    menu.add (0, CONTROL_MENU_ID, order++, "Control");
-	    menu.add (0, OBSERVE_MENU_ID, order++, "Observe");
-	    return true;
-	}
-	
-	/**
-	 * Perform an action in response to a menu item being clicked.
-	 *
-	 */
-	
-	public boolean onOptionsItemSelected (MenuItem item){
-	    switch (item.getItemId()) {
-	      case CHANGE_TOUCH_MODE_MENU_ID:
-	    	  tDesktopViewManager.switchCustomieModus();
-	        String message = tDesktopViewManager.isInCustomizeModus() ? "Changed touch mode. Drag now starts on long touch (click)." 
-	                                              : "Changed touch mode. Drag now starts on touch (click).";
-	        Toast.makeText (getApplicationContext(), message, Toast.LENGTH_LONG).show ();
-	        return true;
-
-	      case CONNECT_MENU_ID:
-		    Toast.makeText (getApplicationContext(), "Try Connect", Toast.LENGTH_LONG).show ();
-		    if(rcService != null) rcService.wifi.Connect();
-		    return true;
-
-	      case DISCONNECT_MENU_ID:
-		    Toast.makeText (getApplicationContext(), "Try Disonnect", Toast.LENGTH_LONG).show ();
-		    if(rcService != null) rcService.wifi.Disconnect();
-		    return true;
-		    
-	      case CONTROL_MENU_ID:
-	    	  if(rcService != null)
-	    	  {
-	    		  rcService.protocolFsm.queue(e.E6_USR_CONNECT);
-	    		  rcService.protocolFsm.processOutstandingEvents();
-	    	  }
-	    	  return true;
-	      case OBSERVE_MENU_ID:
-	    	  if(rcService != null)
-	    	  {
-	    		  rcService.protocolFsm.queue(e.E7_USR_OBSERVE);
-	    		  rcService.protocolFsm.processOutstandingEvents();
-	    	  }
-	    	  return true;
-	    	  
-	    	  
-	    }
-	    return super.onOptionsItemSelected (item);
-	}
 	
 	/**
 	 * Finds all the views we need and configure them to send click events to the activity.
@@ -315,7 +243,6 @@ public class DesktopActivity extends RCActivity
 		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.TelemetryWidget", lp, rc);
 		    this.telemetryWidget = (TelemetryWidget) tDesktopViewManager.createView(elementConfig);
 		    this.telemetryWidget.setBackgroundColor(Color.CYAN);
-		    this.telemetryWidget.setTelemetryData("Telemetry data");
 		    this.telemetryWidget.setAlpha((float) .5);
 		    
 		    rc = new ResizeConfig();

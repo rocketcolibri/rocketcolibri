@@ -23,6 +23,7 @@ public class RocketColibriMessageTelemetry extends RocketColibriMessage
 	private int sequence;
 	
 	final String TAG = this.getClass().getName();
+	
 	public RocketColibriMessageTelemetry(JSONObject jObject) throws JSONException
 	{
 		// read sequence number
@@ -78,10 +79,13 @@ public class RocketColibriMessageTelemetry extends RocketColibriMessage
 	@Override
 	public void sendChangeBroadcast(RocketColibriService service)
 	{
-		Log.d(TAG, "execute action sendBroadcast");
-		service.activeuser = this.activeuser;
-		Intent intent = new Intent(ActionTelemetryUpdate);
-		LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+		if (! this.activeuser.equals(service.activeuser))
+		{	
+			service.activeuser = this.activeuser;
+			Log.d(TAG, "execute action sendBroadcast" + service.activeuser.getName() + service.activeuser.getIpAddress());
+			Intent intent = new Intent(ActionTelemetryUpdate);
+			LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+		}
 	}
 	
 	public void sendEvents(RocketColibriService service)

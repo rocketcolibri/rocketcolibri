@@ -37,7 +37,6 @@ public class RocketColibriProtocol
 	public static final int MIN_CHANNEL_VALUE = 0;
 	public static final String ActionStateUpdate = "protocol.updatestate";
 	public static final String ActionTelemetryUpdate = "protocol.updatetelemetry";
-	public static final String KeyState = "state_new";
 
 	
 	private RocketColibriProtocolFsm fsm;
@@ -244,9 +243,7 @@ public class RocketColibriProtocol
 		public void apply(RocketColibriProtocolFsm fsm, Object event,	Object nextState) 
 		{
 			Log.d(TAG, "execute action sendBroadcast");
-			service.activeuser=null;
 			Intent intent = new Intent(ActionStateUpdate);
-			intent.putExtra(KeyState, nextState.toString());
 			LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
 		}
 	};

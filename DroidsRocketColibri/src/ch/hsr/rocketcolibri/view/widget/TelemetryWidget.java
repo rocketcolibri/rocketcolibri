@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 
@@ -65,6 +66,7 @@ public class TelemetryWidget extends CustomizableView
 	public void setTelemetryData(String telemetryData)
 	{
 		mDisplayText = telemetryData;
+		Log.d("TelemetryWidget", mDisplayText);
 		postInvalidate();
 	}
 }

@@ -16,7 +16,12 @@ public class RcOperator {
 	@Override
 	public boolean equals(Object obj)
 	{
-		RcOperator other = (RcOperator)obj;
-		return this.getName().equals(other.getName());
+		if (null != obj)
+		{
+			RcOperator other = (RcOperator)obj;
+			return this.getName().equals(other.getName());
+		}
+		else
+			return false;
 	}
 }

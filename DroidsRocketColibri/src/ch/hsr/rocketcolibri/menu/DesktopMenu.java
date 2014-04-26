@@ -61,6 +61,7 @@ public class DesktopMenu {
 		    {
 		    	if(null != tRcService)
 		    	{
+		    		tRcService.activeuser = null;
 		    		if (isChecked) 
 		    			tRcService.wifi.Connect();
 			        else

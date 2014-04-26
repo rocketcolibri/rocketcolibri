@@ -31,7 +31,7 @@ import android.util.Log;
 public class WifiConnection 
 {
 	final static String TAG = "WifiConnection";
-	final static String networkSSID = "RocketColibri";
+	final static String networkSSID = "\"RocketColibri\"";
 	private WifiManager wifiManager;
 	
 	public WifiConnection(WifiManager wifiManager)
@@ -47,7 +47,7 @@ public class WifiConnection
 	    wifiManager.disconnect(); 
 	    // create the network configuration for the RocketColibri network
 		WifiConfiguration conf = new WifiConfiguration();
-		conf.SSID = "\"" + networkSSID + "\"";   // Please note the quotes. String should contain ssid in quotes
+		conf.SSID = networkSSID ;   // Please note the quotes. String should contain ssid in quotes
 		conf.preSharedKey = "\""+"1234567890"+"\"";
 		conf.status = WifiConfiguration.Status.ENABLED;
 		conf.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
@@ -73,7 +73,7 @@ public class WifiConnection
 		 List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();
 		 for( WifiConfiguration i : list ) 
 		 {
-		     if(i.SSID != null && i.SSID.equals("\"" + networkSSID + "\"")) 
+		     if(i.SSID != null && i.SSID.equals( networkSSID )) 
 		     {
 		          wifiManager.disconnect();
 		          wifiManager.disableNetwork(i.networkId);
@@ -96,8 +96,9 @@ public class WifiConnection
 	    boolean connected = true;
 	    if(currentWifi != null)
 	    {
-	        if(currentWifi.getSSID() != null) 
-	            connected =currentWifi.getSSID().equals(networkSSID);
+	    	String ssid = currentWifi.getSSID();
+	        if( ssid != null) 
+	            connected =ssid.equals(networkSSID);
 	    }
 
         if (connected)
