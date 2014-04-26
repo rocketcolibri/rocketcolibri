@@ -3,6 +3,7 @@ package ch.hsr.rocketcolibri.menu;
 import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
@@ -52,25 +53,48 @@ public class DesktopMenu {
 			}
 		});
 		
-		b = (ToggleButton)findViewById(R.id.menu_action_main_wifi);
-		b.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if(null != tRcService) tRcService.wifi.Connect();
-			}
-		});
 
+		b = (ToggleButton)findViewById(R.id.menu_action_main_wifi);
+		b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+		{
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) 
+		    {
+		    	if(null != tRcService)
+		    	{
+		    		if (isChecked) 
+		    			tRcService.wifi.Connect();
+			        else
+			        	tRcService.wifi.Disconnect();	    		
+		    	}
+		        
+		    }
+		});
+		
 
 		b = (ToggleButton)findViewById(R.id.menu_action_main_mode);
-		b.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if(null != tRcService) {
-					tRcService.protocolFsm.queue(e.E6_USR_CONNECT);
-					tRcService.protocolFsm.processOutstandingEvents();
-				}
-			}
+		b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+		{
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) 
+		    {
+		    	if(null != tRcService)
+		    	{
+		    		if (isChecked) 
+		    		{
+						tRcService.protocolFsm.queue(e.E6_USR_CONNECT);
+						tRcService.protocolFsm.processOutstandingEvents();
+		    		}
+			        else
+			        {
+						tRcService.protocolFsm.queue(e.E7_USR_OBSERVE);
+						tRcService.protocolFsm.processOutstandingEvents();
+			        }
+		    	}
+		        
+		    }
 		});
+
+		
+		
 		
 		setServiceDependentButtonsEnabled(false);
 	}
