@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketTimeoutException;
 
 import ch.hsr.rocketcolibri.RocketColibriService;
+import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 /**
@@ -15,7 +19,8 @@ import android.util.Log;
 public class RocketColibriProtocolTelemetryReceiver 
 {	
 	final String TAG = this.getClass().getName();
-	DatagramSocket receiveSocket;
+	final static int telemetryTimeout = 3000; // 3s
+	DatagramSocket serverSocket;
 	private int port;
 	private static RocketColibriService context;
 
@@ -23,7 +28,11 @@ public class RocketColibriProtocolTelemetryReceiver
 	{	
 		this.port = port;
 		RocketColibriProtocolTelemetryReceiver.context = context;
+	}
+				
 
+	public void startReceiveTelemetry()
+	{
 		new Thread(new Runnable()
 		{
 			final String TAG =  RocketColibriProtocolTelemetryReceiver.this.TAG;
@@ -34,31 +43,66 @@ public class RocketColibriProtocolTelemetryReceiver
 			{    
 				try 
 				{	
-					DatagramSocket serverSocket = new DatagramSocket(RocketColibriProtocolTelemetryReceiver.this.port);
+					serverSocket = new DatagramSocket(RocketColibriProtocolTelemetryReceiver.this.port);
 					byte[] receiveData = new byte[1500];
 			        Log.d(TAG, "Listening on udp " + InetAddress.getLocalHost().getHostAddress() + ":" + RocketColibriProtocolTelemetryReceiver.this.port);     
 			        DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-			       
+
+			        serverSocket.setSoTimeout(telemetryTimeout);   // set the timeout in millisecounds.
 			        while(true)
 			        {
-			        	serverSocket.receive(receivePacket);
-			        	RocketColibriMessage msg = msgFactory.Create(receivePacket);
-			        	if(null != msg)
+			        	try 
 			        	{
-			        		msg.sendChangeBroadcast(RocketColibriProtocolTelemetryReceiver.context);
-			        		msg.sendEvents(RocketColibriProtocolTelemetryReceiver.context);
+				        	serverSocket.receive(receivePacket);
+				        	RocketColibriMessage msg = msgFactory.Create(receivePacket);
+				        	if(null != msg)
+				        	{
+				        		msg.sendChangeBroadcast(RocketColibriProtocolTelemetryReceiver.context);
+				        		msg.sendEvents(RocketColibriProtocolTelemetryReceiver.context);
+				        	}
+				        	else
+				        	{
+				        		Log.d(TAG, "invalid message received");
+				        	}
 			        	}
-			        	else
+			        	catch (SocketTimeoutException te) 
 			        	{
-			        		Log.d(TAG, "invalid message received");
-			        	}
+			        		handleTimeout();	        		
+			            }
 			        }
 				}
 				catch (IOException e)
 				{
-		              Log.e(TAG, e.toString());
+					Log.e(TAG, "socket closed");
+		            return;
 				}
 			}
 		}).start();
+	}
+		
+	public void stopReceiveTelemetry()
+	{
+		setTelemetryOffline();
+		serverSocket.close();  
+	}
+
+
+	private void setTelemetryOffline() {
+		RocketColibriProtocolTelemetryReceiver.context.activeuser = null;
+		Intent intent = new Intent(RocketColibriProtocol.ActionTelemetryUpdate);
+		LocalBroadcastManager.getInstance(RocketColibriProtocolTelemetryReceiver.context).sendBroadcast(intent);
+	}
+	
+	/**
+	 * this actions must be performed if a Telemetry Receive Timeout occurs
+	 */
+	private void handleTimeout() 
+	{
+		if (null != RocketColibriProtocolTelemetryReceiver.context.activeuser)
+		{	
+			setTelemetryOffline();
+			RocketColibriProtocolTelemetryReceiver.context.protocolFsm.queue(e.E8_TIMEOUT);
+			RocketColibriProtocolTelemetryReceiver.context.protocolFsm.processNextEvent();
+		}
 	}
 }

@@ -9,15 +9,13 @@ import org.json.JSONObject;
 
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 public class RocketColibriMessageTelemetry extends RocketColibriMessage
 {
-	public static final String ActionTelemetryUpdate = "telemetry.update";
-	
+		
 	private RcOperator activeuser = new RcOperator();
 	private List<RcOperator> passivuser = new ArrayList<RcOperator>() ;
 	private int sequence;
@@ -83,7 +81,7 @@ public class RocketColibriMessageTelemetry extends RocketColibriMessage
 		{	
 			service.activeuser = this.activeuser;
 			Log.d(TAG, "execute action sendBroadcast" + service.activeuser.getName() + service.activeuser.getIpAddress());
-			Intent intent = new Intent(ActionTelemetryUpdate);
+			Intent intent = new Intent(RocketColibriProtocol.ActionTelemetryUpdate);
 			LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
 		}
 	}

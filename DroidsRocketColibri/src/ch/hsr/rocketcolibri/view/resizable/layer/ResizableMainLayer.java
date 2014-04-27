@@ -2,11 +2,7 @@ package ch.hsr.rocketcolibri.view.resizable.layer;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Point;
-import android.view.Display;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;

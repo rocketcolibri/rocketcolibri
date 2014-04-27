@@ -19,7 +19,6 @@
 
 package ch.hsr.rocketcolibri.view.draggable;
 
-import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import android.content.Context;
@@ -29,10 +28,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 
 /**
  * A DragView is a special view used by a DragController. During a drag operation, what is actually moving

@@ -4,7 +4,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
-import android.opengl.GLU;
   
 public class MyGLRenderer1 implements GLSurfaceView.Renderer {
     

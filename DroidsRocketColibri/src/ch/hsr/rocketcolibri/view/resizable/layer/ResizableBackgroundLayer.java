@@ -2,11 +2,7 @@ package ch.hsr.rocketcolibri.view.resizable.layer;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.Toast;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
-import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
 
 public class ResizableBackgroundLayer extends AbsoluteLayout{
 

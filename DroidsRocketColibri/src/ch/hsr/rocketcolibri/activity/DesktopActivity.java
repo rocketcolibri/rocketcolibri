@@ -1,19 +1,14 @@
 package ch.hsr.rocketcolibri.activity;
 
-import java.io.IOException;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
-import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -24,7 +19,6 @@ import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
 import ch.hsr.rocketcolibri.menu.DesktopMenu;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
-import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
@@ -39,7 +33,7 @@ public class DesktopActivity extends RCActivity
 {
 	private static final String TAG = "CircleTestActivity";
 	private SurfaceView surface_view;
-	private Camera mCamera;
+	// private Camera mCamera;
 	SurfaceHolder.Callback sh_ob = null;
 	SurfaceHolder surface_holder = null;
 	SurfaceHolder.Callback sh_callback = null;
@@ -62,14 +56,24 @@ public class DesktopActivity extends RCActivity
 	private void updateTelemetryWidget()
 	{
 		if(null == rcService.activeuser)
-		{
-			telemetryWidget.setTelemetryData("no Operator");
-		}
+			telemetryWidget.setTelemetryData("");
 		else
-		{
 			telemetryWidget.setTelemetryData(rcService.activeuser.getName() +"(" +rcService.activeuser.getIpAddress() +")");
-		}
 	}
+
+	/**
+	 * handler TelemetryUpdate
+	 */  
+	private BroadcastReceiver mTelemetryUpdateReceiver = new BroadcastReceiver() 
+	{
+	  @Override
+	  public void onReceive(Context context, Intent intent) 
+	  {
+		updateTelemetryWidget();
+		Log.d(TAG, "mTelemetryUpdateReceiver");
+	  }
+	};
+
 	
 	/**
 	 * handler for received Intents for the state machine changes
@@ -84,66 +88,56 @@ public class DesktopActivity extends RCActivity
 	  }
 	};
 	
-	/**
-	 * handler TelemetryUpdate
-	 */  
-	private BroadcastReceiver mTelemetryUpdateReceiver = new BroadcastReceiver() 
-	{
-	  @Override
-	  public void onReceive(Context context, Intent intent) 
-	  {
-		updateTelemetryWidget();
-		Log.d(TAG, "mTelemetryUpdateReceiver");
-	  }
-	};
 
 	@Override
 	public void onResume() 
 	{
 	  super.onResume();
-	  LocalBroadcastManager.getInstance(this).registerReceiver(mProtocolStateUpdateReceiver, new IntentFilter(RocketColibriProtocol.ActionStateUpdate));
 	  LocalBroadcastManager.getInstance(this).registerReceiver(mTelemetryUpdateReceiver, new IntentFilter(RocketColibriProtocol.ActionTelemetryUpdate));
+	  LocalBroadcastManager.getInstance(this).registerReceiver(mProtocolStateUpdateReceiver, new IntentFilter(RocketColibriProtocol.ActionStateUpdate));
+
 	}
 	
 	@Override
 	protected void onPause()
 	{
-	  // Unregister since the activity is not visible
-	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mProtocolStateUpdateReceiver);
-	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mTelemetryUpdateReceiver);
 	  super.onPause();
+	  // Unregister since the activity is not visible
+	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mTelemetryUpdateReceiver);
+	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mProtocolStateUpdateReceiver);
 	}
 	
-	SurfaceHolder.Callback my_callback() {
-		SurfaceHolder.Callback ob1 = new SurfaceHolder.Callback() {
-
-			@Override
-			public void surfaceDestroyed(SurfaceHolder holder) {
-				mCamera.stopPreview();
-				mCamera.release();
-				mCamera = null;
-			}
-
-			@Override
-			public void surfaceCreated(SurfaceHolder holder) {
-				mCamera = Camera.open();
-
-				try {
-					mCamera.setPreviewDisplay(holder);
-				} catch (IOException exception) {
-					mCamera.release();
-					mCamera = null;
-				}
-			}
-
-			@Override
-			public void surfaceChanged(SurfaceHolder holder, int format,
-					int width, int height) {
-				mCamera.startPreview();
-			}
-		};
-		return ob1;
-	}
+//  TODO add video stream display here
+//	SurfaceHolder.Callback my_callback() {
+//		SurfaceHolder.Callback ob1 = new SurfaceHolder.Callback() {
+//
+//			@Override
+//			public void surfaceDestroyed(SurfaceHolder holder) {
+//				mCamera.stopPreview();
+//				mCamera.release();
+//				mCamera = null;
+//			}
+//
+//			@Override
+//			public void surfaceCreated(SurfaceHolder holder) {
+//				mCamera = Camera.open();
+//
+//				try {
+//					mCamera.setPreviewDisplay(holder);
+//				} catch (IOException exception) {
+//					mCamera.release();
+//					mCamera = null;
+//				}
+//			}
+//
+//			@Override
+//			public void surfaceChanged(SurfaceHolder holder, int format,
+//					int width, int height) {
+//				mCamera.startPreview();
+//			}
+//		};
+//		return ob1;
+//	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -160,8 +154,9 @@ public class DesktopActivity extends RCActivity
 		//there is a bug if no color is set on the surface view
 		surface_view.setBackgroundColor(Color.TRANSPARENT);
 
-		sh_callback = my_callback();
-		surface_holder.addCallback(sh_callback);
+//		TODO
+//		sh_callback = my_callback();
+//		surface_holder.addCallback(sh_callback);
 		
 
 		
