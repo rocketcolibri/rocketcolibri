@@ -21,13 +21,13 @@ public class CustomizeModusListener implements OnTouchListener{
 	private int tViewId = 0;
 	private long tStartTime;
 	private long tDuration;
-	private IDesktopViewManager tDesktopViewManger;
+	private IDesktopViewManager tDesktopViewManager;
 	private CustomizeModusPopupMenu tCustomizeModusPopup;
 	//the single tab handler
 	private SingleTabCountDown tSingleTabCountDown = new SingleTabCountDown(this, MIN_DURATION, MIN_DURATION);
 	
 	public CustomizeModusListener(IDesktopViewManager desktopViewManager, CustomizeModusPopupMenu customizeModusPopup){
-		tDesktopViewManger = desktopViewManager;
+		tDesktopViewManager = desktopViewManager;
 		tCustomizeModusPopup = customizeModusPopup;
 		tCustomizeModusPopup.setOnDismissListener(new OnDismissListener() {
 			@Override
@@ -42,7 +42,7 @@ public class CustomizeModusListener implements OnTouchListener{
 	static final int MIN_DURATION = 160;
 		
 	public boolean onTouch (View v, MotionEvent ev){
-		if (!tDesktopViewManger.isInCustomizeModus()) return false;
+		if (!tDesktopViewManager.isInCustomizeModus()) return false;
         switch(ev.getAction() & MotionEvent.ACTION_MASK)
         {
         case MotionEvent.ACTION_DOWN:
@@ -82,7 +82,7 @@ public class CustomizeModusListener implements OnTouchListener{
         return true;  
 	}
 	
-	boolean singleTab(View tabbedView){
+	boolean singleTab(View tabbedView) {
 		dismissPopupIfIsShowing();
 		tCustomizeModusPopup.setTouchedView((CustomizableView) tabbedView);
 		//TODO Issue #23 
@@ -90,18 +90,72 @@ public class CustomizeModusListener implements OnTouchListener{
 		//to place the Popup close to the tabbedView in a visible area.
 		//To get the max width and max height call tDesktopViewManager.getRootView()
 		//To get the Position Params just remove the comment from the following line.
-		//LayoutParams lp = (LayoutParams) tabbedView.getLayoutParams();
-    	tCustomizeModusPopup.showAsDropDown(tabbedView);
+		LayoutParams lp = (LayoutParams) tabbedView.getLayoutParams();
+		LayoutParams calclparam = this.calculateCoordinatesForPopup(lp);
+
+		tCustomizeModusPopup.showAtLocation(tabbedView, 3, calclparam.x, calclparam.y);
     	return true;
 	}
 	
+	private LayoutParams calculateCoordinatesForPopup(LayoutParams lparam) {
+		int iPosX = 0;
+		int iPosY = 0;
+		int iMaxHeight = tDesktopViewManager.getRootView().getMeasuredHeight();
+		int iMaxWidth = tDesktopViewManager.getRootView().getMeasuredWidth();
+		int iPopupHeight = 200; //tCustomizeModusPopup.getHeight();
+		int iPopupWidth = 240; //tCustomizeModusPopup.getWidth();
+		LayoutParams newlparam = new LayoutParams();
+
+		if ((lparam.y <= 0) && (lparam.x <= 0)){
+			iPosY = 0;
+			iPosX = lparam.x + lparam.width;
+		}
+		else {
+			if (lparam.y + iPopupHeight > iMaxHeight) {
+				iPosY = lparam.y - iPopupHeight;
+				
+				if (lparam.x + iPopupWidth > iMaxWidth) {
+					iPosX = lparam.x - iPopupWidth;
+				}
+				else {
+					if (lparam.x <= 0) {
+						iPosX = 0;
+					}
+					else {
+						iPosX = lparam.x;
+					}
+				}
+			}
+			else {
+				if (lparam.y <= 0) {
+					iPosY = 0;
+				}
+				else {
+					iPosY = lparam.y;
+				}
+
+				if (lparam.x + lparam.width + iPopupWidth > iMaxWidth) {
+					iPosX = lparam.x - iPopupWidth;
+				}
+				else {
+					iPosX = lparam.x + lparam.width;
+				}
+			}
+		}
+		
+		newlparam.x = iPosX;
+		newlparam.y = iPosY;
+
+		return newlparam;
+	}
+
 	private boolean doubleTab(View doubleTabbedView){
-		tDesktopViewManger.resizeView(doubleTabbedView);
+		tDesktopViewManager.resizeView(doubleTabbedView);
 		return true;
 	}
 	
 	private boolean longHold(View holdingView){
-		return tDesktopViewManger.dragView(holdingView);
+		return tDesktopViewManager.dragView(holdingView);
 	}
 	
 	private void dismissPopupIfIsShowing(){
@@ -114,7 +168,7 @@ public class CustomizeModusListener implements OnTouchListener{
 		tSingleTabCountDown.release();
 		tSingleTabCountDown = null;
 		tCustomizeModusPopup = null;
-		tDesktopViewManger = null;
+		tDesktopViewManager = null;
 	}
 
 }
