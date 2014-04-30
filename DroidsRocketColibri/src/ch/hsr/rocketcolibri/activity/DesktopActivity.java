@@ -215,10 +215,10 @@ public class DesktopActivity extends RCActivity
 			    view.setBackgroundColor(Color.RED);
 			    
 			    rc = new ResizeConfig();
-			    rc.keepRatio=false;
+			    rc.keepRatio=true;
 			    rc.maxHeight=900;
-			    rc.minHeight=50;
-			    rc.maxWidth=900;
+			    rc.minHeight=90;
+			    rc.maxWidth=500;
 			    rc.minWidth=50;
 			    lp = new LayoutParams(70, 70, 400, 200);
 			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
