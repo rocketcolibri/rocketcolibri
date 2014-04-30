@@ -75,7 +75,7 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
         this.tListener = listener;
         tConfig = config;
         if(tConfig.keepRatio){
-        	tRatio = tResizeTargetLP.width/tResizeTargetLP.height;
+        	tRatio = tResizeTargetLP.width / (double)tResizeTargetLP.height;
         }
     }
     
@@ -178,11 +178,11 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
         case MotionEvent.ACTION_MOVE:
             // move the balls the same as the finger
             if (tBallID > -1 && tBallID<4) {
-                if(tConfig.keepRatio){//TODO Issue #24
+                if (tConfig.keepRatio) {
                 	calculationWithRatio();
                 }else{
                 	calculationWithoutRatio();
-                }//Issue #24 end
+                }
                 invalidate();
             }
             break;
@@ -249,7 +249,7 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
     
     private void setWidthToTargetViewAndCalculateRatio(){
     	tResizeTargetLP.width = tWidth;
-    	tResizeTargetLP.height = (int) (tResizeTargetLP.width*tRatio);
+    	tResizeTargetLP.height = (int) (tResizeTargetLP.width/tRatio);
     }
     
     private void calculationWithoutRatio(){
