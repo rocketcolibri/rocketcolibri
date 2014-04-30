@@ -179,6 +179,8 @@ public class DesktopActivity extends RCActivity
 		super.onDestroy();
 	}
 	
+	//tmp var
+	boolean setupViewsOnce=true;
 	/**
 	 * Finds all the views we need and configure them to send click events to the activity.
 	 */
@@ -189,123 +191,126 @@ public class DesktopActivity extends RCActivity
 			tDesktopViewManager.createView(vec);
 		}
 		**/
-		try{
-		    ResizeConfig rc = new ResizeConfig();
-		    rc.maxHeight=745;
-		    rc.minHeight=50;
-		    rc.maxWidth=400;
-		    rc.minWidth=30;
-		    LayoutParams lp = new LayoutParams(100, 100, 50,200);
-		    ViewElementConfig elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
-		    View view = tDesktopViewManager.createView(elementConfig);
-		    view.setBackgroundColor(Color.CYAN);
-		    
-		    rc = new ResizeConfig();
-		    rc.keepRatio=false;
-		    rc.maxHeight=700;
-		    rc.minHeight=10;
-		    rc.maxWidth=900;
-		    rc.minWidth=10;
-		    lp = new LayoutParams(50, 50, 250, 200);
-		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
-		    view = tDesktopViewManager.createView(elementConfig);
-		    view.setBackgroundColor(Color.RED);
-		    
-		    rc = new ResizeConfig();
-		    rc.keepRatio=false;
-		    rc.maxHeight=900;
-		    rc.minHeight=50;
-		    rc.maxWidth=900;
-		    rc.minWidth=50;
-		    lp = new LayoutParams(70, 70, 400, 200);
-		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
-		    view = tDesktopViewManager.createView(elementConfig);
-		    view.setBackgroundColor(Color.LTGRAY);
-		    
-		    rc = new ResizeConfig();
-		    rc.keepRatio=true;
-		    rc.maxHeight=500;
-		    rc.minHeight=160;
-		    rc.maxWidth=500;
-		    rc.minWidth=160;
-		    
-		    rc = new ResizeConfig();
-		    rc.maxHeight=300;
-		    rc.minHeight=50;
-		    rc.maxWidth=800;
-		    rc.minWidth=100;
-		    lp = new LayoutParams(600, 100 , 100, 0);
-		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.TelemetryWidget", lp, rc);
-		    this.telemetryWidget = (TelemetryWidget) tDesktopViewManager.createView(elementConfig);
-		    this.telemetryWidget.setBackgroundColor(Color.CYAN);
-		    this.telemetryWidget.setAlpha((float) .5);
-		    
-		    rc = new ResizeConfig();
-		    rc.maxHeight=150;
-		    rc.minHeight=50;
-		    rc.maxWidth=150;
-		    rc.minWidth=50;
-		    lp = new LayoutParams(100, 100 , 0, 0);
-		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget", lp, rc);
-		    this.connectionStatusWidget = (ConnectionStatusWidget) tDesktopViewManager.createView(elementConfig);
-		    this.connectionStatusWidget.setAlpha(1);
-		    
-		    rc = new ResizeConfig();
-		    rc.keepRatio=true;
-		    rc.maxHeight=500;
-		    rc.minHeight=50;
-		    rc.maxWidth=500;
-		    rc.minWidth=50;
-		    lp = new LayoutParams(380, 380 , 100, 300);
-		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
-
-		    Circle circleView = (Circle) tDesktopViewManager.createView(elementConfig);
-		    circleView.setOnHChannelChangeListener(new OnChannelChangeListener ()
-			{
-				@Override
-				public void onChannelChange(int position) 
+		if(setupViewsOnce){
+			try{
+			    ResizeConfig rc = new ResizeConfig();
+			    rc.maxHeight=745;
+			    rc.minHeight=50;
+			    rc.maxWidth=400;
+			    rc.minWidth=30;
+			    LayoutParams lp = new LayoutParams(100, 100, 50,200);
+			    ViewElementConfig elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
+			    View view = tDesktopViewManager.createView(elementConfig);
+			    view.setBackgroundColor(Color.CYAN);
+			    
+			    rc = new ResizeConfig();
+			    rc.keepRatio=false;
+			    rc.maxHeight=700;
+			    rc.minHeight=10;
+			    rc.maxWidth=900;
+			    rc.minWidth=10;
+			    lp = new LayoutParams(50, 50, 250, 200);
+			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
+			    view = tDesktopViewManager.createView(elementConfig);
+			    view.setBackgroundColor(Color.RED);
+			    
+			    rc = new ResizeConfig();
+			    rc.keepRatio=false;
+			    rc.maxHeight=900;
+			    rc.minHeight=50;
+			    rc.maxWidth=900;
+			    rc.minWidth=50;
+			    lp = new LayoutParams(70, 70, 400, 200);
+			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
+			    view = tDesktopViewManager.createView(elementConfig);
+			    view.setBackgroundColor(Color.LTGRAY);
+			    
+			    rc = new ResizeConfig();
+			    rc.keepRatio=true;
+			    rc.maxHeight=500;
+			    rc.minHeight=160;
+			    rc.maxWidth=500;
+			    rc.minWidth=160;
+			    
+			    rc = new ResizeConfig();
+			    rc.maxHeight=300;
+			    rc.minHeight=50;
+			    rc.maxWidth=800;
+			    rc.minWidth=100;
+			    lp = new LayoutParams(600, 100 , 100, 0);
+			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.TelemetryWidget", lp, rc);
+			    this.telemetryWidget = (TelemetryWidget) tDesktopViewManager.createView(elementConfig);
+			    this.telemetryWidget.setBackgroundColor(Color.CYAN);
+			    this.telemetryWidget.setAlpha((float) .5);
+			    
+			    rc = new ResizeConfig();
+			    rc.maxHeight=150;
+			    rc.minHeight=50;
+			    rc.maxWidth=150;
+			    rc.minWidth=50;
+			    lp = new LayoutParams(100, 100 , 0, 0);
+			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget", lp, rc);
+			    this.connectionStatusWidget = (ConnectionStatusWidget) tDesktopViewManager.createView(elementConfig);
+			    this.connectionStatusWidget.setAlpha(1);
+			    
+			    rc = new ResizeConfig();
+			    rc.keepRatio=true;
+			    rc.maxHeight=500;
+			    rc.minHeight=50;
+			    rc.maxWidth=500;
+			    rc.minWidth=50;
+			    lp = new LayoutParams(380, 380 , 100, 300);
+			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
+	
+			    Circle circleView = (Circle) tDesktopViewManager.createView(elementConfig);
+			    circleView.setOnHChannelChangeListener(new OnChannelChangeListener ()
 				{
-					Log.d(TAG, "received new H position from meter1:" + position);
-					if (rcService != null) rcService.channel[3].setControl(position);
-				}
-			});
-		    circleView.setOnVChannelChangeListener(new OnChannelChangeListener ()
-			{
-				@Override
-				public void onChannelChange(int position) 
+					@Override
+					public void onChannelChange(int position) 
+					{
+						Log.d(TAG, "received new H position from meter1:" + position);
+						if (rcService != null) rcService.channel[3].setControl(position);
+					}
+				});
+			    circleView.setOnVChannelChangeListener(new OnChannelChangeListener ()
 				{
-					Log.d(TAG, "received new V position from meter1:" + position);
-					if (rcService != null) rcService.channel[2].setControl(position);
-				}
-			});		
+					@Override
+					public void onChannelChange(int position) 
+					{
+						Log.d(TAG, "received new V position from meter1:" + position);
+						if (rcService != null) rcService.channel[2].setControl(position);
+					}
+				});		
+			    
+			    lp = new LayoutParams(380, 380 , 600, 300);
+			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
+			    circleView = (Circle)tDesktopViewManager.createView(elementConfig);
+			    circleView.setOnHChannelChangeListener(new OnChannelChangeListener ()
+				{
+					@Override
+					public void onChannelChange(int position) 
+					{
+						Log.d(TAG, "received new H position from meter2:" + position);
+						if (rcService != null) rcService.channel[0].setControl(position);
+					}
+				});
+			    circleView.setOnVChannelChangeListener(new OnChannelChangeListener ()
+				{
+					@Override
+					public void onChannelChange(int position) 
+					{
+						Log.d(TAG, "received new V position from meter2:" + position);
+						if (rcService != null) rcService.channel[1].setControl(position);
+					}
+				});
+	
+			}catch(Exception e){
+			}
 		    
-		    lp = new LayoutParams(380, 380 , 600, 300);
-		    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
-		    circleView = (Circle)tDesktopViewManager.createView(elementConfig);
-		    circleView.setOnHChannelChangeListener(new OnChannelChangeListener ()
-			{
-				@Override
-				public void onChannelChange(int position) 
-				{
-					Log.d(TAG, "received new H position from meter2:" + position);
-					if (rcService != null) rcService.channel[0].setControl(position);
-				}
-			});
-		    circleView.setOnVChannelChangeListener(new OnChannelChangeListener ()
-			{
-				@Override
-				public void onChannelChange(int position) 
-				{
-					Log.d(TAG, "received new V position from meter2:" + position);
-					if (rcService != null) rcService.channel[1].setControl(position);
-				}
-			});
-
-		}catch(Exception e){
+		    String message = tDesktopViewManager.isInCustomizeModus() ? "Press and hold to start dragging.": "Touch a view to start dragging.";
+		    Toast.makeText (getApplicationContext(), message, Toast.LENGTH_LONG).show ();
+		    setupViewsOnce = false;
 		}
-	    
-	    String message = tDesktopViewManager.isInCustomizeModus() ? "Press and hold to start dragging.": "Touch a view to start dragging.";
-	    Toast.makeText (getApplicationContext(), message, Toast.LENGTH_LONG).show ();
 	}
 	
 	/**
