@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.2">
+  <zoom_level>6</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>516</x>
+      <y>6</y>
+      <w>138</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>WidgetDirectory
+--
+Responsibilities
+&gt; Holds a List with all available
+Widgets of the application.
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>714</x>
+      <y>6</y>
+      <w>294</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>WidgetDirectoryEntry
+--
++desciption : string
++preview : bitmap
+
+--
+Responisibities
+&gt; Describes the capabilities such as in and outputs of a Widget
+&gt; throws an exception if the creation of the widget fails
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>636</x>
+      <y>0</y>
+      <w>90</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;- 
+m1=0..*
+</panel_attributes>
+    <additional_attributes>78;18;18;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>828</x>
+      <y>108</y>
+      <w>88</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..*
+DataUiSource
+</panel_attributes>
+    <additional_attributes>48;114;48;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>678</x>
+      <y>222</y>
+      <w>258</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>WidgetAdapter
+--
+Responsibilities
+&gt; Descirption of the Parameter
+&gt; Type of the Parameter
+&gt; Range (min, max, maxlen ...) 
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>102</x>
+      <y>6</y>
+      <w>372</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>RocketColibriService
+--
++createWidget(WidgetDirectoryEntry, parameter:map) : CustomizableView
+--
+Responsibilities
+Besides many others
+&gt; Creates the WidgetDirectory with the available Widgets
+&gt; adds the available resources to the WidgetAdapter (for each widget)
+&gt; Holds a list of the currently created Widgets
+&gt; calls doUpdateUiSink if telemetry data has changed
+&gt; provides a factory method to create a widget instance from a WidgetDirectoryEntry
+&gt; provides a method to delete a widget instance
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>456</x>
+      <y>6</y>
+      <w>72</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;- 
+m1=1
+</panel_attributes>
+    <additional_attributes>60;18;18;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>306</x>
+      <y>162</y>
+      <w>138</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>CustomizableView
+--
++doUpdateUiSink
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>354</x>
+      <y>114</y>
+      <w>30</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;- 
+m1=0..*
+</panel_attributes>
+    <additional_attributes>18;48;18;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>132</x>
+      <y>114</y>
+      <w>150</w>
+      <h>228</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.
+&lt;&lt;creates&gt;&gt;</panel_attributes>
+    <additional_attributes>138;216;120;216;18;216;18;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>270</x>
+      <y>282</y>
+      <w>396</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>RCWidget
+--
+bg=red
+Responsibilities
+&gt; serves as data UI source and/or UI sink
+&gt; UI source: receives user inputs and forward data to RocketColibriService
+&gt; UI sink: on doUpdatSink: reads data from RocketColibriService and displays data to the user</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>354</x>
+      <y>228</y>
+      <w>30</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>18;18;18;54</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>210</x>
+      <y>114</y>
+      <w>72</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+</panel_attributes>
+    <additional_attributes>18;18;18;198;60;198</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>726</x>
+      <y>360</y>
+      <w>162</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>cyan: parts of the generic GUI
+library
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>0</x>
+      <y>360</y>
+      <w>156</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>red: parts of RocketColibri App
+
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.UseCase</type>
+    <coordinates>
+      <x>264</x>
+      <y>546</y>
+      <w>72</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>UI sink</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>318</x>
+      <y>546</y>
+      <w>246</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+Dislplay data to the user</panel_attributes>
+    <additional_attributes>18;30;234;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.UseCase</type>
+    <coordinates>
+      <x>264</x>
+      <y>624</y>
+      <w>72</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>UI source</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>318</x>
+      <y>624</y>
+      <w>246</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+User input</panel_attributes>
+    <additional_attributes>234;30;18;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>204</x>
+      <y>516</y>
+      <w>516</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>Data Flow
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>552</x>
+      <y>564</y>
+      <w>126</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>RocketColibriService
+--
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>192</x>
+      <y>402</y>
+      <w>144</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>Circle
+--
+bg=red
+Responsibilities
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>252</x>
+      <y>330</y>
+      <w>174</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>162;18;18;72</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>360</x>
+      <y>402</y>
+      <w>144</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>ConnectionStatus
+--
+bg=red
+Responsibilities
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>408</x>
+      <y>330</y>
+      <w>48</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>36;18;18;72</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>516</x>
+      <y>402</y>
+      <w>144</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>ConnectionStatus
+--
+bg=red
+Responsibilities
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>480</x>
+      <y>330</y>
+      <w>114</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>18;18;102;72</additional_attributes>
+  </element>
+</diagram>
