@@ -1,6 +1,7 @@
 package ch.hsr.rocketcolibri;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import ch.hsr.rocketcolibri.channel.Channel;
@@ -15,6 +16,7 @@ import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolTelemetryReceiver;
 import ch.hsr.rocketcolibri.protocol.WifiConnection;
 import ch.hsr.rocketcolibri.view.widget.RCWidget;
 import ch.hsr.rocketcolibri.widgetdirectory.IUiSinkChangeObservable;
+import ch.hsr.rocketcolibri.widgetdirectory.RCUiSinkType;
 import ch.hsr.rocketcolibri.widgetdirectory.WidgetDirectoryEntry;
 import android.app.Service;
 import android.content.Context;
@@ -38,7 +40,9 @@ public class RocketColibriService extends  Service implements IUiSinkChangeObser
 	final String TAG = this.getClass().getName();
 	public static volatile boolean running;
 	private final IBinder mBinder = new RocketColibriServiceBinder();
-	private List <RCWidget> uiSinkChangeObserver = new ArrayList<RCWidget>();
+
+	private HashMap<RCUiSinkType, List<RCWidget>> uiSinkChangeObserver;
+	
 	public static final int NOF_CHANNEL = 8;
 
 	// GUI Widget collection
@@ -52,7 +56,7 @@ public class RocketColibriService extends  Service implements IUiSinkChangeObser
 	
 	// channels
 	public Channel[] channel = {new Channel(), new Channel(), new Channel(), new Channel(), 
-			                    new Channel(), new Channel(), new Channel(), new Channel()};
+			                     new Channel(), new Channel(), new Channel(), new Channel()};
 	
 	// telemetry data
 	
@@ -74,7 +78,6 @@ public class RocketColibriService extends  Service implements IUiSinkChangeObser
 	public void onCreate() 
 	{
 		super.onCreate();
-
 		Log.d(TAG, "RocketColibriService started");
 		RocketColibriService.running = true;
 		// create a protocol instance
@@ -88,6 +91,11 @@ public class RocketColibriService extends  Service implements IUiSinkChangeObser
 		this.widgetDirectory.add(new WidgetDirectoryEntry("Cross Control", "ch.hsr.rocketcolibri.widget.Circle"));
 		this.widgetDirectory.add(new WidgetDirectoryEntry("Connection Status", "ch.hsr.rocketcolibri.widget.ConnectionStatusWidget"));
 		this.widgetDirectory.add(new WidgetDirectoryEntry("Telemetry Widget", "ch.hsr.rocketcolibri.widget.TelemetryWidget"));
+
+		// observer map
+		uiSinkChangeObserver = new HashMap<RCUiSinkType, List<RCWidget>>();
+		for (RCUiSinkType type : RCUiSinkType.values()) 
+			uiSinkChangeObserver.put(type, new ArrayList<RCWidget>());
 		
 		// create database instance
 		tRocketColibriDB = new RocketColibriDB(this);
@@ -152,22 +160,28 @@ public class RocketColibriService extends  Service implements IUiSinkChangeObser
 
     // methods for the UI sink observers 
 	@Override
-	
-
 	public void registerUiSinkChangeObserver(RCWidget observer) 
 	{
-		this.uiSinkChangeObserver.add(observer);
+		RCUiSinkType type = observer.getType();
+		if(type != RCUiSinkType.None)
+		{
+			uiSinkChangeObserver.get(type).add(observer);
+		}
 	}
 
 	@Override
 	public void unregisterUiSinkChangeObserver(RCWidget observer) 
 	{
-		this.uiSinkChangeObserver.remove(observer);
+		RCUiSinkType type = observer.getType();
+		if(type != RCUiSinkType.None)
+		{
+			this.uiSinkChangeObserver.get(type).remove(observer);
+		}
 	}
 	
-	public void notifyAllUiSinkChangeObserver()
+	public void notifyAllUiSinkChangeObserver(RCUiSinkType type)
 	{
-		for(RCWidget observer : this.uiSinkChangeObserver)
+		for(RCWidget observer : this.uiSinkChangeObserver.get(type))
 		{
 			// TODO
 			// select the right list and object depending on the type
