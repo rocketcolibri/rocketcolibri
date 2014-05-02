@@ -57,8 +57,7 @@ public class RocketColibriProtocolTelemetryReceiver
 				        	RocketColibriMessage msg = msgFactory.Create(receivePacket);
 				        	if(null != msg)
 				        	{
-				        		msg.sendChangeBroadcast(RocketColibriProtocolTelemetryReceiver.context);
-				        		msg.sendEvents(RocketColibriProtocolTelemetryReceiver.context);
+				        		msg.sendUpdateUiSinkAndSendEvents(RocketColibriProtocolTelemetryReceiver.context);
 				        	}
 				        	else
 				        	{
@@ -88,7 +87,8 @@ public class RocketColibriProtocolTelemetryReceiver
 
 
 	private void setTelemetryOffline() {
-		RocketColibriProtocolTelemetryReceiver.context.activeuser = null;
+		// TODO not set to null from here!
+		// RocketColibriProtocolTelemetryReceiver.context.users.setActiveUser(null);
 		Intent intent = new Intent(RocketColibriProtocol.ActionTelemetryUpdate);
 		LocalBroadcastManager.getInstance(RocketColibriProtocolTelemetryReceiver.context).sendBroadcast(intent);
 	}
@@ -98,7 +98,7 @@ public class RocketColibriProtocolTelemetryReceiver
 	 */
 	private void handleTimeout() 
 	{
-		if (null != RocketColibriProtocolTelemetryReceiver.context.activeuser)
+		if (null != RocketColibriProtocolTelemetryReceiver.context.users.getActiveUser())
 		{	
 			setTelemetryOffline();
 			RocketColibriProtocolTelemetryReceiver.context.protocolFsm.queue(e.E8_TIMEOUT);

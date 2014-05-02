@@ -3,6 +3,8 @@ package ch.hsr.rocketcolibri;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import ch.hsr.rocketcolibri.channel.Channel;
 import ch.hsr.rocketcolibri.db.RocketColibriDB;
@@ -18,6 +20,9 @@ import ch.hsr.rocketcolibri.view.widget.RCWidget;
 import ch.hsr.rocketcolibri.widgetdirectory.IUiSinkChangeObservable;
 import ch.hsr.rocketcolibri.widgetdirectory.RCUiSinkType;
 import ch.hsr.rocketcolibri.widgetdirectory.WidgetDirectoryEntry;
+import ch.hsr.rocketcolibri.widgetdirectory.uisinkdata.ConnectionState;
+import ch.hsr.rocketcolibri.widgetdirectory.uisinkdata.UiSinkData;
+import ch.hsr.rocketcolibri.widgetdirectory.uisinkdata.UserData;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -42,7 +47,7 @@ public class RocketColibriService extends  Service implements IUiSinkChangeObser
 	private final IBinder mBinder = new RocketColibriServiceBinder();
 
 	private HashMap<RCUiSinkType, List<RCWidget>> uiSinkChangeObserver;
-	
+	BlockingQueue<UiSinkData> uiSinkNotifyQueue;
 	public static final int NOF_CHANNEL = 8;
 
 	// GUI Widget collection
@@ -61,7 +66,9 @@ public class RocketColibriService extends  Service implements IUiSinkChangeObser
 	// telemetry data
 	
 	// active users
-	public RcOperator activeuser;
+	public UserData users;
+	public ConnectionState connState;
+	
 	
 	// video URL
 	public String videoUrl = "";
@@ -96,6 +103,10 @@ public class RocketColibriService extends  Service implements IUiSinkChangeObser
 		uiSinkChangeObserver = new HashMap<RCUiSinkType, List<RCWidget>>();
 		for (RCUiSinkType type : RCUiSinkType.values()) 
 			uiSinkChangeObserver.put(type, new ArrayList<RCWidget>());
+		
+		uiSinkNotifyQueue = new ArrayBlockingQueue<UiSinkData>(128);
+		users = new UserData(uiSinkNotifyQueue);
+		connState = new ConnectionState(uiSinkNotifyQueue);
 		
 		// create database instance
 		tRocketColibriDB = new RocketColibriDB(this);
@@ -178,14 +189,31 @@ public class RocketColibriService extends  Service implements IUiSinkChangeObser
 			this.uiSinkChangeObserver.get(type).remove(observer);
 		}
 	}
-	
-	public void notifyAllUiSinkChangeObserver(RCUiSinkType type)
+
+	/**
+	 * This is the notify thread from where all UiSink notifications are sent to the widgets
+	 * 
+	 *  TODO this may be replaced to the UI thread
+	 */
+	public class UiSinkNotifyConsumer implements Runnable
 	{
-		for(RCWidget observer : this.uiSinkChangeObserver.get(type))
-		{
-			// TODO
-			// select the right list and object depending on the type
-			observer.onNotifyUiSink(null);
-		}
+	    @Override
+	    public void run() 
+	    {
+	        try
+	        {
+	        	UiSinkData notifyData = uiSinkNotifyQueue.take();
+	        	for(RCWidget observer : uiSinkChangeObserver.get(notifyData.getType()))
+	    		{
+	    			// select the right list and object depending on the type
+	    			observer.onNotifyUiSink(notifyData);
+	    		}
+	        }
+	        catch(InterruptedException e) 
+	        {
+	            e.printStackTrace();
+	        }
+	    }
 	}
+
 }

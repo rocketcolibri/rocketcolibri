@@ -49,16 +49,18 @@ public class DesktopActivity extends RCActivity
 	private void updateConnectionStateWidget()
 	{
 		connectionStatusWidget.setConnectionState((s)rcService.protocolFsm.getState());
-		if(rcService.protocolFsm.getState() == s.DISC)
-			rcService.activeuser = null;
+
+		// TODO not set to null from here! 
+		//		if(rcService.protocolFsm.getState() == s.DISC)
+		//			rcService.users.setActiveUser(null);
 	}
 	
 	private void updateTelemetryWidget()
 	{
-		if(null == rcService.activeuser)
+		if(null == rcService.users.getActiveUser())
 			telemetryWidget.setTelemetryData("");
 		else
-			telemetryWidget.setTelemetryData(rcService.activeuser.getName() +"(" +rcService.activeuser.getIpAddress() +")");
+			telemetryWidget.setTelemetryData(rcService.users.getActiveUser().getName() +"(" +rcService.users.getActiveUser().getIpAddress() +")");
 	}
 
 	/**

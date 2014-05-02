@@ -61,7 +61,9 @@ public class DesktopMenu {
 		    {
 		    	if(null != tRcService)
 		    	{
-		    		tRcService.activeuser = null;
+		    		// TODO not set to null from here!
+		    		// tRcService.users.setActiveUser(null);
+		    		
 		    		if (isChecked) 
 		    			tRcService.wifi.Connect();
 			        else
@@ -93,10 +95,6 @@ public class DesktopMenu {
 		        
 		    }
 		});
-
-		
-		
-		
 		setServiceDependentButtonsEnabled(false);
 	}
 	

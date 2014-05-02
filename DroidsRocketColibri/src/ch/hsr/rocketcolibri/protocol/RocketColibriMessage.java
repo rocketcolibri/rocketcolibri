@@ -4,6 +4,5 @@ import ch.hsr.rocketcolibri.RocketColibriService;
 
 public class RocketColibriMessage 
 {
-	public void sendEvents(RocketColibriService service){}
-	public void sendChangeBroadcast(RocketColibriService service) {};
+	public void sendUpdateUiSinkAndSendEvents(RocketColibriService service){}
 }
