@@ -4,82 +4,37 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>516</x>
-      <y>6</y>
-      <w>138</w>
-      <h>84</h>
-    </coordinates>
-    <panel_attributes>WidgetDirectory
---
-Responsibilities
-&gt; Holds a List with all available
-Widgets of the application.
-bg=cyan</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
       <x>714</x>
       <y>6</y>
       <w>294</w>
-      <h>120</h>
+      <h>144</h>
     </coordinates>
     <panel_attributes>WidgetDirectoryEntry
 --
 +desciption : string
-+preview : bitmap
++className : string
++range : string
 
 --
 Responisibities
-&gt; Describes the capabilities such as in and outputs of a Widget
-&gt; throws an exception if the creation of the widget fails
+&gt; Describes the capabilities of a Widget class
+&gt; Lists all capabilities that are used to add a new widget.
+
 bg=cyan</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>636</x>
+      <x>456</x>
       <y>0</y>
-      <w>90</w>
+      <w>270</w>
       <h>30</h>
     </coordinates>
     <panel_attributes>lt=&lt;- 
 m1=0..*
 </panel_attributes>
-    <additional_attributes>78;18;18;18</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>828</x>
-      <y>108</y>
-      <w>88</w>
-      <h>126</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-
-m1=0..*
-DataUiSource
-</panel_attributes>
-    <additional_attributes>48;114;48;18</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>678</x>
-      <y>222</y>
-      <w>258</w>
-      <h>108</h>
-    </coordinates>
-    <panel_attributes>WidgetAdapter
---
-Responsibilities
-&gt; Descirption of the Parameter
-&gt; Type of the Parameter
-&gt; Range (min, max, maxlen ...) 
-bg=cyan</panel_attributes>
-    <additional_attributes/>
+    <additional_attributes>258;18;18;18</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
@@ -92,6 +47,8 @@ bg=cyan</panel_attributes>
     <panel_attributes>RocketColibriService
 --
 +createWidget(WidgetDirectoryEntry, parameter:map) : CustomizableView
++getWidgetDirectory : &lt;List&gt;WidgetDirectoryEntry
+
 --
 Responsibilities
 Besides many others
@@ -105,29 +62,23 @@ bg=red</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>456</x>
-      <y>6</y>
-      <w>72</w>
-      <h>30</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;- 
-m1=1
-</panel_attributes>
-    <additional_attributes>60;18;18;18</additional_attributes>
-  </element>
-  <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>306</x>
       <y>162</y>
-      <w>138</w>
+      <w>210</w>
       <h>84</h>
     </coordinates>
     <panel_attributes>CustomizableView
 --
 +doUpdateUiSink
++setSourceConfiguration(HashMap)
+
+--
+Responsibilities
+&gt; update sink method to notify changed data
+&gt; setSourceConfiguration sets the parameter
+listed in the range of the WidgetDirectoryEntry
 bg=cyan</panel_attributes>
     <additional_attributes/>
   </element>
@@ -200,8 +151,8 @@ m1=1
   <element>
     <type>com.umlet.element.Note</type>
     <coordinates>
-      <x>726</x>
-      <y>360</y>
+      <x>798</x>
+      <y>204</y>
       <w>162</w>
       <h>42</h>
     </coordinates>
@@ -304,6 +255,9 @@ User input</panel_attributes>
       <h>66</h>
     </coordinates>
     <panel_attributes>Circle
+--
+
+
 --
 bg=red
 Responsibilities

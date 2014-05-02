@@ -1,5 +1,8 @@
 package ch.hsr.rocketcolibri;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.hsr.rocketcolibri.channel.Channel;
 import ch.hsr.rocketcolibri.db.RocketColibriDB;
 import ch.hsr.rocketcolibri.db.RocketColibriDataHandler;
@@ -10,6 +13,8 @@ import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolTelemetryReceiver;
 import ch.hsr.rocketcolibri.protocol.WifiConnection;
+import ch.hsr.rocketcolibri.widgetservice.WidgetDirectory;
+import ch.hsr.rocketcolibri.widgetservice.WidgetDirectoryEntry;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -34,6 +39,9 @@ public class RocketColibriService extends  Service
 	private final IBinder mBinder = new RocketColibriServiceBinder();
 	
 	public static final int NOF_CHANNEL = 8;
+
+	// GUI Widget collection
+	List <WidgetDirectoryEntry> widgetDirectory= new ArrayList<WidgetDirectoryEntry>();
 	
 	// reference to the protocol components
 	public RocketColibriProtocolFsm protocolFsm;
@@ -75,6 +83,13 @@ public class RocketColibriService extends  Service
 		this.protocol.setChannels(channel);
 		this.wifi = new WifiConnection( (WifiManager) getSystemService(Context.WIFI_SERVICE));
 		 
+		// list all available Widgets here: 
+		this.widgetDirectory.add(new WidgetDirectoryEntry("Cross Control", "ch.hsr.rocketcolibri.widget.Circle", 
+				"{\"source\":[ {\"type\":\"Integer\", \"description\":\"H-Channel\",\"min\":1,\"max\":8},"
+	      					+ "{\"type\":\"Integer\", \"description\":\"V-Channel\",\"min\":1,\"max\":8}]}"));
+		this.widgetDirectory.add(new WidgetDirectoryEntry("Connection Status", "ch.hsr.rocketcolibri.widget.ConnectionStatusWidget"));
+		this.widgetDirectory.add(new WidgetDirectoryEntry("Telemetry Widget", "ch.hsr.rocketcolibri.widget.TelemetryWidget"));
+		
 		// create database instance
 		tRocketColibriDB = new RocketColibriDB(this);
 		try {
@@ -83,6 +98,8 @@ public class RocketColibriService extends  Service
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		
    }
 	 
     @Override
