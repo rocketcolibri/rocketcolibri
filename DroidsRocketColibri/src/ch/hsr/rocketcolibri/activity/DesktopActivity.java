@@ -285,6 +285,7 @@ public class DesktopActivity extends RCActivity
 			    lp = new LayoutParams(380, 380 , 600, 300);
 			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
 			    circleView = (Circle)tDesktopViewManager.createView(elementConfig);
+			    
 			    circleView.setOnHChannelChangeListener(new OnChannelChangeListener ()
 				{
 					@Override

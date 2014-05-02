@@ -14,13 +14,15 @@ import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
+import ch.hsr.rocketcolibri.widgetdirectory.RCUiSinkType;
+
 
 /**
  * @short widget to display the connection status received from the ServoController
  * 
  *  The status of the connection is indicated with a icon according to the Systemschnittstellen document 
  */
-public class ConnectionStatusWidget extends CustomizableView 
+public class ConnectionStatusWidget extends RCWidget
 {
 	private RectF connectionIconRect;
 	private Paint connectionIconPaint;
@@ -87,5 +89,17 @@ public class ConnectionStatusWidget extends CustomizableView
 		connectionIconPaint.setShader(paperShader);
 		postInvalidate();
 		
+	}
+
+	@Override
+	public void onNotifyUiSink(Object p) 
+	{
+		// TODO Auto-generated method stub
+	}
+	
+	@Override
+	public RCUiSinkType getType()
+	{
+		return RCUiSinkType.ConnectionState;
 	}
 }

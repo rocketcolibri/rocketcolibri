@@ -13,8 +13,9 @@ import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolTelemetryReceiver;
 import ch.hsr.rocketcolibri.protocol.WifiConnection;
-import ch.hsr.rocketcolibri.widgetservice.WidgetDirectory;
-import ch.hsr.rocketcolibri.widgetservice.WidgetDirectoryEntry;
+import ch.hsr.rocketcolibri.view.widget.RCWidget;
+import ch.hsr.rocketcolibri.widgetdirectory.IUiSinkChangeObservable;
+import ch.hsr.rocketcolibri.widgetdirectory.WidgetDirectoryEntry;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -32,12 +33,12 @@ import android.util.Log;
  * - holds DBService object
  *   
  */
-public class RocketColibriService extends  Service 
+public class RocketColibriService extends  Service implements IUiSinkChangeObservable
 {
 	final String TAG = this.getClass().getName();
 	public static volatile boolean running;
 	private final IBinder mBinder = new RocketColibriServiceBinder();
-	
+	private List <RCWidget> uiSinkChangeObserver = new ArrayList<RCWidget>();
 	public static final int NOF_CHANNEL = 8;
 
 	// GUI Widget collection
@@ -84,9 +85,7 @@ public class RocketColibriService extends  Service
 		this.wifi = new WifiConnection( (WifiManager) getSystemService(Context.WIFI_SERVICE));
 		 
 		// list all available Widgets here: 
-		this.widgetDirectory.add(new WidgetDirectoryEntry("Cross Control", "ch.hsr.rocketcolibri.widget.Circle", 
-				"{\"source\":[ {\"type\":\"Integer\", \"description\":\"H-Channel\",\"min\":1,\"max\":8},"
-	      					+ "{\"type\":\"Integer\", \"description\":\"V-Channel\",\"min\":1,\"max\":8}]}"));
+		this.widgetDirectory.add(new WidgetDirectoryEntry("Cross Control", "ch.hsr.rocketcolibri.widget.Circle"));
 		this.widgetDirectory.add(new WidgetDirectoryEntry("Connection Status", "ch.hsr.rocketcolibri.widget.ConnectionStatusWidget"));
 		this.widgetDirectory.add(new WidgetDirectoryEntry("Telemetry Widget", "ch.hsr.rocketcolibri.widget.TelemetryWidget"));
 		
@@ -97,9 +96,7 @@ public class RocketColibriService extends  Service
 			new RocketColibriDataHandler(this, tRocketColibriDB);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		
-		
+		}	
    }
 	 
     @Override
@@ -152,4 +149,29 @@ public class RocketColibriService extends  Service
             return RocketColibriService.this;
         }
     }
+
+    // methods for the UI sink observers 
+	@Override
+	
+
+	public void registerUiSinkChangeObserver(RCWidget observer) 
+	{
+		this.uiSinkChangeObserver.add(observer);
+	}
+
+	@Override
+	public void unregisterUiSinkChangeObserver(RCWidget observer) 
+	{
+		this.uiSinkChangeObserver.remove(observer);
+	}
+	
+	public void notifyAllUiSinkChangeObserver()
+	{
+		for(RCWidget observer : this.uiSinkChangeObserver)
+		{
+			// TODO
+			// select the right list and object depending on the type
+			observer.onNotifyUiSink(null);
+		}
+	}
 }

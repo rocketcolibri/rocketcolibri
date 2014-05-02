@@ -27,7 +27,8 @@ import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.content.res.TypedArray;
 
-public final class Circle extends CustomizableView {
+public final class Circle extends RCWidget
+{
 
 //	private static final String TAG = Circle.class.getSimpleName();
 	private RectF rimRect;
@@ -330,9 +331,11 @@ public final class Circle extends CustomizableView {
 		super.onDraw(canvas);
 	}
 
-//	@Override
-//	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-//		Log.d(TAG, "Size changed to " + w + "x" + h);
-//	}
+
+	@Override
+	public int getNumberOfChannelListener() 
+	{
+		return 2; 
+	}
 	
 }
