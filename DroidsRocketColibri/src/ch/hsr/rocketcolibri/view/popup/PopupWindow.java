@@ -26,6 +26,7 @@ import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -34,6 +35,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.ViewTreeObserver.OnScrollChangedListener;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -119,6 +121,7 @@ public class PopupWindow {
     
     private OnDismissListener mOnDismissListener;
     private boolean mIgnoreCheekPress = false;
+    private AbsoluteLayout.LayoutParams tLayoutParams;
 
     private int mAnimationStyle = -1;
     
@@ -294,11 +297,9 @@ public class PopupWindow {
      * @param focusable true if the popup can be focused, false otherwise
      */
     public PopupWindow(AbsoluteLayout parent, View contentView, int width, int height, boolean focusable) {
-        if (contentView != null) {
-            mContext = contentView.getContext();
+        mContext = contentView.getContext();
 //            mWindowManager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-            mWindowManager = parent;
-        }
+        mWindowManager = parent;
         View view = ((Activity)mContext).getWindow().getDecorView().findViewById(android.R.id.content);
         view.setOnClickListener(new OnClickListener() {
 			@Override
@@ -306,9 +307,11 @@ public class PopupWindow {
 				dismiss();
 			}
 		});
+        tLayoutParams = createPopupLayout(null);
         setContentView(contentView);
-        setWidth(width);
-        setHeight(height);
+        contentView.measure(width, height);
+        setWidth(contentView.getMeasuredWidth());
+        setHeight(contentView.getMeasuredHeight());
         setFocusable(focusable);
     }
 
@@ -752,6 +755,8 @@ public class PopupWindow {
      * @see #isShowing() 
      */
     public void setHeight(int height) {
+    	Log.d("setHeight", ""+height);
+    	tLayoutParams.height = height;
         mHeight = height;
     }
 
@@ -778,6 +783,8 @@ public class PopupWindow {
      * @see #isShowing()
      */
     public void setWidth(int width) {
+    	Log.d("setWidth", ""+width);
+    	tLayoutParams.width = width;
         mWidth = width;
     }
 
@@ -842,6 +849,16 @@ public class PopupWindow {
      */
     public void showAsDropDown(View anchor) {
         showAsDropDown(anchor, 0, 0);
+    }
+    
+    public void showAtBestPosition(View anchor){
+        if (isShowing() || mContentView == null) {
+            return;
+        }
+        mIsShowing = true;
+        mIsDropdown = true;
+        findPosition(anchor);
+        mWindowManager.addView(mContentView, tLayoutParams);
     }
 
     /**
@@ -1057,6 +1074,23 @@ public class PopupWindow {
         return mAnimationStyle;
     }
     
+    private void findPosition(View anchor){
+    	int targetPos = 0;
+        if((targetPos=anchor.getTop()-getHeight())>=0 && anchor.getRight()+getWidth()<=mWindowManager.getWidth()){//top
+        	tLayoutParams.x = (int) anchor.getX();
+        	tLayoutParams.y = targetPos;
+        }else if(anchor.getRight()+getWidth()<=mWindowManager.getWidth()){//right
+        	tLayoutParams.y = (int) anchor.getY();
+        	tLayoutParams.x = anchor.getRight();
+        }else if(anchor.getBottom()+getHeight()<=mWindowManager.getHeight() && anchor.getRight()+getWidth()<=mWindowManager.getWidth()){//bottom
+        	tLayoutParams.x = (int) anchor.getX();
+        	tLayoutParams.y = anchor.getBottom();
+        }else if((targetPos=anchor.getLeft()-getWidth())>=0){//left
+        	tLayoutParams.y = (int) anchor.getY();
+        	tLayoutParams.x = targetPos;
+        }
+    }
+    
     /**
      * <p>Positions the popup window on screen. When the popup window is too
      * tall to fit under the anchor, a parent scroll view is seeked and scrolled
@@ -1087,6 +1121,9 @@ public class PopupWindow {
         anchor.getWindowVisibleDisplayFrame(displayFrame);
         
         final View root = anchor.getRootView();
+
+        Log.d("mPopupHeight", ""+mHeight);
+        Log.d("mPopupWidth", ""+mWidth);
         if (p.y + mPopupHeight > displayFrame.bottom || p.x + mPopupWidth - root.getWidth() > 0) {
             // if the drop down disappears at the bottom of the screen. we try to
             // scroll a parent scrollview or move the drop down back up on top of
@@ -1224,23 +1261,32 @@ public class PopupWindow {
      * @see #showAsDropDown(android.view.View) 
      */
     public void dismiss() {
-        if (isShowing() && mPopupView != null) {
-            unregisterForScrollChanged();
-
-            try {
-                mWindowManager.removeView(mPopupView);                
-            } finally {
-                if (mPopupView != mContentView && mPopupView instanceof ViewGroup) {
-                    ((ViewGroup) mPopupView).removeView(mContentView);
-                }
-                mPopupView = null;
-                mIsShowing = false;
-    
-                if (mOnDismissListener != null) {
-                    mOnDismissListener.onDismiss();
-                }
-            }
-        }
+    	if(isShowing()){
+	        mIsShowing = false;
+	        mWindowManager.removeView(mContentView); 
+	        if (mOnDismissListener != null) {
+	            mOnDismissListener.onDismiss();
+	        }
+    	}
+    	
+    	
+//        if (isShowing() && mPopupView != null) {
+//            unregisterForScrollChanged();
+//
+//            try {
+//                mWindowManager.removeView(mPopupView);                
+//            } finally {
+//                if (mPopupView != mContentView && mPopupView instanceof ViewGroup) {
+//                    ((ViewGroup) mPopupView).removeView(mContentView);
+//                }
+//                mPopupView = null;
+//                mIsShowing = false;
+//    
+//                if (mOnDismissListener != null) {
+//                    mOnDismissListener.onDismiss();
+//                }
+//            }
+//        }
     }
 
     /**

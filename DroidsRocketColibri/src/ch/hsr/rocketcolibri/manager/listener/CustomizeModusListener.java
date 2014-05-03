@@ -85,70 +85,10 @@ public class CustomizeModusListener implements OnTouchListener{
 	boolean singleTab(View tabbedView) {
 		dismissPopupIfIsShowing();
 		tCustomizeModusPopup.setTouchedView((CustomizableView) tabbedView);
-		//TODO Issue #23 
-		//replace showAsDropDown with showAtLocation(parent, gravity, x, y)
-		//to place the Popup close to the tabbedView in a visible area.
-		//To get the max width and max height call tDesktopViewManager.getRootView()
-		//To get the Position Params just remove the comment from the following line.
-		LayoutParams lp = (LayoutParams) tabbedView.getLayoutParams();
-		LayoutParams calclparam = this.calculateCoordinatesForPopup(lp);
-
-		tCustomizeModusPopup.showAtLocation(tabbedView, 3, calclparam.x, calclparam.y);
+		tCustomizeModusPopup.showAtBestPosition(tabbedView);
     	return true;
 	}
 	
-	private LayoutParams calculateCoordinatesForPopup(LayoutParams lparam) {
-		int iPosX = 0;
-		int iPosY = 0;
-		int iMaxHeight = tDesktopViewManager.getRootView().getMeasuredHeight();
-		int iMaxWidth = tDesktopViewManager.getRootView().getMeasuredWidth();
-		int iPopupHeight = 200; //tCustomizeModusPopup.getHeight();
-		int iPopupWidth = 240; //tCustomizeModusPopup.getWidth();
-		LayoutParams newlparam = new LayoutParams();
-
-		if ((lparam.y <= 0) && (lparam.x <= 0)){
-			iPosY = 0;
-			iPosX = lparam.x + lparam.width;
-		}
-		else {
-			if (lparam.y + iPopupHeight > iMaxHeight) {
-				iPosY = lparam.y - iPopupHeight;
-				
-				if (lparam.x + iPopupWidth > iMaxWidth) {
-					iPosX = lparam.x - iPopupWidth;
-				}
-				else {
-					if (lparam.x <= 0) {
-						iPosX = 0;
-					}
-					else {
-						iPosX = lparam.x;
-					}
-				}
-			}
-			else {
-				if (lparam.y <= 0) {
-					iPosY = 0;
-				}
-				else {
-					iPosY = lparam.y;
-				}
-
-				if (lparam.x + lparam.width + iPopupWidth > iMaxWidth) {
-					iPosX = lparam.x - iPopupWidth;
-				}
-				else {
-					iPosX = lparam.x + lparam.width;
-				}
-			}
-		}
-		
-		newlparam.x = iPosX;
-		newlparam.y = iPosY;
-
-		return newlparam;
-	}
-
 	private boolean doubleTab(View doubleTabbedView){
 		tDesktopViewManager.resizeView(doubleTabbedView);
 		return true;
