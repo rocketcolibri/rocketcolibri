@@ -8,4 +8,8 @@
     <string name="menu_action_main_wifi">Set Wifi Mode</string>
     <string name="menu_action_main_settings">Switch GUI between Configure and Fix</string>
     <string name="menu_action_main_mode">Switch mode between Operate and Observe</string>
+
+    <!-- Popup menu entries -->
+    <string name="popup_menu_edit_channel">Edit channel</string>
+    <string name="popup_menu_resize_element">Resize element</string>
 </resources>
