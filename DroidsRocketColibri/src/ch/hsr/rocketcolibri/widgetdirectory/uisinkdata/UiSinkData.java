@@ -1,37 +1,25 @@
 package ch.hsr.rocketcolibri.widgetdirectory.uisinkdata;
-
-import java.util.concurrent.BlockingQueue;
-
 import ch.hsr.rocketcolibri.widgetdirectory.RCUiSinkType;
 
 public class UiSinkData
 {
+	protected boolean doNotify;
 	protected RCUiSinkType type = RCUiSinkType.None;
-	
-	BlockingQueue<UiSinkData> queue;
-	public UiSinkData(BlockingQueue<UiSinkData>queue)
-	{
-		this.queue = queue;
-		type = RCUiSinkType.ConnectedUsers;
-	}
 		
-	public void notifyThis()
+	protected void notifyThis()
 	{
-		if(null != this.queue)
-		{
-			try 
-			{	
-				this.queue.put(this);
-			}
-			catch (InterruptedException e) 
-			{
-				e.printStackTrace();
-			}
-		}
+		doNotify = true;
 	}
 	
 	public RCUiSinkType getType()
 	{
 		return this.type;
+	}
+	
+	public boolean getAndResetNotifyFlag()
+	{
+		boolean retval = doNotify; 
+		doNotify = false;
+		return retval;
 	}
 }
