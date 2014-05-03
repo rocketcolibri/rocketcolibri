@@ -6,13 +6,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
-import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
+import ch.hsr.rocketcolibri.widgetdirectory.RCUiSinkType;
+import ch.hsr.rocketcolibri.widgetdirectory.uisinkdata.UserData;
 
 /**
  * @short widget to display the telemetry data received from the ServoController 
  */
-public class TelemetryWidget extends CustomizableView 
+public class TelemetryWidget extends RCWidget 
 {
 	private String mDisplayText = "";
 	private Paint mTextPaint;
@@ -63,10 +64,26 @@ public class TelemetryWidget extends CustomizableView
 		super.onDraw(canvas);
 	}
 	
-	public void setTelemetryData(String telemetryData)
+	private void setTelemetryData(String telemetryData)
 	{
 		mDisplayText = telemetryData;
 		Log.d("TelemetryWidget", mDisplayText);
 		postInvalidate();
+	}
+	
+	@Override
+	public void onNotifyUiSink(Object p) 
+	{
+		UserData data = (UserData)p;
+		if(null != data.getActiveUser())
+			setTelemetryData(data.getActiveUser().getName() +"("+ data.getActiveUser().getIpAddress() +")");
+		else
+			setTelemetryData("");
+	}
+	
+	@Override
+	public RCUiSinkType getType()
+	{
+		return RCUiSinkType.ConnectedUsers;
 	}
 }
