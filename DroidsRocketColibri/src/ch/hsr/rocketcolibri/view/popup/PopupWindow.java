@@ -755,7 +755,6 @@ public class PopupWindow {
      * @see #isShowing() 
      */
     public void setHeight(int height) {
-    	Log.d("setHeight", ""+height);
     	tLayoutParams.height = height;
         mHeight = height;
     }
@@ -783,7 +782,6 @@ public class PopupWindow {
      * @see #isShowing()
      */
     public void setWidth(int width) {
-    	Log.d("setWidth", ""+width);
     	tLayoutParams.width = width;
         mWidth = width;
     }
