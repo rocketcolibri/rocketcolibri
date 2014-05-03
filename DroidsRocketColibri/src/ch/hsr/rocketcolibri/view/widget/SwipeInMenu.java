@@ -1,18 +1,24 @@
 package ch.hsr.rocketcolibri.view.widget;
 
-
 import ch.hsr.rocketcolibri.R;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.*;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.ScaleAnimation;
 
 /**
  * SwipeInMenu is a copy of SlidingTray (http://aniqroid.sileria.com/doc/api/com/sileria/android/view/SlidingTray.html)
@@ -86,34 +92,37 @@ public class SwipeInMenu extends ViewGroup {
 	private static final int VELOCITY_UNITS           = 1000;
 	private static final int MSG_ANIMATE              = 1000;
 	private static final int ANIMATION_FRAME_DURATION = 1000 / 60;
-
+	
 	private static final int EXPANDED_FULL_OPEN       = -10001;
 	private static final int COLLAPSED_FULL_CLOSED    = -10002;
 
-	private final int mHandleId;
-	private final int mContentId;
+	private final float tDensityScale;
+	private final int tHeadId;
+	private final int tContentId;
 
-	private View mHandle;
-	private View mContent;
+	private View tHead;
+	private View tContent;
+	private float tHeadDefaultAlpha;
 
-	private final Rect mFrame = new Rect();
-	private final Rect mInvalidate = new Rect();
+	private final Rect tFrame = new Rect();
+	private final Rect tRegion = new Rect();
 	private boolean mTracking;
 	private boolean mLocked;
 
 	private VelocityTracker mVelocityTracker;
 
-	private Orientation mOrientation;
+	private Orientation tOrientation;
 	private Side mHandlePos;
-	private boolean mVertical;
+	private boolean tVertical;
 	private boolean mInvert;
 
-	private boolean mExpanded;
+	private boolean tIsOpen;
 	private int mBottomOffset;
 	private int mTopOffset;
-	private int mHandleHeight;
-	private int mHandleWidth;
 	private int mHandlePad;
+	
+	private int tScreenHeight;
+	private int tScreenWidth;
 
 	private OnDrawerOpenListener mOnDrawerOpenListener;
 	private OnDrawerCloseListener mOnDrawerCloseListener;
@@ -127,15 +136,16 @@ public class SwipeInMenu extends ViewGroup {
 	private long mCurrentAnimationTime;
 	private int mTouchDelta;
 	private boolean mAnimating;
+	private int tLastPosition;
 	private boolean mAllowSingleTap = true;
 	private boolean mAnimateOnClick = true;
 
-	private final int mTapThreshold;
-	private final int mMaximumTapVelocity;
-	private final int mMaximumMinorVelocity;
-	private final int mMaximumMajorVelocity;
-	private final int mMaximumAcceleration;
-	private final int mVelocityUnits;
+	private int mTapThreshold;
+	private int mMaximumTapVelocity;
+	private int mMaximumMinorVelocity;
+	private int mMaximumMajorVelocity;
+	private int mMaximumAcceleration;
+	private int mVelocityUnits;
 
 	/**
 	 * Construct a <code>SwipeInMenu</code> object programmatically with the specified
@@ -148,30 +158,24 @@ public class SwipeInMenu extends ViewGroup {
 	 */
 	public SwipeInMenu(Context context, View handle, View content, Orientation orientation) {
 		super( context );
-
+		tDensityScale = context.getResources().getDisplayMetrics().density;
 		// handle
 		if (handle == null)
 			throw new NullPointerException("Handle cannot be null.");
-		addView( mHandle = handle );
-		mHandle.setOnClickListener(new DrawerToggler());
+		addView( tHead = handle );
+		tHead.setOnClickListener(new DrawerToggler());
 
 		// content
 		if (content == null)
 			throw new IllegalArgumentException("Content cannot be null.");
-		addView( mContent = content );
-		mContent.setVisibility(View.GONE);
+		addView( tContent = content );
+		tContent.setVisibility(View.GONE);
 
-		mHandleId = mContentId = 0;
+		tHeadId = tContentId = 0;
 
 		setOrientation(orientation);
 
-		final float density = getResources().getDisplayMetrics().density;
-		mTapThreshold = (int) (TAP_THRESHOLD * density + 0.5f);
-		mMaximumTapVelocity = (int) (MAXIMUM_TAP_VELOCITY * density + 0.5f);
-		mMaximumMinorVelocity = (int) (MAXIMUM_MINOR_VELOCITY * density + 0.5f);
-		mMaximumMajorVelocity = (int) (MAXIMUM_MAJOR_VELOCITY * density + 0.5f);
-		mMaximumAcceleration = (int) (MAXIMUM_ACCELERATION * density + 0.5f);
-		mVelocityUnits = (int) (VELOCITY_UNITS * density + 0.5f);
+		setVelocityAndThreshold();
 	}
 
 	/**
@@ -193,9 +197,10 @@ public class SwipeInMenu extends ViewGroup {
 	 */
 	public SwipeInMenu(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
+		tDensityScale = context.getResources().getDisplayMetrics().density;
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SwipeInMenu, defStyle, 0);
 
-		int orientation = a.getInteger(R.styleable.SwipeInMenu_orientation,Orientation.TOP.value);
+		int orientation = a.getInteger(R.styleable.SwipeInMenu_orientation,Orientation.TOP.ordinal());
 		setOrientation(Orientation.getByValue(orientation));
 		mHandlePos = Side.getByValue(orientation);
 		mBottomOffset = (int) a.getDimension(R.styleable.SwipeInMenu_bottomOffset, 0.0f);
@@ -221,9 +226,17 @@ public class SwipeInMenu extends ViewGroup {
 					+ "to different children.");
 		}
 
-		mHandleId = handleId;
-		mContentId = contentId;
+		tHeadId = handleId;
+		tContentId = contentId;
 
+		setVelocityAndThreshold();
+
+//        a.recycle();
+
+		setAlwaysDrawnWithCacheEnabled(false);
+	}
+	
+	private void setVelocityAndThreshold(){
 		final float density = getResources().getDisplayMetrics().density;
 		mTapThreshold = (int) (TAP_THRESHOLD * density + 0.5f);
 		mMaximumTapVelocity = (int) (MAXIMUM_TAP_VELOCITY * density + 0.5f);
@@ -231,17 +244,13 @@ public class SwipeInMenu extends ViewGroup {
 		mMaximumMajorVelocity = (int) (MAXIMUM_MAJOR_VELOCITY * density + 0.5f);
 		mMaximumAcceleration = (int) (MAXIMUM_ACCELERATION * density + 0.5f);
 		mVelocityUnits = (int) (VELOCITY_UNITS * density + 0.5f);
-
-//        a.recycle();
-
-		setAlwaysDrawnWithCacheEnabled(false);
 	}
 
 	/**
 	 * Get the current orientation of this sliding tray.
 	 */
 	public Orientation getOrientation () {
-		return mOrientation;
+		return tOrientation;
 	}
 
 	/**
@@ -252,10 +261,10 @@ public class SwipeInMenu extends ViewGroup {
 	 * @param orientation orientation of the sliding tray.
 	 */
 	public void setOrientation (Orientation orientation) {
-		mOrientation = orientation;
+		tOrientation = orientation;
 
-		mVertical = mOrientation == Orientation.BOTTOM || mOrientation == Orientation.TOP;
-		mInvert = mOrientation == Orientation.LEFT || mOrientation == Orientation.TOP;
+		tVertical = tOrientation == Orientation.BOTTOM || tOrientation == Orientation.TOP;
+		mInvert = tOrientation == Orientation.LEFT || tOrientation == Orientation.TOP;
 
 		requestLayout();
 		invalidate();
@@ -298,20 +307,22 @@ public class SwipeInMenu extends ViewGroup {
 
 	@Override
 	protected void onFinishInflate() {
-		if (mHandleId > 0) {
-			mHandle = findViewById(mHandleId);
-			if (mHandle == null) {
+		if (tHeadId > 0) {
+			tHead = findViewById(tHeadId);
+			if (tHead == null) {
 				throw new IllegalArgumentException("The handle attribute is must refer to an existing child.");
 			}
-			mHandle.setOnClickListener(new DrawerToggler());
+			tHead.setOnClickListener(new DrawerToggler());
+			tHeadDefaultAlpha = tHead.getAlpha();
+			createHeadAnimations();
 		}
 
-		if (mContentId > 0) {
-			mContent = findViewById(mContentId);
-			if (mContent == null) {
+		if (tContentId > 0) {
+			tContent = findViewById(tContentId);
+			if (tContent == null) {
 				throw new IllegalArgumentException("The content attribute is must refer to an existing child.");
 			}
-			mContent.setVisibility(View.GONE);
+			tContent.setVisibility(View.GONE);
 		}
 	}
 
@@ -327,57 +338,54 @@ public class SwipeInMenu extends ViewGroup {
 			throw new RuntimeException("SlidingDrawer cannot have UNSPECIFIED dimensions");
 		}
 
-		final View handle = mHandle;
-		measureChild(handle, widthMeasureSpec, heightMeasureSpec);
+		measureChild(tHead, widthMeasureSpec, heightMeasureSpec);
 
-		if (mVertical) {
-			int height = heightSpecSize - handle.getMeasuredHeight() - mTopOffset;
-			mContent.measure(MeasureSpec.makeMeasureSpec(widthSpecSize, MeasureSpec.EXACTLY),
+		if (tVertical) {
+			int height = heightSpecSize - tHead.getMeasuredHeight() - mTopOffset;
+			tContent.measure(MeasureSpec.makeMeasureSpec(widthSpecSize, MeasureSpec.EXACTLY),
 					MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
 		} else {
-			int width = widthSpecSize - handle.getMeasuredWidth() - mTopOffset;
-			mContent.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+			int width = widthSpecSize - tHead.getMeasuredWidth() - mTopOffset;
+			tContent.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
 					MeasureSpec.makeMeasureSpec(heightSpecSize, MeasureSpec.EXACTLY));
 		}
 
 		setMeasuredDimension(widthSpecSize, heightSpecSize);
+		tScreenHeight = ((View)getParent()).getHeight();
+		tScreenWidth = ((View)getParent()).getWidth();
+
 	}
 
 	@Override
 	protected void dispatchDraw (Canvas canvas) {
 		final long drawingTime = getDrawingTime();
-		final View handle = mHandle;
-		final Orientation orientation = mOrientation;
-
-		drawChild(canvas, handle, drawingTime);
+		drawChild(canvas, tHead, drawingTime);
 
 		if (mTracking || mAnimating) {
-			final Bitmap cache = mContent.getDrawingCache();
+			final Bitmap cache = tContent.getDrawingCache();
 			if (cache != null) {
 				// called when opening
-
-				switch (orientation) {
-					case TOP:    canvas.drawBitmap(cache, 0, handle.getTop()-cache.getHeight(), null); break;
-					case LEFT:   canvas.drawBitmap(cache, handle.getLeft()-cache.getWidth(), 0, null); break;
-					case BOTTOM: canvas.drawBitmap(cache, 0, handle.getBottom(), null); break;
-					case RIGHT:  canvas.drawBitmap(cache, handle.getRight(), 0, null);  break;
+				switch (tOrientation) {
+					case TOP:    canvas.drawBitmap(cache, 0, tHead.getTop()-cache.getHeight(), null); break;
+					case LEFT:   canvas.drawBitmap(cache, tHead.getLeft()-cache.getWidth(), 0, null); break;
+					case BOTTOM: canvas.drawBitmap(cache, 0, tHead.getBottom(), null); break;
+					case RIGHT:  canvas.drawBitmap(cache, tHead.getRight(), 0, null);  break;
 				}
 			}
 			else {
 				// called when closing
 				canvas.save();
-				switch (orientation) {
-					case TOP:    canvas.translate(0, handle.getTop() - mContent.getHeight() );  break;
-					case LEFT:   canvas.translate( handle.getLeft() - mContent.getWidth(), 0);   break;
-					case BOTTOM: canvas.translate(0, handle.getTop() - mTopOffset );    break;
-					case RIGHT:  canvas.translate(handle.getLeft() - mTopOffset, 0);    break;
+				switch (tOrientation) {
+					case TOP:    canvas.translate(0, tHead.getTop() - tContent.getHeight() );  break;
+					case LEFT:   canvas.translate( tHead.getLeft() - tContent.getWidth(), 0);   break;
+					case BOTTOM: canvas.translate(0, tHead.getTop() - mTopOffset );    break;
+					case RIGHT:  canvas.translate(tHead.getLeft() - mTopOffset, 0);    break;
 				}
-				drawChild(canvas, mContent, drawingTime);
+				drawChild(canvas, tContent, drawingTime);
 				canvas.restore();
 			}
-		}
-		else if (mExpanded) {
-			drawChild(canvas, mContent, drawingTime);
+		}else if (tIsOpen) {
+			drawChild(canvas, tContent, drawingTime);
 		}
 	}
 
@@ -390,18 +398,13 @@ public class SwipeInMenu extends ViewGroup {
 		final int width = r - l;
 		final int height = b - t;
 
-		final View handle = mHandle;
-
-		int childWidth = handle.getMeasuredWidth();
-		int childHeight = handle.getMeasuredHeight();
+		int childWidth = tHead.getMeasuredWidth();
+		int childHeight = tHead.getMeasuredHeight();
 
 		int childLeft = 0;
 		int childTop  = 0;
 
-		final View content = mContent;
-
-
-		switch (mOrientation) {
+		switch (tOrientation) {
 
 			case TOP:
 				switch (mHandlePos) {
@@ -409,10 +412,10 @@ public class SwipeInMenu extends ViewGroup {
 					case RIGHT:	childLeft = width - childWidth - mHandlePad; break;
 					default:	childLeft = (width - childWidth) / 2; break;
 				}
-				childTop = mExpanded ? height - childHeight - mTopOffset: -mBottomOffset;
+				childTop = tIsOpen ? height - childHeight - mTopOffset: -mBottomOffset;
 
-				content.layout(0, height - childHeight - mTopOffset - content.getMeasuredHeight(),
-						content.getMeasuredWidth(), height - childHeight - mTopOffset );
+				tContent.layout(0, height - childHeight - mTopOffset - tContent.getMeasuredHeight(),
+						tContent.getMeasuredWidth(), height - childHeight - mTopOffset );
 				break;
 
 			case BOTTOM:
@@ -421,41 +424,39 @@ public class SwipeInMenu extends ViewGroup {
 					case RIGHT:	childLeft = width - childWidth - mHandlePad; break;
 					default:	childLeft = (width - childWidth) / 2; break;
 				}
-				childTop = mExpanded ? mTopOffset : height - childHeight + mBottomOffset;
+				childTop = tIsOpen ? mTopOffset : height - childHeight + mBottomOffset;
 
-				content.layout(0, mTopOffset + childHeight, content.getMeasuredWidth(),
-						mTopOffset + childHeight + content.getMeasuredHeight());
+				tContent.layout(0, mTopOffset + childHeight, tContent.getMeasuredWidth(),
+						mTopOffset + childHeight + tContent.getMeasuredHeight());
 				break;
 
 			case RIGHT:
-				childLeft = mExpanded ? mTopOffset : width - childWidth + mBottomOffset;
+				childLeft = tIsOpen ? mTopOffset : width - childWidth + mBottomOffset;
 				switch (mHandlePos) {
 					case TOP:	 childTop = mHandlePad; break;
 					case BOTTOM: childTop = height - childHeight - mHandlePad; break;
 					default:	 childTop = (height - childHeight) / 2; break;
 				}
 
-				content.layout( mTopOffset + childWidth, 0,
-						mTopOffset + childWidth + content.getMeasuredWidth(),
-						content.getMeasuredHeight());
+				tContent.layout( mTopOffset + childWidth, 0,
+						mTopOffset + childWidth + tContent.getMeasuredWidth(),
+						tContent.getMeasuredHeight());
 				break;
 
 			case LEFT:
-				childLeft = mExpanded ? width - childWidth - mTopOffset: -mBottomOffset;
+				childLeft = tIsOpen ? width - childWidth - mTopOffset: -mBottomOffset;
 				switch (mHandlePos) {
 					case TOP:	 childTop = mHandlePad; break;
 					case BOTTOM: childTop = height - childHeight - mHandlePad; break;
 					default:	 childTop = (height - childHeight) / 2; break;
 				}
 
-				content.layout( width - childWidth - mTopOffset - content.getMeasuredWidth(), 0,
-						width - childWidth - mTopOffset, content.getMeasuredHeight());
+				tContent.layout( width - childWidth - mTopOffset - tContent.getMeasuredWidth(), 0,
+						width - childWidth - mTopOffset, tContent.getMeasuredHeight());
 				break;
 		}
 
-		handle.layout(childLeft, childTop, childLeft + childWidth, childTop + childHeight);
-		mHandleHeight = handle.getHeight();
-		mHandleWidth = handle.getWidth();
+		tHead.layout(childLeft, childTop, childLeft + childWidth, childTop + childHeight);
 	}
 
 	@Override
@@ -469,18 +470,15 @@ public class SwipeInMenu extends ViewGroup {
 		float x = event.getX();
 		float y = event.getY();
 
-		final Rect frame = mFrame;
-		final View handle = mHandle;
-
-		handle.getHitRect(frame);
-		if (!mTracking && !frame.contains((int) x, (int) y)) {
+		tHead.getHitRect(tFrame);
+		if (!mTracking && !tFrame.contains((int) x, (int) y)) {
 			return false;
 		}
 
 		if (action == MotionEvent.ACTION_DOWN) {
 			mTracking = true;
 
-			handle.setPressed(true);
+			tHead.setPressed(true);
 			// Must be called before prepareTracking()
 			prepareContent();
 
@@ -499,16 +497,16 @@ public class SwipeInMenu extends ViewGroup {
 	}
 
 	private int getSide () {
-		return mVertical ? mHandle.getTop() : mHandle.getLeft();
+		return tVertical ? tHead.getTop() : tHead.getLeft();
 	}
 
 	private int getOppositeSide () {
 		int pt=0;
-		switch (mOrientation) {
-			case TOP:    pt = mHandle.getBottom(); break;
-			case LEFT:   pt = mHandle.getRight(); break;
-			case BOTTOM: pt = mHandle.getTop(); break;
-			case RIGHT:  pt = mHandle.getLeft(); break;
+		switch (tOrientation) {
+			case TOP:    pt = tHead.getBottom(); break;
+			case LEFT:   pt = tHead.getRight(); break;
+			case BOTTOM: pt = tHead.getTop(); break;
+			case RIGHT:  pt = tHead.getLeft(); break;
 		}
 		return pt;
 	}
@@ -524,7 +522,7 @@ public class SwipeInMenu extends ViewGroup {
 			final int action = event.getAction();
 			switch (action) {
 				case MotionEvent.ACTION_MOVE:
-					moveHandle((int)  (mVertical ? event.getY() : event.getX()) - mTouchDelta);
+					moveHead((int)  (tVertical ? event.getY() : event.getX()) - mTouchDelta);
 					break;
 				case MotionEvent.ACTION_UP:
 				case MotionEvent.ACTION_CANCEL: {
@@ -535,8 +533,7 @@ public class SwipeInMenu extends ViewGroup {
 					float xVelocity = velocityTracker.getXVelocity();
 					boolean negative;
 
-					final boolean vertical = mVertical;
-					if (vertical) {
+					if (tVertical) {
 						negative = yVelocity < 0;
 						if (xVelocity < 0) {
 							xVelocity = -xVelocity;
@@ -559,8 +556,8 @@ public class SwipeInMenu extends ViewGroup {
 						velocity = -velocity;
 					}
 
-					final int top = mHandle.getTop();
-					final int left = mHandle.getLeft();
+					final int top = tHead.getTop();
+					final int left = tHead.getLeft();
 
 					if (Math.abs(velocity) < mMaximumTapVelocity) {
 
@@ -568,7 +565,7 @@ public class SwipeInMenu extends ViewGroup {
 							if (mAllowSingleTap) {
 								playSoundEffect(SoundEffectConstants.CLICK);
 
-								if (mExpanded) {
+								if (tIsOpen) {
 									//animateClose(vertical ? top : left);
 									animateClose( getSide() );
 								} else {
@@ -576,14 +573,14 @@ public class SwipeInMenu extends ViewGroup {
 									//animateOpen(vertical ? top : left);
 								}
 							} else {
-								performFling(vertical ? top : left, velocity, false);
+								performFling(tVertical ? top : left, velocity, false);
 							}
 
 						} else {
-							performFling(vertical ? top : left, velocity, false);
+							performFling(tVertical ? top : left, velocity, false);
 						}
 					} else {
-						performFling(vertical ? top : left, velocity, false);
+						performFling(tVertical ? top : left, velocity, false);
 					}
 				}
 				break;
@@ -594,19 +591,19 @@ public class SwipeInMenu extends ViewGroup {
 	}
 
 	private boolean inThreshold (int top, int left) {
-		switch (mOrientation) {
+		switch (tOrientation) {
 			case TOP:
-				return  (!mExpanded && top < mTapThreshold - mBottomOffset) ||
-						( mExpanded && top > getBottom() - getTop() - mHandleHeight - mTopOffset - mTapThreshold);
+				return  (!tIsOpen && top < mTapThreshold - mBottomOffset) ||
+						( tIsOpen && top > getBottom() - getTop() - tHead.getHeight() - mTopOffset - mTapThreshold);
 			case LEFT:
-				return  (!mExpanded && left < mTapThreshold - mBottomOffset) ||
-						( mExpanded && left > getRight() - getLeft() - mHandleWidth - mTopOffset - mTapThreshold);
+				return  (!tIsOpen && left < mTapThreshold - mBottomOffset) ||
+						( tIsOpen && left > getRight() - getLeft() - tHead.getWidth() - mTopOffset - mTapThreshold);
 			case BOTTOM:
-				return  ( mExpanded && top < mTapThreshold + mTopOffset) ||
-						(!mExpanded && top > mBottomOffset + getBottom() - getTop() -  mHandleHeight - mTapThreshold);
+				return  ( tIsOpen && top < mTapThreshold + mTopOffset) ||
+						(!tIsOpen && top > mBottomOffset + getBottom() - getTop() -  tHead.getHeight() - mTapThreshold);
 			case RIGHT:
-				return  ( mExpanded && left < mTapThreshold + mTopOffset) ||
-						(!mExpanded && left > mBottomOffset + getRight() - getLeft() - mHandleWidth - mTapThreshold);
+				return  ( tIsOpen && left < mTapThreshold + mTopOffset) ||
+						(!tIsOpen && left > mBottomOffset + getRight() - getLeft() - tHead.getWidth() - mTapThreshold);
 		}
 		return false;
 	}
@@ -625,10 +622,10 @@ public class SwipeInMenu extends ViewGroup {
 		mAnimationPosition = position;
 		mAnimatedVelocity = velocity;
 
-		if (mExpanded) {
+		if (tIsOpen) {
 			if (mInvert) {
 				if (always || (velocity < -mMaximumMajorVelocity ||
-						(position < (mVertical ? getHeight() : getWidth()) / 2 &&
+						(position < (tVertical ? getHeight() : getWidth()) / 2 &&
 								velocity > -mMaximumMajorVelocity))) {
 					// We are expanded and are now going to animate away.
 					mAnimatedAcceleration = -mMaximumAcceleration;
@@ -646,7 +643,7 @@ public class SwipeInMenu extends ViewGroup {
 				}
 			}
 			else if (always || (velocity > mMaximumMajorVelocity ||
-					(position > mTopOffset + (mVertical ? mHandleHeight : mHandleWidth) &&
+					(position > mTopOffset + (tVertical ? tHead.getHeight() : tHead.getWidth()) &&
 							velocity > -mMaximumMajorVelocity))) {
 				// We are expanded, but they didn't move sufficiently to cause
 				// us to retract.  Animate back to the collapsed position.
@@ -666,7 +663,7 @@ public class SwipeInMenu extends ViewGroup {
 			//		(position > (mVertical ? getHeight() : getWidth()) / 2 &&
 			//				velocity > -mMaximumMajorVelocity))) {
 			if ((velocity > mMaximumMajorVelocity ||
-					(position > (mVertical ? getHeight() : getWidth()) / 2 &&
+					(position > (tVertical ? getHeight() : getWidth()) / 2 &&
 							velocity > -mMaximumMajorVelocity))) {
 				// We are collapsed, and they moved enough to allow us to expand.
 				mAnimatedAcceleration = mMaximumAcceleration;
@@ -685,9 +682,8 @@ public class SwipeInMenu extends ViewGroup {
 
 //		if (mInvert)
 //			mAnimatedAcceleration *= -1;
-		long now = SystemClock.uptimeMillis();
-		mAnimationLastTime = now;
-		mCurrentAnimationTime = now + ANIMATION_FRAME_DURATION;
+		mAnimationLastTime = SystemClock.uptimeMillis();
+		mCurrentAnimationTime = mAnimationLastTime + ANIMATION_FRAME_DURATION;
 		mAnimating = true;
 		mHandler.removeMessages(MSG_ANIMATE);
 		mHandler.sendMessageAtTime(mHandler.obtainMessage(MSG_ANIMATE), mCurrentAnimationTime);
@@ -697,167 +693,216 @@ public class SwipeInMenu extends ViewGroup {
 	private void prepareTracking(int position) {
 		mTracking = true;
 		mVelocityTracker = VelocityTracker.obtain();
-		boolean opening = !mExpanded;
+		boolean opening = !tIsOpen;
 		if (opening) {
 			mAnimatedAcceleration = mMaximumAcceleration;
 			mAnimatedVelocity = mMaximumMajorVelocity;
-			switch (mOrientation) {
+			switch (tOrientation) {
 				case TOP:
 				case LEFT:
 					mAnimationPosition = mBottomOffset;
 					break;
 				case BOTTOM:
-					mAnimationPosition = mBottomOffset + getHeight() - mHandleHeight;
+					mAnimationPosition = mBottomOffset + getHeight() - tHead.getHeight();
 					break;
 				case RIGHT:
-					mAnimationPosition = mBottomOffset + getWidth() - mHandleWidth;
+					mAnimationPosition = mBottomOffset + getWidth() - tHead.getWidth();
 					break;
 			}
-
-			moveHandle((int) mAnimationPosition);
+			moveHead((int) mAnimationPosition);
 			mAnimating = true;
 			mHandler.removeMessages(MSG_ANIMATE);
-			long now = SystemClock.uptimeMillis();
-			mAnimationLastTime = now;
-			mCurrentAnimationTime = now + ANIMATION_FRAME_DURATION;
-			mAnimating = true;
+			mAnimationLastTime = SystemClock.uptimeMillis();
+			mCurrentAnimationTime = mAnimationLastTime + ANIMATION_FRAME_DURATION;
 		} else {
 			if (mAnimating) {
 				mAnimating = false;
 				mHandler.removeMessages(MSG_ANIMATE);
 			}
-			moveHandle(position);
+			moveHead(position);
 		}
 	}
 
-	private void moveHandle(int position) {
-		final View handle = mHandle;
-
-		switch(mOrientation) {
+	boolean opening = false;
+	private void moveHead(int position) {
+		switch(tOrientation) {
 			case TOP:
 				if (position == EXPANDED_FULL_OPEN) {
-					handle.offsetTopAndBottom( getBottom() - getTop() - mTopOffset - mHandleHeight - handle.getTop() );
+					changeHeadOnOpen();
+					tHead.offsetTopAndBottom( getBottom() - getTop() - mTopOffset - tHead.getHeight() - tHead.getTop() );
 					invalidate();
 				} else if (position == COLLAPSED_FULL_CLOSED) {
-					handle.offsetTopAndBottom( -mBottomOffset - handle.getTop() );
+					changeHeadOnClose();
+					tHead.offsetTopAndBottom( -mBottomOffset - tHead.getTop() );
 					invalidate();
 				} else {
-					final int top = handle.getTop();
-					int deltaY = position - top;
+					int deltaY = position - tHead.getTop();
 					if (position < -mBottomOffset) {
-						deltaY = -mBottomOffset - top;
+						deltaY = -mBottomOffset - tHead.getTop();
 					}
-					else if (position > getBottom() - getTop() - mTopOffset - mHandleHeight) {
-						deltaY = getBottom() - getTop() - mTopOffset - mHandleHeight - top;
+					else if (position > getBottom() - getTop() - mTopOffset - tHead.getHeight()) {
+						deltaY = getBottom() - getTop() - mTopOffset - tHead.getHeight() - tHead.getTop();
 					}
-					handle.offsetTopAndBottom(deltaY);
-
-					final Rect frame = mFrame;
-					final Rect region = mInvalidate;
-
-					handle.getHitRect(frame);
-					region.set(frame);
-
-					region.union(frame.left, frame.top - deltaY, frame.right, frame.bottom - deltaY);
-					region.union(0, frame.bottom - deltaY, getWidth(), frame.bottom - deltaY + mContent.getHeight());
-
-					// todo fix the region calc.
-					// invalidate( region );
-					invalidate();
+					regionUnionYAndInvalidate(deltaY);
 				}
 				break;
 
 			case BOTTOM:
 				if (position == EXPANDED_FULL_OPEN) {
-					handle.offsetTopAndBottom( mTopOffset - handle.getTop());
+					tHead.offsetTopAndBottom( mTopOffset - tHead.getTop());
+					changeHeadOnOpen();
 					invalidate();
 				} else if (position == COLLAPSED_FULL_CLOSED) {
-					handle.offsetTopAndBottom( mBottomOffset + getBottom() - getTop() -	mHandleHeight - handle.getTop());
+					tHead.offsetTopAndBottom( mBottomOffset + getBottom() - getTop() - tHead.getHeight() - tHead.getTop());
+					changeHeadOnClose();
 					invalidate();
-				} else {
-					final int top = handle.getTop();
-					int deltaY = position - top;
-					if (position < mTopOffset) {
-						deltaY = mTopOffset - top;
-					} else if (deltaY > mBottomOffset + getBottom() - getTop() - mHandleHeight - top) {
-						deltaY = mBottomOffset + getBottom() - getTop() - mHandleHeight - top;
+				} else { 
+//					Log.d("tHead.getLayoutParams().height", ""+(tScreenHeight-tHead.getY()));
+					if(tScreenHeight-tHead.getY()>5 && tScreenHeight-tHead.getY()<=90){
+						if(tLastPosition>position){
+							changeHeadOnOpen();
+						}else if(tScreenHeight-tHead.getY()<=90){
+							changeHeadOnClose();
+						}
 					}
-					handle.offsetTopAndBottom(deltaY);
-
-					final Rect frame = mFrame;
-					final Rect region = mInvalidate;
-
-					handle.getHitRect(frame);
-					region.set(frame);
-
-					region.union(frame.left, frame.top - deltaY, frame.right, frame.bottom - deltaY);
-					region.union(0, frame.bottom - deltaY, getWidth(), frame.bottom - deltaY + mContent.getHeight());
-
-					invalidate(region);
+					int deltaY = position - tHead.getTop();
+					if (position < mTopOffset) {
+						deltaY = mTopOffset - tHead.getTop();
+					} else if (deltaY > mBottomOffset + getBottom() - getTop() - tHead.getHeight() - tHead.getTop()) {
+						deltaY = mBottomOffset + getBottom() - getTop() - tHead.getHeight() - tHead.getTop();
+					}
+					regionUnionYAndInvalidate(deltaY);
+					tLastPosition = position;
 				}
 				break;
 
 			case RIGHT:
 				if (position == EXPANDED_FULL_OPEN) {
-					handle.offsetLeftAndRight( mTopOffset - handle.getLeft());
+					changeHeadOnOpen();
+					tHead.offsetLeftAndRight( mTopOffset - tHead.getLeft());
 					invalidate();
 				} else if (position == COLLAPSED_FULL_CLOSED) {
-					handle.offsetLeftAndRight( -mBottomOffset );
+					changeHeadOnClose();
+					tHead.offsetLeftAndRight( -mBottomOffset );
 					invalidate();
 				} else {
-					final int left = handle.getLeft();
-					int deltaX = position - left;
+					int deltaX = position - tHead.getLeft();
 					if (position < mTopOffset) {
-						deltaX = mTopOffset - left;
-					} else if (deltaX > mBottomOffset + getRight() - getLeft() - mHandleWidth - left) {
-						deltaX = mBottomOffset + getRight() - getLeft() - mHandleWidth - left;
+						deltaX = mTopOffset - tHead.getLeft();
+					} else if (deltaX > mBottomOffset + getRight() - getLeft() - tHead.getWidth() - tHead.getLeft()) {
+						deltaX = mBottomOffset + getRight() - getLeft() - tHead.getWidth() - tHead.getLeft();
 					}
-					handle.offsetLeftAndRight(deltaX);
-
-					final Rect frame = mFrame;
-					final Rect region = mInvalidate;
-
-					handle.getHitRect(frame);
-					region.set(frame);
-
-					region.union(frame.left - deltaX, frame.top, frame.right - deltaX, frame.bottom);
-					region.union(frame.right - deltaX, 0, frame.right - deltaX + mContent.getWidth(), getHeight());
-
-					invalidate(region);
+					regionUnionXAndInvalidate(deltaX);
 				}
 				break;
 
 			case LEFT:
 				if (position == EXPANDED_FULL_OPEN) {
-					handle.offsetLeftAndRight( getRight() - getLeft() - mTopOffset - mHandleWidth - handle.getLeft() );
+					changeHeadOnOpen();
+					tHead.offsetLeftAndRight( getRight() - getLeft() - mTopOffset - tHead.getWidth() - tHead.getLeft() );
 					invalidate();
 				} else if (position == COLLAPSED_FULL_CLOSED) {
-					handle.offsetLeftAndRight(-mBottomOffset - handle.getLeft() );
+					changeHeadOnClose();
+					tHead.offsetLeftAndRight(-mBottomOffset - tHead.getLeft() );
 					invalidate();
 				} else {
-					final int left = handle.getLeft();
-					int deltaX = position - left;
+					int deltaX = position - tHead.getLeft();
 					if (position < -mBottomOffset) {
-						deltaX = -mBottomOffset - left;
+						deltaX = -mBottomOffset - tHead.getLeft();
 					}
-					else if (position > getRight() - getLeft() - mTopOffset - mHandleWidth) {
-						deltaX = getRight() - getLeft() - mTopOffset - mHandleWidth - left;
+					else if (position > getRight() - getLeft() - mTopOffset - tHead.getWidth()) {
+						deltaX = getRight() - getLeft() - mTopOffset - tHead.getWidth() - tHead.getLeft();
 					}
-					handle.offsetLeftAndRight(deltaX);
-
-					final Rect frame = mFrame;
-					final Rect region = mInvalidate;
-
-					handle.getHitRect(frame);
-					region.set(frame);
-
-					region.union(frame.left - deltaX, frame.top, frame.right - deltaX, frame.bottom);
-					region.union(frame.right - deltaX, 0, frame.right - deltaX + mContent.getWidth(), getHeight());
-
-					invalidate(region);
+					regionUnionXAndInvalidate(deltaX);
 				}
 				break;
 		}
+	}
+	
+	private void regionUnionXAndInvalidate(int deltaX){
+		tHead.offsetLeftAndRight(deltaX);
+
+		tHead.getHitRect(tFrame);
+		tRegion.set(tFrame);
+
+		tRegion.union(tFrame.left - deltaX, tFrame.top, tFrame.right - deltaX, tFrame.bottom);
+		tRegion.union(tFrame.right - deltaX, 0, tFrame.right - deltaX + tContent.getWidth(), getHeight());
+
+		invalidate(tRegion);
+	}
+	
+	private void regionUnionYAndInvalidate(int deltaY){
+		tHead.offsetTopAndBottom(deltaY);
+		tHead.getHitRect(tFrame);
+		tRegion.set(tFrame);
+
+		tRegion.union(tFrame.left, tFrame.top - deltaY, tFrame.right, tFrame.bottom - deltaY);
+		tRegion.union(0, tFrame.bottom - deltaY, getWidth(), tFrame.bottom - deltaY + tContent.getHeight());
+
+		invalidate(tRegion);
+	}
+	
+	private void changeHeadOnOpen() {
+		if (!opening) {
+			opening = true;
+			tHead.startAnimation(in);
+		}
+	}
+
+	private void changeHeadOnClose(){
+		if (opening) {
+			opening = false;
+			tHead.startAnimation(out);
+		}
+	}
+	
+	private Animation in;
+	private Animation out;
+	private void createHeadAnimations(){
+		Log.d("createAnimations", "createAnimations");
+		in = new ScaleAnimation(-1f, -1f, 0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 1.0f);
+		in.setFillAfter(true);
+		in.setDuration(100);
+		out = new ScaleAnimation(-1f, -1f, 1.0f, 0.05f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 1.0f);
+		out.setDuration(100);
+		out.setFillAfter(true);
+		out.setAnimationListener(new AnimationListener() {
+		    @Override
+		    public void onAnimationEnd(Animation animation) {
+//		    	tHead.layout(tHead.getLeft(), tHead.getBottom()-4, tHead.getRight(), tHead.getBottom());
+//		    	tHead.getLayoutParams().height=getDP(4);
+//		    	tHead.requestLayout();
+		    	tHead.setAlpha(0f);
+		    }
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+			}
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+//		    	tHead.getLayoutParams().height=getDP(30);
+//		    	tHead.requestLayout();
+			}
+		});
+		in.setAnimationListener(new AnimationListener() {
+		    @Override
+		    public void onAnimationEnd(Animation animation) {
+//		    	tHead.layout(tHead.getLeft(), tHead.getTop(), tHead.getRight(), tHead.getTop()+50);
+		    }
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+			}
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+//		    	tHead.getLayoutParams().height= getDP(30);
+//		    	tHead.requestLayout();
+				tHead.setAlpha(tHeadDefaultAlpha);
+			}
+		});
+		tHead.startAnimation(out);
 	}
 
 	private void prepareContent() {
@@ -866,9 +911,9 @@ public class SwipeInMenu extends ViewGroup {
 			return;
 		}
 
-		// Something changed in the content, we need to honor the layout request
+		// Something changed in the content, we need to honor the ltHeadequest
 		// before creating the cached bitmap
-		final View content = mContent;
+		final View content = tContent;
 		if (content.isLayoutRequested()) {
 			measureContent();
 		}
@@ -882,13 +927,13 @@ public class SwipeInMenu extends ViewGroup {
 	}
 
 	public void measureContent () {
-		final View content = mContent;
-		if (mVertical) {
-			final int childHeight = mHandle.getHeight();
+		final View content = tContent;
+		if (tVertical) {
+			final int childHeight = tHead.getHeight();
 			int height = getBottom() - getTop() - childHeight - mTopOffset;
 			content.measure(MeasureSpec.makeMeasureSpec(getRight() - getLeft(), MeasureSpec.EXACTLY),
 					MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY));
-			if (mOrientation == Orientation.TOP) {
+			if (tOrientation == Orientation.TOP) {
 				content.layout(0, height - content.getMeasuredHeight(), content.getMeasuredWidth(), height );
 			}
 			else {
@@ -898,11 +943,11 @@ public class SwipeInMenu extends ViewGroup {
 
 		}
 		else {
-			final int childWidth = mHandle.getWidth();
+			final int childWidth = tHead.getWidth();
 			int width = getRight() - getLeft() - childWidth - mTopOffset;
 			content.measure(MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
 					MeasureSpec.makeMeasureSpec(getBottom() - getTop(), MeasureSpec.EXACTLY));
-			if (mOrientation == Orientation.RIGHT ) {
+			if (tOrientation == Orientation.RIGHT ) {
 				content.layout(childWidth + mTopOffset, 0,
 						mTopOffset + childWidth + content.getMeasuredWidth(), content.getMeasuredHeight());
 			}
@@ -913,7 +958,7 @@ public class SwipeInMenu extends ViewGroup {
 	}
 
 	private void stopTracking() {
-		mHandle.setPressed(false);
+		tHead.setPressed(false);
 		mTracking = false;
 
 		if (mOnDrawerScrollListener != null) {
@@ -932,27 +977,27 @@ public class SwipeInMenu extends ViewGroup {
 			incrementAnimation();
 
 			if (mInvert) {
-				if (mAnimationPosition >= (mVertical ? getHeight() : getWidth()) - mTopOffset) {
+				if (mAnimationPosition >= (tVertical ? getHeight() : getWidth()) - mTopOffset) {
 					mAnimating = false;
 					openDrawer();
 				} else if (mAnimationPosition < -mBottomOffset) {
 					mAnimating = false;
 					closeDrawer();
 				} else {
-					moveHandle((int) mAnimationPosition);
+					moveHead((int) mAnimationPosition);
 					mCurrentAnimationTime += ANIMATION_FRAME_DURATION;
 					mHandler.sendMessageAtTime(mHandler.obtainMessage(MSG_ANIMATE), mCurrentAnimationTime);
 				}
 			}
 			else {
-				if (mAnimationPosition >= mBottomOffset + (mVertical ? getHeight() : getWidth()) - 1) {
+				if (mAnimationPosition >= mBottomOffset + (tVertical ? getHeight() : getWidth()) - 1) {
 					mAnimating = false;
 					closeDrawer();
 				} else if (mAnimationPosition < mTopOffset) {
 					mAnimating = false;
 					openDrawer();
 				} else {
-					moveHandle((int) mAnimationPosition);
+					moveHead((int) mAnimationPosition);
 					mCurrentAnimationTime += ANIMATION_FRAME_DURATION;
 					mHandler.sendMessageAtTime(mHandler.obtainMessage(MSG_ANIMATE), mCurrentAnimationTime);
 				}
@@ -981,10 +1026,10 @@ public class SwipeInMenu extends ViewGroup {
 	 * @see #animateToggle()
 	 */
 	public void toggle() {
-		if (!mExpanded) {
-			openDrawer();
-		} else {
+		if (tIsOpen) {
 			closeDrawer();
+		} else {
+			openDrawer();
 		}
 		invalidate();
 		requestLayout();
@@ -1000,10 +1045,10 @@ public class SwipeInMenu extends ViewGroup {
 	 * @see #toggle()
 	 */
 	public void animateToggle() {
-		if (!mExpanded) {
-			animateOpen();
-		} else {
+		if (tIsOpen) {
 			animateClose();
+		} else {
+			animateOpen();
 		}
 	}
 
@@ -1082,30 +1127,30 @@ public class SwipeInMenu extends ViewGroup {
 	}
 
 	private void closeDrawer() {
-		moveHandle( COLLAPSED_FULL_CLOSED );
-		mContent.setVisibility( View.GONE );
-		mContent.destroyDrawingCache();
+		moveHead( COLLAPSED_FULL_CLOSED );
+		tContent.setVisibility( View.GONE );
+		tContent.destroyDrawingCache();
 
-		if (!mExpanded) {
+		if (!tIsOpen) {
 			return;
 		}
 
-		mExpanded = false;
-
+		tIsOpen = false;
+ 
 		if (mOnDrawerCloseListener != null) {
 			mOnDrawerCloseListener.onDrawerClosed();
 		}
 	}
 
 	private void openDrawer() {
-		moveHandle( EXPANDED_FULL_OPEN );
-		mContent.setVisibility(View.VISIBLE);
+		moveHead( EXPANDED_FULL_OPEN );
+		tContent.setVisibility(View.VISIBLE);
 
-		if (mExpanded) {
+		if (tIsOpen) {
 			return;
 		}
 
-		mExpanded = true;
+		tIsOpen = true;
 
 		if (mOnDrawerOpenListener != null) {
 			mOnDrawerOpenListener.onDrawerOpened();
@@ -1143,13 +1188,13 @@ public class SwipeInMenu extends ViewGroup {
 	}
 
 	/**
-	 * Returns the handle of the drawer.
+	 * Returns thetHeade of the drawer.
 	 *
 	 * @return The View reprenseting the handle of the drawer, identified by
 	 *         the "handle" id in XML.
 	 */
 	public View getHandle() {
-		return mHandle;
+		return tHead;
 	}
 
 	/**
@@ -1160,7 +1205,7 @@ public class SwipeInMenu extends ViewGroup {
 	 * otherwise returns the width for Horizontal orientation.
 	 */
 	public int getHandleSize () {
-		return mVertical ? mHandle.getHeight() : mHandle.getWidth();
+		return tVertical ? tHead.getHeight() : tHead.getWidth();
 	}
 
 	/**
@@ -1170,7 +1215,7 @@ public class SwipeInMenu extends ViewGroup {
 	 *         the "content" id in XML.
 	 */
 	public View getContent() {
-		return mContent;
+		return tContent;
 	}
 
 	/**
@@ -1197,7 +1242,7 @@ public class SwipeInMenu extends ViewGroup {
 	 * @return True if the drawer is opened, false otherwise.
 	 */
 	public boolean isOpened() {
-		return mExpanded;
+		return tIsOpen;
 	}
 
 	/**
@@ -1310,17 +1355,11 @@ public class SwipeInMenu extends ViewGroup {
 
 
 	public enum Side {
-		TOP(0), LEFT(1), BOTTOM(2), RIGHT(3), FRONT(4), BACK(5), CENTER(6);
-
-		public final int value;
-
-		private Side(int value) {
-			this.value = value;
-		}
+		TOP, LEFT, BOTTOM, RIGHT, FRONT, BACK, CENTER;
 
 		public static Side getByValue(int value) {
 			for(Side s: Side.values()) {
-				if(s.value == value) {
+				if(s.ordinal() == value) {
 					return s;
 				}
 			}
@@ -1329,20 +1368,19 @@ public class SwipeInMenu extends ViewGroup {
 	}
 
 	public enum Orientation {
-		TOP(0), LEFT(1), BOTTOM(2), RIGHT(3);
-		public final int value;
-
-		private Orientation(int value) {
-			this.value = value;
-		}
+		TOP, LEFT, BOTTOM, RIGHT;
 
 		public static Orientation getByValue(int value) {
 			for(Orientation s: Orientation.values()) {
-				if(s.value == value) {
+				if(s.ordinal() == value) {
 					return s;
 				}
 			}
 			throw new IllegalArgumentException("There is no 'Orientation' enum with this value");
 		}
+	}
+	
+	private int getDP(int dp){
+		return (int) (dp * tDensityScale + 0.5f);
 	}
 }

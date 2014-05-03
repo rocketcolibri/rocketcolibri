@@ -9,6 +9,7 @@ import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
+import ch.hsr.rocketcolibri.view.widget.SwipeInMenu;
 
 /**
  * This Class is for the Instantiations of the Children's of the Menu
@@ -16,7 +17,7 @@ import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
  * @author artvel
  */
 public class DesktopMenu {
-	private View tContentView;
+	private SwipeInMenu tSwipeInMenu;
 	private Context tContext;
 	private IDesktopViewManager tDesktopViewManager;
 	private RocketColibriService tRcService;
@@ -25,9 +26,17 @@ public class DesktopMenu {
 	public DesktopMenu(Context context, View contentView, IDesktopViewManager desktopViewManager) {
 		tRcService = null;
 		tContext = context;
-		tContentView = contentView;
+		tSwipeInMenu = (SwipeInMenu) contentView;
 		tDesktopViewManager = desktopViewManager;
 		onCreate();	
+	}
+	
+	public void toggle(){
+		tSwipeInMenu.animateToggle();
+	}
+	
+	public void animateToggle(){
+		tSwipeInMenu.animateToggle();
 	}
 	
 	private void setServiceDependentButtonsEnabled(boolean enabled){
@@ -99,7 +108,7 @@ public class DesktopMenu {
 	}
 	
 	private View findViewById(int id){
-		return tContentView.findViewById(id);
+		return tSwipeInMenu.findViewById(id);
 	}
 	
 	
