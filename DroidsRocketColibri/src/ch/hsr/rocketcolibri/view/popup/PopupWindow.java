@@ -1076,13 +1076,13 @@ public class PopupWindow {
     
     private void findPosition(View anchor){
     	int targetPos = 0;
-        if((targetPos=anchor.getTop()-getHeight())>=0 && anchor.getRight()+getWidth()<=mWindowManager.getWidth()){//top
+        if((targetPos=anchor.getTop()-getHeight())>=0 && anchor.getLeft()+getWidth()<=mWindowManager.getWidth()){//top
         	tLayoutParams.x = (int) anchor.getX();
         	tLayoutParams.y = targetPos;
         }else if(anchor.getRight()+getWidth()<=mWindowManager.getWidth()){//right
         	tLayoutParams.y = (int) anchor.getY();
         	tLayoutParams.x = anchor.getRight();
-        }else if(anchor.getBottom()+getHeight()<=mWindowManager.getHeight() && anchor.getRight()+getWidth()<=mWindowManager.getWidth()){//bottom
+        }else if(anchor.getBottom()+getHeight()<=mWindowManager.getHeight() && anchor.getLeft()+getWidth()<=mWindowManager.getWidth()){//bottom
         	tLayoutParams.x = (int) anchor.getX();
         	tLayoutParams.y = anchor.getBottom();
         }else if((targetPos=anchor.getLeft()-getWidth())>=0){//left
