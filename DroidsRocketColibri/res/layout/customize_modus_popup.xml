@@ -10,15 +10,14 @@
         android:id="@+id/editChannel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Edit Channel" />
+        android:text="@string/popup_menu_edit_channel" />
     <Button
         android:id="@+id/resizeMode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Resize Element" />
+        android:text="@string/popup_menu_resize_element" />
     <SeekBar
         android:id="@+id/seekBar1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>
-
