@@ -1085,7 +1085,20 @@ public class PopupWindow {
         	tLayoutParams.y = anchor.getBottom();
         }else if((targetPos=anchor.getLeft()-getWidth())>=0){//left
         	tLayoutParams.y = (int) anchor.getY();
+
+        	if (tLayoutParams.y + getHeight() > mWindowManager.getHeight()) { // the popup must be visible from bottom
+        		tLayoutParams.y = mWindowManager.getHeight() - getHeight();   // if the only available place is on left 
+        	}
+
         	tLayoutParams.x = targetPos;
+        }
+        
+        if (tLayoutParams.x < 0) {  // the popup must be visible from left
+        	tLayoutParams.x = 0;
+        }
+
+        if (tLayoutParams.y < 0) {  // the popup must be visible from top
+        	tLayoutParams.y = 0;
         }
     }
     
