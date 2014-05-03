@@ -92,8 +92,8 @@ public class RocketColibriService extends  Service implements IUiSinkChangeObser
 		this.protocol = new RocketColibriProtocol(protocolFsm, this);
 		this.telemetryReceiver = new RocketColibriProtocolTelemetryReceiver(this, 30001);
 		this.protocol.setChannels(channel);
-		this.wifi = new WifiConnection( (WifiManager) getSystemService(Context.WIFI_SERVICE));
-		 
+		this.wifi = new WifiConnection();
+
 		// list all available Widgets here: 
 		this.widgetDirectory.add(new WidgetDirectoryEntry("Cross Control", "ch.hsr.rocketcolibri.widget.Circle"));
 		this.widgetDirectory.add(new WidgetDirectoryEntry("Connection Status", "ch.hsr.rocketcolibri.widget.ConnectionStatusWidget"));

@@ -32,18 +32,13 @@ public class WifiConnection
 {
 	final static String TAG = "WifiConnection";
 	final static String networkSSID = "\"RocketColibri\"";
-	private WifiManager wifiManager;
-	
-	public WifiConnection(WifiManager wifiManager)
-	{
-		this.wifiManager = wifiManager;
-	}
-	
+
 	/**
 	 * Try to establish a connection to the RocketColibri network
 	 */
-	public void Connect()
+	public void Connect(Context context)
 	{
+		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 	    wifiManager.disconnect(); 
 	    // create the network configuration for the RocketColibri network
 		WifiConfiguration conf = new WifiConfiguration();
@@ -68,21 +63,22 @@ public class WifiConnection
 	/**
 	 * Try to establish a connection to the RocketColibri network
 	 */
-	public void Disconnect()
+	public void Disconnect(Context context)
 	{
-		 List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();
-		 for( WifiConfiguration i : list ) 
-		 {
-		     if(i.SSID != null && i.SSID.equals( networkSSID )) 
-		     {
-		          wifiManager.disconnect();
-		          wifiManager.disableNetwork(i.networkId);
-		          wifiManager.removeNetwork(i.networkId);
-		          wifiManager.setWifiEnabled(true);
-		          Log.d(TAG, "RocketColibri network disconnected an removed");
-		          break;
-		     }           
-		  }
+		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();
+		for( WifiConfiguration i : list ) 
+		{
+		    if(i.SSID != null && i.SSID.equals( networkSSID )) 
+		    {
+		         wifiManager.disconnect();
+		         wifiManager.disableNetwork(i.networkId);
+		         wifiManager.removeNetwork(i.networkId);
+		         wifiManager.setWifiEnabled(true);
+		         Log.d(TAG, "RocketColibri network disconnected an removed");
+		         break;
+		    }           
+		}
 	}
 	
     /**

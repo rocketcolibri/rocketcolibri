@@ -74,9 +74,9 @@ public class DesktopMenu {
 		    		// tRcService.users.setActiveUser(null);
 		    		
 		    		if (isChecked) 
-		    			tRcService.wifi.Connect();
+		    			tRcService.wifi.Connect(tRcService);
 			        else
-			        	tRcService.wifi.Disconnect();	    		
+			        	tRcService.wifi.Disconnect(tRcService);	    		
 		    	}
 		        
 		    }
