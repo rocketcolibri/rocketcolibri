@@ -23,6 +23,7 @@ import ch.hsr.rocketcolibri.widgetdirectory.WidgetDirectoryEntry;
 import ch.hsr.rocketcolibri.widgetdirectory.uisinkdata.ConnectionState;
 import ch.hsr.rocketcolibri.widgetdirectory.uisinkdata.UiSinkData;
 import ch.hsr.rocketcolibri.widgetdirectory.uisinkdata.UserData;
+import ch.hsr.rocketcolibri.widgetdirectory.uisinkdata.VideoUrl;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -63,16 +64,12 @@ public class RocketColibriService extends  Service implements IUiSinkChangeObser
 	public Channel[] channel = {new Channel(), new Channel(), new Channel(), new Channel(), 
 			                     new Channel(), new Channel(), new Channel(), new Channel()};
 	
-	// telemetry data
-	
-	// active users
+	// UiSink data
 	public UserData users;
 	public ConnectionState connState;
+	public VideoUrl videoUrl;
 	
-	
-	// video URL
-	public String videoUrl = "";
-	
+	// database
 	public RocketColibriDB tRocketColibriDB;
 
 	@Override
@@ -103,10 +100,9 @@ public class RocketColibriService extends  Service implements IUiSinkChangeObser
 		uiSinkChangeObserver = new HashMap<RCUiSinkType, List<RCWidget>>();
 		for (RCUiSinkType type : RCUiSinkType.values()) 
 			uiSinkChangeObserver.put(type, new ArrayList<RCWidget>());
-		
-		uiSinkNotifyQueue = new ArrayBlockingQueue<UiSinkData>(128);
-		users = new UserData(uiSinkNotifyQueue);
-		connState = new ConnectionState(uiSinkNotifyQueue);
+
+		users = new UserData();
+		connState = new ConnectionState();
 		
 		// create database instance
 		tRocketColibriDB = new RocketColibriDB(this);
@@ -197,23 +193,39 @@ public class RocketColibriService extends  Service implements IUiSinkChangeObser
 	 */
 	public class UiSinkNotifyConsumer implements Runnable
 	{
+		private void sendToAll(UiSinkData data)
+		{
+			if(data.getAndResetNotifyFlag())
+        	{
+            	for(RCWidget observer : uiSinkChangeObserver.get(data.getType()))
+        		{
+        			// select the right list and object depending on the type
+        			observer.onNotifyUiSink(data);
+        		}        		
+        	}
+		}
+	
 	    @Override
 	    public void run() 
 	    {
-	        try
-	        {
-	        	UiSinkData notifyData = uiSinkNotifyQueue.take();
-	        	for(RCWidget observer : uiSinkChangeObserver.get(notifyData.getType()))
-	    		{
-	    			// select the right list and object depending on the type
-	    			observer.onNotifyUiSink(notifyData);
-	    		}
-	        }
-	        catch(InterruptedException e) 
-	        {
-	            e.printStackTrace();
-	        }
+        	while(true)
+        	{
+        		try 
+        		{
+        			sendToAll(users);
+        			Thread.sleep(100, 0);
+        		
+        			sendToAll(connState);
+        			Thread.sleep(100, 0);
+        		
+        			sendToAll(videoUrl);
+        			Thread.sleep(100, 0);
+				} 
+        		catch (InterruptedException e) 
+        		{
+					e.printStackTrace();
+				}
+        	}
 	    }
 	}
-
 }

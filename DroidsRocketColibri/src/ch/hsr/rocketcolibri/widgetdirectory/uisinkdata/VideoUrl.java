@@ -1,15 +1,13 @@
 package ch.hsr.rocketcolibri.widgetdirectory.uisinkdata;
 
-import java.util.concurrent.BlockingQueue;
-
 import ch.hsr.rocketcolibri.widgetdirectory.RCUiSinkType;
 
 public class VideoUrl extends UiSinkData 
 {
 	private String videoUrl;
 	
-	public VideoUrl(BlockingQueue<UiSinkData> queue) {
-		super(queue);
+	public VideoUrl() 
+	{
 		type = RCUiSinkType.Video;
 	}
 	
@@ -29,5 +27,4 @@ public class VideoUrl extends UiSinkData
 	{
 		return this.videoUrl;
 	}
-
 }

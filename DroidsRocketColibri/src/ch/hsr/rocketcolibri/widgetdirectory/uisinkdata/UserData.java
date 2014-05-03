@@ -2,7 +2,6 @@ package ch.hsr.rocketcolibri.widgetdirectory.uisinkdata;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
 
 import ch.hsr.rocketcolibri.protocol.RcOperator;
 import ch.hsr.rocketcolibri.widgetdirectory.RCUiSinkType;
@@ -12,9 +11,8 @@ public class UserData extends UiSinkData
 	private RcOperator activeUser;
 	private List<RcOperator>passivUser = new ArrayList<RcOperator>();
 	
-	public UserData(BlockingQueue<UiSinkData> uiSinkNotifyQueue) 
+	public UserData() 
 	{
-		super(uiSinkNotifyQueue);
 		type = RCUiSinkType.ConnectedUsers;
 	}
 
