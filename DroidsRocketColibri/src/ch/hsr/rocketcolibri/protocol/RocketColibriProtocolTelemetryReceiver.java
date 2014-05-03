@@ -8,8 +8,6 @@ import java.net.SocketTimeoutException;
 
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
-import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 /**
@@ -87,10 +85,8 @@ public class RocketColibriProtocolTelemetryReceiver
 
 
 	private void setTelemetryOffline() {
-		// TODO not set to null from here!
-		// RocketColibriProtocolTelemetryReceiver.context.users.setActiveUser(null);
-		Intent intent = new Intent(RocketColibriProtocol.ActionTelemetryUpdate);
-		LocalBroadcastManager.getInstance(RocketColibriProtocolTelemetryReceiver.context).sendBroadcast(intent);
+		
+
 	}
 	
 	/**
@@ -100,7 +96,7 @@ public class RocketColibriProtocolTelemetryReceiver
 	{
 		if (null != RocketColibriProtocolTelemetryReceiver.context.users.getActiveUser())
 		{	
-			setTelemetryOffline();
+			RocketColibriProtocolTelemetryReceiver.context.users.removeAllUsers();
 			RocketColibriProtocolTelemetryReceiver.context.protocolFsm.queue(e.E8_TIMEOUT);
 			RocketColibriProtocolTelemetryReceiver.context.protocolFsm.processNextEvent();
 		}

@@ -15,6 +15,7 @@ import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.widgetdirectory.RCUiSinkType;
+import ch.hsr.rocketcolibri.widgetdirectory.uisinkdata.ConnectionState;
 
 
 /**
@@ -62,10 +63,7 @@ public class ConnectionStatusWidget extends RCWidget
 		super.onDraw(canvas);
 	}
 	
-	/**
-	 * 
-	 */
-	public void setConnectionState(s state)
+	private void setConnectionState(s state)
 	{
 		switch(state)
 		{
@@ -88,13 +86,13 @@ public class ConnectionStatusWidget extends RCWidget
 		connectionIconPaint.setStyle(Paint.Style.FILL);
 		connectionIconPaint.setShader(paperShader);
 		postInvalidate();
-		
 	}
 
 	@Override
 	public void onNotifyUiSink(Object p) 
 	{
-		// TODO Auto-generated method stub
+		ConnectionState data = (ConnectionState)p;
+		setConnectionState(data.getState());
 	}
 	
 	@Override

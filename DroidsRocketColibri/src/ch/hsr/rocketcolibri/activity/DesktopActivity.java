@@ -1,13 +1,8 @@
 package ch.hsr.rocketcolibri.activity;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -18,8 +13,6 @@ import ch.hsr.rocketcolibri.manager.DesktopViewManager;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
 import ch.hsr.rocketcolibri.menu.DesktopMenu;
-import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
-import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
@@ -45,68 +38,17 @@ public class DesktopActivity extends RCActivity
 	public static final boolean Debugging = false;
 	private DesktopMenu tDesktopMenu;
 	
-	
-	private void updateConnectionStateWidget()
-	{
-		connectionStatusWidget.setConnectionState((s)rcService.protocolFsm.getState());
-
-		// TODO not set to null from here! 
-		//		if(rcService.protocolFsm.getState() == s.DISC)
-		//			rcService.users.setActiveUser(null);
-	}
-	
-	private void updateTelemetryWidget()
-	{
-		if(null == rcService.users.getActiveUser())
-			telemetryWidget.setTelemetryData("");
-		else
-			telemetryWidget.setTelemetryData(rcService.users.getActiveUser().getName() +"(" +rcService.users.getActiveUser().getIpAddress() +")");
-	}
-
-	/**
-	 * handler TelemetryUpdate
-	 */  
-	private BroadcastReceiver mTelemetryUpdateReceiver = new BroadcastReceiver() 
-	{
-	  @Override
-	  public void onReceive(Context context, Intent intent) 
-	  {
-		updateTelemetryWidget();
-		Log.d(TAG, "mTelemetryUpdateReceiver");
-	  }
-	};
-
-	
-	/**
-	 * handler for received Intents for the state machine changes
-	 */  
-	private BroadcastReceiver mProtocolStateUpdateReceiver = new BroadcastReceiver() 
-	{
-	  @Override
-	  public void onReceive(Context context, Intent intent) 
-	  {
-		updateConnectionStateWidget();
-		Log.d(TAG, "online message received");
-	  }
-	};
-	
 
 	@Override
 	public void onResume() 
 	{
 	  super.onResume();
-	  LocalBroadcastManager.getInstance(this).registerReceiver(mTelemetryUpdateReceiver, new IntentFilter(RocketColibriProtocol.ActionTelemetryUpdate));
-	  LocalBroadcastManager.getInstance(this).registerReceiver(mProtocolStateUpdateReceiver, new IntentFilter(RocketColibriProtocol.ActionStateUpdate));
-
 	}
 	
 	@Override
 	protected void onPause()
 	{
 	  super.onPause();
-	  // Unregister since the activity is not visible
-	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mTelemetryUpdateReceiver);
-	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mProtocolStateUpdateReceiver);
 	}
 	
 //  TODO add video stream display here
@@ -338,15 +280,17 @@ public class DesktopActivity extends RCActivity
 	}
 
 	@Override
-	protected void onServiceReady(){
+	protected void onServiceReady()
+	{
 		setupViews();
 		tDesktopMenu.setService(rcService) ;
-		updateConnectionStateWidget();
-		updateTelemetryWidget();
+		rcService.registerUiSinkChangeObserver(this.connectionStatusWidget);
+		rcService.registerUiSinkChangeObserver(this.telemetryWidget);
 	}
 
 	@Override
-	protected String getClassName() {
+	protected String getClassName() 
+	{
 		return TAG;
 	}
 }

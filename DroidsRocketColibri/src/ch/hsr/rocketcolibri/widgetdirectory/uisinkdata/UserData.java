@@ -49,6 +49,13 @@ public class UserData extends UiSinkData
 			return false;
 	}
 	
+	public void removeAllUsers()
+	{
+		this.activeUser = null;
+		this.passivUser.clear();
+		notifyThis();
+	}
+	
 	public RcOperator getActiveUser()
 	{
 		return this.activeUser;

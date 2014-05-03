@@ -23,10 +23,7 @@ import ch.hsr.rocketcolibri.protocol.fsm.Action;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
-import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-
 
 /**
  * @short implementation of the RocketColibri protocol 
@@ -78,12 +75,12 @@ public class RocketColibriProtocol
 		
 		
 		// send Broadcast on every state change
-		this.fsm.getStateMachinePlan().leaveAction(s.DISC, sendUpdateBroadcast);
-		this.fsm.getStateMachinePlan().leaveAction(s.TRY_CONN, sendUpdateBroadcast); 
-		this.fsm.getStateMachinePlan().leaveAction(s.CONN_OBSERVE, sendUpdateBroadcast); 
-		this.fsm.getStateMachinePlan().leaveAction(s.CONN_LCK_OUT,  sendUpdateBroadcast);
-		this.fsm.getStateMachinePlan().leaveAction(s.CONN_TRY_CONTROL,  sendUpdateBroadcast);
-		this.fsm.getStateMachinePlan().leaveAction(s.CONN_CONTROL, sendUpdateBroadcast);
+		this.fsm.getStateMachinePlan().leaveAction(s.DISC, updateState);
+		this.fsm.getStateMachinePlan().leaveAction(s.TRY_CONN, updateState); 
+		this.fsm.getStateMachinePlan().leaveAction(s.CONN_OBSERVE, updateState); 
+		this.fsm.getStateMachinePlan().leaveAction(s.CONN_LCK_OUT,  updateState);
+		this.fsm.getStateMachinePlan().leaveAction(s.CONN_TRY_CONTROL,  updateState);
+		this.fsm.getStateMachinePlan().leaveAction(s.CONN_CONTROL, updateState);
 		
 		user = getUserName(service);
 		
@@ -241,12 +238,11 @@ public class RocketColibriProtocol
 		}
 	};
 	
-	Action<RocketColibriProtocolFsm> sendUpdateBroadcast = new Action<RocketColibriProtocolFsm>() {
+	Action<RocketColibriProtocolFsm> updateState = new Action<RocketColibriProtocolFsm>() {
 		public void apply(RocketColibriProtocolFsm fsm, Object event,	Object nextState) 
 		{
-			Log.d(TAG, "execute action sendBroadcast");
-			Intent intent = new Intent(ActionStateUpdate);
-			LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
+			Log.d(TAG, "execute action updateState");
+			service.connState.setState((s)nextState);
 		}
 	};
 }

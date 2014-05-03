@@ -3,13 +3,10 @@ package ch.hsr.rocketcolibri;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-
 import ch.hsr.rocketcolibri.channel.Channel;
 import ch.hsr.rocketcolibri.db.RocketColibriDB;
 import ch.hsr.rocketcolibri.db.RocketColibriDataHandler;
-import ch.hsr.rocketcolibri.protocol.RcOperator;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
@@ -25,9 +22,7 @@ import ch.hsr.rocketcolibri.widgetdirectory.uisinkdata.UiSinkData;
 import ch.hsr.rocketcolibri.widgetdirectory.uisinkdata.UserData;
 import ch.hsr.rocketcolibri.widgetdirectory.uisinkdata.VideoUrl;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
@@ -39,6 +34,7 @@ import android.util.Log;
  * - Provide a binder for the activities
  * - holds protocol and wifi connection objects
  * - holds DBService object
+ * - updates RCWidgets with changeds telemetry data
  *   
  */
 public class RocketColibriService extends  Service implements IUiSinkChangeObservable
@@ -103,7 +99,8 @@ public class RocketColibriService extends  Service implements IUiSinkChangeObser
 
 		users = new UserData();
 		connState = new ConnectionState();
-		
+		videoUrl = new VideoUrl();
+
 		// create database instance
 		tRocketColibriDB = new RocketColibriDB(this);
 		try {
@@ -111,7 +108,46 @@ public class RocketColibriService extends  Service implements IUiSinkChangeObser
 			new RocketColibriDataHandler(this, tRocketColibriDB);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}	
+		}
+		
+		// UiSink data notification thread
+		new Thread(new Runnable()
+		{
+			private void sendToAll(UiSinkData data)
+			{
+				if(data.getAndResetNotifyFlag())
+	        	{
+	            	for(RCWidget observer : uiSinkChangeObserver.get(data.getType()))
+	        		{
+	        			// select the right list and object depending on the type
+	        			observer.onNotifyUiSink(data);
+	        		}        		
+	        	}
+			}
+		
+		    @Override
+		    public void run() 
+		    {
+	        	while(true)
+	        	{
+	        		try 
+	        		{
+	        			sendToAll(users);
+	        			Thread.sleep(100, 0);
+	        		
+	        			sendToAll(connState);
+	        			Thread.sleep(100, 0);
+	        		
+	        			sendToAll(videoUrl);
+	        			Thread.sleep(100, 0);
+					} 
+	        		catch (InterruptedException e) 
+	        		{
+						e.printStackTrace();
+					}
+	        	}
+		    }
+		}).start();
    }
 	 
     @Override
@@ -186,46 +222,4 @@ public class RocketColibriService extends  Service implements IUiSinkChangeObser
 		}
 	}
 
-	/**
-	 * This is the notify thread from where all UiSink notifications are sent to the widgets
-	 * 
-	 *  TODO this may be replaced to the UI thread
-	 */
-	public class UiSinkNotifyConsumer implements Runnable
-	{
-		private void sendToAll(UiSinkData data)
-		{
-			if(data.getAndResetNotifyFlag())
-        	{
-            	for(RCWidget observer : uiSinkChangeObserver.get(data.getType()))
-        		{
-        			// select the right list and object depending on the type
-        			observer.onNotifyUiSink(data);
-        		}        		
-        	}
-		}
-	
-	    @Override
-	    public void run() 
-	    {
-        	while(true)
-        	{
-        		try 
-        		{
-        			sendToAll(users);
-        			Thread.sleep(100, 0);
-        		
-        			sendToAll(connState);
-        			Thread.sleep(100, 0);
-        		
-        			sendToAll(videoUrl);
-        			Thread.sleep(100, 0);
-				} 
-        		catch (InterruptedException e) 
-        		{
-					e.printStackTrace();
-				}
-        	}
-	    }
-	}
 }
