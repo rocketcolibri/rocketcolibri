@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <!-- control elements loaded from /res/value/rc.db -->
+        <!-- control elements loaded from /res/raw/rc.db -->
         <!-- and created on the fly per reflaction -->
         <!-- handled by DesktopViewManager -->
 
