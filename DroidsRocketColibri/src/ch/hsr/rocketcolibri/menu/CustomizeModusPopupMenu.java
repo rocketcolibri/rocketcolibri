@@ -30,9 +30,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 		setAnimationStyle(R.style.PopupAnimation);
 		setSoftInputMode(android.view.WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
-		RocketColibriDefaults.setDefaultViewSettings(getContentView());
 		onCreate();
-		
 	}
 	
 	

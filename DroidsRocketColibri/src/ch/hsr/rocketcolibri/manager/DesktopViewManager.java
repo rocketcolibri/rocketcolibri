@@ -36,19 +36,21 @@ public class DesktopViewManager implements IDesktopViewManager{
 	private ResizeController tResizeController;
 	private DragController tDragController;
 	private AbsoluteLayout tRootView;
+	private AbsoluteLayout tControlElementParentView;
 	private boolean tCustomizeModus;
 	private CustomizeModusListener tCustomizeModusListener;
 	private ViewChangedListener tViewChangeListener;
 	private IDragListener dragListener;
 	
-	public DesktopViewManager(Activity context, AbsoluteLayout rootView, ViewChangedListener vcListener){
+	public DesktopViewManager(Activity context, AbsoluteLayout rootView, AbsoluteLayout controlElementParentView, ViewChangedListener vcListener){
 		tContext = context;
 		tRootView = rootView;
+		tControlElementParentView = controlElementParentView;
 		tViewChangeListener = vcListener;
 		tResizeController = new ResizeController(context);
 		tResizeController.setResizeDoneListener(createResizeDoneListener());
 		tDragController = new DragController(context);
-		DragLayer dragLayer = (DragLayer) tRootView;
+		DragLayer dragLayer = (DragLayer) tControlElementParentView;
 		dragLayer.setDragController(tDragController);
 	    tDragController.addDropTarget (dragLayer);
 	    tDragController.setDragListener(createDragListener());
@@ -63,9 +65,9 @@ public class DesktopViewManager implements IDesktopViewManager{
 		ResizeConfig rConfig = null;
 		try{
 			rConfig = ((CustomizableView)resizeTarget).getViewElementConfig().getResizeConfig();
-			tResizeController.startResize(tRootView, resizeTarget, rConfig);
+			tResizeController.startResize(tControlElementParentView, resizeTarget, rConfig);
 		}catch(Exception e){
-			tResizeController.startResize(tRootView, resizeTarget);
+			tResizeController.startResize(tControlElementParentView, resizeTarget);
 		}
 	}
 	
@@ -82,7 +84,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 		    // I use the dragInfo to pass along the object being dragged.
 		    // I'm not sure how the Launcher designers do this.
 		    Object dragInfo = dragView;
-		    tDragController.startDrag (dragView, (IDragSource) tRootView, dragInfo, DragController.DRAG_ACTION_MOVE);
+		    tDragController.startDrag (dragView, (IDragSource) tControlElementParentView, dragInfo, DragController.DRAG_ACTION_MOVE);
 		    return true;
 	    }
 	    // If we get here, return false to indicate that we have not taken care of the event.
@@ -95,7 +97,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	    Constructor<?> cons = c.getConstructor(Context.class, ViewElementConfig.class);
 	    CustomizableView view = (CustomizableView)cons.newInstance(tContext, cElementConfig);
 	    view.setOnTouchListener(tCustomizeModusListener);
-	    tRootView.addView(view);
+	    tControlElementParentView.addView(view);
 	    return view;
 	}
 
@@ -111,11 +113,11 @@ public class DesktopViewManager implements IDesktopViewManager{
 	}
 	
 	private void updateModusOfCustomizableViews(){
-    	int size = tRootView.getChildCount();
+    	int size = tControlElementParentView.getChildCount();
     	ICustomizableView view = null;
     	for(int i = 0; i < size; ++i){
     		try{
-    			view = (ICustomizableView) tRootView.getChildAt(i);
+    			view = (ICustomizableView) tControlElementParentView.getChildAt(i);
     			view.setCustomizeModus(tCustomizeModus);
     		}catch(Exception e){
     		}
@@ -123,21 +125,13 @@ public class DesktopViewManager implements IDesktopViewManager{
 	}
 
 	@Override
-	public void release() {
-		Log.d("DesktopViewManager", "release");
-		tResizeController = null;
-		tContext = null;
-		tCustomizeModusListener.release();
-		tCustomizeModusListener = null;
-		tDragController = null;
-		tRootView = null;
+	public AbsoluteLayout getRootView() {
+		return tRootView;
 	}
 
 	@Override
-	public View getRootView() {
-		//the real root
-//		View view = tContext.getWindow().getDecorView().findViewById(android.R.id.content);
-		return tRootView;
+	public AbsoluteLayout getControlElementParentView() {
+		return tControlElementParentView;
 	}
 	
 	private IResizeDoneListener createResizeDoneListener() {
@@ -166,6 +160,18 @@ public class DesktopViewManager implements IDesktopViewManager{
 			tViewChangeListener.onViewChange(((CustomizableView)view).getViewElementConfig());
 		}catch(Exception e){
 		}
+	}
+	
+	@Override
+	public void release() {
+		Log.d("DesktopViewManager", "release");
+		tResizeController = null;
+		tContext = null;
+		tCustomizeModusListener.release();
+		tCustomizeModusListener = null;
+		tDragController = null;
+		tControlElementParentView = null;
+		tRootView = null;
 	}
 
 }

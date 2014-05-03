@@ -104,8 +104,9 @@ public class DesktopActivity extends RCActivity
 		
 
 		
+		AbsoluteLayout rootLayer = (AbsoluteLayout) findViewById(R.id.root_layer);
 		AbsoluteLayout absolutLayout = (AbsoluteLayout) findViewById(R.id.drag_layer);
-		tDesktopViewManager = new DesktopViewManager(this, absolutLayout, new ViewChangedListener() {
+		tDesktopViewManager = new DesktopViewManager(this, rootLayer, absolutLayout, new ViewChangedListener() {
 			@Override
 			public void onViewChange(ViewElementConfig viewElementConfig) {
 				Log.d("changed", "changed");

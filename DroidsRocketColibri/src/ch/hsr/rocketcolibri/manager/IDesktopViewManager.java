@@ -1,5 +1,6 @@
 package ch.hsr.rocketcolibri.manager;
 
+import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import android.view.View;
 
@@ -9,6 +10,7 @@ public interface IDesktopViewManager {
 	View createView(ViewElementConfig cElementConfig) throws Exception;
 	boolean isInCustomizeModus();
 	void switchCustomieModus();
-	View getRootView();
+	AbsoluteLayout getRootView();
+	AbsoluteLayout getControlElementParentView();
 	void release();
 }
