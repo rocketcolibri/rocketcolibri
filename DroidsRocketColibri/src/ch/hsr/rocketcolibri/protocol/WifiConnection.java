@@ -31,7 +31,7 @@ import android.util.Log;
 public class WifiConnection 
 {
 	final static String TAG = "WifiConnection";
-	final static String networkSSID = "\"RocketColibri\"";
+	public final static String networkSSID = "\"RocketColibri\"";
 
 	/**
 	 * Try to establish a connection to the RocketColibri network
@@ -79,70 +79,5 @@ public class WifiConnection
 		         break;
 		    }           
 		}
-	}
-	
-    /**
-     * Checks the connection to the ServoController which has the SSID RocketColibri
-     * @return true if connected, false if not
-     */
-	public static boolean isConnectedToRocketColibri(Context context)
-	{
-		WifiManager wifiManager = (WifiManager)context.getSystemService(Context.WIFI_SERVICE);
-	    WifiInfo currentWifi = wifiManager.getConnectionInfo();
-	    boolean connected = true;
-	    if(currentWifi != null)
-	    {
-	    	String ssid = currentWifi.getSSID();
-	        if( ssid != null) 
-	            connected =ssid.equals(networkSSID);
-	    }
-
-        if (connected)
-        	Log.d(TAG, "RocketColibri connected");
-        else
-        	Log.d(TAG, "RocketColibri not connected");
-
-	    return connected;
-	}
-
-	public static boolean getConnectivityStatus(Context context) 
-    {
-    	boolean retval = false;
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();       
-        if (null != activeNetwork) 
-        {
-            if(activeNetwork.getType() == ConnectivityManager.TYPE_WIFI)
-            {
-            	retval = isConnectedToRocketColibri( context );
-            }
-        } 
-        return retval;
-    }
-     
-    
-	public static class NetworkChangeReceiver extends BroadcastReceiver 
-	{
-		@Override
-	    public void onReceive(final Context context, final Intent intent) 
-	    {
-			IBinder serviceBinder = peekService(context, new Intent(context, RocketColibriService.class));
-			RocketColibriService rcService = ((RocketColibriService.RocketColibriServiceBinder)serviceBinder).getService();
-
-			if(rcService != null)
-			{
-		    	if(getConnectivityStatus(context))
-		    	{
-		    		rcService.protocolFsm.queue(e.E1_CONN_SSID);
-		    	}
-		    	else
-		    	{
-		    		rcService.protocolFsm.queue(e.E2_DISC_SSID);
-		    	}
-		    	rcService.protocolFsm.processOutstandingEvents();
-			}
-			else
-				Log.d(TAG, "RocketColibri service not found");
-	    }
 	}
 }
