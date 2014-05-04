@@ -79,9 +79,16 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		});
 	}
 	
-	public void setTouchedView(CustomizableView cView){
+	public void show(CustomizableView cView){
+		dismissPopupIfIsShowing();
 		tTargetView = cView;
 		alphaChangeSlider.setProgress((int)(tTargetView.getAlpha()*100f));
+		showAtBestPosition(cView);
+	}
+	
+	private void dismissPopupIfIsShowing(){
+    	if(isShowing())
+    		dismiss();
 	}
 	
 	private View findViewById(int id){

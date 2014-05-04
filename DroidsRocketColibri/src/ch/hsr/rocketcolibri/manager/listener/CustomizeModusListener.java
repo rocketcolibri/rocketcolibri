@@ -63,7 +63,7 @@ public class CustomizeModusListener implements OnTouchListener{
         		tSingleTabCountDown.safeCancel();
             	tClickCount = 0;
             	tStartTime=0;
-            	dismissPopupIfIsShowing();
+            	tCustomizeModusPopup.dismiss();
             	return doubleTab(v);
         	}else if(tDuration < MIN_DURATION){
         		tSingleTabCountDown.safeCancel();
@@ -86,9 +86,7 @@ public class CustomizeModusListener implements OnTouchListener{
 	}
 	
 	boolean singleTab(View tabbedView) {
-		dismissPopupIfIsShowing();
-		tCustomizeModusPopup.setTouchedView((CustomizableView) tabbedView);
-		tCustomizeModusPopup.showAtBestPosition(tabbedView);
+		tCustomizeModusPopup.show((CustomizableView) tabbedView);
     	return true;
 	}
 	
@@ -101,13 +99,8 @@ public class CustomizeModusListener implements OnTouchListener{
 		return tDesktopViewManager.dragView(holdingView);
 	}
 	
-	private void dismissPopupIfIsShowing(){
-    	if(tCustomizeModusPopup.isShowing())
-    		tCustomizeModusPopup.dismiss();
-	}
-	
 	public void release(){
-		dismissPopupIfIsShowing();
+		tCustomizeModusPopup.dismiss();
 		tSingleTabCountDown.release();
 		tSingleTabCountDown = null;
 		tCustomizeModusPopup = null;
