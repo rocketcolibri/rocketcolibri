@@ -57,47 +57,30 @@ public class DesktopMenu {
 				tDesktopViewManager.switchCustomieModus();
 			}
 		});
-		
 
 		b = (ToggleButton)findViewById(R.id.menu_action_main_wifi);
-		b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-		{
-		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) 
-		    {
-		    	if(null != tRcService)
-		    	{
-		    		// TODO not set to null from here!
-		    		// tRcService.users.setActiveUser(null);
-		    		
-		    		if (isChecked) 
-		    			tRcService.wifi.Connect(tRcService);
-			        else
-			        	tRcService.wifi.Disconnect(tRcService);	    		
-		    	}
-		        
+		b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
+	    		// TODO not set to null from here!
+	    		// tRcService.users.setActiveUser(null);
+	    		if (isChecked) 
+	    			tRcService.wifi.Connect(tRcService);
+		        else
+		        	tRcService.wifi.Disconnect(tRcService);
 		    }
 		});
 		
 
 		b = (ToggleButton)findViewById(R.id.menu_action_main_mode);
-		b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-		{
-		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) 
-		    {
-		    	if(null != tRcService)
-		    	{
-		    		if (isChecked) 
-		    		{
-						tRcService.protocolFsm.queue(e.E6_USR_CONNECT);
-						tRcService.protocolFsm.processOutstandingEvents();
-		    		}
-			        else
-			        {
-						tRcService.protocolFsm.queue(e.E7_USR_OBSERVE);
-						tRcService.protocolFsm.processOutstandingEvents();
-			        }
-		    	}
-		        
+		b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
+	    		if (isChecked){
+					tRcService.protocolFsm.queue(e.E6_USR_CONNECT);
+					tRcService.protocolFsm.processOutstandingEvents();
+	    		}else{
+					tRcService.protocolFsm.queue(e.E7_USR_OBSERVE);
+					tRcService.protocolFsm.processOutstandingEvents();
+		        }
 		    }
 		});
 		setServiceDependentButtonsEnabled(false);
@@ -106,7 +89,7 @@ public class DesktopMenu {
 	private void initServiceDependentItems(){
 		serviceDependentItems = new View[serviceDependentItemIds.length];
 		for(int i = 0; i < serviceDependentItemIds.length;++i){
-			serviceDependentItems[i] = (ToggleButton)findViewById(serviceDependentItemIds[i]);
+			serviceDependentItems[i] = findViewById(serviceDependentItemIds[i]);
 		}
 	}
 	

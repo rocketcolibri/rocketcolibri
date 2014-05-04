@@ -44,6 +44,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	private CustomizeModusListener tCustomizeModusListener;
 	private ViewChangedListener tViewChangeListener;
 	private IDragListener dragListener;
+	private CustomizeModusPopupMenu tCustomizeModusPopupMenu;
 	
 	public DesktopViewManager(Activity context, AbsoluteLayout rootView, AbsoluteLayout controlElementParentView, ViewChangedListener vcListener){
 		tContext = context;
@@ -59,8 +60,8 @@ public class DesktopViewManager implements IDesktopViewManager{
 	    tDragController.setDragListener(createDragListener());
 	    LayoutInflater li = LayoutInflater.from(context);
 		LinearLayout ll = (LinearLayout) li.inflate(R.layout.customize_modus_popup, null, false);
-		
-	    tCustomizeModusListener = new CustomizeModusListener(this, new CustomizeModusPopupMenu(this, ll));
+		tCustomizeModusPopupMenu = new CustomizeModusPopupMenu(this, ll);
+	    tCustomizeModusListener = new CustomizeModusListener(this);
 	}
 
 	@Override
@@ -175,6 +176,11 @@ public class DesktopViewManager implements IDesktopViewManager{
 		tDragController = null;
 		tControlElementParentView = null;
 		tRootView = null;
+	}
+	
+	@Override
+	public CustomizeModusPopupMenu getCustomizeModusPopupMenu(){
+		return tCustomizeModusPopupMenu;
 	}
 
 }

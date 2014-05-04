@@ -3,6 +3,7 @@
  */
 package ch.hsr.rocketcolibri.manager;
 
+import ch.hsr.rocketcolibri.menu.CustomizeModusPopupMenu;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import android.view.View;
@@ -18,5 +19,6 @@ public interface IDesktopViewManager {
 	void switchCustomieModus();
 	AbsoluteLayout getRootView();
 	AbsoluteLayout getControlElementParentView();
+	CustomizeModusPopupMenu getCustomizeModusPopupMenu();
 	void release();
 }

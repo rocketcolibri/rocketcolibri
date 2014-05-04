@@ -25,14 +25,12 @@ public class CustomizeModusListener implements OnTouchListener{
 	private long tStartTime;
 	private long tDuration;
 	private IDesktopViewManager tDesktopViewManager;
-	private CustomizeModusPopupMenu tCustomizeModusPopup;
 	//the single tab handler
 	private SingleTabCountDown tSingleTabCountDown = new SingleTabCountDown(this, MIN_DURATION, MIN_DURATION);
 	
-	public CustomizeModusListener(IDesktopViewManager desktopViewManager, CustomizeModusPopupMenu customizeModusPopup){
+	public CustomizeModusListener(IDesktopViewManager desktopViewManager){
 		tDesktopViewManager = desktopViewManager;
-		tCustomizeModusPopup = customizeModusPopup;
-		tCustomizeModusPopup.setOnDismissListener(new OnDismissListener() {
+		tDesktopViewManager.getCustomizeModusPopupMenu().setOnDismissListener(new OnDismissListener() {
 			@Override
 			public void onDismiss() {
 				tSingleTabCountDown.safeCancel();
@@ -63,7 +61,7 @@ public class CustomizeModusListener implements OnTouchListener{
         		tSingleTabCountDown.safeCancel();
             	tClickCount = 0;
             	tStartTime=0;
-            	tCustomizeModusPopup.dismiss();
+            	tDesktopViewManager.getCustomizeModusPopupMenu().dismiss();
             	return doubleTab(v);
         	}else if(tDuration < MIN_DURATION){
         		tSingleTabCountDown.safeCancel();
@@ -86,7 +84,7 @@ public class CustomizeModusListener implements OnTouchListener{
 	}
 	
 	boolean singleTab(View tabbedView) {
-		tCustomizeModusPopup.show((CustomizableView) tabbedView);
+		tDesktopViewManager.getCustomizeModusPopupMenu().show((CustomizableView) tabbedView);
     	return true;
 	}
 	
@@ -100,10 +98,9 @@ public class CustomizeModusListener implements OnTouchListener{
 	}
 	
 	public void release(){
-		tCustomizeModusPopup.dismiss();
+		tDesktopViewManager.getCustomizeModusPopupMenu().dismiss();
 		tSingleTabCountDown.release();
 		tSingleTabCountDown = null;
-		tCustomizeModusPopup = null;
 		tDesktopViewManager = null;
 	}
 
