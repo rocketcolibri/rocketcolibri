@@ -194,8 +194,7 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
             break;
         case MotionEvent.ACTION_UP:
           if(tGroupId==-1){
-        	  finish();
-        	  tListener.done(tResizeTarget);
+        	  stop();
           }
           return true;
         }
@@ -204,6 +203,11 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
         this.updateViewLayout(tResizeTarget, tResizeTargetLP);
         return true;
     }
+    
+	public void stop() {
+		finish();
+		tListener.done(tResizeTarget);
+	}
     
     private void calculationWithRatio(){
         if (tGroupId == 1) {

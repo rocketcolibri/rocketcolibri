@@ -14,7 +14,8 @@ import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
  * @author Artan Veliju
  */
 public class ResizableMainLayer extends AbsoluteLayout{
-
+	
+	private ResizeableTargetLayer tTargetLayer;
 	public ResizableMainLayer(Context context, View resizeTarget, final IResizeDoneListener listener, LayoutParams lp, ResizeConfig config) {
 		super(context);
 		IResizeDoneListener mainListener = new IResizeDoneListener() {
@@ -29,8 +30,12 @@ public class ResizableMainLayer extends AbsoluteLayout{
         setLayoutParams(lp);
         ResizableBackgroundLayer bgLayer = new ResizableBackgroundLayer(context, lp);
         addView(bgLayer);
-        ResizeableTargetLayer targetLayer = new ResizeableTargetLayer(context, resizeTarget, lp, mainListener, config);
-        addView(targetLayer);
+        tTargetLayer = new ResizeableTargetLayer(context, resizeTarget, lp, mainListener, config);
+        addView(tTargetLayer);
+	}
+	
+	public void stop(){
+		tTargetLayer.stop();
 	}
 
 }

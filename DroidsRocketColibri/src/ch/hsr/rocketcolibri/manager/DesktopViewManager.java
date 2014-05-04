@@ -182,5 +182,11 @@ public class DesktopViewManager implements IDesktopViewManager{
 	public CustomizeModusPopupMenu getCustomizeModusPopupMenu(){
 		return tCustomizeModusPopupMenu;
 	}
+	
+	@Override
+	public void closeSpecialThings(){
+		tCustomizeModusPopupMenu.dismiss();
+		tResizeController.stopResize();
+	}
 
 }

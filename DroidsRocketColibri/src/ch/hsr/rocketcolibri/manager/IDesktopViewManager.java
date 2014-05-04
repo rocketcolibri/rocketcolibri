@@ -20,5 +20,6 @@ public interface IDesktopViewManager {
 	AbsoluteLayout getRootView();
 	AbsoluteLayout getControlElementParentView();
 	CustomizeModusPopupMenu getCustomizeModusPopupMenu();
+	void closeSpecialThings();
 	void release();
 }

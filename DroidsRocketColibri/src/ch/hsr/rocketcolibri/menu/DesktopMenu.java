@@ -13,6 +13,7 @@ import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import ch.hsr.rocketcolibri.view.widget.SwipeInMenu;
+import ch.hsr.rocketcolibri.view.widget.SwipeInMenu.OnDrawerOpenListener;
 
 /**
  * This Class is for the Instantiations of the Children's of the Menu
@@ -31,6 +32,12 @@ public class DesktopMenu {
 		tContext = context;
 		tSwipeInMenu = (SwipeInMenu) contentView;
 		tDesktopViewManager = desktopViewManager;
+		tSwipeInMenu.setOnDrawerOpenListener(new OnDrawerOpenListener() {
+			@Override
+			public void onDrawerOpened() {
+				tDesktopViewManager.closeSpecialThings();
+			}
+		});
 		onCreate();	
 	}
 	

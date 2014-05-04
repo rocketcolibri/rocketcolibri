@@ -47,6 +47,11 @@ public class ResizeController {
 	    tIsResizing = true;
 	}
 	
+	public void stopResize(){
+//		if(tViewResizer!=null)
+//			tViewResizer.stop();
+	}
+	
 	public void setResizeDoneListener(IResizeDoneListener listener){
 		tResizeDoneListener = listener;
 	}
