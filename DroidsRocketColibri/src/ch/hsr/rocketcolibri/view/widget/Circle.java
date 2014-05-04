@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.view.widget;
 
 import ch.hsr.rocketcolibri.R;
@@ -27,6 +30,9 @@ import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.content.res.TypedArray;
 
+/**
+ * @author Artan Veliju
+ */
 public final class Circle extends RCWidget
 {
 

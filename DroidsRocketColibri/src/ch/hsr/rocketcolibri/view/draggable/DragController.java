@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 /*
  * This is a modified version of a class from the Android
  * Open Source Project. The original copyright and license information follows.
@@ -41,7 +44,8 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout;
  * When a drag starts it creates a special view (a DragView) that moves around the screen
  * until the user ends the drag. As feedback to the user, this object causes the device to
  * vibrate as the drag begins.
- *
+ * 
+ * @author Artan Veliju
  */
 
 public class DragController {

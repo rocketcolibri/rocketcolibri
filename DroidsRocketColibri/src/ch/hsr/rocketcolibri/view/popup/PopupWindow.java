@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.view.popup;
 /*
  * Copyright (C) 2007 The Android Open Source Project
@@ -50,6 +53,7 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
  * 
  * @see android.widget.AutoCompleteTextView
  * @see android.widget.Spinner
+ * @author Artan Veliju
  */
 public class PopupWindow {
     /**

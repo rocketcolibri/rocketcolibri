@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.widgetdirectory.uisinkdata;
 
 import ch.hsr.rocketcolibri.widgetdirectory.RCUiSinkType;

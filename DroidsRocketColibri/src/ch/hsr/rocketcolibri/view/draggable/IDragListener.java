@@ -1,9 +1,14 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.view.draggable;
 
 import android.view.View;
 
 /**
  * Interface to receive notifications when a drag starts or stops
+ * 
+ * @author Artan Veliju
  */
 public interface IDragListener {
     

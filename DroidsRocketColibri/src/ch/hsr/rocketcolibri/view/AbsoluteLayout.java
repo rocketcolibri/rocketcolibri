@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 /*
  * This is a modified version of a class from the Android Open Source Project. 
  * The original copyright and license information follows.
@@ -35,6 +38,8 @@ import android.widget.RemoteViews.RemoteView;
  * android.R.styleable#View View Attributes}</p>
  * 
  * <p>Note: This class is a clone of AbsoluteLayout, which is now deprecated.
+ * 
+ * @author Artan Veliju
  */
 
 @RemoteView

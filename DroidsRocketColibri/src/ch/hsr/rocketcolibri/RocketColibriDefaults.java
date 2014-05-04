@@ -1,9 +1,15 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri;
 
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.view.View;
 
+/**
+ * @author Artan Veliju
+ */
 @TargetApi(Build.VERSION_CODES.KITKAT)
 public class RocketColibriDefaults {
 	

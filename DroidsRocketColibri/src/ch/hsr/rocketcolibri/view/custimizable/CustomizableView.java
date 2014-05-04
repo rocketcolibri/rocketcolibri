@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.view.custimizable;
 
 import android.content.Context;
@@ -8,6 +11,9 @@ import android.view.View;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 
+/**
+ * @author Artan Veliju
+ */
 public class CustomizableView extends View implements ICustomizableView{
 	private boolean customizeModusActive = false;
 	private ViewElementConfig tViewElementConfig;

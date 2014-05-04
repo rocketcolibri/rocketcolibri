@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.view.resizable.layer;
 
 import android.content.Context;
@@ -7,6 +10,9 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 
+/**
+ * @author Artan Veliju
+ */
 public class ResizableMainLayer extends AbsoluteLayout{
 
 	public ResizableMainLayer(Context context, View resizeTarget, final IResizeDoneListener listener, LayoutParams lp, ResizeConfig config) {

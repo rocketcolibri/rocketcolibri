@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.view.widget;
 
 import ch.hsr.rocketcolibri.R;
@@ -80,7 +83,7 @@ import android.view.animation.ScaleAnimation;
  *
  * @author Ahmed Shakil
  * @author PatrickF
- * @author artvel
+ * @author Artan Veliju
  */
 public class SwipeInMenu extends ViewGroup {
 

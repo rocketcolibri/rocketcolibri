@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri;
 
 import java.util.ArrayList;
@@ -35,9 +38,10 @@ import android.util.Log;
  * - holds protocol and wifi connection objects
  * - holds DBService object
  * - updates RCWidgets with changeds telemetry data
- *   
+ * 
+ * @author Artan Veliju
  */
-public class RocketColibriService extends  Service implements IUiSinkChangeObservable
+public class RocketColibriService extends Service implements IUiSinkChangeObservable
 {
 	final String TAG = this.getClass().getName();
 	public static volatile boolean running;

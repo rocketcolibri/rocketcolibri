@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.manager.listener;
 
 import android.util.Log;
@@ -13,7 +16,7 @@ import ch.hsr.rocketcolibri.view.popup.PopupWindow.OnDismissListener;
 
 /**
  * This Class handles the touch events in the Customize-Mode
- * @author artvel
+ * @author Artan Veliju
  */
 public class CustomizeModusListener implements OnTouchListener{
 

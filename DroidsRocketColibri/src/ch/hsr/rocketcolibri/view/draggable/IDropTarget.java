@@ -1,3 +1,7 @@
+/**
+ * Rocket Colibri © 2014
+ */
+
 /*
  * This is a modified version of a class from the Android Open Source Project. 
  * The original copyright and license information follows.
@@ -24,6 +28,7 @@ import android.graphics.Rect;
 /**
  * Interface defining an object that can receive a view at the end of a drag operation.
  *
+ * @author Artan Veliju
  */
 public interface IDropTarget {
 

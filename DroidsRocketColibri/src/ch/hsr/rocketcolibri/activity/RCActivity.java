@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.activity;
 
 import android.app.Activity;
@@ -26,7 +29,9 @@ import java.util.Locale;
 import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.RocketColibriService;
 
-
+/**
+ * @author Artan Veliju
+ */
 public abstract class RCActivity extends Activity {
 	protected RocketColibriService rcService;
 	protected ProgressDialog mDialog;

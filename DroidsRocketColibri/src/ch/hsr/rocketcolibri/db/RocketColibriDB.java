@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.db;
 
 import java.io.File;
@@ -13,6 +16,9 @@ import android.content.Context;
 import ch.hsr.rocketcolibri.db.model.RCModel;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 
+/**
+ * @author Artan Veliju
+ */
 public class RocketColibriDB {
 	private ODB tOdb;
 	

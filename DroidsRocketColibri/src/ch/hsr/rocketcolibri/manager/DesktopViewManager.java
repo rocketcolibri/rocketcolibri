@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.manager;
 
 import java.lang.reflect.Constructor;
@@ -29,7 +32,7 @@ import ch.hsr.rocketcolibri.view.resizable.ResizeController;
 /**
  * The DesktopViewManager handles creation, drag&drop and resizing of the
  * Views on the Desktop.
- * @author artvel
+ * @author Artan Veliju
  */
 public class DesktopViewManager implements IDesktopViewManager{
 	private Activity tContext;

@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.protocol.fsm;
 
 // sources from https://github.com/olibye/guvna

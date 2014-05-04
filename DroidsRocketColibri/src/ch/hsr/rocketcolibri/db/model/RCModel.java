@@ -1,9 +1,14 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.db.model;
 
 import java.util.List;
 
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-
+/**
+ * @author Artan Veliju
+ */
 public class RCModel {
 	private String name;
 	private List<ViewElementConfig> viewElementConfigs;

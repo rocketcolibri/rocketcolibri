@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.menu;
 
 import android.content.Context;
@@ -14,7 +17,7 @@ import ch.hsr.rocketcolibri.view.widget.SwipeInMenu;
 /**
  * This Class is for the Instantiations of the Children's of the Menu
  * and the Listener of them
- * @author artvel
+ * @author Artan Veliju
  */
 public class DesktopMenu {
 	private SwipeInMenu tSwipeInMenu;

@@ -1,6 +1,10 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.activity;
 
 import android.graphics.Color;
+
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +26,9 @@ import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
 import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
 import ch.hsr.rocketcolibri.view.widget.TelemetryWidget;
 
+/**
+ * @author Artan Veliju
+ */
 public class DesktopActivity extends RCActivity
 {
 	private static final String TAG = "CircleTestActivity";

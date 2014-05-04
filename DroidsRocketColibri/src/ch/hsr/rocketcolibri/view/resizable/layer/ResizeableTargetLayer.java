@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.view.resizable.layer;
 
 import java.util.ArrayList;
@@ -15,6 +18,9 @@ import android.graphics.Point;
 import android.view.MotionEvent;
 import android.view.View;
 
+/**
+ * @author Artan Veliju
+ */
 public class ResizeableTargetLayer extends AbsoluteLayout {
 
 	/**

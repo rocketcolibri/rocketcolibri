@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.widgetdirectory;
 
 import java.lang.reflect.Constructor;

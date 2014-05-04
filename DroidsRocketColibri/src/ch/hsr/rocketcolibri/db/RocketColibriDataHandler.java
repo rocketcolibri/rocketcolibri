@@ -1,6 +1,10 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.db;
 
 import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,6 +17,9 @@ import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.db.model.JsonRCModel;
 import ch.hsr.rocketcolibri.db.model.RCModel;
 
+/**
+ * @author Artan Veliju
+ */
 public class RocketColibriDataHandler {
 
 	private Context tContext;

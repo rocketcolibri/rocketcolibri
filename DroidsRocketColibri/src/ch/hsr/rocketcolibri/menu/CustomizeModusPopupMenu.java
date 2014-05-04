@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.menu;
 
 import android.graphics.Color;
@@ -16,6 +19,9 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.popup.PopupWindow;
 
+/**
+ * @author Artan Veliju
+ */
 public class CustomizeModusPopupMenu extends PopupWindow{
 
 	private CustomizableView tTargetView;

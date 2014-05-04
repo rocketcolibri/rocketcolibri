@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri;
 
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
@@ -12,6 +15,9 @@ import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.util.Log;
 
+/**
+ * @author Artan Veliju
+ */
 public class NetworkChangeReceiver extends BroadcastReceiver {
 	final String TAG = NetworkChangeReceiver.class.getSimpleName();
 	

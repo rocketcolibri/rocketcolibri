@@ -1,3 +1,6 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.manager.listener;
 
 import java.util.concurrent.locks.Lock;
@@ -7,6 +10,9 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 
+/**
+ * @author Artan Veliju
+ */
 public class SingleTabCountDown extends CountDownTimer{
 	private Lock syncedStartCancel = new ReentrantLock(true);
 	private volatile boolean running;

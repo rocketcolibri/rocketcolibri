@@ -1,3 +1,7 @@
+/**
+ * Rocket Colibri © 2014
+ */
+
 /*
  * This is a modified version of a class from the Android Open Source Project. 
  * The original copyright and license information follows.
@@ -35,6 +39,7 @@ import android.view.View;
  * on the screen is a DragView. A DragView is constructed using a bitmap of the view the user really
  * wants to move.
  *
+ * @author Artan Veliju
  */
 
 public class DragView extends View 

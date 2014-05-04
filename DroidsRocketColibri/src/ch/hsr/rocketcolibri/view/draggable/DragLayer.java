@@ -1,3 +1,7 @@
+/**
+ * Rocket Colibri © 2014
+ */
+
 /*
  * This is a modified version of a class from the Android Open Source Project. 
  * The original copyright and license information follows.
@@ -36,6 +40,8 @@ import android.widget.Toast;
  * It is a bit different in several respects:
  * (1) It extends MyAbsoluteLayout rather than FrameLayout; (2) it implements DragSource and DropTarget methods
  * that were done in a separate Workspace class in the Launcher.
+ * 
+ * @author Artan Veliju
  */
 public class DragLayer extends AbsoluteLayout 
     implements IDragSource, IDropTarget

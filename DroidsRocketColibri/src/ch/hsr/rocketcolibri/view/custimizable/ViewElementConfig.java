@@ -1,8 +1,14 @@
+/**
+ * Rocket Colibri © 2014
+ */
 package ch.hsr.rocketcolibri.view.custimizable;
 
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 
+/**
+ * @author Artan Veliju
+ */
 public class ViewElementConfig {
 	private int id;
 	private String classPath;
