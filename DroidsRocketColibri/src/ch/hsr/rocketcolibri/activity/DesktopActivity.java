@@ -260,8 +260,6 @@ public class DesktopActivity extends RCActivity
 			}catch(Exception e){
 			}
 		    
-		    String message = tDesktopViewManager.isInCustomizeModus() ? "Press and hold to start dragging.": "Touch a view to start dragging.";
-		    Toast.makeText (getApplicationContext(), message, Toast.LENGTH_LONG).show ();
 		    setupViewsOnce = false;
 		}
 	}
