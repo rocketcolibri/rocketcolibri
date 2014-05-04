@@ -24,10 +24,10 @@ public class DesktopMenu {
 	private Context tContext;
 	private IDesktopViewManager tDesktopViewManager;
 	private RocketColibriService tRcService;
-	private int[] serviceDependentButtons = {R.id.menu_action_main_settings,R.id.menu_action_main_wifi, R.id.menu_action_main_mode};
+	private int[] serviceDependentItemIds = {R.id.menu_action_main_settings,R.id.menu_action_main_wifi, R.id.menu_action_main_mode};
+	private View[] serviceDependentItems;
 	
 	public DesktopMenu(Context context, View contentView, IDesktopViewManager desktopViewManager) {
-		tRcService = null;
 		tContext = context;
 		tSwipeInMenu = (SwipeInMenu) contentView;
 		tDesktopViewManager = desktopViewManager;
@@ -42,14 +42,6 @@ public class DesktopMenu {
 		tSwipeInMenu.animateToggle();
 	}
 	
-	private void setServiceDependentButtonsEnabled(boolean enabled){
-		ToggleButton b = null;
-		for(int i = 0; i < serviceDependentButtons.length;++i){
-			b = (ToggleButton)findViewById(serviceDependentButtons[i]);
-			b.setEnabled(enabled);
-		}
-	}
-	
 	public void setService(RocketColibriService rcService) {
 		tRcService = rcService;
 		setServiceDependentButtonsEnabled(true);
@@ -57,6 +49,7 @@ public class DesktopMenu {
 	
 	
 	private void onCreate(){
+		initServiceDependentItems();
 		ToggleButton b = (ToggleButton)findViewById(R.id.menu_action_main_settings);
 		b.setOnClickListener(new OnClickListener() {
 			@Override
@@ -110,10 +103,21 @@ public class DesktopMenu {
 		setServiceDependentButtonsEnabled(false);
 	}
 	
+	private void initServiceDependentItems(){
+		serviceDependentItems = new View[serviceDependentItemIds.length];
+		for(int i = 0; i < serviceDependentItemIds.length;++i){
+			serviceDependentItems[i] = (ToggleButton)findViewById(serviceDependentItemIds[i]);
+		}
+	}
+	
+	private void setServiceDependentButtonsEnabled(boolean enabled){
+		for(int i = 0; i < serviceDependentItems.length;++i){
+			serviceDependentItems[i].setEnabled(enabled);
+		}
+	}
+	
 	private View findViewById(int id){
 		return tSwipeInMenu.findViewById(id);
 	}
-	
-	
 
 }
