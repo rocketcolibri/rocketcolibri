@@ -26,11 +26,11 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
 
 	/**
 	 *  point0
-	 *  O--------------O point2
+	 *  O--------------O point3
 	 *  -              -
 	 *  - View Element -
 	 *  -              -
-	 *  O--------------O point3
+	 *  O--------------O point2
 	 *  point1
 	 */
 	private Point tPoint0, tPoint2;
