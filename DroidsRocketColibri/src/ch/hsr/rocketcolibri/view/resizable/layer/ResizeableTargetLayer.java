@@ -15,6 +15,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -63,7 +64,11 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
     private int tCurrentY;
     private double tRatio;
 
-    
+    /**
+	 * Class name for logging 
+	 */
+	final String TAG = this.getClass().getName();
+
     public ResizeableTargetLayer(final Context context, View resizeTarget, LayoutParams layoutParams, final IResizeDoneListener listener) {
     	this(context, resizeTarget, layoutParams, listener, new ResizeConfig());
     }
@@ -219,9 +224,11 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
                	tTopLeftOrRightX = tColorballs.get(0).getX()+tColorballs.get(0).getWidthOfBall();
         	}
         	tWidth = tBottomLeftOrRightX-tTopLeftOrRightX;
+        	tHeight = calculateHeightWithRatio();
 
-        	//break if min or max size is reached
-        	if(!isWithInPermittedRange())return;
+        	// break if min or max size for width or height is reached
+        	if (!isWidthInPermittedRange() || !isHeightInPermittedRange()) return;
+
         	setXAndYToTheTargetPoint();
         	setWidthToTargetViewAndCalculateRatio();
         	tResizeTargetLP.x = tTopLeftOrRightX;
@@ -241,9 +248,11 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
             	tBottomLeftOrRightX = tColorballs.get(1).getX()+tColorballs.get(1).getHeightOfBall();
         	}
         	tWidth = tTopLeftOrRightX-tBottomLeftOrRightX;
-        	
-        	//break if min or max size is reached
-        	if(!isWithInPermittedRange())return;
+        	tHeight = calculateHeightWithRatio();
+
+        	// break if min or max size for width or height is reached
+        	if (!isWidthInPermittedRange() || !isHeightInPermittedRange()) return;
+
         	setXAndYToTheTargetPoint();
         	setWidthToTargetViewAndCalculateRatio();
         	if(tBallID==1){
@@ -259,9 +268,13 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
     
     private void setWidthToTargetViewAndCalculateRatio(){
     	tResizeTargetLP.width = tWidth;
-    	tResizeTargetLP.height = (int) (tResizeTargetLP.width/tRatio);
+    	tResizeTargetLP.height = calculateHeightWithRatio(); //(int) (tResizeTargetLP.width/tRatio);
     }
     
+    private int calculateHeightWithRatio(){
+    	return (int) (tWidth/tRatio);
+    }
+
     private void calculationWithoutRatio(){
         if (tGroupId == 1) {
         	if(tBallID==0){
@@ -276,7 +289,7 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
             	tBottomLeftOrRightY = tCurrentY;
         	}
          	tWidth = tBottomLeftOrRightX-tTopLeftOrRightX;
-         	if(isWithInPermittedRange()){
+         	if(isWidthInPermittedRange()){
          		tColorballs.get(tBallID).setX(tCurrentX);
             	changePointsOnBottomLeftAndTopRight_X_AndDraw();
             	tResizeTargetLP.width = tWidth;
@@ -307,7 +320,7 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
             	tBottomLeftOrRightY = tCurrentY+tColorballs.get(3).getHeightOfBall();
         	}
          	tWidth = tBottomLeftOrRightX-tTopLeftOrRightX;
-         	if(isWithInPermittedRange()){
+         	if(isWidthInPermittedRange()){
          		tColorballs.get(tBallID).setX(tCurrentX);
          		changePointsOnTopLeftAndBottomRight_X_AndDraw();
          		tResizeTargetLP.width = tWidth;
@@ -329,7 +342,7 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
         }
     }
     
-    private boolean isWithInPermittedRange(){
+    private boolean isWidthInPermittedRange(){
     	return tWidth >= tConfig.minWidth && tWidth <= tConfig.maxWidth;
     }
     
