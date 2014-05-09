@@ -5,6 +5,10 @@ package ch.hsr.rocketcolibri.widgetdirectory.uioutputdata;
 
 import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 
+/**
+ * Contains informations about the video stream available from
+ * the ServoController 
+ */
 public class VideoUrl extends UiOutputData 
 {
 	private String videoUrl;

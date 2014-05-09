@@ -96,7 +96,7 @@ public class RocketColibriService extends Service implements IUiOutputSinkChange
 		// list all available Widgets here: 
 		this.tWidgetDirectory.add(new WidgetDirectoryEntry("Cross Control", "ch.hsr.rocketcolibri.widget.Circle"));
 		this.tWidgetDirectory.add(new WidgetDirectoryEntry("Connection Status", "ch.hsr.rocketcolibri.widget.ConnectionStatusWidget"));
-		this.tWidgetDirectory.add(new WidgetDirectoryEntry("Telemetry Widget", "ch.hsr.rocketcolibri.widget.TelemetryWidget"));
+		this.tWidgetDirectory.add(new WidgetDirectoryEntry("User Info", "ch.hsr.rocketcolibri.widget.ConnectedUserInfoWidget"));
 
 		// observer map
 		tUiOutputSinkChangeObserver = new HashMap<UiOutputDataType, List<RCWidget>>();

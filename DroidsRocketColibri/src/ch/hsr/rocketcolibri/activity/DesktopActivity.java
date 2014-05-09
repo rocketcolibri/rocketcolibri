@@ -24,7 +24,7 @@ import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.widget.Circle;
 import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
 import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
-import ch.hsr.rocketcolibri.view.widget.TelemetryWidget;
+import ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget;
 
 /**
  * @author Artan Veliju
@@ -40,7 +40,7 @@ public class DesktopActivity extends RCActivity
 	private IDesktopViewManager tDesktopViewManager;
 	
 	private ConnectionStatusWidget connectionStatusWidget;
-	private TelemetryWidget telemetryWidget;
+	private ConnectedUserInfoWidget telemetryWidget;
 		
 	public static final boolean Debugging = false;
 	private DesktopMenu tDesktopMenu;
@@ -190,8 +190,8 @@ public class DesktopActivity extends RCActivity
 			    rc.maxWidth=800;
 			    rc.minWidth=100;
 			    lp = new LayoutParams(600, 100 , 100, 0);
-			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.TelemetryWidget", lp, rc);
-			    this.telemetryWidget = (TelemetryWidget) tDesktopViewManager.createView(elementConfig);
+			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget", lp, rc);
+			    this.telemetryWidget = (ConnectedUserInfoWidget) tDesktopViewManager.createView(elementConfig);
 			    this.telemetryWidget.setBackgroundColor(Color.CYAN);
 			    this.telemetryWidget.setAlpha((float) .5);
 			    

@@ -6,6 +6,10 @@ package ch.hsr.rocketcolibri.widgetdirectory.uioutputdata;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 
+/**
+ * Contains the information about the state of the connection
+ * between the RocketColibri and the ServoControler 
+ */
 public class ConnectionState extends UiOutputData {
 
 	private s state;
@@ -31,5 +35,4 @@ public class ConnectionState extends UiOutputData {
 	{
 		return this.state;
 	}
-	
 }

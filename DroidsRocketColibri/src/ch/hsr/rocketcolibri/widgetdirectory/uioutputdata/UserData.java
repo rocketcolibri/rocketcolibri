@@ -9,6 +9,10 @@ import java.util.List;
 import ch.hsr.rocketcolibri.protocol.RcOperator;
 import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 
+/**
+ * Contains the name and the IP address of all 
+ * connected active and passive users 
+ */
 public class UserData extends UiOutputData
 {
 	private RcOperator activeUser;

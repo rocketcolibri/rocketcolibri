@@ -58,7 +58,7 @@ public class ConnectionStatusWidget extends RCWidget
 		float scale = (float) getWidth();
 		canvas.save(Canvas.MATRIX_SAVE_FLAG);
 		canvas.scale(scale, scale);
-		canvas.drawOval(connectionIconRect, connectionIconPaint);
+		canvas.drawRect(connectionIconRect, connectionIconPaint);
 		canvas.restore();
 		super.onDraw(canvas);
 	}
