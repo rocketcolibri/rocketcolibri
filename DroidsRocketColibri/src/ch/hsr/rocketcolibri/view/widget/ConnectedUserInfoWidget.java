@@ -26,6 +26,7 @@ public class ConnectedUserInfoWidget extends RCWidget
 	private Paint tUserBitmapPaint;
 	private Bitmap tObserverBitmap;
 	private Bitmap tControlBitmap;
+	private Bitmap tUsersBitmap;
 	private Paint tTextPaint;
 	static final int tFontSize = 20;
 	static final int tLineSpace = 4;
@@ -43,6 +44,7 @@ public class ConnectedUserInfoWidget extends RCWidget
 		tTextPaint.setTextSize(tFontSize);
 		tObserverBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_connected), tFontSize, tFontSize, true);	
 		tControlBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_control), tFontSize, tFontSize, true);
+		tUsersBitmap =  BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connected_users);
 		
 		tUserBitmapPaint = new Paint();
 		tUserBitmapPaint.setFilterBitmap(false);
@@ -76,6 +78,12 @@ public class ConnectedUserInfoWidget extends RCWidget
 		canvas.drawText(getUserText(user), tFontSize+tBorderSize+tLineSpace  , tBorderSize+tFontSize+(tLineSpace+tFontSize)*line, tTextPaint);
 	}
 	
+	public static Bitmap resizeBitmap(Bitmap bitmap, int width, int height) { //width - height in pixel not in DP
+	    bitmap.setDensity(Bitmap.DENSITY_NONE); 
+	    Bitmap newbmp = Bitmap.createScaledBitmap(bitmap, width, height, true);
+	    return newbmp;
+	}
+	
 	@Override
 	protected void onDraw(Canvas canvas) {
 		if(null != tUserData) {
@@ -88,6 +96,10 @@ public class ConnectedUserInfoWidget extends RCWidget
 				drawUserLine(canvas, line++, tObserverBitmap, user);
 			}
 		}
+		
+		int size = Math.min(canvas.getHeight(),canvas.getWidth());
+		canvas.drawBitmap(resizeBitmap(this.tUsersBitmap,size,size), canvas.getWidth()-size, 0, null);
+		
 		super.onDraw(canvas);
 	}
 
