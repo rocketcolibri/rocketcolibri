@@ -11,7 +11,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.util.AttributeSet;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RcOperator;
@@ -24,15 +23,14 @@ import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.UserData;
  */
 public class ConnectedUserInfoWidget extends RCWidget 
 {
-	Paint tUserBitmapPaint;
-	RectF tUserIcon;
+	private Paint tUserBitmapPaint;
 	private Bitmap tObserverBitmap;
 	private Bitmap tControlBitmap;
 	private Paint tTextPaint;
 	static final int tFontSize = 20;
 	static final int tLineSpace = 4;
 	static final int tBorderSize = 10;
-	UserData tUserData;
+	private UserData tUserData;
 	
 	public ConnectedUserInfoWidget(Context context, ViewElementConfig elementConfig) {
 		super(context, elementConfig);
@@ -40,7 +38,6 @@ public class ConnectedUserInfoWidget extends RCWidget
 	}
 	
 	private void init(Context context, AttributeSet attrs) {
-		tUserIcon = new RectF(0.0f, 0.0f, 1.0f, 1.0f);
 		tTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		tTextPaint.setColor(Color.BLACK);
 		tTextPaint.setTextSize(tFontSize);
@@ -76,7 +73,7 @@ public class ConnectedUserInfoWidget extends RCWidget
 	
 	private void drawUserLine(Canvas canvas, int line, Bitmap bitmap, RcOperator user) {
 		canvas.drawBitmap(bitmap, tBorderSize, tBorderSize+(tLineSpace+tFontSize)*line, null);
-		canvas.drawText(getUserText(tUserData.getActiveUser()), tFontSize+tBorderSize+tLineSpace  , tBorderSize+tFontSize+(tLineSpace+tFontSize)*line, tTextPaint);
+		canvas.drawText(getUserText(user), tFontSize+tBorderSize+tLineSpace  , tBorderSize+tFontSize+(tLineSpace+tFontSize)*line, tTextPaint);
 	}
 	
 	@Override

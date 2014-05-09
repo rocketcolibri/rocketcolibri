@@ -26,11 +26,18 @@ public class UserData extends UiOutputData
 	public boolean setConnectedUsers(RcOperator activeUser, List<RcOperator>passivUser)
 	{
 		boolean doNotify = false;
-		if(!activeUser.equals(this.activeUser))
-		{
-			this.activeUser = activeUser;
-			doNotify = true;
+		if(null != activeUser) {
+			if(!activeUser.equals(this.activeUser)) 	{
+				this.activeUser = activeUser;
+				doNotify = true;
+			}
+		} else {
+			if(null != this.activeUser) {
+				this.activeUser = activeUser;
+				doNotify = true;
+			}
 		}
+			
 		
 		if(!passivUser.equals(this.passivUser))
 		{

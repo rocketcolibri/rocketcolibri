@@ -12,64 +12,57 @@ import org.json.JSONObject;
 
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
-import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
-public class RocketColibriMessageTelemetry extends RocketColibriMessage
-{
-		
-	private RcOperator activeuser = new RcOperator();
-	private List<RcOperator> passivuser = new ArrayList<RcOperator>() ;
-	private int sequence;
+public class RocketColibriMessageTelemetry extends RocketColibriMessage {
+	final String TAG = this.getClass().getName();		
+	private RcOperator tActiveuser = new RcOperator();
+	private List<RcOperator> tPassivuser = new ArrayList<RcOperator>() ;
+	private int tSequence;
 	
-	final String TAG = this.getClass().getName();
-	
-	public RocketColibriMessageTelemetry(JSONObject jObject) throws JSONException
-	{
+	public RocketColibriMessageTelemetry(JSONObject jObject) throws JSONException	{
 		// read sequence number
-		this.sequence = jObject.getInt("sequence");
-		
+		this.tSequence = jObject.getInt("sequence");	
 		// read the active user from message
-		this.activeuser.setName(jObject.getJSONObject("activeip").getString("user"));
-		this.activeuser.setIpAddress(jObject.getJSONObject("activeip").getString("ip"));
-		
+		if(jObject.has("activeip")) {
+			this.tActiveuser.setName(jObject.getJSONObject("activeip").getString("user"));
+			this.tActiveuser.setIpAddress(jObject.getJSONObject("activeip").getString("ip"));
+		} else{
+			this.tActiveuser = null;
+		}
 		// read the list with the passive users from the message
 		JSONArray ja = jObject.getJSONArray("passiveip");
-		for (int i = 0; i < ja.length(); i++) 
-		{
-			RcOperator rco = new RcOperator();
-			rco.setName(ja.getJSONObject(i).getString("user"));
-			rco.setIpAddress(ja.getJSONObject(i).getString("ip"));
-			this.passivuser.add(rco);
+		if(null != ja)	{
+			for (int i = 0; i < ja.length(); i++) {
+				RcOperator rco = new RcOperator();
+				rco.setName(ja.getJSONObject(i).getString("user"));
+				rco.setIpAddress(ja.getJSONObject(i).getString("ip"));
+				this.tPassivuser.add(rco);
+			}
+		} else {
+			if(null != this.tPassivuser)
+				this.tPassivuser.removeAll(tPassivuser);
 		}
+		
 	} 
 	
-	public RcOperator getActiveUser()
-	{
-		return activeuser;
+	public RcOperator getActiveUser(){
+		return tActiveuser;
 	}
 	
-	public List<RcOperator>getPassivUsers()
-	{
-		return passivuser;
+	public List<RcOperator>getPassivUsers()	{
+		return tPassivuser;
 	}
 	
-	public int getSequence()
-	{
-		return sequence;
+	public int getSequence() {
+		return tSequence;
 	}
 
 	@Override
-	public boolean equals(Object obj)
-	{
+	public boolean equals(Object obj)	{
 		RocketColibriMessageTelemetry other = (RocketColibriMessageTelemetry)obj;
-		if(null != other)
-		{
-			if(this.activeuser.equals(other.activeuser))
-			{
-				if (this.passivuser.equals(other.passivuser))
-				{
+		if(null != other) {
+			if(this.tActiveuser.equals(other.tActiveuser)) {
+				if (this.tPassivuser.equals(other.tPassivuser)) {
 					return true;
 				}
 			}
@@ -78,24 +71,14 @@ public class RocketColibriMessageTelemetry extends RocketColibriMessage
 	}
 
 	@Override
-	public void sendUpdateUiSinkAndSendEvents(RocketColibriService service)
-	{
-		if(service.tUsers.setConnectedUsers(this.activeuser, this.passivuser))
-		{
-			// TODO: remove sending broadcasts after refactoring is done
-			Log.d(TAG, "execute action sendBroadcast" + this.activeuser.getName() + this.activeuser.getIpAddress());
-			Intent intent = new Intent(RocketColibriProtocol.ActionTelemetryUpdate);
-			LocalBroadcastManager.getInstance(service).sendBroadcast(intent);
-		}
-		
-		if(null == this.activeuser)
+	public void sendUpdateUiSinkAndSendEvents(RocketColibriService service) {
+		service.tUsers.setConnectedUsers(this.tActiveuser, this.tPassivuser);
+		if(null == this.tActiveuser)
 			service.tProtocolFsm.queue(e.E3_RECV_TELE_NONE);
-		else
-		{
+		else{
 			// TODO
 			service.tProtocolFsm.queue(e.E3_RECV_TELE_NONE);
 		}
 		service.tProtocolFsm.processNextEvent();
-		
 	}
 }
