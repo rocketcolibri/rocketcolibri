@@ -221,7 +221,7 @@ public class DesktopActivity extends RCActivity
 					public void onChannelChange(int position) 
 					{
 						Log.d(TAG, "received new H position from meter1:" + position);
-						if (rcService != null) rcService.channel[3].setControl(position);
+						if (rcService != null) rcService.tChannel[3].setControl(position);
 					}
 				});
 			    circleView.setOnVChannelChangeListener(new OnChannelChangeListener ()
@@ -230,7 +230,7 @@ public class DesktopActivity extends RCActivity
 					public void onChannelChange(int position) 
 					{
 						Log.d(TAG, "received new V position from meter1:" + position);
-						if (rcService != null) rcService.channel[2].setControl(position);
+						if (rcService != null) rcService.tChannel[2].setControl(position);
 					}
 				});		
 			    
@@ -244,7 +244,7 @@ public class DesktopActivity extends RCActivity
 					public void onChannelChange(int position) 
 					{
 						Log.d(TAG, "received new H position from meter2:" + position);
-						if (rcService != null) rcService.channel[0].setControl(position);
+						if (rcService != null) rcService.tChannel[0].setControl(position);
 					}
 				});
 			    circleView.setOnVChannelChangeListener(new OnChannelChangeListener ()
@@ -253,7 +253,7 @@ public class DesktopActivity extends RCActivity
 					public void onChannelChange(int position) 
 					{
 						Log.d(TAG, "received new V position from meter2:" + position);
-						if (rcService != null) rcService.channel[1].setControl(position);
+						if (rcService != null) rcService.tChannel[1].setControl(position);
 					}
 				});
 	
@@ -290,8 +290,8 @@ public class DesktopActivity extends RCActivity
 	{
 		setupViews();
 		tDesktopMenu.setService(rcService) ;
-		rcService.registerUiSinkChangeObserver(this.connectionStatusWidget);
-		rcService.registerUiSinkChangeObserver(this.telemetryWidget);
+		rcService.registerUiOutputSinkChangeObserver(this.connectionStatusWidget);
+		rcService.registerUiOutputSinkChangeObserver(this.telemetryWidget);
 	}
 
 	@Override

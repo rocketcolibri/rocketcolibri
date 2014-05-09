@@ -7,7 +7,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import ch.hsr.rocketcolibri.widgetdirectory.RCUiSinkType;
+import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 
 /**
  * Describes the interface between a widget and the RocketColibriService
@@ -35,19 +35,19 @@ public class RCWidget extends CustomizableView
 	 * The Object class depends on the return value of getType
 	 * @param data
 	 */
-	public void onNotifyUiSink(Object data)	{}
+	public void onNotifyUiOutputSink(Object data)	{}
 	
 	/**
-	 * Override this function with the UiSink type the widget wants to receive with the onNotifyUiSink method. 
+	 * Override this function with the Ui Output data type the widget wants to receive with the onNotifyUiOutputSink method. 
 	 * @return type
 	 */
-	public RCUiSinkType getType() 
+	public UiOutputDataType getType() 
 	{
-		return RCUiSinkType.None;
+		return UiOutputDataType.None;
 	}
 	
 	/**
-	 * Override the methode if the widget serves as a UI source for RC channels.
+	 * Override the methode if the widget serves as a UI input source for RC channels.
 	 * 
 	 * @return Return the number of channels (ChannelListernes) that may be attached to the widget.
 	 */

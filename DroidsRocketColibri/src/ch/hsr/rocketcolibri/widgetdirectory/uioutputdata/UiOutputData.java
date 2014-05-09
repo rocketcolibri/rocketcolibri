@@ -1,20 +1,20 @@
 /**
  * Rocket Colibri © 2014
  */
-package ch.hsr.rocketcolibri.widgetdirectory.uisinkdata;
-import ch.hsr.rocketcolibri.widgetdirectory.RCUiSinkType;
+package ch.hsr.rocketcolibri.widgetdirectory.uioutputdata;
+import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 
-public class UiSinkData
+public class UiOutputData
 {
 	protected boolean doNotify;
-	protected RCUiSinkType type = RCUiSinkType.None;
+	protected UiOutputDataType type = UiOutputDataType.None;
 		
 	protected void notifyThis()
 	{
 		doNotify = true;
 	}
 	
-	public RCUiSinkType getType()
+	public UiOutputDataType getType()
 	{
 		return this.type;
 	}

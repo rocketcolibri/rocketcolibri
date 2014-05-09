@@ -15,10 +15,9 @@ import android.graphics.Shader;
 import android.util.AttributeSet;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
-import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import ch.hsr.rocketcolibri.widgetdirectory.RCUiSinkType;
-import ch.hsr.rocketcolibri.widgetdirectory.uisinkdata.ConnectionState;
+import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
+import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.ConnectionState;
 
 
 /**
@@ -52,8 +51,6 @@ public class ConnectionStatusWidget extends RCWidget
 		connectionIconPaint.setStyle(Paint.Style.FILL);
 		connectionIconPaint.setShader(paperShader);
 	}
-	
-	
 	
 	@Override
 	protected void onDraw(Canvas canvas) 
@@ -92,15 +89,15 @@ public class ConnectionStatusWidget extends RCWidget
 	}
 
 	@Override
-	public void onNotifyUiSink(Object p) 
+	public void onNotifyUiOutputSink(Object p) 
 	{
 		ConnectionState data = (ConnectionState)p;
 		setConnectionState(data.getState());
 	}
 	
 	@Override
-	public RCUiSinkType getType()
+	public UiOutputDataType getType()
 	{
-		return RCUiSinkType.ConnectionState;
+		return UiOutputDataType.ConnectionState;
 	}
 }

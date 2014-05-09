@@ -62,7 +62,7 @@ public abstract class RCActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		Log.d(getClassName(), "onResume");
-		if (!RocketColibriService.running) {
+		if (!RocketColibriService.tRunning) {
 			startService(new Intent(this, RocketColibriService.class));
 		}
 		Intent intent = new Intent(this, RocketColibriService.class);

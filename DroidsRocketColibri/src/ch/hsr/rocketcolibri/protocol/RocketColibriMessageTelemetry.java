@@ -80,7 +80,7 @@ public class RocketColibriMessageTelemetry extends RocketColibriMessage
 	@Override
 	public void sendUpdateUiSinkAndSendEvents(RocketColibriService service)
 	{
-		if(service.users.setConnectedUsers(this.activeuser, this.passivuser))
+		if(service.tUsers.setConnectedUsers(this.activeuser, this.passivuser))
 		{
 			// TODO: remove sending broadcasts after refactoring is done
 			Log.d(TAG, "execute action sendBroadcast" + this.activeuser.getName() + this.activeuser.getIpAddress());
@@ -89,13 +89,13 @@ public class RocketColibriMessageTelemetry extends RocketColibriMessage
 		}
 		
 		if(null == this.activeuser)
-			service.protocolFsm.queue(e.E3_RECV_TELE_NONE);
+			service.tProtocolFsm.queue(e.E3_RECV_TELE_NONE);
 		else
 		{
 			// TODO
-			service.protocolFsm.queue(e.E3_RECV_TELE_NONE);
+			service.tProtocolFsm.queue(e.E3_RECV_TELE_NONE);
 		}
-		service.protocolFsm.processNextEvent();
+		service.tProtocolFsm.processNextEvent();
 		
 	}
 }

@@ -217,7 +217,7 @@ public class RocketColibriProtocol
 				Object nextState) 
 		{
 			Log.d(TAG, "execute action startSendHelloMessage");
-			service.telemetryReceiver.startReceiveTelemetry();
+			service.tTelemetryReceiver.startReceiveTelemetry();
 			sendHelloCommand();			
 		}
 	};
@@ -236,7 +236,7 @@ public class RocketColibriProtocol
 				Object nextState) 
 		{
 			Log.d(TAG, "execute action stopSendMessage");
-			service.telemetryReceiver.stopReceiveTelemetry();
+			service.tTelemetryReceiver.stopReceiveTelemetry();
 			cancelOldCommandJob();
 		}
 	};
@@ -245,7 +245,7 @@ public class RocketColibriProtocol
 		public void apply(RocketColibriProtocolFsm fsm, Object event,	Object nextState) 
 		{
 			Log.d(TAG, "execute action updateState");
-			service.connState.setState((s)nextState);
+			service.tConnState.setState((s)nextState);
 		}
 	};
 }

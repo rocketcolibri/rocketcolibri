@@ -6,7 +6,7 @@ package ch.hsr.rocketcolibri;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
+
 import ch.hsr.rocketcolibri.channel.Channel;
 import ch.hsr.rocketcolibri.db.RocketColibriDB;
 import ch.hsr.rocketcolibri.db.RocketColibriDataHandler;
@@ -17,13 +17,13 @@ import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolTelemetryReceiver;
 import ch.hsr.rocketcolibri.protocol.WifiConnection;
 import ch.hsr.rocketcolibri.view.widget.RCWidget;
-import ch.hsr.rocketcolibri.widgetdirectory.IUiSinkChangeObservable;
-import ch.hsr.rocketcolibri.widgetdirectory.RCUiSinkType;
+import ch.hsr.rocketcolibri.widgetdirectory.IUiOutputSinkChangeObservable;
+import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 import ch.hsr.rocketcolibri.widgetdirectory.WidgetDirectoryEntry;
-import ch.hsr.rocketcolibri.widgetdirectory.uisinkdata.ConnectionState;
-import ch.hsr.rocketcolibri.widgetdirectory.uisinkdata.UiSinkData;
-import ch.hsr.rocketcolibri.widgetdirectory.uisinkdata.UserData;
-import ch.hsr.rocketcolibri.widgetdirectory.uisinkdata.VideoUrl;
+import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.ConnectionState;
+import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.UiOutputData;
+import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.UserData;
+import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.VideoUrl;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -38,72 +38,74 @@ import android.util.Log;
  * - holds protocol and wifi connection objects
  * - holds DBService object
  * - updates RCWidgets with changeds telemetry data
- * 
- * @author Artan Veliju
  */
-public class RocketColibriService extends Service implements IUiSinkChangeObservable
-{
+public class RocketColibriService extends Service implements IUiOutputSinkChangeObservable {
 	final String TAG = this.getClass().getName();
-	public static volatile boolean running;
-	private final IBinder mBinder = new RocketColibriServiceBinder();
-
-	private HashMap<RCUiSinkType, List<RCWidget>> uiSinkChangeObserver;
-	BlockingQueue<UiSinkData> uiSinkNotifyQueue;
 	public static final int NOF_CHANNEL = 8;
+	// used by RCActivity
+	public static volatile boolean tRunning;
+	private final IBinder tBinder = new RocketColibriServiceBinder();
+	private HashMap<UiOutputDataType, List<RCWidget>> tUiOutputSinkChangeObserver;
 
 	// GUI Widget collection
-	List <WidgetDirectoryEntry> widgetDirectory= new ArrayList<WidgetDirectoryEntry>();
+	List <WidgetDirectoryEntry> tWidgetDirectory= new ArrayList<WidgetDirectoryEntry>();
 	
 	// reference to the protocol components
-	public RocketColibriProtocolFsm protocolFsm;
-	public RocketColibriProtocol protocol;
-	public RocketColibriProtocolTelemetryReceiver telemetryReceiver;
-	public WifiConnection wifi;
-	
-	// channels
-	public Channel[] channel = {new Channel(), new Channel(), new Channel(), new Channel(), 
-			                     new Channel(), new Channel(), new Channel(), new Channel()};
-	
-	// UiSink data
-	public UserData users;
-	public ConnectionState connState;
-	public VideoUrl videoUrl;
-	
+	public RocketColibriProtocolFsm tProtocolFsm;
+	public RocketColibriProtocol tProtocol;
+	public RocketColibriProtocolTelemetryReceiver tTelemetryReceiver;
+
 	// database
-	public RocketColibriDB tRocketColibriDB;
+	private RocketColibriDB tRocketColibriDB;
+
+	
+	// --- UI Input Sink
+	// ..  Channels
+	public Channel[] tChannel = {new Channel(), new Channel(), new Channel(), new Channel(), 
+			                     new Channel(), new Channel(), new Channel(), new Channel()};
+	// ..  used for Wifi connect / disconnect
+	public WifiConnection tWifi;
+	
+	// --- Ui Output Source data
+	//  .. data about the users connected to the servo controller
+	public UserData tUsers;
+	//  .. state of the connection between RocketColibri and Servo Controller
+	public ConnectionState tConnState;
+	//  .. URL containing the video stream
+	public VideoUrl tVdeoUrl;
+
 
 	@Override
 	public IBinder onBind(Intent intent) 
 	{
-		return mBinder;
+		return tBinder;
 	}
 	
 	@Override
-	public void onCreate() 
-	{
+	public void onCreate() {
 		super.onCreate();
 		Log.d(TAG, "RocketColibriService started");
-		RocketColibriService.running = true;
+		RocketColibriService.tRunning = true;
 		// create a protocol instance
-		this.protocolFsm = new RocketColibriProtocolFsm(s.DISC);
-		this.protocol = new RocketColibriProtocol(protocolFsm, this);
-		this.telemetryReceiver = new RocketColibriProtocolTelemetryReceiver(this, 30001);
-		this.protocol.setChannels(channel);
-		this.wifi = new WifiConnection();
+		this.tProtocolFsm = new RocketColibriProtocolFsm(s.DISC);
+		this.tProtocol = new RocketColibriProtocol(tProtocolFsm, this);
+		this.tTelemetryReceiver = new RocketColibriProtocolTelemetryReceiver(this, 30001);
+		this.tProtocol.setChannels(tChannel);
+		this.tWifi = new WifiConnection();
 
 		// list all available Widgets here: 
-		this.widgetDirectory.add(new WidgetDirectoryEntry("Cross Control", "ch.hsr.rocketcolibri.widget.Circle"));
-		this.widgetDirectory.add(new WidgetDirectoryEntry("Connection Status", "ch.hsr.rocketcolibri.widget.ConnectionStatusWidget"));
-		this.widgetDirectory.add(new WidgetDirectoryEntry("Telemetry Widget", "ch.hsr.rocketcolibri.widget.TelemetryWidget"));
+		this.tWidgetDirectory.add(new WidgetDirectoryEntry("Cross Control", "ch.hsr.rocketcolibri.widget.Circle"));
+		this.tWidgetDirectory.add(new WidgetDirectoryEntry("Connection Status", "ch.hsr.rocketcolibri.widget.ConnectionStatusWidget"));
+		this.tWidgetDirectory.add(new WidgetDirectoryEntry("Telemetry Widget", "ch.hsr.rocketcolibri.widget.TelemetryWidget"));
 
 		// observer map
-		uiSinkChangeObserver = new HashMap<RCUiSinkType, List<RCWidget>>();
-		for (RCUiSinkType type : RCUiSinkType.values()) 
-			uiSinkChangeObserver.put(type, new ArrayList<RCWidget>());
+		tUiOutputSinkChangeObserver = new HashMap<UiOutputDataType, List<RCWidget>>();
+		for (UiOutputDataType type : UiOutputDataType.values()) 
+			tUiOutputSinkChangeObserver.put(type, new ArrayList<RCWidget>());
 
-		users = new UserData();
-		connState = new ConnectionState();
-		videoUrl = new VideoUrl();
+		tUsers = new UserData();
+		tConnState = new ConnectionState();
+		tVdeoUrl = new VideoUrl();
 
 		// create database instance
 		tRocketColibriDB = new RocketColibriDB(this);
@@ -115,38 +117,30 @@ public class RocketColibriService extends Service implements IUiSinkChangeObserv
 		}
 		
 		// UiSink data notification thread
-		new Thread(new Runnable()
-		{
-			private void sendToAll(UiSinkData data)
-			{
-				if(data.getAndResetNotifyFlag())
-	        	{
-	            	for(RCWidget observer : uiSinkChangeObserver.get(data.getType()))
-	        		{
+		new Thread(new Runnable() {
+			private void sendToAll(UiOutputData data)	{
+				if(data.getAndResetNotifyFlag()) {
+	            	for(RCWidget observer : tUiOutputSinkChangeObserver.get(data.getType())) {
 	        			// select the right list and object depending on the type
-	        			observer.onNotifyUiSink(data);
+	        			observer.onNotifyUiOutputSink(data);
 	        		}        		
 	        	}
 			}
 		
 		    @Override
-		    public void run() 
-		    {
-	        	while(true)
-	        	{
-	        		try 
-	        		{
-	        			sendToAll(users);
+		    public void run() {
+	        	while(true) {
+	        		try {
+	        			sendToAll(tUsers);
 	        			Thread.sleep(100, 0);
 	        		
-	        			sendToAll(connState);
+	        			sendToAll(tConnState);
 	        			Thread.sleep(100, 0);
 	        		
-	        			sendToAll(videoUrl);
+	        			sendToAll(tVdeoUrl);
 	        			Thread.sleep(100, 0);
 					} 
-	        		catch (InterruptedException e) 
-	        		{
+	        		catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 	        	}
@@ -161,69 +155,60 @@ public class RocketColibriService extends Service implements IUiSinkChangeObserv
         
         tRocketColibriDB.close();
         tRocketColibriDB = null;
-        running = false;
+        tRunning = false;
     }
 
     @Override
-	public int onStartCommand(Intent intent, int flags, int startId)
-	{
+	public int onStartCommand(Intent intent, int flags, int startId) {
 		return Service.START_STICKY;
 	}
     
-    public RocketColibriDB getRocketColibriDB(){
+    public RocketColibriDB getRocketColibriDB() {
     	return tRocketColibriDB;
     }
 
 	/**
 	 * Set the application to the 'Control' state
 	 */
-	public void setUserControl() 
-	{
-		this.protocolFsm.queue(e.E6_USR_CONNECT);
-		this.protocolFsm.processOutstandingEvents();
+	public void setUserControl() {
+		this.tProtocolFsm.queue(e.E6_USR_CONNECT);
+		this.tProtocolFsm.processOutstandingEvents();
 	}
 	
 	/**
 	 * Set the application to the 'Passiv' state
 	 */
-	public void setUserPassive() 
-	{
-		this.protocolFsm.queue(e.E7_USR_OBSERVE);
-		this.protocolFsm.processOutstandingEvents();
+	public void setUserPassive() {
+		this.tProtocolFsm.queue(e.E7_USR_OBSERVE);
+		this.tProtocolFsm.processOutstandingEvents();
 	}
 	
 	/**
      * Class used for the client Binder.  Because we know this service always
      * runs in the same process as its clients, we don't need to deal with IPC.
      */
-    public class RocketColibriServiceBinder extends Binder
-    {
-    	public RocketColibriService getService() 
-    	{
+    public class RocketColibriServiceBinder extends Binder {
+    	public RocketColibriService getService() {
             // Return this instance of RocketColibriProtocol so clients can call public methods
             return RocketColibriService.this;
         }
     }
 
-    // methods for the UI sink observers 
+    /** Register a UI output sink (RCWidget) */ 
 	@Override
-	public void registerUiSinkChangeObserver(RCWidget observer) 
-	{
-		RCUiSinkType type = observer.getType();
-		if(type != RCUiSinkType.None)
-		{
-			uiSinkChangeObserver.get(type).add(observer);
+	public void registerUiOutputSinkChangeObserver(RCWidget observer) {
+		UiOutputDataType type = observer.getType();
+		if(type != UiOutputDataType.None) {
+			tUiOutputSinkChangeObserver.get(type).add(observer);
 		}
 	}
 
+    /** Unregister a UI output sink (RCWidget) */
 	@Override
-	public void unregisterUiSinkChangeObserver(RCWidget observer) 
-	{
-		RCUiSinkType type = observer.getType();
-		if(type != RCUiSinkType.None)
-		{
-			this.uiSinkChangeObserver.get(type).remove(observer);
+	public void unregisterUiOutputSinkChangeObserver(RCWidget observer) {
+		UiOutputDataType type = observer.getType();
+		if(type != UiOutputDataType.None) {
+			this.tUiOutputSinkChangeObserver.get(type).remove(observer);
 		}
 	}
-
 }

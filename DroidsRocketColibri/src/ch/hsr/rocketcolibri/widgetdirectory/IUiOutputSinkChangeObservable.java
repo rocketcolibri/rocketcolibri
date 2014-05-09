@@ -8,8 +8,8 @@ import ch.hsr.rocketcolibri.view.widget.RCWidget;
 /**
  * This interface must be implemented by a service that serves as a UiSink source
  */
-public interface IUiSinkChangeObservable 
+public interface IUiOutputSinkChangeObservable 
 {
-	public void registerUiSinkChangeObserver(RCWidget observer);
-	public void unregisterUiSinkChangeObserver(RCWidget observer);
+	public void registerUiOutputSinkChangeObserver(RCWidget observer);
+	public void unregisterUiOutputSinkChangeObserver(RCWidget observer);
 }

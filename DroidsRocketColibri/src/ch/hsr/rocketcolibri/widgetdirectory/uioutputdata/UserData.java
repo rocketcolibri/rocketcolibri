@@ -1,22 +1,22 @@
 /**
  * Rocket Colibri © 2014
  */
-package ch.hsr.rocketcolibri.widgetdirectory.uisinkdata;
+package ch.hsr.rocketcolibri.widgetdirectory.uioutputdata;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ch.hsr.rocketcolibri.protocol.RcOperator;
-import ch.hsr.rocketcolibri.widgetdirectory.RCUiSinkType;
+import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 
-public class UserData extends UiSinkData
+public class UserData extends UiOutputData
 {
 	private RcOperator activeUser;
 	private List<RcOperator>passivUser = new ArrayList<RcOperator>();
 	
 	public UserData() 
 	{
-		type = RCUiSinkType.ConnectedUsers;
+		type = UiOutputDataType.ConnectedUsers;
 	}
 
 	public boolean setConnectedUsers(RcOperator activeUser, List<RcOperator>passivUser)

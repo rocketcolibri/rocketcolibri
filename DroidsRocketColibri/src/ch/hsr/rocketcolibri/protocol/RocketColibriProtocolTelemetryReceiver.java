@@ -14,7 +14,7 @@ import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import android.util.Log;
 
 /**
- * 
+ * Message receiver
  *
  */
 public class RocketColibriProtocolTelemetryReceiver 
@@ -34,6 +34,7 @@ public class RocketColibriProtocolTelemetryReceiver
 
 	public void startReceiveTelemetry()
 	{
+		// AsyncTask
 		new Thread(new Runnable()
 		{
 			final String TAG =  RocketColibriProtocolTelemetryReceiver.this.TAG;
@@ -97,11 +98,11 @@ public class RocketColibriProtocolTelemetryReceiver
 	 */
 	private void handleTimeout() 
 	{
-		if (null != RocketColibriProtocolTelemetryReceiver.context.users.getActiveUser())
+		if (null != RocketColibriProtocolTelemetryReceiver.context.tUsers.getActiveUser())
 		{	
-			RocketColibriProtocolTelemetryReceiver.context.users.removeAllUsers();
-			RocketColibriProtocolTelemetryReceiver.context.protocolFsm.queue(e.E8_TIMEOUT);
-			RocketColibriProtocolTelemetryReceiver.context.protocolFsm.processNextEvent();
+			RocketColibriProtocolTelemetryReceiver.context.tUsers.removeAllUsers();
+			RocketColibriProtocolTelemetryReceiver.context.tProtocolFsm.queue(e.E8_TIMEOUT);
+			RocketColibriProtocolTelemetryReceiver.context.tProtocolFsm.processNextEvent();
 		}
 	}
 }

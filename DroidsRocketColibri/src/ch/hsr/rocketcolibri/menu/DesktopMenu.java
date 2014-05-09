@@ -71,9 +71,9 @@ public class DesktopMenu {
 	    		// TODO not set to null from here!
 	    		// tRcService.users.setActiveUser(null);
 	    		if (isChecked) 
-	    			tRcService.wifi.Connect(tRcService);
+	    			tRcService.tWifi.connectRocketColibriSSID(tRcService);
 		        else
-		        	tRcService.wifi.Disconnect(tRcService);
+		        	tRcService.tWifi.disconnectRocketColibriSSID(tRcService);
 		    }
 		});
 		
@@ -82,11 +82,11 @@ public class DesktopMenu {
 		b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
 	    		if (isChecked){
-					tRcService.protocolFsm.queue(e.E6_USR_CONNECT);
-					tRcService.protocolFsm.processOutstandingEvents();
+					tRcService.tProtocolFsm.queue(e.E6_USR_CONNECT);
+					tRcService.tProtocolFsm.processOutstandingEvents();
 	    		}else{
-					tRcService.protocolFsm.queue(e.E7_USR_OBSERVE);
-					tRcService.protocolFsm.processOutstandingEvents();
+					tRcService.tProtocolFsm.queue(e.E7_USR_OBSERVE);
+					tRcService.tProtocolFsm.processOutstandingEvents();
 		        }
 		    }
 		});

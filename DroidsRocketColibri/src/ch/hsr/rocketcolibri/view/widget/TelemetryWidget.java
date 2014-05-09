@@ -10,8 +10,8 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import ch.hsr.rocketcolibri.widgetdirectory.RCUiSinkType;
-import ch.hsr.rocketcolibri.widgetdirectory.uisinkdata.UserData;
+import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
+import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.UserData;
 
 /**
  * @short widget to display the telemetry data received from the ServoController 
@@ -75,7 +75,7 @@ public class TelemetryWidget extends RCWidget
 	}
 	
 	@Override
-	public void onNotifyUiSink(Object p) 
+	public void onNotifyUiOutputSink(Object p) 
 	{
 		UserData data = (UserData)p;
 		if(null != data.getActiveUser())
@@ -85,8 +85,8 @@ public class TelemetryWidget extends RCWidget
 	}
 	
 	@Override
-	public RCUiSinkType getType()
+	public UiOutputDataType getType()
 	{
-		return RCUiSinkType.ConnectedUsers;
+		return UiOutputDataType.ConnectedUsers;
 	}
 }

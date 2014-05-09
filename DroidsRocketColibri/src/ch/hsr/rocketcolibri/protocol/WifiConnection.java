@@ -5,17 +5,9 @@ package ch.hsr.rocketcolibri.protocol;
 
 import java.util.List;
 
-import ch.hsr.rocketcolibri.RocketColibriService;
-import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiConfiguration;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.IBinder;
 import android.util.Log;
 
 /**
@@ -39,7 +31,7 @@ public class WifiConnection
 	/**
 	 * Try to establish a connection to the RocketColibri network
 	 */
-	public void Connect(Context context)
+	public void connectRocketColibriSSID(Context context)
 	{
 		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 	    wifiManager.disconnect(); 
@@ -66,7 +58,7 @@ public class WifiConnection
 	/**
 	 * Try to establish a connection to the RocketColibri network
 	 */
-	public void Disconnect(Context context)
+	public void disconnectRocketColibriSSID(Context context)
 	{
 		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();

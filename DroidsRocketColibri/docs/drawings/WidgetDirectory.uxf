@@ -4,8 +4,8 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>714</x>
-      <y>156</y>
+      <x>678</x>
+      <y>144</y>
       <w>294</w>
       <h>144</h>
     </coordinates>
@@ -26,8 +26,8 @@ bg=cyan</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>378</x>
-      <y>150</y>
+      <x>342</x>
+      <y>138</y>
       <w>348</w>
       <h>30</h>
     </coordinates>
@@ -39,16 +39,16 @@ m1=0..*
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>186</x>
-      <y>156</y>
-      <w>210</w>
+      <x>0</x>
+      <y>144</y>
+      <w>360</w>
       <h>126</h>
     </coordinates>
     <panel_attributes>RocketColibriService
 --
 
 +getWidgetDirectory : &lt;List&gt;WidgetDirectoryEntry
-+addUiSinkObserver()
++addUiOutputSinkObserver(RCWidget)
 --
 Responsibilities
 Besides many others
@@ -64,8 +64,8 @@ bg=red</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>366</x>
-      <y>300</y>
+      <x>330</x>
+      <y>318</y>
       <w>210</w>
       <h>84</h>
     </coordinates>
@@ -85,8 +85,8 @@ bg=cyan</panel_attributes>
   <element>
     <type>com.umlet.element.Note</type>
     <coordinates>
-      <x>792</x>
-      <y>336</y>
+      <x>756</x>
+      <y>324</y>
       <w>162</w>
       <h>42</h>
     </coordinates>
@@ -98,8 +98,8 @@ bg=cyan</panel_attributes>
   <element>
     <type>com.umlet.element.Note</type>
     <coordinates>
-      <x>72</x>
-      <y>396</y>
+      <x>24</x>
+      <y>324</y>
       <w>156</w>
       <h>30</h>
     </coordinates>
@@ -111,56 +111,56 @@ bg=red</panel_attributes>
   <element>
     <type>com.umlet.element.UseCase</type>
     <coordinates>
-      <x>348</x>
-      <y>696</y>
+      <x>312</x>
+      <y>876</y>
       <w>72</w>
       <h>66</h>
     </coordinates>
-    <panel_attributes>UI sink</panel_attributes>
+    <panel_attributes>UI Output sink</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>402</x>
-      <y>696</y>
-      <w>246</w>
+      <x>366</x>
+      <y>876</y>
+      <w>276</w>
       <h>42</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 Dislplay data to the user</panel_attributes>
-    <additional_attributes>18;30;234;30</additional_attributes>
+    <additional_attributes>18;30;264;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.UseCase</type>
     <coordinates>
-      <x>348</x>
-      <y>774</y>
+      <x>312</x>
+      <y>954</y>
       <w>72</w>
       <h>66</h>
     </coordinates>
-    <panel_attributes>UI source</panel_attributes>
+    <panel_attributes>UI Input source</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>402</x>
-      <y>774</y>
-      <w>246</w>
+      <x>366</x>
+      <y>954</y>
+      <w>276</w>
       <h>42</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 User input</panel_attributes>
-    <additional_attributes>234;30;18;30</additional_attributes>
+    <additional_attributes>264;30;18;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Note</type>
     <coordinates>
-      <x>288</x>
-      <y>666</y>
+      <x>252</x>
+      <y>840</y>
       <w>516</w>
-      <h>210</h>
+      <h>216</h>
     </coordinates>
     <panel_attributes>Data Flow
 </panel_attributes>
@@ -169,12 +169,12 @@ User input</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>636</x>
-      <y>714</y>
+      <x>294</x>
+      <y>852</y>
       <w>126</w>
-      <h>108</h>
+      <h>186</h>
     </coordinates>
-    <panel_attributes>RocketColibriService
+    <panel_attributes>RCWidget
 --
 
 </panel_attributes>
@@ -183,8 +183,8 @@ User input</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>276</x>
-      <y>576</y>
+      <x>240</x>
+      <y>564</y>
       <w>144</w>
       <h>66</h>
     </coordinates>
@@ -201,19 +201,19 @@ Responsibilities
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>336</x>
-      <y>480</y>
+      <x>300</x>
+      <y>492</y>
       <w>30</w>
-      <h>108</h>
+      <h>84</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>18;18;18;96</additional_attributes>
+    <additional_attributes>18;18;18;72</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>444</x>
-      <y>576</y>
+      <x>408</x>
+      <y>564</y>
       <w>144</w>
       <h>66</h>
     </coordinates>
@@ -227,19 +227,19 @@ Responsibilities
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>492</x>
-      <y>480</y>
+      <x>456</x>
+      <y>492</y>
       <w>30</w>
-      <h>108</h>
+      <h>84</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>18;18;18;96</additional_attributes>
+    <additional_attributes>18;18;18;72</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>606</x>
-      <y>576</y>
+      <x>570</x>
+      <y>564</y>
       <w>144</w>
       <h>66</h>
     </coordinates>
@@ -253,26 +253,26 @@ Responsibilities
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>654</x>
-      <y>480</y>
+      <x>618</x>
+      <y>492</y>
       <w>30</w>
-      <h>108</h>
+      <h>84</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>18;18;18;96</additional_attributes>
+    <additional_attributes>18;18;18;72</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>186</x>
-      <y>12</y>
-      <w>198</w>
+      <x>6</x>
+      <y>0</y>
+      <w>342</w>
       <h>84</h>
     </coordinates>
-    <panel_attributes>IUiSinkChangeObservable
+    <panel_attributes>IUiOutputSinkChangeObservable
 --
-+registerUiSinkChangeObserver
-+unregisterUiSinkObserver
++registerUiOutputSinkChangeObserver(RCWidget)
++unregisterUiOutputSinkObserver(RCWidget)
 bg=red
 </panel_attributes>
     <additional_attributes/>
@@ -280,22 +280,22 @@ bg=red
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>378</x>
-      <y>192</y>
-      <w>278</w>
-      <h>252</h>
+      <x>342</x>
+      <y>180</y>
+      <w>296</w>
+      <h>276</h>
     </coordinates>
     <panel_attributes>lt=&lt;- 
 m1=0..*
 update notification
 </panel_attributes>
-    <additional_attributes>228;240;228;30;18;30</additional_attributes>
+    <additional_attributes>246;264;246;30;18;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>228</x>
-      <y>78</y>
+      <x>108</x>
+      <y>66</y>
       <w>102</w>
       <h>90</h>
     </coordinates>
@@ -306,15 +306,15 @@ update notification
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>288</x>
-      <y>432</y>
+      <x>252</x>
+      <y>444</y>
       <w>462</w>
       <h>66</h>
     </coordinates>
     <panel_attributes>RCWidget
 --
-+onNotifyUiSink(Object)
-+getType:RCUiSinkType
++onNotifyUiOutputSink(Object)
++getType:RCUiOutputSinkType
 +getNumberOfChannelListeners:integer
 --
 bg=red
@@ -324,12 +324,48 @@ bg=red
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>450</x>
-      <y>366</y>
+      <x>414</x>
+      <y>384</y>
       <w>30</w>
-      <h>78</h>
+      <h>72</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>18;18;18;66</additional_attributes>
+    <additional_attributes>18;18;18;60</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.UseCase</type>
+    <coordinates>
+      <x>630</x>
+      <y>876</y>
+      <w>72</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>UI Output source</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.UseCase</type>
+    <coordinates>
+      <x>630</x>
+      <y>954</y>
+      <w>72</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>UI Input sink</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>612</x>
+      <y>852</y>
+      <w>126</w>
+      <h>186</h>
+    </coordinates>
+    <panel_attributes>RocketColibriService
+--
+
+</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>

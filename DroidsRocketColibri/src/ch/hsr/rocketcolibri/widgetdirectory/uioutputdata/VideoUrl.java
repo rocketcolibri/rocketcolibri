@@ -1,17 +1,17 @@
 /**
  * Rocket Colibri © 2014
  */
-package ch.hsr.rocketcolibri.widgetdirectory.uisinkdata;
+package ch.hsr.rocketcolibri.widgetdirectory.uioutputdata;
 
-import ch.hsr.rocketcolibri.widgetdirectory.RCUiSinkType;
+import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 
-public class VideoUrl extends UiSinkData 
+public class VideoUrl extends UiOutputData 
 {
 	private String videoUrl;
 	
 	public VideoUrl() 
 	{
-		type = RCUiSinkType.Video;
+		type = UiOutputDataType.Video;
 	}
 	
 	public boolean setVideoUrl(String videoUrl)
