@@ -30,9 +30,10 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.PixelFormat;
+//import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.view.View;
+//import android.view.WindowManager;
 
 /**
  * A DragView is a special view used by a DragController. During a drag operation, what is actually moving
@@ -63,7 +64,7 @@ public class DragView extends View
      * Construct the drag view.
      * <p>
      * The registration point is the point inside our view that the touch events should
-     * be centered upon.
+     * be centered upon. </p>
      *
      * @param context A context
      * @param bitmap The view that we're dragging around.  We scale it up when we draw it.
@@ -136,9 +137,9 @@ public class DragView extends View
      */
     public void show(IBinder windowToken, int touchX, int touchY) {
 //        WindowManager.LayoutParams lp;
-        int pixelFormat;
-
-        pixelFormat = PixelFormat.TRANSLUCENT;
+//        int pixelFormat;
+//
+//        pixelFormat = PixelFormat.TRANSLUCENT;
 
 //        lp = new WindowManager.LayoutParams(
 //                ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -161,7 +162,7 @@ public class DragView extends View
     }
     
     /**
-     * Move the window containing this view.
+     * <p>Move the window containing this view.</p>
      *
      * @param touchX the x coordinate the user touched in screen coordinates
      * @param touchY the y coordinate the user touched in screen coordinates
@@ -169,13 +170,58 @@ public class DragView extends View
     void move(int touchX, int touchY) {
         // This is what was done in the Launcher code.
 //        WindowManager.LayoutParams lp = mLayoutParams;
-    	mLayoutParams.x = touchX - mRegistrationX;
-    	mLayoutParams.y = touchY - mRegistrationY;
-        mWindowManager.updateViewLayout(this, mLayoutParams);
+
+    	mLayoutParams.x = calculateXPosition(touchX - mRegistrationX);
+    	mLayoutParams.y = calculateYPosition(touchY - mRegistrationY);
+
+    	mWindowManager.updateViewLayout(this, mLayoutParams);
+    }
+
+    /**
+     * <p>The widgets must stay in visible area on the screen,
+     * this method calculates the x position within range</p>
+     * 
+     * @param actualXPosition
+     * @return
+     */
+    public int calculateXPosition(int actualXPosition) {
+    	int maxWidth = mWindowManager.getWidth();
+        int newXPosition = actualXPosition;
+
+    	if (newXPosition + mLayoutParams.width > maxWidth) {
+    		newXPosition = maxWidth - mLayoutParams.width;
+    	}
+
+    	if (newXPosition < 0) {
+    		newXPosition = 0;
+    	}
+
+    	return newXPosition;
+    }
+
+    /**
+     * <p>The widgets must stay in visible area on the screen,
+     * this method calculates the y position within range</p>
+     * 
+     * @param actualXPosition
+     * @return
+     */
+    public int calculateYPosition(int actualYPosition) {
+    	int maxHeight = mWindowManager.getHeight();
+        int newYPosition = actualYPosition;
+
+    	if (newYPosition + mLayoutParams.height > maxHeight) {
+    		newYPosition = maxHeight - mLayoutParams.height;
+    	}
+
+    	if (newYPosition < 0) {
+    		newYPosition = 0;
+    	}
+
+    	return newYPosition;
     }
 
     void remove() {
         mWindowManager.removeView(this);
     }
 }
-

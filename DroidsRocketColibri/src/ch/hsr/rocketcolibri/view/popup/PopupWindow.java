@@ -506,14 +506,6 @@ public class PopupWindow {
 
         	tLayoutParams.x = targetPos;
         }
-        
-        if (tLayoutParams.x < 0) {  // the popup must be visible from left
-        	tLayoutParams.x = 0;
-        }
-
-        if (tLayoutParams.y < 0) {  // the popup must be visible from top
-        	tLayoutParams.y = 0;
-        }
     }
 
     /**

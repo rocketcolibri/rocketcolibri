@@ -143,8 +143,9 @@ public void onDrop(IDragSource source, int x, int y, int xOffset, int yOffset,
 
     int w = v.getWidth ();
     int h = v.getHeight ();
-    int left = x - xOffset;
-    int top = y - yOffset;
+    int left = dragView.calculateXPosition(x - xOffset);
+    int top = dragView.calculateYPosition(y - yOffset);
+    
     DragLayer.LayoutParams lp = new DragLayer.LayoutParams (w, h, left, top);
     this.updateViewLayout(v, lp);
 }
