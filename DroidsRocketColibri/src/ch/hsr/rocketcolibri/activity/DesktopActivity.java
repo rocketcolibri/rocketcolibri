@@ -4,7 +4,6 @@
 package ch.hsr.rocketcolibri.activity;
 
 import android.graphics.Color;
-
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +24,7 @@ import ch.hsr.rocketcolibri.view.widget.Circle;
 import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
 import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
 import ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget;
+import ch.hsr.rocketcolibri.view.widget.VideoStreamWidget;
 
 /**
  * @author Artan Veliju
@@ -41,7 +41,7 @@ public class DesktopActivity extends RCActivity
 	
 	private ConnectionStatusWidget connectionStatusWidget;
 	private ConnectedUserInfoWidget telemetryWidget;
-		
+	private VideoStreamWidget tVideoStreamWidget;
 	public static final boolean Debugging = false;
 	private DesktopMenu tDesktopMenu;
 	
@@ -145,14 +145,21 @@ public class DesktopActivity extends RCActivity
 		**/
 		if(setupViewsOnce){
 			try{
-			    ResizeConfig rc = new ResizeConfig();
+				ResizeConfig rc;
+				LayoutParams lp;
+				ViewElementConfig elementConfig;
+				View view;
+				
+			    
+			    
+			    rc = new ResizeConfig();
 			    rc.maxHeight=745;
 			    rc.minHeight=50;
 			    rc.maxWidth=400;
 			    rc.minWidth=30;
-			    LayoutParams lp = new LayoutParams(100, 100, 50,200);
-			    ViewElementConfig elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
-			    View view = tDesktopViewManager.createView(elementConfig);
+			    lp = new LayoutParams(100, 100, 50,200);
+			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
+			    view = tDesktopViewManager.createView(elementConfig);
 			    view.setBackgroundColor(Color.CYAN);
 			    
 			    rc = new ResizeConfig();
@@ -176,14 +183,7 @@ public class DesktopActivity extends RCActivity
 			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
 			    view = tDesktopViewManager.createView(elementConfig);
 			    view.setBackgroundColor(Color.LTGRAY);
-			    
-			    rc = new ResizeConfig();
-			    rc.keepRatio=true;
-			    rc.maxHeight=500;
-			    rc.minHeight=160;
-			    rc.maxWidth=500;
-			    rc.minWidth=160;
-			    
+
 			    rc = new ResizeConfig();
 			    rc.maxHeight=300;
 			    rc.minHeight=50;
@@ -204,7 +204,18 @@ public class DesktopActivity extends RCActivity
 			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget", lp, rc);
 			    this.connectionStatusWidget = (ConnectionStatusWidget) tDesktopViewManager.createView(elementConfig);
 			    this.connectionStatusWidget.setAlpha(1);
-			    
+
+			    rc = new ResizeConfig();
+			    rc.maxHeight=600;
+			    rc.minHeight=100;
+			    rc.maxWidth=800;
+			    rc.minWidth=200;
+			    lp = new LayoutParams(400, 300 , 100, 100);
+			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.VideoStreamWidget", lp, rc);
+			    this.tVideoStreamWidget = (VideoStreamWidget) tDesktopViewManager.createView(elementConfig);
+			    this.tVideoStreamWidget.setAlpha(1);
+
+
 			    rc = new ResizeConfig();
 			    rc.keepRatio=true;
 			    rc.maxHeight=500;
