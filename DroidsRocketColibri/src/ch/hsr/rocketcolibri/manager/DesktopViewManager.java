@@ -100,7 +100,6 @@ public class DesktopViewManager implements IDesktopViewManager{
 	    Class<?> c = Class.forName(cElementConfig.getClassPath());
 	    Constructor<?> cons = c.getConstructor(Context.class, ViewElementConfig.class);
 	    CustomizableView view = (CustomizableView)cons.newInstance(tContext, cElementConfig);
-	    view.setOnTouchListener(tCustomizeModusListener);
 	    tControlElementParentView.addView(view);
 	    return view;
 	}
@@ -118,10 +117,11 @@ public class DesktopViewManager implements IDesktopViewManager{
 	
 	private void updateModusOfCustomizableViews(){
     	int size = tControlElementParentView.getChildCount();
-    	ICustomizableView view = null;
+    	CustomizableView view = null;
     	for(int i = 0; i < size; ++i){
     		try{
-    			view = (ICustomizableView) tControlElementParentView.getChildAt(i);
+    			view = (CustomizableView) tControlElementParentView.getChildAt(i);
+    			view.setOnTouchListener(tCustomizeModusListener);
     			view.setCustomizeModus(tCustomizeModus);
     		}catch(Exception e){
     		}

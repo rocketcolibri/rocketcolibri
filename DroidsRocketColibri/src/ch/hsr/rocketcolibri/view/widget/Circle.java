@@ -7,6 +7,7 @@ import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -179,6 +180,7 @@ public final class Circle extends RCWidget
 		setMeasuredDimension(1, 1);
 		super.onFinishInflate();
 	}
+	
 	private void init(Context context, AttributeSet attrs) {
 		if (context != null && attrs != null){
 			TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Circle);
@@ -221,8 +223,17 @@ public final class Circle extends RCWidget
 				return false;
 			}
 		});
-		
-		this.setOnTouchListener(mListener); 
+		setOnTouchListener(mListener); 
+		setModusChangeListener(new ModusChangeListener() {
+			@Override
+			public void customizeModeDeactivated() {
+				setOnTouchListener(mListener); 
+			}
+			
+			@Override
+			public void customizeModeActivated() {
+			}
+		});
 	}
 
 	private void initDrawingTools() {

@@ -15,8 +15,17 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
  * @author Artan Veliju
  */
 public class CustomizableView extends View implements ICustomizableView{
-	private boolean customizeModusActive = false;
+	private boolean tCustomizeModusActive = false;
 	private ViewElementConfig tViewElementConfig;
+	//empty listener to avoid null check
+	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
+		@Override
+		public void customizeModeDeactivated() {
+		}
+		@Override
+		public void customizeModeActivated() {
+		}
+	};
 	
 	/**
 	 * Constructor for non Android instantiation
@@ -40,7 +49,7 @@ public class CustomizableView extends View implements ICustomizableView{
 	
     @Override
     protected void onDraw(Canvas canvas) {
-    	if(!customizeModusActive)return;
+    	if(!tCustomizeModusActive)return;
         final Drawable foreground = getResources().getDrawable(R.drawable.dragforeground);
         if (foreground != null) {
             foreground.setBounds(0, 0, getRight() - getLeft(), getBottom() - getTop());
@@ -61,11 +70,23 @@ public class CustomizableView extends View implements ICustomizableView{
 
 	@Override
 	public void setCustomizeModus(boolean enabled) {
-		if(customizeModusActive!=enabled)
+		if(tCustomizeModusActive!=enabled){
+			if(enabled){
+				tModusChangeListener.customizeModeActivated();
+			}else{
+				tModusChangeListener.customizeModeDeactivated();
+			}
 			invalidate();
-		customizeModusActive = enabled;
+			tCustomizeModusActive = enabled;
+		}
 	}
 	
+	@Override
+	public void setModusChangeListener(ModusChangeListener mcl){
+		tModusChangeListener = mcl;
+	}
+	
+	@Override
 	public ViewElementConfig getViewElementConfig(){
 		tViewElementConfig.settLayoutParams((LayoutParams) getLayoutParams());
 		tViewElementConfig.setAlpha(getAlpha());
