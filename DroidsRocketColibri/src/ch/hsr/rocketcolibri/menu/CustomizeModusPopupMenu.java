@@ -3,6 +3,7 @@
  */
 package ch.hsr.rocketcolibri.menu;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriDefaults;
+import ch.hsr.rocketcolibri.activity.EditChannelActivity;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
@@ -46,8 +48,8 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		b.setOnClickListener(new OnClickListener() {
 			
 			@Override
-			public void onClick(View v) {
-				Log.d("editChannel", "click");
+			public void onClick(View targetView) {
+				tDesktopViewManager.startEditActivity(targetView);
 			}
 		});
 

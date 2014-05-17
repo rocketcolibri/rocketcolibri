@@ -20,6 +20,7 @@ public interface IDesktopViewManager {
 	AbsoluteLayout getRootView();
 	AbsoluteLayout getControlElementParentView();
 	CustomizeModusPopupMenu getCustomizeModusPopupMenu();
+	void startEditActivity(View targetView);
 	void closeSpecialThings();
 	void release();
 }

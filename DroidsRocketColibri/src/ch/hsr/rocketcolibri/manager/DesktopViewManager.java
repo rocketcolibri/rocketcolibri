@@ -7,12 +7,14 @@ import java.lang.reflect.Constructor;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.activity.EditChannelActivity;
 import ch.hsr.rocketcolibri.manager.listener.CustomizeModusListener;
 import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
 import ch.hsr.rocketcolibri.menu.CustomizeModusPopupMenu;
@@ -136,6 +138,12 @@ public class DesktopViewManager implements IDesktopViewManager{
 	@Override
 	public AbsoluteLayout getControlElementParentView() {
 		return tControlElementParentView;
+	}
+	
+	@Override
+	public void startEditActivity(View targetView){
+		Intent intent = new Intent(tContext, EditChannelActivity.class);
+		tContext.startActivity(intent);
 	}
 	
 	private IResizeDoneListener createResizeDoneListener() {
