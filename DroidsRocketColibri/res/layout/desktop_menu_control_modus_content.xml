@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ch.hsr.rocketcolibri.menu.desktop.ControlModusContent xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/controlModusContent"
+	android:visibility="gone"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FF8D73"
+    android:orientation="vertical" >
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="5"
+        android:orientation="horizontal"
+        android:rowCount="5" >
+
+        <ToggleButton
+            android:id="@+id/menu_action_main_settings"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@null"
+            android:button="@drawable/selector_main_menu_settings"
+            android:checked="false"
+            android:contentDescription="@string/menu_action_main_settings"
+            android:textOff="Operate"
+            android:textOn="Config Mode" >
+        </ToggleButton>
+
+        <ToggleButton
+            android:id="@+id/menu_action_main_wifi"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@null"
+            android:button="@drawable/selector_main_menu_wifi"
+            android:checked="false"
+            android:contentDescription="@string/menu_action_main_wifi"
+            android:textOff="Wifi Off"
+            android:textOn="Wifi On" >
+        </ToggleButton>
+
+        <ToggleButton
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@null"
+            android:button="@drawable/selector_main_menu_mode"
+            android:checked="false"
+            android:contentDescription="@string/menu_action_main_mode"
+            android:textOff="Observe"
+            android:textOn="Operate" >
+        </ToggleButton>
+
+        <ToggleButton
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@null"
+            android:button="@drawable/selector_main_menu_mode"
+            android:checked="false"
+            android:contentDescription="@string/menu_action_main_mode"
+            android:textOff="Observe"
+            android:textOn="Operate" >
+        </ToggleButton>
+
+        <ToggleButton
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@null"
+            android:button="@drawable/selector_main_menu_mode"
+            android:checked="false"
+            android:contentDescription="@string/menu_action_main_mode"
+            android:textOff="Observe"
+            android:textOn="Operate" >
+        </ToggleButton>
+
+        <ToggleButton
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@null"
+            android:button="@drawable/selector_main_menu_mode"
+            android:checked="false"
+            android:contentDescription="@string/menu_action_main_mode"
+            android:textOff="Observe"
+            android:textOn="Operate" >
+        </ToggleButton>
+
+        <ToggleButton
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@null"
+            android:button="@drawable/selector_main_menu_mode"
+            android:checked="false"
+            android:contentDescription="@string/menu_action_main_mode"
+            android:textOff="Observe"
+            android:textOn="Operate" >
+        </ToggleButton>
+
+        <ToggleButton
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@null"
+            android:button="@drawable/selector_main_menu_mode"
+            android:checked="false"
+            android:contentDescription="@string/menu_action_main_mode"
+            android:textOff="Observe"
+            android:textOn="Operate" >
+        </ToggleButton>
+
+        <ToggleButton
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@null"
+            android:button="@drawable/selector_main_menu_mode"
+            android:checked="false"
+            android:contentDescription="@string/menu_action_main_mode"
+            android:textOff="Observe"
+            android:textOn="Operate" >
+        </ToggleButton>
+    </GridLayout>
+
+</ch.hsr.rocketcolibri.menu.desktop.ControlModusContent>

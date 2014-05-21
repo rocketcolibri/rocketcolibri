@@ -4,9 +4,13 @@
 package ch.hsr.rocketcolibri.menu.desktop;
 
 import android.content.Context;
+import android.app.Activity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
@@ -25,8 +29,10 @@ public class DesktopMenu {
 	private Context tContext;
 	private IDesktopViewManager tDesktopViewManager;
 	private RocketColibriService tRcService;
-	private int[] serviceDependentItemIds = {R.id.menu_action_main_settings,R.id.menu_action_main_wifi, R.id.menu_action_main_mode};
-	private View[] serviceDependentItems;
+	private int[] tServiceDependentItemIds = {R.id.menu_action_main_settings,R.id.menu_action_main_wifi, R.id.menu_action_main_mode};
+	private View[] tServiceDependentItems;
+	private ControlModusContent tControlModusContent;
+	private CustomizeModusContent tCustomizeModusContent;
 	
 	public DesktopMenu(Context context, View contentView, IDesktopViewManager desktopViewManager) {
 		tContext = context;
@@ -38,7 +44,14 @@ public class DesktopMenu {
 				tDesktopViewManager.closeSpecialThings();
 			}
 		});
-		onCreate();	
+		initContents();
+		onCreate();
+	}
+	
+	private void initContents(){
+		tControlModusContent = (ControlModusContent)tSwipeInMenu.findViewById(R.id.controlModusContent);
+		tCustomizeModusContent = (CustomizeModusContent)tSwipeInMenu.findViewById(R.id.customizeModusContent);
+		switchModusContent();
 	}
 	
 	public void toggle(){
@@ -62,7 +75,9 @@ public class DesktopMenu {
 			@Override
 			public void onClick(View v) {
 				tDesktopViewManager.switchCustomieModus();
+				switchModusContent();
 			}
+
 		});
 
 		b = (ToggleButton)findViewById(R.id.menu_action_main_wifi);
@@ -93,16 +108,26 @@ public class DesktopMenu {
 		setServiceDependentButtonsEnabled(false);
 	}
 	
+	private void switchModusContent() {
+		if(tDesktopViewManager.isInCustomizeModus()){
+			tCustomizeModusContent.setVisibility(View.VISIBLE);
+			tControlModusContent.setVisibility(View.GONE);
+		}else{
+			tControlModusContent.setVisibility(View.VISIBLE);
+			tCustomizeModusContent.setVisibility(View.GONE);
+		}
+	}
+	
 	private void initServiceDependentItems(){
-		serviceDependentItems = new View[serviceDependentItemIds.length];
-		for(int i = 0; i < serviceDependentItemIds.length;++i){
-			serviceDependentItems[i] = findViewById(serviceDependentItemIds[i]);
+		tServiceDependentItems = new View[tServiceDependentItemIds.length];
+		for(int i = 0; i < tServiceDependentItemIds.length;++i){
+			tServiceDependentItems[i] = findViewById(tServiceDependentItemIds[i]);
 		}
 	}
 	
 	private void setServiceDependentButtonsEnabled(boolean enabled){
-		for(int i = 0; i < serviceDependentItems.length;++i){
-			serviceDependentItems[i].setEnabled(enabled);
+		for(int i = 0; i < tServiceDependentItems.length;++i){
+			tServiceDependentItems[i].setEnabled(enabled);
 		}
 	}
 	
