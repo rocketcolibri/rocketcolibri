@@ -55,4 +55,5 @@ public class RCWidget extends CustomizableView
 	{
 		return 0;
 	}
+
 }

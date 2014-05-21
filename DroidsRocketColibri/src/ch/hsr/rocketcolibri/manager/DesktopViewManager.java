@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.activity.EditChannelActivity;
 import ch.hsr.rocketcolibri.manager.listener.CustomizeModusListener;
@@ -20,9 +19,7 @@ import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
 import ch.hsr.rocketcolibri.menu.CustomizeModusPopupMenu;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
-import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import ch.hsr.rocketcolibri.view.custimizable.ViewSequence;
 import ch.hsr.rocketcolibri.view.draggable.DragController;
 import ch.hsr.rocketcolibri.view.draggable.DragLayer;
 import ch.hsr.rocketcolibri.view.draggable.IDragListener;
@@ -103,10 +100,12 @@ public class DesktopViewManager implements IDesktopViewManager{
 	    Class<?> c = Class.forName(cElementConfig.getClassPath());
 	    Constructor<?> cons = c.getConstructor(Context.class, ViewElementConfig.class);
 	    CustomizableView view = (CustomizableView)cons.newInstance(tContext, cElementConfig);
-	    if(ViewSequence.Foreground == view.getViewSequence())
-	    	tControlElementParentView.addView(view, 0);
-	    else
-	    	tControlElementParentView.addView(view);
+	    tControlElementParentView.addView(view);
+	    if(!tCustomizeModus && (null != view.getOperateOverlayView()))
+	    	tControlElementParentView.addView(view.getOperateOverlayView(),0);
+	    
+	    	
+	    
 	    
 	    return view;
 	}
@@ -130,6 +129,14 @@ public class DesktopViewManager implements IDesktopViewManager{
     			view = (CustomizableView) tControlElementParentView.getChildAt(i);
     			view.setOnTouchListener(tCustomizeModusListener);
     			view.setCustomizeModus(tCustomizeModus);
+    			// switch View
+    			if(null != view.getOperateOverlayView()){
+    				if(tCustomizeModus){
+    					tControlElementParentView.removeView(view.getOperateOverlayView());
+    				} else {
+    					tControlElementParentView.addView(view.getOperateOverlayView(), 0);
+    				}
+    			}
     		}catch(Exception e){
     		}
     	}

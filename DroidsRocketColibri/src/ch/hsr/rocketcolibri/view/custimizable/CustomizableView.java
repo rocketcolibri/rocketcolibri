@@ -93,8 +93,8 @@ public class CustomizableView extends View implements ICustomizableView{
 		return tViewElementConfig;
 	}
 	
-	public ViewSequence getViewSequence () {
-		return ViewSequence.Foreground; 
+	public View getOperateOverlayView() {
+		return null;
 	}
 }
 

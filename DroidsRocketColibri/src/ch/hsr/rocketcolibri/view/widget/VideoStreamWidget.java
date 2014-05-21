@@ -2,50 +2,43 @@ package ch.hsr.rocketcolibri.view.widget;
 
 import java.io.IOException;
 
-import ch.hsr.rocketcolibri.activity.DesktopActivity;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import ch.hsr.rocketcolibri.view.custimizable.ViewSequence;
 import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.VideoUrl;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.RelativeLayout;
-
 
 public class VideoStreamWidget extends RCWidget  implements SurfaceHolder.Callback, OnPreparedListener {
 
 	private MediaPlayer tMediaPlayer;
     private SurfaceView tVideoSurfaceView;
     private SurfaceHolder tHolder;
-
     RelativeLayout tRel;
-    
 	VideoUrl tVideoUrl;
-
 	
 	public VideoStreamWidget(Context context, ViewElementConfig elementConfig) 	{
 		super(context, elementConfig);
-		
   	  	tVideoSurfaceView = (SurfaceView)new SurfaceView(context);
   	  	tVideoSurfaceView.setLayoutParams(elementConfig.getLayoutParams());
   	  	tHolder = tVideoSurfaceView.getHolder();
   	  	tHolder.addCallback(this); 
-  	    DesktopActivity activity = (DesktopActivity)context;
-  	    // TODO: if next line is active the SurfaceView won't be created!
-  	    //activity.setContentView(tVideoSurfaceView, elementConfig.getLayoutParams());
 	}
-
 	
 	@Override
-	protected void onDraw(Canvas canvas) 
-	{
+	protected void onLayout (boolean changed, int left, int top, int right, int bottom)
+	{	
+		tVideoSurfaceView.setLayoutParams(this.getLayoutParams());
+	}
+	
+	@Override
+	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 	}
 	
@@ -56,7 +49,6 @@ public class VideoStreamWidget extends RCWidget  implements SurfaceHolder.Callba
 	 */
 	public void onNotifyUiOutputSink(Object data) {
 		tVideoUrl = (VideoUrl)data;
-		//Play_Video();
 	}
 	
 	/**
@@ -68,14 +60,11 @@ public class VideoStreamWidget extends RCWidget  implements SurfaceHolder.Callba
 		return UiOutputDataType.Video;
 	}
 
-	/**
-	 * The video view must be place in the background
-	 */
 	@Override
-	public ViewSequence getViewSequence () {
-		return ViewSequence.Background; 
+	public View getOperateOverlayView() {
+		return tVideoSurfaceView;
 	}
-
+	
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height)
     {
@@ -104,8 +93,7 @@ public class VideoStreamWidget extends RCWidget  implements SurfaceHolder.Callba
      } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
-     }
-    	
+     }   	
     }
     
     @Override
@@ -113,7 +101,6 @@ public class VideoStreamWidget extends RCWidget  implements SurfaceHolder.Callba
     {
           releaseMediaPlayer();
     }
-
     
     private void releaseMediaPlayer()
     {
@@ -123,7 +110,6 @@ public class VideoStreamWidget extends RCWidget  implements SurfaceHolder.Callba
                 tMediaPlayer = null;
           }
     }
-
 
 	@Override
 	public void onPrepared(MediaPlayer mp) {
