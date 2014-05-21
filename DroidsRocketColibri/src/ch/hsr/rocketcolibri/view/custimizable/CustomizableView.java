@@ -92,5 +92,9 @@ public class CustomizableView extends View implements ICustomizableView{
 		tViewElementConfig.setAlpha(getAlpha());
 		return tViewElementConfig;
 	}
+	
+	public ViewSequence getViewSequence () {
+		return ViewSequence.Foreground; 
+	}
 }
 
