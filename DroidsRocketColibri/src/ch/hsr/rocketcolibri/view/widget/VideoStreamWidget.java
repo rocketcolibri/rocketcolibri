@@ -78,7 +78,7 @@ public class VideoStreamWidget extends RCWidget  implements SurfaceHolder.Callba
             tMediaPlayer.setDisplay(holder);
             // TODO set videoUrl here
             tMediaPlayer.setDataSource("rtsp://v6.cache1.c.youtube.com/CjYLENy73wIaLQkDsLHya4-Z9hMYDSANFEIJbXYtZ29vZ2xlSARSBXdhdGNoYKX4k4uBjbOiUQw=/0/0/0/video.3gp");
-            tMediaPlayer.prepare();
+            tMediaPlayer.prepareAsync();
             tMediaPlayer.setOnPreparedListener(this);
             tMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
      } catch (IllegalArgumentException e) {
