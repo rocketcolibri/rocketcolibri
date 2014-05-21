@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import ch.hsr.rocketcolibri.activity.DesktopActivity;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
+import ch.hsr.rocketcolibri.view.custimizable.ViewSequence;
 import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.VideoUrl;
 import android.app.Activity;
@@ -62,11 +63,18 @@ public class VideoStreamWidget extends RCWidget  implements SurfaceHolder.Callba
 	 * Override this function with the Ui Output data type the widget wants to receive with the onNotifyUiOutputSink method. 
 	 * @return type
 	 */
+	@Override
 	public UiOutputDataType getType() {
 		return UiOutputDataType.Video;
 	}
 
-
+	/**
+	 * The video view must be place in the background
+	 */
+	@Override
+	public ViewSequence getViewSequence () {
+		return ViewSequence.Background; 
+	}
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height)

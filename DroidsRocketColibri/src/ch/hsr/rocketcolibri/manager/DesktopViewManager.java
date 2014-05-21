@@ -22,6 +22,7 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
+import ch.hsr.rocketcolibri.view.custimizable.ViewSequence;
 import ch.hsr.rocketcolibri.view.draggable.DragController;
 import ch.hsr.rocketcolibri.view.draggable.DragLayer;
 import ch.hsr.rocketcolibri.view.draggable.IDragListener;
@@ -102,7 +103,11 @@ public class DesktopViewManager implements IDesktopViewManager{
 	    Class<?> c = Class.forName(cElementConfig.getClassPath());
 	    Constructor<?> cons = c.getConstructor(Context.class, ViewElementConfig.class);
 	    CustomizableView view = (CustomizableView)cons.newInstance(tContext, cElementConfig);
-	    tControlElementParentView.addView(view);
+	    if(ViewSequence.Foreground == view.getViewSequence())
+	    	tControlElementParentView.addView(view, 0);
+	    else
+	    	tControlElementParentView.addView(view);
+	    
 	    return view;
 	}
 
