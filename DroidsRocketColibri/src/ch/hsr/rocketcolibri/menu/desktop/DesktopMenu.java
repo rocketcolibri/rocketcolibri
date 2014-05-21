@@ -1,7 +1,7 @@
 /**
  * Rocket Colibri © 2014
  */
-package ch.hsr.rocketcolibri.menu;
+package ch.hsr.rocketcolibri.menu.desktop;
 
 import android.content.Context;
 import android.view.View;
