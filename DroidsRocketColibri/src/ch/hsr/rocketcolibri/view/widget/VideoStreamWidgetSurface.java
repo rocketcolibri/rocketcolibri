@@ -3,7 +3,6 @@ package ch.hsr.rocketcolibri.view.widget;
 import java.io.IOException;
 
 import ch.hsr.rocketcolibri.R;
-import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.VideoUrl;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,15 +15,17 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-public class VideoStreamWidgetSurface extends SurfaceView implements SurfaceHolder.Callback, OnPreparedListener {
-	private VideoUrl tVideoUrl;
+public class VideoStreamWidgetSurface extends SurfaceView implements SurfaceHolder.Callback, OnPreparedListener, OnErrorListener {
+	static final String TAG = "VideoStreamWidgetSurface";
+	private String tVideoUrl = new String("");
 	private MediaPlayer tMediaPlayer;
 	private SurfaceHolder tHolder;
-
 	private RectF videoNotAvailIconRect;
 	private Paint videoNotAvailIconPaint;
 	private Bitmap videoNotAvailIconBitmap;
@@ -33,7 +34,6 @@ public class VideoStreamWidgetSurface extends SurfaceView implements SurfaceHold
 		super(context);
   	  	tHolder = getHolder();
   	  	tHolder.addCallback(this);
-  	  	
 		videoNotAvailIconRect = new RectF(0.0f, 0.0f, 1.0f, 1.0f);
 		videoNotAvailIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.video_stream_not_available);
 		BitmapShader paperShader = new BitmapShader(videoNotAvailIconBitmap, Shader.TileMode.MIRROR, Shader.TileMode.MIRROR);
@@ -51,53 +51,49 @@ public class VideoStreamWidgetSurface extends SurfaceView implements SurfaceHold
 	@Override
 	protected void onDraw(Canvas canvas) 
 	{
-		if(null == this.tVideoUrl) {
+		super.onDraw(canvas);
+		
+		if(tVideoUrl.length() > 2)
+			canvas.drawColor(0, Mode.CLEAR);
+		else
+		{
 			float scale = (float) getWidth();
 			canvas.save(Canvas.MATRIX_SAVE_FLAG);
 			canvas.scale(scale, scale);
 			canvas.drawRect(videoNotAvailIconRect, videoNotAvailIconPaint);
 			canvas.restore();
-			super.onDraw(canvas);
 		}
-		else
-			canvas.drawColor(0, Mode.CLEAR);
 	}
 	
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height)
-    {
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){
     	holder.setFixedSize(width, height);
     }
     
     private void playVideo() {
-    	if(null != this.tVideoUrl) {
+    	if(tVideoUrl.length() > 2) {
             try {
-            	
-                tMediaPlayer = new MediaPlayer();
+            	if(null == tMediaPlayer)
+            		tMediaPlayer = new MediaPlayer();
                 tMediaPlayer.setDisplay(tHolder);
-                // TODO set videoUrl here
-                tMediaPlayer.setDataSource(tVideoUrl.getVideoUrl());
-                //tMediaPlayer.setDataSource("rtsp://v6.cache1.c.youtube.com/CjYLENy73wIaLQkDsLHya4-Z9hMYDSANFEIJbXYtZ29vZ2xlSARSBXdhdGNoYKX4k4uBjbOiUQw=/0/0/0/video.3gp");
+                tMediaPlayer.setDataSource(tVideoUrl);
                 tMediaPlayer.prepareAsync();
                 tMediaPlayer.setOnPreparedListener(this);
+                tMediaPlayer.setOnErrorListener(this);
                 tMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
          } catch (IllegalArgumentException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        	 e.printStackTrace();
          } catch (SecurityException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        	 e.printStackTrace();
          } catch (IllegalStateException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        	 e.printStackTrace();
          } catch (IOException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+        	 e.printStackTrace();
          }     		
-    	}
+    	}  		
     	postInvalidate();
     }
-    
+
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
     	tHolder = holder;
@@ -115,7 +111,7 @@ public class VideoStreamWidgetSurface extends SurfaceView implements SurfaceHold
           if (tMediaPlayer != null)
           {
                 tMediaPlayer.release();
-                tMediaPlayer = null;
+                tMediaPlayer = null;             
           }
     }
 
@@ -124,12 +120,39 @@ public class VideoStreamWidgetSurface extends SurfaceView implements SurfaceHold
 		tMediaPlayer.start();
 	}
 	
-	public VideoUrl getVideoUrl() {
+	public void restart(){
+        try {
+	        for (int u=1; u<=5; u++) {
+		        Thread.sleep(5000);
+		        tMediaPlayer.stop();
+		        tMediaPlayer.release();
+	        };
+
+        }
+        catch (Exception e)
+        {
+        }
+        tMediaPlayer=null;
+        playVideo();
+    }
+	
+	@Override
+	public boolean onError(MediaPlayer mp, int what, int extra) {
+		restart();
+		Log.d(TAG, "Video Player Error:" + what + "Extra:" +extra);
+		return true;
+	}
+	
+	public String getVideoUrl() {
 		return tVideoUrl;
 	}
 
-	public void setVideoUrl(VideoUrl tVideoUrl) {
-		this.tVideoUrl = tVideoUrl;
-		playVideo();
+	public void setVideoUrl(String videoUrl) {
+		tVideoUrl = videoUrl;
+		if(tVideoUrl.length() > 2)
+			playVideo();
+		else
+			releaseMediaPlayer();
+		postInvalidate();
 	}
 }

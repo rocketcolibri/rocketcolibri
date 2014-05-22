@@ -93,8 +93,13 @@ public class CustomizableView extends View implements ICustomizableView{
 		return tViewElementConfig;
 	}
 	
+	/**
+	 * Override this function if the Widgets needs an overlay view during
+	 * the operate mode. (eg. SufavceView for video display)
+	 * @return operateOverlayView
+	 */
 	public View getOperateOverlayView() {
-		return null;
+		return null; // the default is no operateOverlayView
 	}
 }
 

@@ -104,5 +104,6 @@ public class RocketColibriProtocolTelemetryReceiver
 			RocketColibriProtocolTelemetryReceiver.context.tProtocolFsm.queue(e.E8_TIMEOUT);
 			RocketColibriProtocolTelemetryReceiver.context.tProtocolFsm.processNextEvent();
 		}
+		RocketColibriProtocolTelemetryReceiver.context.tVdeoUrl.setVideoUrl("");
 	}
 }

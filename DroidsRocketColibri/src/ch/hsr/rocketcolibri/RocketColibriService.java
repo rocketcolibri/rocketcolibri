@@ -86,6 +86,13 @@ public class RocketColibriService extends Service implements IUiOutputSinkChange
 		super.onCreate();
 		Log.d(TAG, "RocketColibriService started");
 		RocketColibriService.tRunning = true;
+
+		// UI sink data
+		tUsers = new UserData();
+		tConnState = new ConnectionState();
+		tVdeoUrl = new VideoUrl();
+
+		
 		// create a protocol instance
 		this.tProtocolFsm = new RocketColibriProtocolFsm(s.DISC);
 		this.tProtocol = new RocketColibriProtocol(tProtocolFsm, this);
@@ -104,9 +111,6 @@ public class RocketColibriService extends Service implements IUiOutputSinkChange
 		for (UiOutputDataType type : UiOutputDataType.values()) 
 			tUiOutputSinkChangeObserver.put(type, new ArrayList<RCWidget>());
 
-		tUsers = new UserData();
-		tConnState = new ConnectionState();
-		tVdeoUrl = new VideoUrl();
 
 		// create database instance
 		tRocketColibriDB = new RocketColibriDB(this);

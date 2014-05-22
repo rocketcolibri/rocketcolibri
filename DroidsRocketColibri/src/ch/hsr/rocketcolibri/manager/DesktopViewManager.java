@@ -4,6 +4,8 @@
 package ch.hsr.rocketcolibri.manager;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
@@ -101,12 +103,9 @@ public class DesktopViewManager implements IDesktopViewManager{
 	    Constructor<?> cons = c.getConstructor(Context.class, ViewElementConfig.class);
 	    CustomizableView view = (CustomizableView)cons.newInstance(tContext, cElementConfig);
 	    tControlElementParentView.addView(view);
-	    if(!tCustomizeModus && (null != view.getOperateOverlayView()))
-	    	tControlElementParentView.addView(view.getOperateOverlayView(),0);
-	    
-	    	
-	    
-	    
+//	    if(!tCustomizeModus && (null != view.getOperateOverlayView()))
+//	    	tControlElementParentView.addView(view.getOperateOverlayView(),0);
+	    updateModusOfCustomizableViews();
 	    return view;
 	}
 
@@ -123,23 +122,34 @@ public class DesktopViewManager implements IDesktopViewManager{
 	
 	private void updateModusOfCustomizableViews(){
     	int size = tControlElementParentView.getChildCount();
+    	
+    	List<View>operateOverlayViews = new ArrayList<View>();
+    	
     	CustomizableView view = null;
     	for(int i = 0; i < size; ++i){
     		try{
-    			view = (CustomizableView) tControlElementParentView.getChildAt(i);
-    			view.setOnTouchListener(tCustomizeModusListener);
-    			view.setCustomizeModus(tCustomizeModus);
-    			// switch View
-    			if(null != view.getOperateOverlayView()){
-    				if(tCustomizeModus){
-    					tControlElementParentView.removeView(view.getOperateOverlayView());
-    				} else {
-    					tControlElementParentView.addView(view.getOperateOverlayView(), 0);
-    				}
-    			}
-    		}catch(Exception e){
+	    			View v = tControlElementParentView.getChildAt(i);
+	    			if (v instanceof CustomizableView)	{
+		    			view = (CustomizableView) v;
+		    			view.setOnTouchListener(tCustomizeModusListener);
+		    			view.setCustomizeModus(tCustomizeModus);
+		    			// switch View
+		    			if(null != view.getOperateOverlayView())
+		    				operateOverlayViews.add(view.getOperateOverlayView());
+	    			} else{
+	    				tControlElementParentView.removeView(v);
+	    			}
+    			}catch(Exception e){
+    			Log.d("DV", "msg");
     		}
     	}
+    	// add the new operate overly after setting the 'normal' customized' views
+    	for ( View v : operateOverlayViews)	{
+    		if(!tCustomizeModus)
+    			tControlElementParentView.addView(v, 0);	
+    	}
+    		
+    	
 	}
 
 	@Override

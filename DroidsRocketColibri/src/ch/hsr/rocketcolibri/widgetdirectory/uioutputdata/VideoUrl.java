@@ -16,6 +16,7 @@ public class VideoUrl extends UiOutputData
 	public VideoUrl() 
 	{
 		type = UiOutputDataType.Video;
+		videoUrl = new String("");
 	}
 	
 	public boolean setVideoUrl(String videoUrl)

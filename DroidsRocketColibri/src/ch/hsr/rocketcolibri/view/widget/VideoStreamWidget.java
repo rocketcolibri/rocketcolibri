@@ -1,17 +1,11 @@
 package ch.hsr.rocketcolibri.view.widget;
 
-import java.io.IOException;
 
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.VideoUrl;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnPreparedListener;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -46,7 +40,7 @@ public class VideoStreamWidget extends RCWidget {
 	 * @param data
 	 */
 	public void onNotifyUiOutputSink(Object data) {
-		tVideoSurfaceView.setVideoUrl((VideoUrl)data);
+		tVideoSurfaceView.setVideoUrl(((VideoUrl)data).getVideoUrl());
 	}
 	
 	/**

@@ -9,10 +9,8 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
-import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.VideoUrl;
 
 public class RocketColibriMessageTelemetry extends RocketColibriMessage {
 	final String TAG = this.getClass().getName();		
