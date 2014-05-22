@@ -353,7 +353,7 @@ descirption:string</panel_attributes>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
-m1=0..n
+m1=0..8
 r1=Controls</panel_attributes>
     <additional_attributes>180;30;30;30</additional_attributes>
   </element>
@@ -366,7 +366,7 @@ r1=Controls</panel_attributes>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
-m1=0..1
+m1=0..n
 r1=Displays</panel_attributes>
     <additional_attributes>180;30;30;30</additional_attributes>
   </element>
