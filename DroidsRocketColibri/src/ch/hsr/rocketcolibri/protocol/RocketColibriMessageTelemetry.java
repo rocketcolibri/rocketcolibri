@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
+import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.VideoUrl;
 
 public class RocketColibriMessageTelemetry extends RocketColibriMessage {
 	final String TAG = this.getClass().getName();		
@@ -72,6 +73,8 @@ public class RocketColibriMessageTelemetry extends RocketColibriMessage {
 
 	@Override
 	public void sendUpdateUiSinkAndSendEvents(RocketColibriService service) {
+		service.tVdeoUrl.setVideoUrl("rtsp://192.168.200.1:8554/unicast");
+		
 		service.tUsers.setConnectedUsers(this.tActiveuser, this.tPassivuser);
 		if(null == this.tActiveuser)
 			service.tProtocolFsm.queue(e.E3_RECV_TELE_NONE);

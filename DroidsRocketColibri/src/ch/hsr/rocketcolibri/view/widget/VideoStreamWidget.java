@@ -15,20 +15,18 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-public class VideoStreamWidget extends RCWidget  implements SurfaceHolder.Callback, OnPreparedListener {
+public class VideoStreamWidget extends RCWidget {
 
-	private MediaPlayer tMediaPlayer;
-    private SurfaceView tVideoSurfaceView;
-    private SurfaceHolder tHolder;
+	
+    private VideoStreamWidgetSurface tVideoSurfaceView;
+    
     RelativeLayout tRel;
-	VideoUrl tVideoUrl;
+	
 	
 	public VideoStreamWidget(Context context, ViewElementConfig elementConfig) 	{
 		super(context, elementConfig);
-  	  	tVideoSurfaceView = (SurfaceView)new SurfaceView(context);
+  	  	tVideoSurfaceView = new VideoStreamWidgetSurface(context);
   	  	tVideoSurfaceView.setLayoutParams(elementConfig.getLayoutParams());
-  	  	tHolder = tVideoSurfaceView.getHolder();
-  	  	tHolder.addCallback(this); 
 	}
 	
 	@Override
@@ -48,7 +46,7 @@ public class VideoStreamWidget extends RCWidget  implements SurfaceHolder.Callba
 	 * @param data
 	 */
 	public void onNotifyUiOutputSink(Object data) {
-		tVideoUrl = (VideoUrl)data;
+		tVideoSurfaceView.setVideoUrl((VideoUrl)data);
 	}
 	
 	/**
@@ -63,56 +61,5 @@ public class VideoStreamWidget extends RCWidget  implements SurfaceHolder.Callba
 	@Override
 	public View getOperateOverlayView() {
 		return tVideoSurfaceView;
-	}
-	
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height)
-    {
-    	holder.setFixedSize(width, height);
-    }
-    
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        try {
-            tMediaPlayer = new MediaPlayer();
-            tMediaPlayer.setDisplay(holder);
-            // TODO set videoUrl here
-            tMediaPlayer.setDataSource("rtsp://v6.cache1.c.youtube.com/CjYLENy73wIaLQkDsLHya4-Z9hMYDSANFEIJbXYtZ29vZ2xlSARSBXdhdGNoYKX4k4uBjbOiUQw=/0/0/0/video.3gp");
-            tMediaPlayer.prepareAsync();
-            tMediaPlayer.setOnPreparedListener(this);
-            tMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-     } catch (IllegalArgumentException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-     } catch (SecurityException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-     } catch (IllegalStateException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-     } catch (IOException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-     }   	
-    }
-    
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder)
-    {
-          releaseMediaPlayer();
-    }
-    
-    private void releaseMediaPlayer()
-    {
-          if (tMediaPlayer != null)
-          {
-                tMediaPlayer.release();
-                tMediaPlayer = null;
-          }
-    }
-
-	@Override
-	public void onPrepared(MediaPlayer mp) {
-		tMediaPlayer.start();
 	}
 }
