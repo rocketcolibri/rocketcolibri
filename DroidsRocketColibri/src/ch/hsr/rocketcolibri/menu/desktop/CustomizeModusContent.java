@@ -3,24 +3,18 @@ package ch.hsr.rocketcolibri.menu.desktop;
 import java.util.List;
 
 import ch.hsr.rocketcolibri.R;
-import ch.hsr.rocketcolibri.activity.DesktopActivity;
-import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.widgetdirectory.WidgetEntry;
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.GridLayout;
-import android.widget.LinearLayout;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 public class CustomizeModusContent extends ModusContent{
 	
@@ -107,11 +101,10 @@ public class CustomizeModusContent extends ModusContent{
 	private CustomizableView setupView(WidgetEntry we, MotionEvent e) throws Exception{
 		CustomizableView v1 = (CustomizableView) tDesktopViewManager.createAndAddView(getDemoConfig(we));
 		AbsoluteLayout rootView = tDesktopViewManager.getRootView();
-		v1.setCustomizeModus(true);
 		AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) v1.getLayoutParams();
 		lp.x = (int) (rootView.getWidth()/2)-lp.width/2;
 		lp.y = (int) (rootView.getHeight()/2)-lp.height/2;
-		v1.invalidate();
+		v1.setCustomizeModus(true);
 		return v1;
 	}
 	

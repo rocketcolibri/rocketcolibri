@@ -50,8 +50,8 @@ public class DesktopMenu {
 	private void initContents(){
 		tControlModusContent = (ControlModusContent)tSwipeInMenu.findViewById(R.id.controlModusContent);
 		tCustomizeModusContent = (CustomizeModusContent)tSwipeInMenu.findViewById(R.id.customizeModusContent);
-		tControlModusContent.create(null);
-		tCustomizeModusContent.create(tService.getWdgetEntries());
+		tControlModusContent.create(null, tDesktopViewManager);
+		tCustomizeModusContent.create(tService.getWdgetEntries(), tDesktopViewManager);
 		switchModusContent();
 	}
 	
