@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -29,63 +30,45 @@ public class CustomizeModusContent extends ModusContent{
 
 	@Override
 	protected void onCreate(List<WidgetEntry> widgetEntries) {
-		ToggleButton tb = (ToggleButton)findViewById(R.id.testElement);
-		LinearLayout b = new LinearLayout(tContext);
-		b.setLayoutParams(new LayoutParams(300, 300));
-		b.setOrientation(LinearLayout.VERTICAL);
-		b.setBackgroundColor(Color.GRAY);
-		for(WidgetEntry wEntry : widgetEntries){
+		GridLayout gLayout = (GridLayout) findViewById(R.id.widgetEntryContent);
+		for(WidgetEntry wEntry : widgetEntries){ 
 			try {
 				Log.d("wEntry", ""+wEntry.getClassPath());
 				CustomizableView view = createIconView(wEntry.getClassPath(), 300, 300);
-				b.addView(view);
-			
+				view.setBackgroundResource(R.drawable.border);
+				view.setOnTouchListener(new WidgetTouchListener(wEntry));
+				gLayout.addView(view);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 		}
-		this.addView(b);
-		tb.setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				switch(event.getAction() & MotionEvent.ACTION_MASK){
-				case MotionEvent.ACTION_UP:
-					tDesktopViewManager.getDesktopMenu().animateToggle();
-					try {
-						setupView(event);
-						return true;
-					} catch (Exception e) {
-						return false;
-					}
-				}
-				return false;
-			}				
-		});
+
 	}
 	
-	private CustomizableView setupView(MotionEvent e) throws Exception{
-		CustomizableView v1 = (CustomizableView) tDesktopViewManager.createAndAddView(getDemoConfig());
-		AbsoluteLayout rootView = tDesktopViewManager.getRootView();
+	class WidgetTouchListener implements View.OnTouchListener{
+		private WidgetEntry tWidgetEntry;
 		
-		v1.setCustomizeModus(true);
-		Toast.makeText(tContext, "X:"+e.getX()+" Y:"+e.getY(), Toast.LENGTH_SHORT).show();
-		AbsoluteLayout.LayoutParams lp = (ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams) v1.getLayoutParams();
-		lp.x = (int) (rootView.getWidth()/2)-lp.width/2;
-		lp.y = (int) (rootView.getHeight()/2)-lp.height/2;
-		v1.invalidate();
-		return v1;
-	}
-	
-	private ViewElementConfig getDemoConfig(){
-		ResizeConfig rc = new ResizeConfig();
-	    rc.keepRatio=true;
-	    rc.maxHeight=500;
-	    rc.minHeight=50;
-	    rc.maxWidth=500;
-	    rc.minWidth=50;
-	    AbsoluteLayout.LayoutParams lp = new AbsoluteLayout.LayoutParams(380, 380 , 0, 0);
-	    ViewElementConfig elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
-		return elementConfig;
+		public WidgetTouchListener(WidgetEntry wEntry){
+			tWidgetEntry = wEntry;
+		}
+
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			switch(event.getAction()){
+			case MotionEvent.ACTION_UP:
+				tDesktopViewManager.getDesktopMenu().animateToggle();
+				try {
+					setupView(tWidgetEntry, event);
+					Toast.makeText(tContext, tWidgetEntry.getLabelText(), Toast.LENGTH_SHORT).show();
+					return true;
+				} catch (Exception e) {
+					e.printStackTrace();
+					return false;
+				}
+			}
+			return true;
+		}
+		
 	}
 	
 	/**
@@ -95,9 +78,13 @@ public class CustomizeModusContent extends ModusContent{
 	 * @throws Exception 
 	 */
 	private CustomizableView createIconView(String widgetClassPath, int width, int height) throws Exception{
+		return tDesktopViewManager.createView(createDemoViewElementConfig(widgetClassPath, width, height));
+	}
+	
+	private ViewElementConfig createDemoViewElementConfig(String widgetClassPath, int width, int height){
 		AbsoluteLayout.LayoutParams lp = new AbsoluteLayout.LayoutParams(width, height, 0, 0);
 		ViewElementConfig vElementConfig = new ViewElementConfig(widgetClassPath, lp, getDefaultResizeConfig());
-		return tDesktopViewManager.createView(vElementConfig);
+		return vElementConfig;
 	}
 	
 	/**
@@ -115,6 +102,29 @@ public class CustomizeModusContent extends ModusContent{
 	    rc.maxWidth=500;
 	    rc.minWidth=50;
 	    return rc;
+	}
+	
+	private CustomizableView setupView(WidgetEntry we, MotionEvent e) throws Exception{
+		CustomizableView v1 = (CustomizableView) tDesktopViewManager.createAndAddView(getDemoConfig(we));
+		AbsoluteLayout rootView = tDesktopViewManager.getRootView();
+		v1.setCustomizeModus(true);
+		AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) v1.getLayoutParams();
+		lp.x = (int) (rootView.getWidth()/2)-lp.width/2;
+		lp.y = (int) (rootView.getHeight()/2)-lp.height/2;
+		v1.invalidate();
+		return v1;
+	}
+	
+	private ViewElementConfig getDemoConfig(WidgetEntry we){
+		ResizeConfig rc = new ResizeConfig();
+	    rc.keepRatio=true;
+	    rc.maxHeight=500;
+	    rc.minHeight=50;
+	    rc.maxWidth=500;
+	    rc.minWidth=50;
+	    AbsoluteLayout.LayoutParams lp = new AbsoluteLayout.LayoutParams(380, 380 , 0, 0);
+	    ViewElementConfig elementConfig = new ViewElementConfig(we.getClassPath(), lp, rc);
+		return elementConfig;
 	}
 	
 }

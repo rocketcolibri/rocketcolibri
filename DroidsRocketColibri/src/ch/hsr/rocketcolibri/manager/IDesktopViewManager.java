@@ -18,7 +18,6 @@ public interface IDesktopViewManager {
 	boolean dragView(View dagTarget);
 	CustomizableView createAndAddView(ViewElementConfig vElementConfig) throws Exception;
 	CustomizableView createView(ViewElementConfig vElementConfig) throws Exception;
-	DesktopMenu createDesktopMenu();
 	boolean isInCustomizeModus();
 	void switchCustomieModus();
 	AbsoluteLayout getRootView();

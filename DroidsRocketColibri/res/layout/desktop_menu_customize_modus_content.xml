@@ -3,26 +3,14 @@
     android:id="@+id/customizeModusContent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#9584E8"
     android:orientation="vertical"
     android:visibility="gone" >
 
     <GridLayout
+        android:id="@+id/widgetEntryContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:columnCount="5"
-        android:orientation="horizontal"
-        android:rowCount="2" >
-        <ToggleButton
-            android:id="@+id/testElement"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@null"
-            android:button="@drawable/selector_main_menu_settings"
-            android:checked="false"
-            android:contentDescription="@string/menu_action_main_settings"
-            android:textOff="Operate"
-            android:textOn="Config Mode" >
-        </ToggleButton>
+        android:columnCount="6"
+        android:orientation="horizontal" >
     </GridLayout>
 </ch.hsr.rocketcolibri.menu.desktop.CustomizeModusContent>

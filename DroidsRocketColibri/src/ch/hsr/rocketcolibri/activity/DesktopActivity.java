@@ -32,7 +32,7 @@ import ch.hsr.rocketcolibri.view.widget.VideoStreamWidget;
  */
 public class DesktopActivity extends RCActivity
 {
-	private static final String TAG = "CircleTestActivity";
+	private static final String TAG = "DesktopActivity";
 	private SurfaceView surface_view;
 	// private Camera mCamera;
 	SurfaceHolder.Callback sh_ob = null;
@@ -94,9 +94,8 @@ public class DesktopActivity extends RCActivity
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d("", "after create onCreate"); 
 		setContentView(R.layout.main);
-		Log.d("", "after create main");
+		
 		AbsoluteLayout rootLayer = (AbsoluteLayout) findViewById(R.id.root_layer);
 		AbsoluteLayout absolutLayout = (AbsoluteLayout) findViewById(R.id.drag_layer);
 		tDesktopViewManager = new DesktopViewManager(this, rootLayer, absolutLayout, new ViewChangedListener() {
@@ -107,9 +106,7 @@ public class DesktopActivity extends RCActivity
 				//rcService.getRocketColibriDB().store(viewElementConfig);
 			}
 		});
-		Log.d("", "pre create desktopmenu");
-		tDesktopMenu = tDesktopViewManager.createDesktopMenu();
-		Log.d("", "after create desktopmenu");
+		tDesktopMenu = tDesktopViewManager.getDesktopMenu();
 		
 		getWindow().setFormat(PixelFormat.TRANSLUCENT);
 		surface_view = (SurfaceView) findViewById(R.id.camView);

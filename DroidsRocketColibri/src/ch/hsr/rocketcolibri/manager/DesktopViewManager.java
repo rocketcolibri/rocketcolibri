@@ -68,6 +68,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 		LinearLayout ll = (LinearLayout) li.inflate(R.layout.customize_modus_popup, null, false);
 		tCustomizeModusPopupMenu = new CustomizeModusPopupMenu(this, ll);
 	    tCustomizeModusListener = new CustomizeModusListener(this);
+	    tDesktopMenu = new DesktopMenu(tContext, this);
 	}
 
 	@Override
@@ -79,12 +80,6 @@ public class DesktopViewManager implements IDesktopViewManager{
 		}catch(Exception e){
 			tResizeController.startResize(tControlElementParentView, resizeTarget);
 		}
-	}
-	
-	@Override
-	public DesktopMenu createDesktopMenu(){
-		tDesktopMenu = new DesktopMenu(tContext, this);
-		return tDesktopMenu;
 	}
 	
 	@Override
