@@ -33,7 +33,7 @@ public class DesktopMenu {
 	private View[] tServiceDependentItems;
 	private ControlModusContent tControlModusContent;
 	private CustomizeModusContent tCustomizeModusContent;
-	
+	private boolean initOnce = true;
 	public DesktopMenu(Context context, IDesktopViewManager desktopViewManager) {
 		tContext = context;
 		tSwipeInMenu = (SwipeInMenu) ((Activity)tContext).findViewById(R.id.swipeInMenu);
@@ -65,7 +65,10 @@ public class DesktopMenu {
 	
 	public void setService(RocketColibriService rcService) {
 		tService = rcService;
-		initContents();
+		if(initOnce){
+			initOnce = false;
+			initContents();
+		}
 		setServiceDependentButtonsEnabled(true);
 	}
 	
