@@ -13,22 +13,13 @@ import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
  * Describes the capabilities of a Widget class
  * Lists all capabilities that are used to add a new widget.
  */
-public class WidgetDirectoryEntry 
-{
-	/**
-	 * Description
-	 */
-	String description;
+public class WidgetEntry {
+	String tClassPath;
+	String tLabelText;
 	
-	/**
-	 * Name of the class
-	 */
-	String className;
-	
-	public WidgetDirectoryEntry(String className, String description)
-	{
-		this.className = className;
-		this.description = description;
+	public WidgetEntry(String labelText, String classPath){
+		this.tLabelText = labelText;
+		this.tClassPath = classPath;
 	}
 
 	/**
@@ -38,22 +29,18 @@ public class WidgetDirectoryEntry
 	 * @return widget view
 	 * @throws Exception
 	 */
-	public CustomizableView createWidget(Context context, ViewElementConfig elementConfig) throws Exception
-	{
-	    Class<?> c = Class.forName(this.className);
+	public CustomizableView createWidget(Context context, ViewElementConfig elementConfig) throws Exception{
+	    Class<?> c = Class.forName(this.tLabelText);
 	    Constructor<?> cons = c.getConstructor(Context.class, ViewElementConfig.class);
 	    CustomizableView view = (CustomizableView)cons.newInstance(context, elementConfig);
 	    return view;
 	}
 	
-	public String getDescription()
-	{
-		return this.description;
+	public String getClassPath(){
+		return tClassPath;
 	}
 	
-	public void setDescription(String description) 
-	{
-		this.description = description;
+	public String getLabelText(){
+		return tLabelText;
 	}
-	
 }

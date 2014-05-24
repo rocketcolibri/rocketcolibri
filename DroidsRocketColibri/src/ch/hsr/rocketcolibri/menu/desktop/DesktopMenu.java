@@ -28,15 +28,15 @@ public class DesktopMenu {
 	private SwipeInMenu tSwipeInMenu;
 	private Context tContext;
 	private IDesktopViewManager tDesktopViewManager;
-	private RocketColibriService tRcService;
+	private RocketColibriService tService;
 	private int[] tServiceDependentItemIds = {R.id.menu_action_main_settings,R.id.menu_action_main_wifi, R.id.menu_action_main_mode};
 	private View[] tServiceDependentItems;
 	private ControlModusContent tControlModusContent;
 	private CustomizeModusContent tCustomizeModusContent;
 	
-	public DesktopMenu(Context context, View contentView, IDesktopViewManager desktopViewManager) {
+	public DesktopMenu(Context context, IDesktopViewManager desktopViewManager) {
 		tContext = context;
-		tSwipeInMenu = (SwipeInMenu) contentView;
+		tSwipeInMenu = (SwipeInMenu) ((Activity)tContext).findViewById(R.id.swipeInMenu);
 		tDesktopViewManager = desktopViewManager;
 		tSwipeInMenu.setOnDrawerOpenListener(new OnDrawerOpenListener() {
 			@Override
@@ -44,13 +44,14 @@ public class DesktopMenu {
 				tDesktopViewManager.closeSpecialThings();
 			}
 		});
-		initContents();
 		onCreate();
 	}
 	
 	private void initContents(){
 		tControlModusContent = (ControlModusContent)tSwipeInMenu.findViewById(R.id.controlModusContent);
 		tCustomizeModusContent = (CustomizeModusContent)tSwipeInMenu.findViewById(R.id.customizeModusContent);
+		tControlModusContent.create(null);
+		tCustomizeModusContent.create(tService.getWdgetEntries());
 		switchModusContent();
 	}
 	
@@ -63,7 +64,8 @@ public class DesktopMenu {
 	}
 	
 	public void setService(RocketColibriService rcService) {
-		tRcService = rcService;
+		tService = rcService;
+		initContents();
 		setServiceDependentButtonsEnabled(true);
 	}
 	
@@ -86,9 +88,9 @@ public class DesktopMenu {
 	    		// TODO not set to null from here!
 	    		// tRcService.users.setActiveUser(null);
 	    		if (isChecked) 
-	    			tRcService.tWifi.connectRocketColibriSSID(tRcService);
+	    			tService.tWifi.connectRocketColibriSSID(tService);
 		        else
-		        	tRcService.tWifi.disconnectRocketColibriSSID(tRcService);
+		        	tService.tWifi.disconnectRocketColibriSSID(tService);
 		    }
 		});
 		
@@ -97,11 +99,11 @@ public class DesktopMenu {
 		b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
 	    		if (isChecked){
-					tRcService.tProtocolFsm.queue(e.E6_USR_CONNECT);
-					tRcService.tProtocolFsm.processOutstandingEvents();
+					tService.tProtocolFsm.queue(e.E6_USR_CONNECT);
+					tService.tProtocolFsm.processOutstandingEvents();
 	    		}else{
-					tRcService.tProtocolFsm.queue(e.E7_USR_OBSERVE);
-					tRcService.tProtocolFsm.processOutstandingEvents();
+					tService.tProtocolFsm.queue(e.E7_USR_OBSERVE);
+					tService.tProtocolFsm.processOutstandingEvents();
 		        }
 		    }
 		});

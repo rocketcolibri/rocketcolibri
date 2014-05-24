@@ -30,13 +30,13 @@ public class CustomizableView extends View implements ICustomizableView{
 	/**
 	 * Constructor for non Android instantiation
 	 * @param context
-	 * @param cElementConfig
+	 * @param vElementConfig
 	 */
-    public CustomizableView(Context context, ViewElementConfig cElementConfig) {
+    public CustomizableView(Context context, ViewElementConfig vElementConfig) {
 		super(context);
-		tViewElementConfig = cElementConfig;
+		tViewElementConfig = vElementConfig;
 		setLayoutParams(tViewElementConfig.getLayoutParams());
-		setAlpha(cElementConfig.getAlpha());
+		setAlpha(vElementConfig.getAlpha());
 	}
 
 	public CustomizableView(Context context, AttributeSet attrs) {

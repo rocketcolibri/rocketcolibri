@@ -16,10 +16,14 @@ import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolTelemetryReceiver;
 import ch.hsr.rocketcolibri.protocol.WifiConnection;
+import ch.hsr.rocketcolibri.view.widget.Circle;
+import ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget;
+import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
 import ch.hsr.rocketcolibri.view.widget.RCWidget;
+import ch.hsr.rocketcolibri.view.widget.VideoStreamWidget;
 import ch.hsr.rocketcolibri.widgetdirectory.IUiOutputSinkChangeObservable;
 import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
-import ch.hsr.rocketcolibri.widgetdirectory.WidgetDirectoryEntry;
+import ch.hsr.rocketcolibri.widgetdirectory.WidgetEntry;
 import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.ConnectionState;
 import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.UiOutputData;
 import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.UserData;
@@ -48,7 +52,7 @@ public class RocketColibriService extends Service implements IUiOutputSinkChange
 	private HashMap<UiOutputDataType, List<RCWidget>> tUiOutputSinkChangeObserver;
 
 	// GUI Widget collection
-	List <WidgetDirectoryEntry> tWidgetDirectory= new ArrayList<WidgetDirectoryEntry>();
+	List <WidgetEntry> tWidgetDirectory= new ArrayList<WidgetEntry>();
 	
 	// reference to the protocol components
 	public RocketColibriProtocolFsm tProtocolFsm;
@@ -101,10 +105,10 @@ public class RocketColibriService extends Service implements IUiOutputSinkChange
 		this.tWifi = new WifiConnection();
 
 		// list all available Widgets here: 
-		this.tWidgetDirectory.add(new WidgetDirectoryEntry("Cross Control", "ch.hsr.rocketcolibri.widget.Circle"));
-		this.tWidgetDirectory.add(new WidgetDirectoryEntry("Connection Status", "ch.hsr.rocketcolibri.widget.ConnectionStatusWidget"));
-		this.tWidgetDirectory.add(new WidgetDirectoryEntry("User Info", "ch.hsr.rocketcolibri.widget.ConnectedUserInfoWidget"));
-		this.tWidgetDirectory.add(new WidgetDirectoryEntry("Video Stream", "ch.hsr.rocketcolibri.widget.VideoStreamWidget"));
+		this.tWidgetDirectory.add(new WidgetEntry("Cross Control", Circle.class.getName()));
+		this.tWidgetDirectory.add(new WidgetEntry("Connection Status", ConnectionStatusWidget.class.getName()));
+		this.tWidgetDirectory.add(new WidgetEntry("User Info", ConnectedUserInfoWidget.class.getName()));
+		this.tWidgetDirectory.add(new WidgetEntry("Video Stream", VideoStreamWidget.class.getName()));
 
 		// observer map
 		tUiOutputSinkChangeObserver = new HashMap<UiOutputDataType, List<RCWidget>>();
@@ -215,5 +219,9 @@ public class RocketColibriService extends Service implements IUiOutputSinkChange
 		if(type != UiOutputDataType.None) {
 			this.tUiOutputSinkChangeObserver.get(type).remove(observer);
 		}
+	}
+	
+	public List<WidgetEntry> getWdgetEntries(){
+		return tWidgetDirectory;
 	}
 }

@@ -60,14 +60,18 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 	
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
-		IBinder serviceBinder = peekService(context, new Intent(context, RocketColibriService.class));
-		RocketColibriService rcService = ((RocketColibriService.RocketColibriServiceBinder) serviceBinder).getService();
+		try{
+			IBinder serviceBinder = peekService(context, new Intent(context, RocketColibriService.class));
+			RocketColibriService rcService = ((RocketColibriService.RocketColibriServiceBinder) serviceBinder).getService();
 
-		if (getConnectivityStatus(context)) {
-			rcService.tProtocolFsm.queue(e.E1_CONN_SSID);
-		} else {
-			rcService.tProtocolFsm.queue(e.E2_DISC_SSID);
+			if (getConnectivityStatus(context)) {
+				rcService.tProtocolFsm.queue(e.E1_CONN_SSID);
+			} else {
+				rcService.tProtocolFsm.queue(e.E2_DISC_SSID);
+			}
+			rcService.tProtocolFsm.processOutstandingEvents();
+		}catch(NullPointerException e){
 		}
-		rcService.tProtocolFsm.processOutstandingEvents();
+
 	}
 }

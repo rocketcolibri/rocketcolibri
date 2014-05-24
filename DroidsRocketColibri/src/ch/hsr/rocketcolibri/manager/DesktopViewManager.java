@@ -10,6 +10,8 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import ch.hsr.rocketcolibri.activity.EditChannelActivity;
 import ch.hsr.rocketcolibri.manager.listener.CustomizeModusListener;
 import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
 import ch.hsr.rocketcolibri.menu.CustomizeModusPopupMenu;
+import ch.hsr.rocketcolibri.menu.desktop.DesktopMenu;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
@@ -47,6 +50,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	private ViewChangedListener tViewChangeListener;
 	private IDragListener dragListener;
 	private CustomizeModusPopupMenu tCustomizeModusPopupMenu;
+	private DesktopMenu tDesktopMenu;
 	
 	public DesktopViewManager(Activity context, AbsoluteLayout rootView, AbsoluteLayout controlElementParentView, ViewChangedListener vcListener){
 		tContext = context;
@@ -78,6 +82,12 @@ public class DesktopViewManager implements IDesktopViewManager{
 	}
 	
 	@Override
+	public DesktopMenu createDesktopMenu(){
+		tDesktopMenu = new DesktopMenu(tContext, this);
+		return tDesktopMenu;
+	}
+	
+	@Override
 	public boolean dragView(View dragView){
 	    if (tCustomizeModus) {
 	        // Make sure the drag was started by a long press as opposed to a long click.
@@ -98,15 +108,21 @@ public class DesktopViewManager implements IDesktopViewManager{
 	}
 	
 	@Override
-	public View createView(ViewElementConfig cElementConfig) throws Exception{
-	    Class<?> c = Class.forName(cElementConfig.getClassPath());
-	    Constructor<?> cons = c.getConstructor(Context.class, ViewElementConfig.class);
-	    CustomizableView view = (CustomizableView)cons.newInstance(tContext, cElementConfig);
+	public CustomizableView createAndAddView(ViewElementConfig cElementConfig) throws Exception{
+	    CustomizableView view = createView(cElementConfig);
+	    if(tCustomizeModus){
+	    	view.setOnTouchListener(tCustomizeModusListener);
+	    }
+	    view.setCustomizeModus(tCustomizeModus);
 	    tControlElementParentView.addView(view);
-//	    if(!tCustomizeModus && (null != view.getOperateOverlayView()))
-//	    	tControlElementParentView.addView(view.getOperateOverlayView(),0);
-	    updateModusOfCustomizableViews();
 	    return view;
+	}
+	
+	@Override
+	public CustomizableView createView(ViewElementConfig vElementConfig) throws Exception{
+	    Class<?> c = Class.forName(vElementConfig.getClassPath());
+	    Constructor<?> cons = c.getConstructor(Context.class, ViewElementConfig.class);
+	    return (CustomizableView)cons.newInstance(tContext, vElementConfig);
 	}
 
 	@Override
@@ -122,34 +138,15 @@ public class DesktopViewManager implements IDesktopViewManager{
 	
 	private void updateModusOfCustomizableViews(){
     	int size = tControlElementParentView.getChildCount();
-    	
-    	List<View>operateOverlayViews = new ArrayList<View>();
-    	
     	CustomizableView view = null;
     	for(int i = 0; i < size; ++i){
     		try{
-	    			View v = tControlElementParentView.getChildAt(i);
-	    			if (v instanceof CustomizableView)	{
-		    			view = (CustomizableView) v;
-		    			view.setOnTouchListener(tCustomizeModusListener);
-		    			view.setCustomizeModus(tCustomizeModus);
-		    			// switch View
-		    			if(null != view.getOperateOverlayView())
-		    				operateOverlayViews.add(view.getOperateOverlayView());
-	    			} else{
-	    				tControlElementParentView.removeView(v);
-	    			}
-    			}catch(Exception e){
-    			Log.d("DV", "msg");
+    			view = (CustomizableView) tControlElementParentView.getChildAt(i);
+    			view.setOnTouchListener(tCustomizeModusListener);
+    			view.setCustomizeModus(tCustomizeModus);
+    		}catch(Exception e){
     		}
     	}
-    	// add the new operate overly after setting the 'normal' customized' views
-    	for ( View v : operateOverlayViews)	{
-    		if(!tCustomizeModus)
-    			tControlElementParentView.addView(v, 0);	
-    	}
-    		
-    	
 	}
 
 	@Override
@@ -160,6 +157,11 @@ public class DesktopViewManager implements IDesktopViewManager{
 	@Override
 	public AbsoluteLayout getControlElementParentView() {
 		return tControlElementParentView;
+	}
+	
+	@Override
+	public DesktopMenu getDesktopMenu(){
+		return tDesktopMenu;
 	}
 	
 	@Override
@@ -198,7 +200,6 @@ public class DesktopViewManager implements IDesktopViewManager{
 	
 	@Override
 	public void release() {
-		Log.d("DesktopViewManager", "release");
 		tResizeController = null;
 		tContext = null;
 		tCustomizeModusListener.release();

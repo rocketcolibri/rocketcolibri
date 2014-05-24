@@ -94,8 +94,23 @@ public class DesktopActivity extends RCActivity
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.d("", "after create onCreate"); 
 		setContentView(R.layout.main);
-
+		Log.d("", "after create main");
+		AbsoluteLayout rootLayer = (AbsoluteLayout) findViewById(R.id.root_layer);
+		AbsoluteLayout absolutLayout = (AbsoluteLayout) findViewById(R.id.drag_layer);
+		tDesktopViewManager = new DesktopViewManager(this, rootLayer, absolutLayout, new ViewChangedListener() {
+			@Override
+			public void onViewChange(ViewElementConfig viewElementConfig) {
+				Log.d("changed", "changed");
+				//TODO 
+				//rcService.getRocketColibriDB().store(viewElementConfig);
+			}
+		});
+		Log.d("", "pre create desktopmenu");
+		tDesktopMenu = tDesktopViewManager.createDesktopMenu();
+		Log.d("", "after create desktopmenu");
+		
 		getWindow().setFormat(PixelFormat.TRANSLUCENT);
 		surface_view = (SurfaceView) findViewById(R.id.camView);
 		if (surface_holder == null) {
@@ -110,19 +125,6 @@ public class DesktopActivity extends RCActivity
 //		sh_callback = my_callback();
 //		surface_holder.addCallback(sh_callback);
 		
-
-		
-		AbsoluteLayout rootLayer = (AbsoluteLayout) findViewById(R.id.root_layer);
-		AbsoluteLayout absolutLayout = (AbsoluteLayout) findViewById(R.id.drag_layer);
-		tDesktopViewManager = new DesktopViewManager(this, rootLayer, absolutLayout, new ViewChangedListener() {
-			@Override
-			public void onViewChange(ViewElementConfig viewElementConfig) {
-				Log.d("changed", "changed");
-				//TODO 
-				//rcService.getRocketColibriDB().store(viewElementConfig);
-			}
-		});
-		tDesktopMenu = new DesktopMenu(this, findViewById(R.id.swipeInMenu), tDesktopViewManager);
 	}
 	
 	@Override
@@ -160,7 +162,7 @@ public class DesktopActivity extends RCActivity
 			    rc.minWidth=30;
 			    lp = new LayoutParams(100, 100, 50,200);
 			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
-			    view = tDesktopViewManager.createView(elementConfig);
+			    view = tDesktopViewManager.createAndAddView(elementConfig);
 			    view.setBackgroundColor(Color.CYAN);
 			    
 			    rc = new ResizeConfig();
@@ -171,7 +173,7 @@ public class DesktopActivity extends RCActivity
 			    rc.minWidth=10;
 			    lp = new LayoutParams(50, 50, 250, 200);
 			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
-			    view = tDesktopViewManager.createView(elementConfig);
+			    view = tDesktopViewManager.createAndAddView(elementConfig);
 			    view.setBackgroundColor(Color.RED);
 			    
 			    rc = new ResizeConfig();
@@ -182,7 +184,7 @@ public class DesktopActivity extends RCActivity
 			    rc.minWidth=50;
 			    lp = new LayoutParams(70, 70, 400, 200);
 			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
-			    view = tDesktopViewManager.createView(elementConfig);
+			    view = tDesktopViewManager.createAndAddView(elementConfig);
 			    view.setBackgroundColor(Color.LTGRAY);
 
 			    rc = new ResizeConfig();
@@ -192,7 +194,7 @@ public class DesktopActivity extends RCActivity
 			    rc.minWidth=100;
 			    lp = new LayoutParams(600, 100 , 100, 0);
 			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget", lp, rc);
-			    this.telemetryWidget = (ConnectedUserInfoWidget) tDesktopViewManager.createView(elementConfig);
+			    this.telemetryWidget = (ConnectedUserInfoWidget) tDesktopViewManager.createAndAddView(elementConfig);
 			    this.telemetryWidget.setBackgroundColor(Color.CYAN);
 			    this.telemetryWidget.setAlpha((float) .5);
 			    
@@ -203,7 +205,7 @@ public class DesktopActivity extends RCActivity
 			    rc.minWidth=50;
 			    lp = new LayoutParams(100, 100 , 0, 0);
 			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget", lp, rc);
-			    this.connectionStatusWidget = (ConnectionStatusWidget) tDesktopViewManager.createView(elementConfig);
+			    this.connectionStatusWidget = (ConnectionStatusWidget) tDesktopViewManager.createAndAddView(elementConfig);
 			    this.connectionStatusWidget.setAlpha(1);
 
 			    rc = new ResizeConfig();
@@ -213,7 +215,7 @@ public class DesktopActivity extends RCActivity
 			    rc.minWidth=200;
 			    lp = new LayoutParams(400, 300 , 100, 100);
 			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.VideoStreamWidget", lp, rc);
-			    this.tVideoStreamWidget = (VideoStreamWidget) tDesktopViewManager.createView(elementConfig);
+			    this.tVideoStreamWidget = (VideoStreamWidget) tDesktopViewManager.createAndAddView(elementConfig);
 			    this.tVideoStreamWidget.setAlpha(1);
 
 
@@ -226,7 +228,7 @@ public class DesktopActivity extends RCActivity
 			    lp = new LayoutParams(380, 380 , 100, 300);
 			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
 	
-			    Circle circleView = (Circle) tDesktopViewManager.createView(elementConfig);
+			    Circle circleView = (Circle) tDesktopViewManager.createAndAddView(elementConfig);
 			    circleView.setOnHChannelChangeListener(new OnChannelChangeListener ()
 				{
 					@Override
@@ -248,7 +250,7 @@ public class DesktopActivity extends RCActivity
 			    
 			    lp = new LayoutParams(380, 380 , 600, 300);
 			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
-			    circleView = (Circle)tDesktopViewManager.createView(elementConfig);
+			    circleView = (Circle)tDesktopViewManager.createAndAddView(elementConfig);
 			    
 			    circleView.setOnHChannelChangeListener(new OnChannelChangeListener ()
 				{
@@ -274,6 +276,10 @@ public class DesktopActivity extends RCActivity
 		    
 		    setupViewsOnce = false;
 		}
+	}
+	
+	public IDesktopViewManager getDesktopViewManager(){
+		return tDesktopViewManager;
 	}
 	
 	/**

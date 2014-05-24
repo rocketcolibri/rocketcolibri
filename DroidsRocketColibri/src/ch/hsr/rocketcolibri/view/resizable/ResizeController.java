@@ -43,13 +43,13 @@ public class ResizeController {
 		indexOfResizeTargetOnParent = parent.indexOfChild(resizeTarget);
 		tTargetParent.removeViewAt(indexOfResizeTargetOnParent);
 		tViewResizer = new ResizableMainLayer(tContext, resizeTarget, tInternalResizeDoneListener, parentLayoutParams, rConfg);
-	    tTargetParent.addView(tViewResizer);//add resize view to the targets parent to make it visible
+	    tTargetParent.addView(tViewResizer);//add resize view to the targets parent to make the resizer visible
 	    tIsResizing = true;
 	}
 	
 	public void stopResize(){
-//		if(tViewResizer!=null)
-//			tViewResizer.stop();
+		if(tIsResizing)
+			tViewResizer.stop();
 	}
 	
 	public void setResizeDoneListener(IResizeDoneListener listener){

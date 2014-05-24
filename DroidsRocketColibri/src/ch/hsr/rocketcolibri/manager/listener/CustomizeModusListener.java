@@ -44,8 +44,7 @@ public class CustomizeModusListener implements OnTouchListener{
 		
 	public boolean onTouch (View v, MotionEvent ev){
 		if (!tDesktopViewManager.isInCustomizeModus()) return false;
-        switch(ev.getAction() & MotionEvent.ACTION_MASK)
-        {
+        switch(ev.getAction() & MotionEvent.ACTION_MASK){
         case MotionEvent.ACTION_DOWN:
         	if(tViewId!=v.hashCode() || System.currentTimeMillis() - tStartTime>MAX_DURATION){
         		tClickCount=0;

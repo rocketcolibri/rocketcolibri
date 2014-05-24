@@ -14,7 +14,7 @@
         android:orientation="horizontal"
         android:rowCount="2" >
         <ToggleButton
-            android:id="@+id/menu_action_main_settings"
+            android:id="@+id/testElement"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@null"
@@ -23,28 +23,6 @@
             android:contentDescription="@string/menu_action_main_settings"
             android:textOff="Operate"
             android:textOn="Config Mode" >
-        </ToggleButton>
-        <ToggleButton
-            android:id="@+id/menu_action_main_wifi"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@null"
-            android:button="@drawable/selector_main_menu_wifi"
-            android:checked="false"
-            android:contentDescription="@string/menu_action_main_wifi"
-            android:textOff="Wifi Off"
-            android:textOn="Wifi On" >
-        </ToggleButton>
-        <ToggleButton
-            android:id="@+id/menu_action_main_mode"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@null"
-            android:button="@drawable/selector_main_menu_mode"
-            android:checked="false"
-            android:contentDescription="@string/menu_action_main_mode"
-            android:textOff="Observe"
-            android:textOn="Operate" >
         </ToggleButton>
     </GridLayout>
 </ch.hsr.rocketcolibri.menu.desktop.CustomizeModusContent>
