@@ -3,8 +3,7 @@
     android:id="@+id/controlModusContent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:visibility="gone" >
+    android:orientation="vertical" >
 
     <GridLayout
         android:layout_width="wrap_content"
