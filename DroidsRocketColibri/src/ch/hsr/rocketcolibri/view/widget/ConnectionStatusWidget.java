@@ -15,7 +15,9 @@ import android.graphics.Shader;
 import android.util.AttributeSet;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
+import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.ConnectionState;
 
@@ -99,5 +101,17 @@ public class ConnectionStatusWidget extends RCWidget
 	public UiOutputDataType getType()
 	{
 		return UiOutputDataType.ConnectionState;
+	}
+	
+	public static ViewElementConfig getDefaultViewElementConfig() {
+		ResizeConfig rc = new ResizeConfig();
+	    rc.maxHeight=150;
+	    rc.minHeight=50;
+	    rc.maxWidth=150;
+	    rc.minWidth=50;
+	    LayoutParams lp = new LayoutParams(100, 100 , 0, 0);
+	    ViewElementConfig elementConfig = new ViewElementConfig(ConnectionStatusWidget.class.getName(), lp, rc);
+	    elementConfig.setAlpha(1);
+	    return elementConfig;
 	}
 }

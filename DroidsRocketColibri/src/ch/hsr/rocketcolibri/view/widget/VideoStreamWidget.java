@@ -1,7 +1,9 @@
 package ch.hsr.rocketcolibri.view.widget;
 
 
+import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
+import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.VideoUrl;
 import android.content.Context;
@@ -55,5 +57,16 @@ public class VideoStreamWidget extends RCWidget {
 	@Override
 	public View getOperateOverlayView() {
 		return tVideoSurfaceView;
+	}
+	
+	public static ViewElementConfig getDefaultViewElementConfig() {
+		ResizeConfig rc = new ResizeConfig();
+	    rc.maxHeight=600;
+	    rc.minHeight=100;
+	    rc.maxWidth=800;
+	    rc.minWidth=200;
+	    LayoutParams lp = new LayoutParams(400, 300 , 100, 100);
+	    ViewElementConfig elementConfig = new ViewElementConfig(VideoStreamWidget.class.getName(), lp, rc);
+	    return elementConfig;
 	}
 }

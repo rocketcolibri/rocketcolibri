@@ -105,10 +105,10 @@ public class RocketColibriService extends Service implements IUiOutputSinkChange
 		this.tWifi = new WifiConnection();
 
 		// list all available Widgets here: 
-		this.tWidgetDirectory.add(new WidgetEntry("Cross Control", Circle.class.getName()));
-		this.tWidgetDirectory.add(new WidgetEntry("Connection Status", ConnectionStatusWidget.class.getName()));
-		this.tWidgetDirectory.add(new WidgetEntry("User Info", ConnectedUserInfoWidget.class.getName()));
-		this.tWidgetDirectory.add(new WidgetEntry("Video Stream", VideoStreamWidget.class.getName()));
+		this.tWidgetDirectory.add(new WidgetEntry("Cross Control", Circle.class.getName(), Circle.getDefaultViewElementConfig()));
+		this.tWidgetDirectory.add(new WidgetEntry("Connection Status", ConnectionStatusWidget.class.getName(), ConnectionStatusWidget.getDefaultViewElementConfig()));
+		this.tWidgetDirectory.add(new WidgetEntry("User Info", ConnectedUserInfoWidget.class.getName(), ConnectedUserInfoWidget.getDefaultViewElementConfig()));
+		this.tWidgetDirectory.add(new WidgetEntry("Video Stream", VideoStreamWidget.class.getName(), VideoStreamWidget.getDefaultViewElementConfig()));
 
 		// observer map
 		tUiOutputSinkChangeObserver = new HashMap<UiOutputDataType, List<RCWidget>>();

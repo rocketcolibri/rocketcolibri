@@ -4,6 +4,7 @@
 package ch.hsr.rocketcolibri.widgetdirectory;
 
 import java.lang.reflect.Constructor;
+
 import android.content.Context;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
@@ -14,16 +15,22 @@ import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
  * Lists all capabilities that are used to add a new widget.
  */
 public class WidgetEntry {
-	String tClassPath;
-	String tLabelText;
+	private String tClassPath;
+	private String tLabelText;
+	private ViewElementConfig tViewElementConfig;
 	
-	public WidgetEntry(String labelText, String classPath){
-		this.tLabelText = labelText;
-		this.tClassPath = classPath;
+	public WidgetEntry(String labelText, String classPath, ViewElementConfig defaultConfig){
+		tLabelText = labelText;
+		tClassPath = classPath;
+		tViewElementConfig = defaultConfig;
 	}
 
+	public CustomizableView createWidget(Context context) throws Exception{
+		return createWidget(context, getDefaultViewElementConfig());
+	}
+	
 	/**
-	 * Get a new widget instance of this WidgetDirectoryEntry
+	 * Get a new widget instance of this Widget
 	 * @param context
 	 * @param elementConfig
 	 * @return widget view
@@ -42,5 +49,9 @@ public class WidgetEntry {
 	
 	public String getLabelText(){
 		return tLabelText;
+	}
+	
+	public ViewElementConfig getDefaultViewElementConfig(){
+		return tViewElementConfig;
 	}
 }

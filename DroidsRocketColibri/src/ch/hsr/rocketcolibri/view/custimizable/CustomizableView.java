@@ -36,9 +36,9 @@ public class CustomizableView extends View implements ICustomizableView{
 		super(context);
 		tViewElementConfig = vElementConfig;
 		setLayoutParams(tViewElementConfig.getLayoutParams());
-		setAlpha(vElementConfig.getAlpha());
+		setAlpha(tViewElementConfig.getAlpha());
 	}
-
+    
 	public CustomizableView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}

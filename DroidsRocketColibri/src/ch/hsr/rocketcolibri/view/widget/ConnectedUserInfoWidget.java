@@ -14,7 +14,9 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RcOperator;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
+import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.UserData;
 
@@ -107,6 +109,17 @@ public class ConnectedUserInfoWidget extends RCWidget
 	public void onNotifyUiOutputSink(Object p)	{
 		tUserData = (UserData)p;
 		postInvalidate();
+	}
+	
+	public static ViewElementConfig getDefaultViewElementConfig(){
+		ResizeConfig rc = new ResizeConfig();
+	    rc.maxHeight=300;
+	    rc.minHeight=50;
+	    rc.maxWidth=800;
+	    rc.minWidth=100;
+	    ViewElementConfig vec = new ViewElementConfig(ConnectedUserInfoWidget.class.getName(), new LayoutParams(600, 100 , 100, 0), rc);
+	    vec.setAlpha(0.5f);
+	    return vec;
 	}
 	
 	@Override

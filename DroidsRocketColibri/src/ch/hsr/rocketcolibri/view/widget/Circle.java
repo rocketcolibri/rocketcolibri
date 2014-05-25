@@ -9,6 +9,7 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
+import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -350,9 +351,20 @@ public final class Circle extends RCWidget
 
 
 	@Override
-	public int getNumberOfChannelListener() 
-	{
+	public int getNumberOfChannelListener() {
 		return 2; 
+	}
+	
+	public static ViewElementConfig getDefaultViewElementConfig() {
+		ResizeConfig rc = new ResizeConfig();
+	    rc.keepRatio=true;
+	    rc.maxHeight=500;
+	    rc.minHeight=50;
+	    rc.maxWidth=500;
+	    rc.minWidth=50;
+	    LayoutParams lp = new LayoutParams(380, 380 , 100, 300);
+	    ViewElementConfig elementConfig = new ViewElementConfig(Circle.class.getName(), lp, rc);
+	    return elementConfig;
 	}
 	
 }

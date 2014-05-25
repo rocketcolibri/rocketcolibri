@@ -28,7 +28,7 @@ public class CustomizeModusContent extends ModusContent{
 		for(WidgetEntry wEntry : widgetEntries){ 
 			try {
 				Log.d("wEntry", ""+wEntry.getClassPath());
-				CustomizableView view = createIconView(wEntry.getClassPath(), 300, 300);
+				CustomizableView view = createIconView(wEntry, 300, 300);
 				view.setBackgroundResource(R.drawable.border);
 				view.setOnTouchListener(new WidgetTouchListener(wEntry));
 				gLayout.addView(view);
@@ -71,53 +71,20 @@ public class CustomizeModusContent extends ModusContent{
 	 * not for interaction with the View itself.
 	 * @throws Exception 
 	 */
-	private CustomizableView createIconView(String widgetClassPath, int width, int height) throws Exception{
-		return tDesktopViewManager.createView(createDemoViewElementConfig(widgetClassPath, width, height));
-	}
-	
-	private ViewElementConfig createDemoViewElementConfig(String widgetClassPath, int width, int height){
-		AbsoluteLayout.LayoutParams lp = new AbsoluteLayout.LayoutParams(width, height, 0, 0);
-		ViewElementConfig vElementConfig = new ViewElementConfig(widgetClassPath, lp, getDefaultResizeConfig());
-		return vElementConfig;
-	}
-	
-	/**
-	 * This Method returns a never used ResizeConfig, its needs to be set
-	 * to the ViewElementConfig to avoid unexpected Exceptions.
-	 * Its not because we create the View just to show how the Widget will look like
-	 * not for interaction with the View itself.
-	 * @return
-	 */
-	private ResizeConfig getDefaultResizeConfig(){
-		ResizeConfig rc = new ResizeConfig();
-	    rc.keepRatio=true;
-	    rc.maxHeight=500;
-	    rc.minHeight=50;
-	    rc.maxWidth=500;
-	    rc.minWidth=50;
-	    return rc;
+	private CustomizableView createIconView(WidgetEntry wEntry, int width, int height) throws Exception{
+		ViewElementConfig vec = wEntry.getDefaultViewElementConfig();
+		vec.settLayoutParams(new AbsoluteLayout.LayoutParams(width, height, 0, 0));
+		return tDesktopViewManager.createView(vec);
 	}
 	
 	private CustomizableView setupView(WidgetEntry we, MotionEvent e) throws Exception{
-		CustomizableView v1 = (CustomizableView) tDesktopViewManager.createAndAddView(getDemoConfig(we));
+		CustomizableView v1 = (CustomizableView) tDesktopViewManager.createAndAddView(we.getDefaultViewElementConfig());
 		AbsoluteLayout rootView = tDesktopViewManager.getRootView();
 		AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) v1.getLayoutParams();
 		lp.x = (int) (rootView.getWidth()/2)-lp.width/2;
 		lp.y = (int) (rootView.getHeight()/2)-lp.height/2;
 		v1.setCustomizeModus(true);
 		return v1;
-	}
-	
-	private ViewElementConfig getDemoConfig(WidgetEntry we){
-		ResizeConfig rc = new ResizeConfig();
-	    rc.keepRatio=true;
-	    rc.maxHeight=500;
-	    rc.minHeight=50;
-	    rc.maxWidth=500;
-	    rc.minWidth=50;
-	    AbsoluteLayout.LayoutParams lp = new AbsoluteLayout.LayoutParams(380, 380 , 0, 0);
-	    ViewElementConfig elementConfig = new ViewElementConfig(we.getClassPath(), lp, rc);
-		return elementConfig;
 	}
 	
 }

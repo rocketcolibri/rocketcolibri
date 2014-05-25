@@ -39,8 +39,6 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		onCreate();
 	}
 	
-	
-	
 	private void onCreate(){
 		Button b = (Button) findViewById(R.id.editChannel);
 		b.setOnClickListener(new OnClickListener() {
@@ -57,10 +55,8 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 			}
 		});
 
-//		setUpDeleteButton(R.id.deleteElementBtn);
 		HoldButton holdButton = (HoldButton) findViewById(R.id.deleteElementBtn);
 		holdButton.setOnHoldListener(new OnHoldListener() {
-			@Override
 			public void onHoldEnd(View v) {
 				tDesktopViewManager.deleteView(tTargetView);
 				dismiss();
@@ -69,59 +65,13 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		
 		alphaChangeSlider = (SeekBar)findViewById(R.id.alphaSlider);
 		alphaChangeSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-			
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-			}
-			
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-			}
-			
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
+			public void onStopTrackingTouch(SeekBar seekBar) {}
+			public void onStartTrackingTouch(SeekBar seekBar) {}
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				tTargetView.setAlpha(progress/100f);
 			}
 		});
 	}
-	
-//	private void setUpDeleteButton(int resourceId){
-//		Button b = (Button) findViewById(resourceId);
-//		final Drawable startColor = b.getBackground();
-//		final Drawable endColor = mContext.getResources().getDrawable(R.drawable.delete_foreground);
-//		b.setOnTouchListener(new OnTouchListener() {
-//		    Drawable[] color = {startColor, endColor};
-//		    TransitionDrawable trans = new TransitionDrawable(color);
-//		    final int MAX_DURATION = 4000;
-//		    long duration = 0;
-//		    long startTime = 0;
-//		    
-//			public boolean onTouch(View v, MotionEvent event) {
-//				switch(event.getAction()){
-//				case MotionEvent.ACTION_DOWN: 
-//	        		startTime = System.currentTimeMillis();
-//	        		v.setBackground(trans);
-//	        		trans.startTransition(MAX_DURATION);
-//	        		break;
-//				case MotionEvent.ACTION_MOVE: 
-//					duration = System.currentTimeMillis() - startTime;
-//					if(duration >= MAX_DURATION){
-//						tDesktopViewManager.deleteView(tTargetView);
-//						dismiss();
-//						trans.resetTransition();
-//					}
-//					break;
-//				case MotionEvent.ACTION_UP: 
-//					trans.resetTransition();
-//					break;
-//		        case MotionEvent.ACTION_CANCEL:
-//		        	return false;
-//		        }
-//				return true;
-//			}
-//		});
-//	}
 	
 	public void show(CustomizableView cView){
 		dismissPopupIfIsShowing();
