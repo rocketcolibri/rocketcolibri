@@ -63,7 +63,30 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 				tDesktopViewManager.resizeView(tTargetView);
 			}
 		});
-		b = (Button) findViewById(R.id.deleteElementBtn);
+
+		setUpDeleteButton(R.id.deleteElementBtn);
+		
+		alphaChangeSlider = (SeekBar)findViewById(R.id.alphaSlider);
+		alphaChangeSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+			}
+			
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+			}
+			
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress,
+					boolean fromUser) {
+				tTargetView.setAlpha(progress/100f);
+			}
+		});
+	}
+	
+	private void setUpDeleteButton(int resourceId){
+		Button b = (Button) findViewById(resourceId);
 		final Drawable startColor = b.getBackground();
 		final Drawable endColor = mContext.getResources().getDrawable(R.drawable.delete_foreground);
 		b.setOnTouchListener(new OnTouchListener() {
@@ -83,7 +106,6 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 				case MotionEvent.ACTION_MOVE: 
 					duration = System.currentTimeMillis() - startTime;
 					if(duration >= MAX_DURATION){
-						trans.reverseTransition(200);
 						tDesktopViewManager.deleteView(tTargetView);
 						dismiss();
 						trans.resetTransition();
@@ -91,31 +113,13 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 					break;
 				case MotionEvent.ACTION_UP: 
 					if(duration < MAX_DURATION){
-						trans.reverseTransition(200);
+						trans.reverseTransition(500);
 					}
 					break;
 		        case MotionEvent.ACTION_CANCEL:
 		        	return false;
 		        }
 				return true;
-			}
-		});
-		
-		alphaChangeSlider = (SeekBar)findViewById(R.id.alphaSlider);
-		alphaChangeSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-			
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {
-			}
-			
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {
-			}
-			
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				tTargetView.setAlpha(progress/100f);
 			}
 		});
 	}
