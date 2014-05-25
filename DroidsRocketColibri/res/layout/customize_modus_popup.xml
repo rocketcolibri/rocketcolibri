@@ -16,10 +16,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/popup_menu_resize_element" />
-    <Button
+    <ch.hsr.rocketcolibri.view.HoldButton
         android:id="@+id/deleteElementBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:drawable="@drawable/delete_foreground"
         android:text="@string/popup_menu_delete_element" />
     <SeekBar
         android:id="@+id/alphaSlider"
