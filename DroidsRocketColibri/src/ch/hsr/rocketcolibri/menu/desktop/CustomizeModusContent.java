@@ -73,16 +73,17 @@ public class CustomizeModusContent extends ModusContent{
 	 */
 	private CustomizableView createIconView(WidgetEntry wEntry, int width, int height) throws Exception{
 		ViewElementConfig vec = wEntry.getDefaultViewElementConfig();
-		vec.settLayoutParams(new AbsoluteLayout.LayoutParams(width, height, 0, 0));
+		vec.setLayoutParams(new AbsoluteLayout.LayoutParams(width, height, 0, 0));
 		return tDesktopViewManager.createView(vec);
 	}
 	
 	private CustomizableView setupView(WidgetEntry we, MotionEvent e) throws Exception{
-		CustomizableView v1 = (CustomizableView) tDesktopViewManager.createAndAddView(we.getDefaultViewElementConfig());
+		ViewElementConfig vec = we.getDefaultViewElementConfig();
+		AbsoluteLayout.LayoutParams lp = vec.getLayoutParams();
 		AbsoluteLayout rootView = tDesktopViewManager.getRootView();
-		AbsoluteLayout.LayoutParams lp = (AbsoluteLayout.LayoutParams) v1.getLayoutParams();
 		lp.x = (int) (rootView.getWidth()/2)-lp.width/2;
 		lp.y = (int) (rootView.getHeight()/2)-lp.height/2;
+		CustomizableView v1 = (CustomizableView) tDesktopViewManager.createAndAddView(vec);
 		v1.setCustomizeModus(true);
 		return v1;
 	}

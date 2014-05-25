@@ -52,6 +52,6 @@ public class WidgetEntry {
 	}
 	
 	public ViewElementConfig getDefaultViewElementConfig(){
-		return tViewElementConfig;
+		return tViewElementConfig.copy();
 	}
 }

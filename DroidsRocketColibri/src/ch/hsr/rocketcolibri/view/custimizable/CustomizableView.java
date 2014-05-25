@@ -88,7 +88,7 @@ public class CustomizableView extends View implements ICustomizableView{
 	
 	@Override
 	public ViewElementConfig getViewElementConfig(){
-		tViewElementConfig.settLayoutParams((LayoutParams) getLayoutParams());
+		tViewElementConfig.setLayoutParams((LayoutParams) getLayoutParams());
 		tViewElementConfig.setAlpha(getAlpha());
 		return tViewElementConfig;
 	}

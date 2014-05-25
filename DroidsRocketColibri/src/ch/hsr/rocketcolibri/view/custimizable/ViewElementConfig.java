@@ -3,6 +3,7 @@
  */
 package ch.hsr.rocketcolibri.view.custimizable;
 
+import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 
@@ -54,7 +55,7 @@ public class ViewElementConfig {
 		return resizeConfig;
 	}
 
-	public void settLayoutParams(LayoutParams layoutParams) {
+	public void setLayoutParams(LayoutParams layoutParams) {
 		this.layoutParams = layoutParams;
 	}
 
@@ -68,6 +69,16 @@ public class ViewElementConfig {
 	
 	public float getAlpha(){
 		return alpha;
+	}
+	
+	public ViewElementConfig copy(){
+		ViewElementConfig vec = new ViewElementConfig();
+		vec.setAlpha(alpha);
+		vec.setId(id);
+		vec.setClassPath(classPath);
+		vec.setLayoutParams(new AbsoluteLayout.LayoutParams(layoutParams.width, layoutParams.height, layoutParams.x, layoutParams.y));
+		vec.settResizeConfig(resizeConfig.copy());
+		return vec;
 	}
 	
 	
