@@ -12,12 +12,17 @@
         android:layout_height="wrap_content"
         android:text="@string/popup_menu_edit_channel" />
     <Button
-        android:id="@+id/resizeMode"
+        android:id="@+id/resizeElementBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/popup_menu_resize_element" />
+    <Button
+        android:id="@+id/deleteElementBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/popup_menu_delete_element" />
     <SeekBar
-        android:id="@+id/seekBar1"
+        android:id="@+id/alphaSlider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

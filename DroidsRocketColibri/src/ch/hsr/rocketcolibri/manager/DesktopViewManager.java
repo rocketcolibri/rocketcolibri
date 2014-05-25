@@ -119,6 +119,11 @@ public class DesktopViewManager implements IDesktopViewManager{
 	    Constructor<?> cons = c.getConstructor(Context.class, ViewElementConfig.class);
 	    return (CustomizableView)cons.newInstance(tContext, vElementConfig);
 	}
+	
+	@Override
+	public void deleteView(View view){
+		tControlElementParentView.removeView(view);
+	}
 
 	@Override
 	public boolean isInCustomizeModus() {

@@ -6,9 +6,14 @@ package ch.hsr.rocketcolibri.menu;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.TransitionDrawable;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -46,23 +51,57 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 	private void onCreate(){
 		Button b = (Button) findViewById(R.id.editChannel);
 		b.setOnClickListener(new OnClickListener() {
-			
-			@Override
 			public void onClick(View targetView) {
 				tDesktopViewManager.startEditActivity(targetView);
 			}
 		});
 
-		b = (Button) findViewById(R.id.resizeMode);
+		b = (Button) findViewById(R.id.resizeElementBtn);
 		b.setOnClickListener(new OnClickListener() {
-			@Override
 			public void onClick(View v) {
 				dismiss();
 				tDesktopViewManager.resizeView(tTargetView);
 			}
 		});
+		b = (Button) findViewById(R.id.deleteElementBtn);
+		final Drawable startColor = b.getBackground();
+		final Drawable endColor = mContext.getResources().getDrawable(R.drawable.delete_foreground);
+		b.setOnTouchListener(new OnTouchListener() {
+		    Drawable[] color = {startColor, endColor};
+		    TransitionDrawable trans = new TransitionDrawable(color);
+		    final int MAX_DURATION = 4000;
+		    long duration = 0;
+		    long startTime = 0;
+		    
+			public boolean onTouch(View v, MotionEvent event) {
+				switch(event.getAction()){
+				case MotionEvent.ACTION_DOWN: 
+	        		startTime = System.currentTimeMillis();
+	        		v.setBackground(trans);
+	        		trans.startTransition(MAX_DURATION);
+	        		break;
+				case MotionEvent.ACTION_MOVE: 
+					duration = System.currentTimeMillis() - startTime;
+					if(duration >= MAX_DURATION){
+						trans.reverseTransition(200);
+						tDesktopViewManager.deleteView(tTargetView);
+						dismiss();
+						trans.resetTransition();
+					}
+					break;
+				case MotionEvent.ACTION_UP: 
+					if(duration < MAX_DURATION){
+						trans.reverseTransition(200);
+					}
+					break;
+		        case MotionEvent.ACTION_CANCEL:
+		        	return false;
+		        }
+				return true;
+			}
+		});
 		
-		alphaChangeSlider = (SeekBar)findViewById(R.id.seekBar1);
+		alphaChangeSlider = (SeekBar)findViewById(R.id.alphaSlider);
 		alphaChangeSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			
 			@Override

@@ -11,5 +11,6 @@
 
     <!-- Popup menu entries -->
     <string name="popup_menu_edit_channel">Edit channel</string>
-    <string name="popup_menu_resize_element">Resize element</string>
+    <string name="popup_menu_resize_element">Resize Element</string>
+    <string name="popup_menu_delete_element">Delete Element</string>
 </resources>

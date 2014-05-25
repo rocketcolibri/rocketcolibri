@@ -44,7 +44,7 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
  */
 public class PopupWindow {
         
-    private Context mContext;
+    protected Context mContext;
     private AbsoluteLayout mWindowManager;
     
     private boolean mIsShowing;
