@@ -188,8 +188,8 @@ public class AbsoluteLayout extends ViewGroup {
          */
         public LayoutParams(int width, int height, int x, int y) {
             super(width, height);
-            this.setX(x);
-            this.setY(y);
+            this.x = x;
+            this.y = y;
         }
 
         /**
@@ -228,46 +228,10 @@ public class AbsoluteLayout extends ViewGroup {
             super(source);
         }
 
-        /**
-         * Getter method for the X-Coordinate
-         *
-         * @return returns the X-Coordinate
-         */
-        public int getX() {
-        	return this.x;
-        }
-
-        /**
-         * Setter method for the X-Coordinate
-         *
-         * @return
-         */
-        public void setX(int theX) {
-        	this.x = theX;
-        }
-
-        /**
-         * Getter method for the Y-Coordinate
-         *
-         * @return returns the Y-Coordinate
-         */
-        public int getY() {
-        	return this.y;
-        }
-
-        /**
-         * Setter method for the Y-Coordinate
-         *
-         * @return
-         */
-        public void setY(int theY) {
-        	this.y = theY;
-        }
-
         public String debug(String output) {
             return output + "Absolute.LayoutParams={width="
                     + sizeToString(width) + ", height=" + sizeToString(height)
-                    + " x=" + this.getX() + " y=" + this.getY() + "}";
+                    + " x=" + this.x + " y=" + this.y + "}";
         }
 
       /**
@@ -289,11 +253,11 @@ public class AbsoluteLayout extends ViewGroup {
         }
 
         public boolean equals(LayoutParams theParam) {
-        	if (this.getX() != theParam.getX()) {
+        	if (this.x != theParam.x) {
         		return false;
         	}
 
-        	if (this.getY() != theParam.getY()) {
+        	if (this.y != theParam.y) {
         		return false;
         	}
 
