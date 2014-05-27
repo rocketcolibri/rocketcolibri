@@ -81,6 +81,10 @@ public class CustomizableView extends View implements ICustomizableView{
 		}
 	}
 	
+	public void setCustomizeModusListener(OnTouchListener customizeModusListener){
+		setOnTouchListener(customizeModusListener);
+	}
+	
 	@Override
 	public void setModusChangeListener(ModusChangeListener mcl){
 		tModusChangeListener = mcl;

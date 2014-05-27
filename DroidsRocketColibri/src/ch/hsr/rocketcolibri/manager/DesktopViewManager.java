@@ -33,6 +33,7 @@ import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeController;
 import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
+import ch.hsr.rocketcolibri.view.widget.RCWidget;
 
 
 /**
@@ -52,9 +53,9 @@ public class DesktopViewManager implements IDesktopViewManager{
 	private IDragListener dragListener;
 	private CustomizeModusPopupMenu tCustomizeModusPopupMenu;
 	private DesktopMenu tDesktopMenu;
-	private OnChannelChangeListener tChannelListener;
+	private OnChannelChangeListener tControlModusListener;
 	
-	public DesktopViewManager(Activity context, AbsoluteLayout rootView, AbsoluteLayout controlElementParentView, ViewChangedListener vcListener){
+	public DesktopViewManager(Activity context, AbsoluteLayout rootView, AbsoluteLayout controlElementParentView, OnChannelChangeListener controlModusListener, ViewChangedListener vcListener){
 		tContext = context;
 		tRootView = rootView;
 		tControlElementParentView = controlElementParentView;
@@ -71,7 +72,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 		tCustomizeModusPopupMenu = new CustomizeModusPopupMenu(this, ll);
 	    tCustomizeModusListener = new CustomizeModusListener(this);
 	    tDesktopMenu = new DesktopMenu(tContext, this);
-//	    tChannelListener = channelListener;
+	    tControlModusListener = controlModusListener;
 	}
 
 	@Override
@@ -108,9 +109,9 @@ public class DesktopViewManager implements IDesktopViewManager{
 	@Override
 	public CustomizableView createAndAddView(ViewElementConfig cElementConfig) throws Exception{
 	    CustomizableView view = createView(cElementConfig);
-	    if(tCustomizeModus){
-	    	view.setOnTouchListener(tCustomizeModusListener);
-	    }
+	    view.setCustomizeModusListener(tCustomizeModusListener);
+	    //temporary
+	    try{((RCWidget)view).setControlModusListener(tControlModusListener);}catch(ClassCastException e){}
 	    view.setCustomizeModus(tCustomizeModus);
 	    tControlElementParentView.addView(view);
 	    return view;
@@ -145,7 +146,6 @@ public class DesktopViewManager implements IDesktopViewManager{
     	for(int i = 0; i < size; ++i){
     		try{
     			view = (CustomizableView) tControlElementParentView.getChildAt(i);
-    			view.setOnTouchListener(tCustomizeModusListener);
     			view.setCustomizeModus(tCustomizeModus);
     		}catch(Exception e){
     		}

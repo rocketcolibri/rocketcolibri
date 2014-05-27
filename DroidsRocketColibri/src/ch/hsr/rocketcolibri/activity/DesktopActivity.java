@@ -45,7 +45,7 @@ public class DesktopActivity extends RCActivity{
 	private VideoStreamWidget tVideoStreamWidget;
 	public static final boolean Debugging = false;
 	private DesktopMenu tDesktopMenu;
-	private OnChannelChangeListener communicationBridge = new OnChannelChangeListener() {
+	private OnChannelChangeListener tControlModusListener = new OnChannelChangeListener() {
 		public void onChannelChange(int channel, int position) {
 			rcService.tChannel[channel].setControl(position);
 		}
@@ -102,7 +102,7 @@ public class DesktopActivity extends RCActivity{
 		
 		AbsoluteLayout rootLayer = (AbsoluteLayout) findViewById(R.id.root_layer);
 		AbsoluteLayout absolutLayout = (AbsoluteLayout) findViewById(R.id.drag_layer);
-		tDesktopViewManager = new DesktopViewManager(this, rootLayer, absolutLayout, new ViewChangedListener() {
+		tDesktopViewManager = new DesktopViewManager(this, rootLayer, absolutLayout, tControlModusListener, new ViewChangedListener() {
 			@Override
 			public void onViewChange(ViewElementConfig viewElementConfig) {
 				Log.d("changed", "changed");
@@ -239,6 +239,7 @@ public class DesktopActivity extends RCActivity{
 			    circleView.updateProtocolMap();
 	
 			}catch(Exception e){
+				e.printStackTrace();
 			}
 		    
 		    setupViewsOnce = false;

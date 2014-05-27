@@ -14,6 +14,7 @@ import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
+import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -40,14 +41,11 @@ import android.content.res.TypedArray;
 /**
  * @author Artan Veliju
  */
-public final class Circle extends RCWidget
-{
-
+public final class Circle extends RCWidget {
 //	private static final String TAG = Circle.class.getSimpleName();
 	private RectF rimRect;
 	private Paint rimPaint;
 	private Paint rimCirclePaint;
-	
 	private RectF faceRect;
 	private Bitmap faceTexture;
 	private Paint facePaint;
@@ -62,48 +60,8 @@ public final class Circle extends RCWidget
 	private Map<String, String> protocolMap = new HashMap<String, String>();
 	private int tChannelV;
 	private int tChannelH;
-	private OnChannelChangeListener tChannelListener;
-
-	
-	/**
-	 * the MyOnTouchListener holds a horizontal an vertical channel listener
-	 */
-	class MyOnTouchListener implements OnTouchListener{
-		@Override
-		public boolean onTouch(View v, MotionEvent event) {
-			try{
-				Log.d("onTouchListener", 
-						String.valueOf(event.getAxisValue(MotionEvent.AXIS_Y)) + "," + 
-					    String.valueOf(event.getAxisValue(MotionEvent.AXIS_X)));
-				tChannelListener.onChannelChange(tChannelH, eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_X)));
-				tChannelListener.onChannelChange(tChannelV, eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_Y)));
-			}catch(Exception e){
-				Toast.makeText(Circle.this.getContext(), "check your channel configuration!", Toast.LENGTH_SHORT).show();
-			}
-			return false;
-		}
-	}
-	
-	public void setOnChangeListener(OnChannelChangeListener channelListener){
-		tChannelListener = channelListener;
-	}
-
-	/**
-	 * converts the position read from the event to the channel position
-	 * @param eventPos (event position)
-	 * @return channel position
-	 */
-	public int eventPoistionToChannelValue(float eventPos)
-	{
-		int channelPos = (int)(eventPos * RocketColibriProtocol.MAX_CHANNEL_VALUE / diameterInDP);
-		if (channelPos > RocketColibriProtocol.MAX_CHANNEL_VALUE) return RocketColibriProtocol.MAX_CHANNEL_VALUE;
-		else if (channelPos < RocketColibriProtocol.MIN_CHANNEL_VALUE) return RocketColibriProtocol.MIN_CHANNEL_VALUE;
-		else 
-			return channelPos;
-	}
-	
+	private OnChannelChangeListener tControlModusListener;
 	private MyOnTouchListener mListener = new MyOnTouchListener();
-	
 	
 	public Circle(Context context, ViewElementConfig elementConfig) {
 		super(context, elementConfig);
@@ -113,7 +71,6 @@ public final class Circle extends RCWidget
 		orientationSide = "left";
 		diameterInDP = elementConfig.getLayoutParams().width;
 		init(context, null);
-		
 	}
 
 	public Circle(Context context, AttributeSet attrs) {
@@ -124,6 +81,43 @@ public final class Circle extends RCWidget
 	public Circle(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		init(context, attrs);
+	}
+	
+	/**
+	 * the MyOnTouchListener holds a horizontal an vertical channel listener
+	 */
+	class MyOnTouchListener implements OnTouchListener {
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			try{
+				Log.d("onTouchListener", 
+						String.valueOf(event.getAxisValue(MotionEvent.AXIS_Y)) + "," + 
+					    String.valueOf(event.getAxisValue(MotionEvent.AXIS_X)));
+				tControlModusListener.onChannelChange(tChannelH, eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_X)));
+				tControlModusListener.onChannelChange(tChannelV, eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_Y)));
+			}catch(Exception e){
+				Toast.makeText(Circle.this.getContext(), "check your channel configuration!", Toast.LENGTH_SHORT).show();
+			}
+			return false;
+		}
+	}
+	
+	@Override
+	public void setControlModusListener(OnChannelChangeListener channelListener) {
+		tControlModusListener = channelListener;
+		setOnTouchListener(mListener); 
+	}
+
+	/**
+	 * converts the position read from the event to the channel position
+	 * @param eventPos (event position)
+	 * @return channel position
+	 */
+	public int eventPoistionToChannelValue(float eventPos) {
+		int channelPos = (int)(eventPos * RocketColibriProtocol.MAX_CHANNEL_VALUE / diameterInDP);
+		if (channelPos > RocketColibriProtocol.MAX_CHANNEL_VALUE) return RocketColibriProtocol.MAX_CHANNEL_VALUE;
+		else if (channelPos < RocketColibriProtocol.MIN_CHANNEL_VALUE) return RocketColibriProtocol.MIN_CHANNEL_VALUE;
+		else return channelPos;
 	}
 	
 	@Override
@@ -159,8 +153,6 @@ public final class Circle extends RCWidget
 
 	@Override
 	protected void onFinishInflate() {
-		// TODO Auto-generated method stub
-		Log.d("onFinishInflate", "onInitializeAccessibilityNodeInfo");
 		setMeasuredDimension(1, 1);
 		super.onFinishInflate();
 	}
@@ -173,7 +165,6 @@ public final class Circle extends RCWidget
 			positionInPercentY = a.getInteger(R.styleable.Circle_positionInPercentY, positionInPercentY);
 			orientationSide = a.getString(R.styleable.Circle_orientationSide);
 			diameterInDP = a.getInt(R.styleable.Circle_diameterInDP, diameterInDP);
-			
 			initPosition();
 		}
 		initDrawingTools();
@@ -189,41 +180,12 @@ public final class Circle extends RCWidget
 	}
 	
 	private void initListener(){
-		this.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				Log.d("OnClickListener", "");
-			}
-		});
-		
-		
-		this.setOnGenericMotionListener(new OnGenericMotionListener(){
-
-			@Override
-			public boolean onGenericMotion(View v, MotionEvent event) {
-				Log.d("OnGenericMotionListener", String.valueOf(event.getY()));
-				return false;
-			}
-			
-		});
-		this.setOnDragListener(new OnDragListener(){
-
-			@Override
-			public boolean onDrag(View v, DragEvent event) {
-				Log.d("OnDragListener", String.valueOf(event.getY()));
-				return false;
-			}
-		});
-		setOnTouchListener(mListener); 
 		setModusChangeListener(new ModusChangeListener() {
-			@Override
 			public void customizeModeDeactivated() {
 				setOnTouchListener(mListener); 
 			}
-			
-			@Override
 			public void customizeModeActivated() {
+				setOnTouchListener(tCustomizeModusListener);
 			}
 		});
 	}
@@ -312,7 +274,6 @@ public final class Circle extends RCWidget
 	private int getPreferredSize() {
 		return 150;
 	}
-
 	
 	private void drawRim(Canvas canvas) {
 		// first, draw the metallic body
