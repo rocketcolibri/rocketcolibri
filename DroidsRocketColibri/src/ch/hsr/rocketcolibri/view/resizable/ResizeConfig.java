@@ -12,53 +12,13 @@ public class ResizeConfig {
 	
 	public ResizeConfig copy(){
 		ResizeConfig rc = new ResizeConfig();
-		rc.setKeepRatio(this.keepRatio);
-		rc.setMaxHeight(this.maxHeight);
-		rc.setMinHeight(this.minHeight);
-		rc.setMaxWidth(this.maxWidth);
-		rc.setMinWidth(this.minWidth);
+		rc.keepRatio = this.keepRatio;
+		rc.maxHeight = this.maxHeight;
+		rc.minHeight = this.minHeight;
+		rc.maxWidth = this.maxWidth;
+		rc.minWidth = this.minWidth;
 
 		return rc;
-	}
-
-	public boolean isKeepRatio() {
-		return this.keepRatio;
-	}
-
-	public void setKeepRatio(boolean keepRatio) {
-		this.keepRatio = keepRatio;
-	}
-
-	public int getMinWidth() {
-		return this.minWidth;
-	}
-
-	public void setMinWidth(int minWidth) {
-		this.minWidth = minWidth;
-	}
-
-	public int getMaxWidth() {
-		return this.maxWidth;
-	}
-
-	public void setMaxWidth(int maxWidth) {
-		this.maxWidth = maxWidth;
-	}
-
-	public int getMinHeight() {
-		return this.minHeight;
-	}
-
-	public void setMinHeight(int minHeight) {
-		this.minHeight = minHeight;
-	}
-
-	public int getMaxHeight() {
-		return this.maxHeight;
-	}
-
-	public void setMaxHeight(int maxHeight) {
-		this.maxHeight = maxHeight;
 	}
 
 	/**
@@ -68,23 +28,23 @@ public class ResizeConfig {
 	 * @return returns true if all members are equal
 	 */
 	public boolean equals(ResizeConfig theConfig) {
-		if (this.isKeepRatio() != theConfig.isKeepRatio()) {
+		if (this.keepRatio != theConfig.keepRatio) {
 			return false;
 		}
 
-		if (this.getMinWidth() != theConfig.getMinWidth()) {
+		if (this.minWidth != theConfig.minWidth) {
 			return false;
 		}
 
-		if (this.getMaxWidth() != theConfig.getMaxWidth()) {
+		if (this.maxWidth != theConfig.maxWidth) {
 			return false;
 		}
 
-		if (this.getMinHeight() != theConfig.getMinHeight()) {
+		if (this.minHeight != theConfig.minHeight) {
 			return false;
 		}
 
-		if (this.getMaxHeight() != theConfig.getMaxHeight()) {
+		if (this.maxHeight != theConfig.maxHeight) {
 			return false;
 		}
 
