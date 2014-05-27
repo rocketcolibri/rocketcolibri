@@ -1,19 +1,27 @@
 package ch.hsr.rocketcolibri.menu.desktop;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.util.CacheUtil;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.widgetdirectory.WidgetEntry;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.GridLayout;
+import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.Toast;
 
 public class CustomizeModusContent extends ModusContent{
@@ -25,13 +33,26 @@ public class CustomizeModusContent extends ModusContent{
 	@Override
 	protected void onCreate(List<WidgetEntry> widgetEntries) {
 		GridLayout gLayout = (GridLayout) findViewById(R.id.widgetEntryContent);
-		for(WidgetEntry wEntry : widgetEntries){ 
+		CacheUtil cacheUtil = new CacheUtil(tContext);
+		int width = 300;
+		int height = 300;
+		for(WidgetEntry wEntry : widgetEntries){
 			try {
-				Log.d("wEntry", ""+wEntry.getClassPath());
-				CustomizableView view = createIconView(wEntry, 300, 300);
-				view.setBackgroundResource(R.drawable.border);
-				view.setOnTouchListener(new WidgetTouchListener(wEntry));
-				gLayout.addView(view);
+				ImageView iView = new ImageView(tContext);
+				iView.setLayoutParams(new LayoutParams(width, height));
+				iView.setScaleType(ScaleType.CENTER);
+				Bitmap viewBitmap = null;
+				try{
+					viewBitmap = cacheUtil.loadBitmap(wEntry.getClassPath());
+					Log.d("loadBitmap", ""+wEntry.getClassPath());
+				}catch(FileNotFoundException e){ 
+					Log.d("createBitmap", ""+wEntry.getClassPath());
+					viewBitmap = cacheUtil.createBitmap(createIconView(wEntry, width, height), wEntry.getClassPath());
+				}
+				iView.setImageBitmap(viewBitmap);
+				iView.setBackgroundResource(R.drawable.border);
+				iView.setOnTouchListener(new WidgetTouchListener(wEntry));
+				gLayout.addView(iView);
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
