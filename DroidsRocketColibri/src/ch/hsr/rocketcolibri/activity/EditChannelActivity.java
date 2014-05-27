@@ -1,12 +1,18 @@
 package ch.hsr.rocketcolibri.activity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.RCConstants;
 
 public class EditChannelActivity extends RCActivity{
 	
@@ -20,10 +26,43 @@ public class EditChannelActivity extends RCActivity{
 	}
 
 	private void readWidgetSettings() {
-		// TODO read widget settings
-		
+		LinearLayout contentList = (LinearLayout)findViewById(R.id.content_list);
+		Intent i = getIntent();
+		if(i.hasExtra(RCConstants.CHANNEL_H)){
+			contentList.addView(createLayout("Channel H", i.getStringExtra(RCConstants.CHANNEL_H)));
+		}
+		if (i.hasExtra(RCConstants.CHANNEL_V)) {
+			contentList.addView(createLayout("Channel V", i.getStringExtra(RCConstants.CHANNEL_V)));
+		}
+		if (i.hasExtra(RCConstants.INVERTED)) {
+			contentList.addView(createLayout("Inverted", i.getStringExtra(RCConstants.INVERTED)));
+		}
+		if (i.hasExtra(RCConstants.MIN_RANGE)) {
+			contentList.addView(createLayout("min Range", i.getStringExtra(RCConstants.MIN_RANGE)));
+		}
+		if (i.hasExtra(RCConstants.MAX_RANGE)) {
+			contentList.addView(createLayout("max Range", i.getStringExtra(RCConstants.MAX_RANGE)));
+		}
+		if (i.hasExtra(RCConstants.TRIMM)) {
+			contentList.addView(createLayout("Trimm", i.getStringExtra(RCConstants.TRIMM)));
+		}
 	}
-
+	
+	private LinearLayout createLayout(String label, String value){
+		LinearLayout ll = new LinearLayout(this);
+		ll.setOrientation(LinearLayout.HORIZONTAL);
+		ll.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
+		ll.getLayoutParams().width = LayoutParams.MATCH_PARENT;
+		TextView tv = new TextView(this);
+		tv.setText(label);
+		ll.addView(tv);
+		EditText et = new EditText(this);
+		if(value!=null)
+			et.setText(value);
+		ll.addView(et);
+		return ll;
+	}
+	
 	@Override
 	protected void onServiceReady() {
 //		rcService.

@@ -32,6 +32,7 @@ import ch.hsr.rocketcolibri.view.draggable.IDragSource;
 import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeController;
+import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
 
 
 /**
@@ -51,6 +52,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	private IDragListener dragListener;
 	private CustomizeModusPopupMenu tCustomizeModusPopupMenu;
 	private DesktopMenu tDesktopMenu;
+	private OnChannelChangeListener tChannelListener;
 	
 	public DesktopViewManager(Activity context, AbsoluteLayout rootView, AbsoluteLayout controlElementParentView, ViewChangedListener vcListener){
 		tContext = context;
@@ -69,6 +71,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 		tCustomizeModusPopupMenu = new CustomizeModusPopupMenu(this, ll);
 	    tCustomizeModusListener = new CustomizeModusListener(this);
 	    tDesktopMenu = new DesktopMenu(tContext, this);
+//	    tChannelListener = channelListener;
 	}
 
 	@Override

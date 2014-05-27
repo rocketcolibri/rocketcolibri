@@ -3,6 +3,8 @@
  */
 package ch.hsr.rocketcolibri.view.widget;
 
+import java.util.Map;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
@@ -28,8 +30,18 @@ public class RCWidget extends CustomizableView
 	public RCWidget(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 	}
-
-
+	
+	public Map<String, String> getProtocolMap(){
+		return null;
+	}
+	
+	/**
+	 * should be overriden from the child
+	 * @param map
+	 */
+	public void updateProtocolMap(){
+	}
+	
 	/**
 	 * RocketColibriService sends UiSink change notification with this methods
 	 * The Object class depends on the return value of getType

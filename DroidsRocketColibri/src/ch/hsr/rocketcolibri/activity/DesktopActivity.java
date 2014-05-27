@@ -13,6 +13,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Toast;
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.manager.DesktopViewManager;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
@@ -30,8 +31,7 @@ import ch.hsr.rocketcolibri.view.widget.VideoStreamWidget;
 /**
  * @author Artan Veliju
  */
-public class DesktopActivity extends RCActivity
-{
+public class DesktopActivity extends RCActivity{
 	private static final String TAG = "DesktopActivity";
 	private SurfaceView surface_view;
 	// private Camera mCamera;
@@ -45,7 +45,11 @@ public class DesktopActivity extends RCActivity
 	private VideoStreamWidget tVideoStreamWidget;
 	public static final boolean Debugging = false;
 	private DesktopMenu tDesktopMenu;
-	
+	private OnChannelChangeListener communicationBridge = new OnChannelChangeListener() {
+		public void onChannelChange(int channel, int position) {
+			rcService.tChannel[channel].setControl(position);
+		}
+	};
 
 	@Override
 	public void onResume() 
@@ -149,8 +153,6 @@ public class DesktopActivity extends RCActivity
 				LayoutParams lp;
 				ViewElementConfig elementConfig;
 				View view;
-				
-			    
 			    
 			    rc = new ResizeConfig();
 			    rc.maxHeight=745;
@@ -215,7 +217,6 @@ public class DesktopActivity extends RCActivity
 			    this.tVideoStreamWidget = (VideoStreamWidget) tDesktopViewManager.createAndAddView(elementConfig);
 			    this.tVideoStreamWidget.setAlpha(1);
 
-
 			    rc = new ResizeConfig();
 			    rc.keepRatio=true;
 			    rc.maxHeight=500;
@@ -226,47 +227,16 @@ public class DesktopActivity extends RCActivity
 			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
 	
 			    Circle circleView = (Circle) tDesktopViewManager.createAndAddView(elementConfig);
-			    circleView.setOnHChannelChangeListener(new OnChannelChangeListener ()
-				{
-					@Override
-					public void onChannelChange(int position) 
-					{
-						Log.d(TAG, "received new H position from meter1:" + position);
-						if (rcService != null) rcService.tChannel[3].setControl(position);
-					}
-				});
-			    circleView.setOnVChannelChangeListener(new OnChannelChangeListener ()
-				{
-					@Override
-					public void onChannelChange(int position) 
-					{
-						Log.d(TAG, "received new V position from meter1:" + position);
-						if (rcService != null) rcService.tChannel[2].setControl(position);
-					}
-				});		
+			    circleView.getProtocolMap().put(RCConstants.CHANNEL_H, "3");
+			    circleView.getProtocolMap().put(RCConstants.CHANNEL_V, "2");
+			    circleView.updateProtocolMap();
 			    
 			    lp = new LayoutParams(380, 380 , 600, 300);
 			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
 			    circleView = (Circle)tDesktopViewManager.createAndAddView(elementConfig);
-			    
-			    circleView.setOnHChannelChangeListener(new OnChannelChangeListener ()
-				{
-					@Override
-					public void onChannelChange(int position) 
-					{
-						Log.d(TAG, "received new H position from meter2:" + position);
-						if (rcService != null) rcService.tChannel[0].setControl(position);
-					}
-				});
-			    circleView.setOnVChannelChangeListener(new OnChannelChangeListener ()
-				{
-					@Override
-					public void onChannelChange(int position) 
-					{
-						Log.d(TAG, "received new V position from meter2:" + position);
-						if (rcService != null) rcService.tChannel[1].setControl(position);
-					}
-				});
+			    circleView.getProtocolMap().put(RCConstants.CHANNEL_H, "0");
+			    circleView.getProtocolMap().put(RCConstants.CHANNEL_V, "1");
+			    circleView.updateProtocolMap();
 	
 			}catch(Exception e){
 			}

@@ -3,7 +3,11 @@
  */
 package ch.hsr.rocketcolibri.view.widget;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
@@ -30,6 +34,7 @@ import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
+import android.widget.Toast;
 import android.content.res.TypedArray;
 
 /**
@@ -53,7 +58,35 @@ public final class Circle extends RCWidget
 	private String orientationSide = "left";
 	public int diameterInDP;
 	public static final int maxChannel = 1000;
-	private static final float rimSize       = 0.02f;
+	private static final float rimSize = 0.02f;
+	private Map<String, String> protocolMap = new HashMap<String, String>();
+	private int tChannelV;
+	private int tChannelH;
+	private OnChannelChangeListener tChannelListener;
+
+	
+	/**
+	 * the MyOnTouchListener holds a horizontal an vertical channel listener
+	 */
+	class MyOnTouchListener implements OnTouchListener{
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			try{
+				Log.d("onTouchListener", 
+						String.valueOf(event.getAxisValue(MotionEvent.AXIS_Y)) + "," + 
+					    String.valueOf(event.getAxisValue(MotionEvent.AXIS_X)));
+				tChannelListener.onChannelChange(tChannelH, eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_X)));
+				tChannelListener.onChannelChange(tChannelV, eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_Y)));
+			}catch(Exception e){
+				Toast.makeText(Circle.this.getContext(), "check your channel configuration!", Toast.LENGTH_SHORT).show();
+			}
+			return false;
+		}
+	}
+	
+	public void setOnChangeListener(OnChannelChangeListener channelListener){
+		tChannelListener = channelListener;
+	}
 
 	/**
 	 * converts the position read from the event to the channel position
@@ -69,58 +102,8 @@ public final class Circle extends RCWidget
 			return channelPos;
 	}
 	
-	/**
-	 * the MyOnTouchListener holds a horizontal an vertical channel listener
-	 */
-	class MyOnTouchListener implements OnTouchListener
-	{
-		private OnChannelChangeListener hChannel;
-		private OnChannelChangeListener vChannel;
-		@Override
-		public boolean onTouch(View v, MotionEvent event) {
-			Log.d("onTouchListener", 
-					String.valueOf(event.getAxisValue(MotionEvent.AXIS_Y)) + "," + 
-				    String.valueOf(event.getAxisValue(MotionEvent.AXIS_X)));
-	
-			if (hChannel != null)
-				hChannel.onChannelChange(eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_X)));
-			
-			if (vChannel != null)
-				vChannel.onChannelChange(eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_Y)));
-			
-			return false;
-		}
-		
-		public void setHOnChangeListener(OnChannelChangeListener cl)
-		{
-			hChannel = cl;
-		}
-		
-		public void setVOnChangeListener(OnChannelChangeListener cl)
-		{
-			vChannel = cl;
-		}
-	}
-	
 	private MyOnTouchListener mListener = new MyOnTouchListener();
 	
-	/**
-	 * set the onChannelChangeListener for the horizontal channel control
-	 * @param onChannelChangeListener
-	 */
-	public void setOnHChannelChangeListener(OnChannelChangeListener onChannelChangeListener) 
-	{
-		mListener.setHOnChangeListener(onChannelChangeListener);
-	}
-
-	/**
-	 * set the onChannelChangeListener for the vertical channel control
-	 * @param onChannelChangeListener
-	 */
-	public void setOnVChannelChangeListener(OnChannelChangeListener onChannelChangeListener) 
-	{
-		mListener.setVOnChangeListener(onChannelChangeListener);
-	}
 	
 	public Circle(Context context, ViewElementConfig elementConfig) {
 		super(context, elementConfig);
@@ -195,6 +178,14 @@ public final class Circle extends RCWidget
 		}
 		initDrawingTools();
 		initListener();
+		
+		//init protocol mapping
+		protocolMap.put(RCConstants.CHANNEL_H, "");
+		protocolMap.put(RCConstants.CHANNEL_V, "");
+		protocolMap.put(RCConstants.INVERTED, "");
+		protocolMap.put(RCConstants.MAX_RANGE, "");
+		protocolMap.put(RCConstants.MIN_RANGE, "");
+		protocolMap.put(RCConstants.TRIMM, "");
 	}
 	
 	private void initListener(){
@@ -349,6 +340,16 @@ public final class Circle extends RCWidget
 		super.onDraw(canvas);
 	}
 
+	@Override
+	public Map<String, String> getProtocolMap(){
+		return protocolMap;
+	}
+
+	@Override
+	public void updateProtocolMap(){
+		tChannelH = Integer.parseInt(protocolMap.get(RCConstants.CHANNEL_H));
+		tChannelV = Integer.parseInt(protocolMap.get(RCConstants.CHANNEL_V));
+	}
 
 	@Override
 	public int getNumberOfChannelListener() {
