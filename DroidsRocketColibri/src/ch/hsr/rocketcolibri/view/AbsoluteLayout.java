@@ -231,7 +231,7 @@ public class AbsoluteLayout extends ViewGroup {
         public String debug(String output) {
             return output + "Absolute.LayoutParams={width="
                     + sizeToString(width) + ", height=" + sizeToString(height)
-                    + " x=" + x + " y=" + y + "}";
+                    + " x=" + this.x + " y=" + this.y + "}";
         }
 
       /**
@@ -251,8 +251,18 @@ public class AbsoluteLayout extends ViewGroup {
             }
             return String.valueOf(size);
         }
+
+        public boolean equals(LayoutParams theParam) {
+        	if (this.x != theParam.x) {
+        		return false;
+        	}
+
+        	if (this.y != theParam.y) {
+        		return false;
+        	}
+
+        	return true;
+        }
     } // end class
  
 } // end class
-
-

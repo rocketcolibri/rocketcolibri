@@ -16,13 +16,13 @@ public class ViewElementConfig {
 	private LayoutParams layoutParams;
 	private ResizeConfig resizeConfig;
 	private float alpha;
-	
+
 	public ViewElementConfig(){}
-	
+
 	public ViewElementConfig(String classPath, LayoutParams layoutParams, ResizeConfig resizeConfig){
 		this(0, classPath, layoutParams, resizeConfig);
 	}
-	
+
 	public ViewElementConfig(int id, String classPath, LayoutParams layoutParams, ResizeConfig resizeConfig){
 		this.id = id;
 		this.classPath = classPath;
@@ -32,7 +32,7 @@ public class ViewElementConfig {
 	}
 
 	public int getId() {
-		return id;
+		return this.id;
 	}
 
 	public void setId(int id) {
@@ -40,7 +40,7 @@ public class ViewElementConfig {
 	}
 
 	public String getClassPath() {
-		return classPath;
+		return this.classPath;
 	}
 
 	public void setClassPath(String classPath) {
@@ -48,18 +48,18 @@ public class ViewElementConfig {
 	}
 
 	public LayoutParams getLayoutParams(){
-		return layoutParams;
+		return this.layoutParams;
 	}
 	
 	public ResizeConfig getResizeConfig(){
-		return resizeConfig;
+		return this.resizeConfig;
 	}
 
 	public void setLayoutParams(LayoutParams layoutParams) {
 		this.layoutParams = layoutParams;
 	}
 
-	public void settResizeConfig(ResizeConfig resizeConfig) {
+	public void setResizeConfig(ResizeConfig resizeConfig) {
 		this.resizeConfig = resizeConfig;
 	}
 	
@@ -68,18 +68,42 @@ public class ViewElementConfig {
 	}
 	
 	public float getAlpha(){
-		return alpha;
+		return this.alpha;
 	}
-	
+
+	public boolean equals(ViewElementConfig theConfig) {
+
+		if (this.id != theConfig.id)
+		{
+			return false;
+		}
+
+		if (this.classPath.compareTo(theConfig.classPath) != 0) {
+			return false;
+		}
+
+		if (!this.layoutParams.equals(theConfig.layoutParams)) {
+			return false;
+		}
+
+		if (!this.resizeConfig.equals(theConfig.resizeConfig)) {
+			return false;
+		}
+
+		if (this.alpha != theConfig.alpha) {
+			return false;
+		}
+
+		return true;
+	}
+
 	public ViewElementConfig copy(){
 		ViewElementConfig vec = new ViewElementConfig();
 		vec.setAlpha(alpha);
 		vec.setId(id);
 		vec.setClassPath(classPath);
 		vec.setLayoutParams(new AbsoluteLayout.LayoutParams(layoutParams.width, layoutParams.height, layoutParams.x, layoutParams.y));
-		vec.settResizeConfig(resizeConfig.copy());
+		vec.setResizeConfig(resizeConfig.copy());
 		return vec;
 	}
-	
-	
 }
