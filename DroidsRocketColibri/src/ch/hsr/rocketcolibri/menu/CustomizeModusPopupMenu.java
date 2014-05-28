@@ -62,7 +62,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 
 		HoldButton holdButton = (HoldButton) findViewById(R.id.deleteElementBtn);
 		holdButton.setOnHoldListener(new OnHoldListener() {
-			AlphaAnimation deleteAnimation = new AlphaAnimation(1.0f, 0.009f);
+			AlphaAnimation deleteAnimation = new AlphaAnimation(0.75f, 0.009f);
 			public void onHoldStart(View v, int overallDuration) {
 				deleteAnimation.setDuration(overallDuration);
 				deleteAnimation.setFillAfter(true);
