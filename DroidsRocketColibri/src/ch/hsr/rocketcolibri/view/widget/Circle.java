@@ -172,11 +172,16 @@ public final class Circle extends RCWidget {
 		
 		//init protocol mapping
 		protocolMap.put(RCConstants.CHANNEL_H, "");
+		protocolMap.put(RCConstants.INVERTED_H, "");
+		protocolMap.put(RCConstants.MAX_RANGE_H, "");
+		protocolMap.put(RCConstants.MIN_RANGE_H, "");
+		protocolMap.put(RCConstants.TRIMM_H, "");
+		
 		protocolMap.put(RCConstants.CHANNEL_V, "");
-		protocolMap.put(RCConstants.INVERTED, "");
-		protocolMap.put(RCConstants.MAX_RANGE, "");
-		protocolMap.put(RCConstants.MIN_RANGE, "");
-		protocolMap.put(RCConstants.TRIMM, "");
+		protocolMap.put(RCConstants.INVERTED_V, "");
+		protocolMap.put(RCConstants.MAX_RANGE_V, "");
+		protocolMap.put(RCConstants.MIN_RANGE_V, "");
+		protocolMap.put(RCConstants.TRIMM_V, "");
 	}
 	
 	private void initListener(){
@@ -302,12 +307,12 @@ public final class Circle extends RCWidget {
 	}
 
 	@Override
-	public Map<String, String> getProtocolMap(){
+	public Map<String, String> getProtocolMap() {
 		return protocolMap;
 	}
 
 	@Override
-	public void updateProtocolMap(){
+	public void updateProtocolMap() {
 		tChannelH = Integer.parseInt(protocolMap.get(RCConstants.CHANNEL_H));
 		tChannelV = Integer.parseInt(protocolMap.get(RCConstants.CHANNEL_V));
 	}

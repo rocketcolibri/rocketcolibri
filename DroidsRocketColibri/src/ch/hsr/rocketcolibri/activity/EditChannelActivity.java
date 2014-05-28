@@ -1,5 +1,7 @@
 package ch.hsr.rocketcolibri.activity;
 
+import java.util.Set;
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,24 +30,17 @@ public class EditChannelActivity extends RCActivity{
 	private void readWidgetSettings() {
 		LinearLayout contentList = (LinearLayout)findViewById(R.id.content_list);
 		Intent i = getIntent();
-		if(i.hasExtra(RCConstants.CHANNEL_H)){
-			contentList.addView(createLayout("Channel H", i.getStringExtra(RCConstants.CHANNEL_H)));
+		Set<String> keySet = i.getExtras().keySet();
+		for(String key : keySet){
+			if(key.startsWith(RCConstants.PREFIX)){
+				i.getStringExtra(key);
+				contentList.addView(createLayout(getString(getStringResourceIdOf(key)), i.getStringExtra(key)));
+			}
 		}
-		if (i.hasExtra(RCConstants.CHANNEL_V)) {
-			contentList.addView(createLayout("Channel V", i.getStringExtra(RCConstants.CHANNEL_V)));
-		}
-		if (i.hasExtra(RCConstants.INVERTED)) {
-			contentList.addView(createLayout("Inverted", i.getStringExtra(RCConstants.INVERTED)));
-		}
-		if (i.hasExtra(RCConstants.MIN_RANGE)) {
-			contentList.addView(createLayout("min Range", i.getStringExtra(RCConstants.MIN_RANGE)));
-		}
-		if (i.hasExtra(RCConstants.MAX_RANGE)) {
-			contentList.addView(createLayout("max Range", i.getStringExtra(RCConstants.MAX_RANGE)));
-		}
-		if (i.hasExtra(RCConstants.TRIMM)) {
-			contentList.addView(createLayout("Trimm", i.getStringExtra(RCConstants.TRIMM)));
-		}
+	}
+	
+	private int getStringResourceIdOf(String key){
+		return getResources().getIdentifier(key, "string", RCConstants.class.getPackage().getName());
 	}
 	
 	private LinearLayout createLayout(String label, String value){
