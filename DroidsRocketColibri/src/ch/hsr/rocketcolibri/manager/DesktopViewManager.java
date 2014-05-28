@@ -171,9 +171,9 @@ public class DesktopViewManager implements IDesktopViewManager{
 	
 	@Override
 	public void startEditActivity(View targetView){
-		Intent intent = new Intent(tContext, EditChannelActivity.class);
-		putProtocolExtras(intent, targetView);
-		tContext.startActivity(intent);
+	    Intent editChannelIntent = new Intent(tContext, EditChannelActivity.class);
+	    putProtocolExtras(editChannelIntent, targetView);
+	    tContext.startActivityForResult(editChannelIntent, tControlElementParentView.indexOfChild(targetView));
 	}
 	
 	private void putProtocolExtras(Intent intent, View targetView){
@@ -183,6 +183,18 @@ public class DesktopViewManager implements IDesktopViewManager{
 		for(String key : keySet){
 			intent.putExtra(key, pm.get(key));
 		}
+	}
+	
+	@Override
+	public void editActivityResult(int viewIndex, Intent editChannelIntent){
+		Log.d(""+viewIndex, "editActivityResult");
+		RCWidget rcw = (RCWidget)tControlElementParentView.getChildAt(viewIndex);
+		Set<String> keySet = rcw.getProtocolMap().keySet();
+		for(String key : keySet){
+			Log.d(""+key, ""+editChannelIntent.getStringExtra(key));
+			rcw.getProtocolMap().put(key, editChannelIntent.getStringExtra(key));
+		}
+		rcw.updateProtocolMap();
 	}
 	
 	private IResizeDoneListener createResizeDoneListener() {

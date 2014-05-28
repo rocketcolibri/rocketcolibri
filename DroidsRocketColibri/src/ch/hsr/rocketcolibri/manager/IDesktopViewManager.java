@@ -8,6 +8,7 @@ import ch.hsr.rocketcolibri.menu.desktop.DesktopMenu;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
+import android.content.Intent;
 import android.view.View;
 
 /**
@@ -26,6 +27,7 @@ public interface IDesktopViewManager {
 	CustomizeModusPopupMenu getCustomizeModusPopupMenu();
 	DesktopMenu getDesktopMenu();
 	void startEditActivity(View targetView);
+	void editActivityResult(int viewIndex, Intent editChannelIntent);
 	void closeSpecialThings();
 	void release();
 }

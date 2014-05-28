@@ -1,11 +1,16 @@
 package ch.hsr.rocketcolibri.activity;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
@@ -18,7 +23,8 @@ import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 
 public class EditChannelActivity extends RCActivity{
-	
+	private Map<String, Integer> channelViewMap = new HashMap<String, Integer>();
+	private int viewIdStart = 999999;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -35,7 +41,7 @@ public class EditChannelActivity extends RCActivity{
 		for(String key : keySet){
 			if(key.startsWith(RCConstants.PREFIX)){
 				i.getStringExtra(key);
-				contentList.addView(createLayout(getString(getStringResourceIdOf(key)), i.getStringExtra(key)));
+				contentList.addView(createLayout(getString(getStringResourceIdOf(key)), key, i.getStringExtra(key)));
 			}
 		}
 	}
@@ -44,7 +50,7 @@ public class EditChannelActivity extends RCActivity{
 		return getResources().getIdentifier(key, "string", RCConstants.class.getPackage().getName());
 	}
 	
-	private LinearLayout createLayout(String label, String value){
+	private LinearLayout createLayout(String label, String key, String value){
 		LinearLayout ll = new LinearLayout(this);
 		ll.setOrientation(LinearLayout.HORIZONTAL);
 		ll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -53,11 +59,26 @@ public class EditChannelActivity extends RCActivity{
 		tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		ll.addView(tv);
 		EditText et = new EditText(this);
+		channelViewMap.put(key, Integer.valueOf(viewIdStart));
+		et.setId(viewIdStart);
+		++viewIdStart;
 		if(value!=null)
 			et.setText(value);
 		et.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		ll.addView(et);
 		return ll;
+	}
+	
+	private void fillResultIntent(){
+		Set<String> keySet = channelViewMap.keySet();
+		Intent resultIntent = new Intent(getIntent().getAction());
+		EditText tv = null;
+		for(String key : keySet){
+			tv = (EditText) findViewById(channelViewMap.get(key).intValue());
+			Log.d("fillResultIntent: "+key, ""+tv.getText().toString());
+			resultIntent.putExtra(key, tv.getText().toString());
+		}
+		setResult(RESULT_OK, resultIntent);
 	}
 	
 	@Override
@@ -78,6 +99,7 @@ public class EditChannelActivity extends RCActivity{
 		b.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				setResult(RESULT_CANCELED);
 				finish();
 			}
 		});
@@ -86,6 +108,8 @@ public class EditChannelActivity extends RCActivity{
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(EditChannelActivity.this, "save coming soon!", Toast.LENGTH_SHORT).show();
+				fillResultIntent();
+				finish();
 			}
 		});
 	}

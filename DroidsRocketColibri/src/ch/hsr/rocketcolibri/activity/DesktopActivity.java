@@ -3,6 +3,7 @@
  */
 package ch.hsr.rocketcolibri.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
@@ -264,16 +265,22 @@ public class DesktopActivity extends RCActivity{
 	 * Send a message to the debug log and display it using Toast.
 	 */
 	
-	public void trace (String msg) 
-	{
+	public void trace (String msg) {
 	    if (!Debugging) return;
 	    Log.d ("DesktopActivity", msg);
 	    toast (msg);
 	}
+	
+	@Override
+	protected void onActivityResult(int viewIndex, int resultCode, Intent editChannelIntent) {
+		Log.d("", "viewIndex:"+viewIndex+" resultCode: "+resultCode);
+        if (resultCode == RESULT_OK) {
+            tDesktopViewManager.editActivityResult(viewIndex, editChannelIntent);
+        }
+	}
 
 	@Override
-	protected void onServiceReady()
-	{
+	protected void onServiceReady() {
 		setupViews();
 		tDesktopMenu.setService(rcService) ;
 		rcService.registerUiOutputSinkChangeObserver(this.connectionStatusWidget);

@@ -3,6 +3,8 @@ package ch.hsr.rocketcolibri;
 public class RCConstants {
 	public static final String PREFIX = "rc_";
 	
+	public static final String VIEW_INDEX = PREFIX+"vi";
+	
 	public static final String CHANNEL_H = PREFIX+"channel_h";
 	public static final String INVERTED_H = PREFIX+"inverted_h";
 	public static final String MIN_RANGE_H = PREFIX+"min_range_h";
