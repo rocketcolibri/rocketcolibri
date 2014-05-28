@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -61,21 +62,19 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 
 		HoldButton holdButton = (HoldButton) findViewById(R.id.deleteElementBtn);
 		holdButton.setOnHoldListener(new OnHoldListener() {
-			float alphaBefore = 0;
-			public void onHoldStart(View v) {
-				alphaBefore = tTargetView.getAlpha();
-			}
-			public void onHold(int timeLeft, int overallDuration) {
-				float od = overallDuration;
-				float tl = timeLeft;
-				tTargetView.setAlpha(tl/od);
+			AlphaAnimation deleteAnimation = new AlphaAnimation(1.0f, 0.009f);
+			public void onHoldStart(View v, int overallDuration) {
+				deleteAnimation.setDuration(overallDuration);
+				deleteAnimation.setFillAfter(true);
+				tTargetView.startAnimation(deleteAnimation);
 			}
 			public void onHoldEnd(View v) {
 				tDesktopViewManager.deleteView(tTargetView);
 				dismiss();
 			}
 			public void onHoldCanceled() {
-				tTargetView.setAlpha(alphaBefore);
+				deleteAnimation.cancel();
+				tTargetView.setAnimation(null);
 			}
 		});
 		

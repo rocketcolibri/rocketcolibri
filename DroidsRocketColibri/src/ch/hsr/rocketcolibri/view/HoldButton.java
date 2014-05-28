@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -44,9 +45,7 @@ public class HoldButton extends Button{
 	}
 	
 	public interface OnHoldListener{
-		void onHoldStart(View v);
-		/** @param timeLeft from x>0 to 0, on 0 will be called onHoldEnd*/
-		void onHold(int timeLeft, int overallDuration);
+		void onHoldStart(View v, int overallDuration);
 		void onHoldEnd(View v);
 		void onHoldCanceled();
 	}
@@ -62,12 +61,11 @@ public class HoldButton extends Button{
 				case MotionEvent.ACTION_DOWN:
 					done = false;
 	        		startTime = System.currentTimeMillis();
-	        		tHoldListener.onHoldStart(v);
+	        		tHoldListener.onHoldStart(v, MAX_DURATION);
 	        		tTransition.startTransition(MAX_DURATION);
 	        		break;
-				case MotionEvent.ACTION_MOVE: 
+				case MotionEvent.ACTION_MOVE:
 					duration = System.currentTimeMillis() - startTime;
-					tHoldListener.onHold((int)(MAX_DURATION-duration), MAX_DURATION);
 					if(duration >= MAX_DURATION){
 						done = true;
 						tHoldListener.onHoldEnd(v);
