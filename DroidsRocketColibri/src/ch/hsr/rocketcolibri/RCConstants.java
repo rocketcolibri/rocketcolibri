@@ -14,4 +14,10 @@ public class RCConstants {
 	public static final String MIN_RANGE_V = PREFIX+"min_range_v";
 	public static final String MAX_RANGE_V = PREFIX+"max_range_v";
 	public static final String TRIMM_V = PREFIX+"trimm_v";
+	
+	public static final String CHANNEL = PREFIX+"channel";
+	public static final String INVERTED = PREFIX+"inverted";
+	public static final String MIN_RANGE = PREFIX+"min_range";
+	public static final String MAX_RANGE = PREFIX+"max_range";
+	public static final String TRIMM = PREFIX+"trimm";
 }

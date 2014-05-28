@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 
@@ -23,7 +24,7 @@ public class EditChannelActivity extends RCActivity{
 		super.onCreate(savedInstanceState);
 		showLoading("Loading...");
 		setContentView(R.layout.edit_channel);
-		initCloseButton();
+		initFooterButtons();
 		readWidgetSettings();
 	}
 
@@ -46,39 +47,45 @@ public class EditChannelActivity extends RCActivity{
 	private LinearLayout createLayout(String label, String value){
 		LinearLayout ll = new LinearLayout(this);
 		ll.setOrientation(LinearLayout.HORIZONTAL);
-		ll.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
-		ll.getLayoutParams().width = LayoutParams.MATCH_PARENT;
+		ll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		TextView tv = new TextView(this);
 		tv.setText(label);
+		tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		ll.addView(tv);
 		EditText et = new EditText(this);
 		if(value!=null)
 			et.setText(value);
+		et.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		ll.addView(et);
 		return ll;
 	}
 	
 	@Override
 	protected void onServiceReady() {
-//		rcService.
-		
 		//just to test the loading sequence
 		new AsyncTask<Void, Void, Void>() {
 			@Override
 			protected Void doInBackground(Void... params) {
-				SystemClock.sleep(2000);
+				SystemClock.sleep(500);
 				hideLoading();				
 				return null;
 			}
 		}.execute();
 	}
 	
-	private void initCloseButton(){
-		Button b = (Button) findViewById(R.id.btn_close);
+	private void initFooterButtons(){
+		Button b = (Button) findViewById(R.id.closeBtn);
 		b.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				finish();
+			}
+		});
+		b = (Button) findViewById(R.id.saveBtn);
+		b.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(EditChannelActivity.this, "save coming soon!", Toast.LENGTH_SHORT).show();
 			}
 		});
 	}

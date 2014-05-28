@@ -1,16 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Rocket Colibri</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    
+
     <!-- Main menu entries -->
     <string name="menu_action_main_wifi">Set Wifi Mode</string>
     <string name="menu_action_main_settings">Switch GUI between Configure and Fix</string>
     <string name="menu_action_main_mode">Switch mode between Operate and Observe</string>
 
     <!-- Popup menu entries -->
-    <string name="popup_menu_edit_channel">Edit channel</string>
-    <string name="popup_menu_resize_element">Resize Element</string>
-    <string name="popup_menu_delete_element">Delete Element</string>
+    <string name="popup_menu_edit_channel_btn">Edit channel</string>
+    <string name="popup_menu_resize_element_btn">Resize Element</string>
+    <string name="popup_menu_delete_element_btn">Delete Element</string>
+    
+    <!-- Edit Channel -->
+    <string name="rc_channel_h">Channel H</string>
+    <string name="rc_inverted_h">Inverted H</string>
+    <string name="rc_min_range_h">Min Range H</string>
+    <string name="rc_max_range_h">Max Range H</string>
+    <string name="rc_trimm_h">Trimm H</string>
+    <string name="rc_channel_v">Channel V</string>
+    <string name="rc_inverted_v">Inverted V</string>
+    <string name="rc_min_range_v">Min Range V</string>
+    <string name="rc_max_range_v">Max Range V</string>
+    <string name="rc_trimm_v">Trimm V</string>
+    <string name="rc_channel">Channel</string>
+    <string name="rc_inverted">Inverted</string>
+    <string name="rc_min_range">Min Range</string>
+    <string name="rc_max_range">Max Range</string>
+    <string name="rc_trimm">Trimm</string>
+    <string name="close_btn">Close</string>
+    <string name="save_btn">Save</string>
+    
 </resources>

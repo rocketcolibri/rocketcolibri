@@ -6,6 +6,8 @@ package ch.hsr.rocketcolibri.manager;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import android.app.Activity;
 import android.content.Context;
@@ -170,7 +172,17 @@ public class DesktopViewManager implements IDesktopViewManager{
 	@Override
 	public void startEditActivity(View targetView){
 		Intent intent = new Intent(tContext, EditChannelActivity.class);
+		putProtocolExtras(intent, targetView);
 		tContext.startActivity(intent);
+	}
+	
+	private void putProtocolExtras(Intent intent, View targetView){
+		RCWidget rcWidget = (RCWidget)targetView;
+		Map<String, String> pm = rcWidget.getProtocolMap();
+		Set<String> keySet = pm.keySet();
+		for(String key : keySet){
+			intent.putExtra(key, pm.get(key));
+		}
 	}
 	
 	private IResizeDoneListener createResizeDoneListener() {

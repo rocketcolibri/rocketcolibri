@@ -10,18 +10,18 @@
         android:id="@+id/editChannel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/popup_menu_edit_channel" />
+        android:text="@string/popup_menu_edit_channel_btn" />
     <Button
         android:id="@+id/resizeElementBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/popup_menu_resize_element" />
+        android:text="@string/popup_menu_resize_element_btn" />
     <ch.hsr.rocketcolibri.view.HoldButton
         android:id="@+id/deleteElementBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawable="@drawable/delete_foreground"
-        android:text="@string/popup_menu_delete_element" />
+        android:text="@string/popup_menu_delete_element_btn" />
     <SeekBar
         android:id="@+id/alphaSlider"
         android:layout_width="match_parent"

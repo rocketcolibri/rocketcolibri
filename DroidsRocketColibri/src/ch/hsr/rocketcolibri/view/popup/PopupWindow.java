@@ -100,6 +100,11 @@ public class PopupWindow {
         setHeight(contentView.getMeasuredHeight());
         setFocusable(focusable);
     }
+    
+    public void updateLayoutHeight(int height){
+        mContentView.measure(getWidth(), height);
+        setHeight(mContentView.getMeasuredHeight());
+    }
 
     /**
      * <p>Return the drawable used as the popup window's background.</p>

@@ -44,7 +44,11 @@ public class HoldButton extends Button{
 	}
 	
 	public interface OnHoldListener{
+		void onHoldStart(View v);
+		/** @param timeLeft from x>0 to 0, on 0 will be called onHoldEnd*/
+		void onHold(int timeLeft, int overallDuration);
 		void onHoldEnd(View v);
+		void onHoldCanceled();
 	}
 	
 	private OnTouchListener createOnTouchListener(){
@@ -52,20 +56,26 @@ public class HoldButton extends Button{
 		    final int MAX_DURATION = 4000;
 		    long duration = 0;
 		    long startTime = 0;
+		    boolean done = false;
 			public boolean onTouch(View v, MotionEvent event) {
 				switch(event.getAction()){
-				case MotionEvent.ACTION_DOWN: 
+				case MotionEvent.ACTION_DOWN:
+					done = false;
 	        		startTime = System.currentTimeMillis();
+	        		tHoldListener.onHoldStart(v);
 	        		tTransition.startTransition(MAX_DURATION);
 	        		break;
 				case MotionEvent.ACTION_MOVE: 
 					duration = System.currentTimeMillis() - startTime;
+					tHoldListener.onHold((int)(MAX_DURATION-duration), MAX_DURATION);
 					if(duration >= MAX_DURATION){
+						done = true;
 						tHoldListener.onHoldEnd(v);
 						tTransition.resetTransition();
 					}
 					break;
 				case MotionEvent.ACTION_UP: 
+					if(!done)tHoldListener.onHoldCanceled();
 					tTransition.resetTransition();
 					break;
 		        case MotionEvent.ACTION_CANCEL:

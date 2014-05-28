@@ -3,82 +3,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <LinearLayout
-        android:id="@+id/content_list"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#3D3D3D"
-        android:orientation="vertical" >
+        android:layout_above="@+id/editChannelFooter"
+        android:layout_alignParentTop="true" >
 
-        <TextView
-            android:id="@+id/TextView08"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/content_list"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Dynamic Item coming soon..."
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:background="#3D3D3D"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </ScrollView>
 
-        <TextView
-            android:id="@+id/TextView07"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dynamic Item coming soon..."
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:id="@+id/TextView06"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dynamic Item coming soon..."
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:id="@+id/TextView05"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dynamic Item coming soon..."
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:id="@+id/TextView04"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dynamic Item coming soon..."
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:id="@+id/TextView03"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dynamic Item coming soon..."
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:id="@+id/TextView02"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dynamic Item coming soon..."
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:id="@+id/TextView01"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dynamic Item coming soon..."
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dynamic Item coming soon..."
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_close"
-        android:layout_alignParentBottom="true"
+    <LinearLayout
+        android:id="@+id/editChannelFooter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Close" />
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true" >
+        <Button
+            android:id="@+id/closeBtn"
+            android:layout_weight="0.5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/close_btn" />
+
+        <Button
+            android:id="@+id/saveBtn"
+            android:layout_weight="0.5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save_btn" />
+    </LinearLayout>
 
 </RelativeLayout>
