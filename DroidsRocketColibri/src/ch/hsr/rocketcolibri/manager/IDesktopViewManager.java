@@ -8,6 +8,7 @@ import ch.hsr.rocketcolibri.menu.desktop.DesktopMenu;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
+import android.app.Service;
 import android.content.Intent;
 import android.view.View;
 
@@ -30,4 +31,5 @@ public interface IDesktopViewManager {
 	void editActivityResult(int viewIndex, Intent editChannelIntent);
 	void closeSpecialThings();
 	void release();
+	void serviceReady(Service service);
 }

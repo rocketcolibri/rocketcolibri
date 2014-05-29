@@ -3,6 +3,7 @@
  */
 package ch.hsr.rocketcolibri.view.custimizable;
 
+import android.app.Service;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
@@ -104,6 +105,11 @@ public class CustomizableView extends View implements ICustomizableView{
 	 */
 	public View getOperateOverlayView() {
 		return null; // the default is no operateOverlayView
+	}
+
+	@Override
+	public void notifyServiceReady(Service service) {
+		
 	}
 }
 

@@ -4,9 +4,9 @@
   <element>
     <type>com.umlet.element.custom.Systemborder</type>
     <coordinates>
-      <x>1030</x>
-      <y>210</y>
-      <w>30</w>
+      <x>870</x>
+      <y>180</y>
+      <w>130</w>
       <h>80</h>
     </coordinates>
     <panel_attributes>center:RC-Model</panel_attributes>
@@ -15,8 +15,8 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>60</x>
-      <y>400</y>
+      <x>0</x>
+      <y>370</y>
       <w>330</w>
       <h>150</h>
     </coordinates>
@@ -34,8 +34,8 @@ ConfigureRockerColibri()
   <element>
     <type>com.umlet.element.custom.Systemborder</type>
     <coordinates>
-      <x>440</x>
-      <y>200</y>
+      <x>380</x>
+      <y>170</y>
       <w>330</w>
       <h>100</h>
     </coordinates>
@@ -47,19 +47,19 @@ bg=light_gray</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>740</x>
-      <y>220</y>
-      <w>310</w>
+      <x>680</x>
+      <y>190</y>
+      <w>210</w>
       <h>50</h>
     </coordinates>
     <panel_attributes/>
-    <additional_attributes>290;30;30;30</additional_attributes>
+    <additional_attributes>190;30;30;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>480</x>
-      <y>390</y>
+      <x>420</x>
+      <y>360</y>
       <w>330</w>
       <h>150</h>
     </coordinates>
@@ -75,7 +75,7 @@ OutputTelemetryData()
   <element>
     <type>com.umlet.element.Actor</type>
     <coordinates>
-      <x>210</x>
+      <x>150</x>
       <y>180</y>
       <w>80</w>
       <h>120</h>
@@ -86,7 +86,7 @@ OutputTelemetryData()
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>250</x>
+      <x>190</x>
       <y>190</y>
       <w>210</w>
       <h>50</h>
@@ -97,8 +97,8 @@ OutputTelemetryData()
   <element>
     <type>com.umlet.element.custom.Node</type>
     <coordinates>
-      <x>360</x>
-      <y>660</y>
+      <x>300</x>
+      <y>630</y>
       <w>330</w>
       <h>110</h>
     </coordinates>
@@ -110,8 +110,8 @@ center: Smartphone oder Tablet</panel_attributes>
   <element>
     <type>com.umlet.element.custom.Node</type>
     <coordinates>
-      <x>850</x>
-      <y>660</y>
+      <x>790</x>
+      <y>630</y>
       <w>330</w>
       <h>110</h>
     </coordinates>
@@ -123,8 +123,8 @@ center:Befindet sich auf dem Modell</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>660</x>
-      <y>660</y>
+      <x>600</x>
+      <y>630</y>
       <w>210</w>
       <h>70</h>
     </coordinates>
@@ -135,8 +135,8 @@ Wifi Link</panel_attributes>
   <element>
     <type>com.umlet.element.custom.Systemborder</type>
     <coordinates>
-      <x>330</x>
-      <y>600</y>
+      <x>270</x>
+      <y>570</y>
       <w>900</w>
       <h>230</h>
     </coordinates>

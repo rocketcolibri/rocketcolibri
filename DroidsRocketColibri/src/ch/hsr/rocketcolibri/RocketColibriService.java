@@ -210,6 +210,10 @@ public class RocketColibriService extends Service implements IUiOutputSinkChange
 		if(type != UiOutputDataType.None) {
 			tUiOutputSinkChangeObserver.get(type).add(observer);
 		}
+
+		if(tUsers.getType() == observer.getType()) tUsers.notifyThis();
+		if(tConnState.getType()== observer.getType()) tConnState.notifyThis();
+		if(tVdeoUrl.getType() ==  observer.getType()) tVdeoUrl.notifyThis();
 	}
 
     /** Unregister a UI output sink (RCWidget) */

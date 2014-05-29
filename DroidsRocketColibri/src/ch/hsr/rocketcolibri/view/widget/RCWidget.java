@@ -5,8 +5,10 @@ package ch.hsr.rocketcolibri.view.widget;
 
 import java.util.Map;
 
+import android.app.Service;
 import android.content.Context;
 import android.util.AttributeSet;
+import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
@@ -70,5 +72,13 @@ public class RCWidget extends CustomizableView {
 	 */
 	public int getNumberOfChannelListener() {
 		return 0;
+	}
+	
+	@Override
+	public void notifyServiceReady(Service rcService) {
+		try {
+			((RocketColibriService) rcService).registerUiOutputSinkChangeObserver(this);
+		}catch(Exception e){
+		}
 	}
 }

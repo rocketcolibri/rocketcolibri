@@ -17,7 +17,7 @@ public class UiOutputData
 	protected boolean doNotify;
 	protected UiOutputDataType type = UiOutputDataType.None;
 		
-	protected void notifyThis()
+	public void notifyThis()
 	{
 		doNotify = true;
 	}

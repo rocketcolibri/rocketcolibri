@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -56,6 +57,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	private CustomizeModusPopupMenu tCustomizeModusPopupMenu;
 	private DesktopMenu tDesktopMenu;
 	private OnChannelChangeListener tControlModusListener;
+	private Service tService;
 	
 	public DesktopViewManager(Activity context, AbsoluteLayout rootView, AbsoluteLayout controlElementParentView, OnChannelChangeListener controlModusListener, ViewChangedListener vcListener){
 		tContext = context;
@@ -116,6 +118,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	    try{((RCWidget)view).setControlModusListener(tControlModusListener);}catch(ClassCastException e){}
 	    view.setCustomizeModus(tCustomizeModus);
 	    tControlElementParentView.addView(view);
+	    if(null != tService)view.notifyServiceReady(tService);
 	    return view;
 	}
 	
@@ -247,4 +250,17 @@ public class DesktopViewManager implements IDesktopViewManager{
 		tResizeController.stopResize();
 	}
 
+	public void serviceReady(Service service) {
+		tService = service;
+		int size = tControlElementParentView.getChildCount();
+    	CustomizableView view = null;
+    	for(int i = 0; i < size; ++i){
+    		try{
+    			view = (CustomizableView) tControlElementParentView.getChildAt(i);
+    			view.notifyServiceReady(service);
+    		}catch(Exception e){
+    		}
+    	}
+	}
+	
 }

@@ -12,7 +12,7 @@ import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
  */
 public class ConnectionState extends UiOutputData {
 
-	private s state;
+	private s state = s.DISC;
 	
 	public ConnectionState() 
 	{
