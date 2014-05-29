@@ -4,27 +4,37 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
+import android.text.InputType;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLayoutChangeListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import ch.hsr.rocketcolibri.DataType;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
+import ch.hsr.rocketcolibri.widgetdirectory.WidgetEntry;
 
 public class EditChannelActivity extends RCActivity{
-	private Map<String, Integer> channelViewMap = new HashMap<String, Integer>();
-	private int viewIdStart = 999999;
+	private Map<String, View> channelViewMap = new HashMap<String, View>();
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -35,13 +45,14 @@ public class EditChannelActivity extends RCActivity{
 	}
 
 	private void readWidgetSettings() {
-		LinearLayout contentList = (LinearLayout)findViewById(R.id.content_list);
+		GridLayout contentList = (GridLayout)findViewById(R.id.content_list);
 		Intent i = getIntent();
 		Set<String> keySet = i.getExtras().keySet();
 		for(String key : keySet){
 			if(key.startsWith(RCConstants.PREFIX)){
 				i.getStringExtra(key);
-				contentList.addView(createLayout(getString(getStringResourceIdOf(key)), key, i.getStringExtra(key)));
+				contentList.addView(createLabelView(getString(getStringResourceIdOf(key))));
+				contentList.addView(createInputView(key, i.getStringExtra(key)));
 			}
 		}
 	}
@@ -50,31 +61,51 @@ public class EditChannelActivity extends RCActivity{
 		return getResources().getIdentifier(key, "string", RCConstants.class.getPackage().getName());
 	}
 	
-	private LinearLayout createLayout(String label, String key, String value){
-		LinearLayout ll = new LinearLayout(this);
-		ll.setOrientation(LinearLayout.HORIZONTAL);
-		ll.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+	private View createLabelView(String value){
 		TextView tv = new TextView(this);
-		tv.setText(label);
+		tv.setText(value);
 		tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-		ll.addView(tv);
-		EditText et = new EditText(this);
-		channelViewMap.put(key, Integer.valueOf(viewIdStart));
-		et.setId(viewIdStart);
-		++viewIdStart;
-		if(value!=null)
-			et.setText(value);
-		et.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-		ll.addView(et);
-		return ll;
+		return tv;
+	}
+	
+	private View createInputView(String key, String value){
+		switch(RCConstants.getDataTypeOf(key)){
+		case BOOLEAN:
+			final Switch switc = new Switch(this){
+				public String getText(){
+					return Boolean.toString(this.isChecked());
+				}
+			};
+			switc.setChecked(Boolean.parseBoolean(value));
+			switc.setGravity(Gravity.CENTER_VERTICAL);
+			channelViewMap.put(key, switc);
+			return switc;
+		case DOUBLE:
+		case FLOAT:
+			return createEditTextWithInputType(InputType.TYPE_CLASS_NUMBER, key, value);
+		case INT:
+			return createEditTextWithInputType(InputType.TYPE_CLASS_NUMBER, key, value);
+		default:
+			return createEditTextWithInputType(InputType.TYPE_CLASS_TEXT, key, value);
+		}
+	}
+	
+	private View createEditTextWithInputType(int inputType, String key, String value){
+		EditText tv = new EditText(this);
+		tv.setInputType(inputType);
+//		tv.setRawInputType(inputType);
+		tv.setText(value);
+		tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		channelViewMap.put(key, tv);
+		return tv;
 	}
 	
 	private void fillResultIntent(){
 		Set<String> keySet = channelViewMap.keySet();
 		Intent resultIntent = new Intent(getIntent().getAction());
-		EditText tv = null;
+		TextView tv = null;
 		for(String key : keySet){
-			tv = (EditText) findViewById(channelViewMap.get(key).intValue());
+			tv = (TextView) channelViewMap.get(key);
 			resultIntent.putExtra(key, tv.getText().toString());
 		}
 		setResult(RESULT_OK, resultIntent);
