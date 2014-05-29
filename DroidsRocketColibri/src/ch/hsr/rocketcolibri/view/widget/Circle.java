@@ -98,7 +98,7 @@ public final class Circle extends RCWidget {
 			}catch(Exception e){
 				Toast.makeText(Circle.this.getContext(), "check your channel configuration!", Toast.LENGTH_SHORT).show();
 			}
-			return false;
+			return true;
 		}
 	}
 	
