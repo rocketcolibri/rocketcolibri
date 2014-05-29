@@ -3,6 +3,9 @@
  */
 package ch.hsr.rocketcolibri.view.custimizable;
 
+import android.app.Service;
+
+
 /**
  * @author Artan Veliju
  */
@@ -14,5 +17,6 @@ public interface ICustomizableView {
 	 */
 	void setCustomizeModus(boolean enabled);
 	void setModusChangeListener(ModusChangeListener mcl);
+	void notifyServiceReady(Service service); 
 	ViewElementConfig getViewElementConfig();
 }

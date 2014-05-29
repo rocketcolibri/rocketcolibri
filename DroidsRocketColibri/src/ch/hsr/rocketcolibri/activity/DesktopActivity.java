@@ -283,9 +283,7 @@ public class DesktopActivity extends RCActivity{
 	protected void onServiceReady() {
 		setupViews();
 		tDesktopMenu.setService(rcService) ;
-		rcService.registerUiOutputSinkChangeObserver(this.connectionStatusWidget);
-		rcService.registerUiOutputSinkChangeObserver(this.telemetryWidget);
-		rcService.registerUiOutputSinkChangeObserver(this.tVideoStreamWidget);
+		tDesktopViewManager.serviceReady(rcService);
 	}
 
 	@Override
