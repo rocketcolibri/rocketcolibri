@@ -75,7 +75,6 @@ public class EditChannelActivity extends RCActivity{
 		EditText tv = null;
 		for(String key : keySet){
 			tv = (EditText) findViewById(channelViewMap.get(key).intValue());
-			Log.d("fillResultIntent: "+key, ""+tv.getText().toString());
 			resultIntent.putExtra(key, tv.getText().toString());
 		}
 		setResult(RESULT_OK, resultIntent);
@@ -107,7 +106,7 @@ public class EditChannelActivity extends RCActivity{
 		b.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(EditChannelActivity.this, "save coming soon!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(EditChannelActivity.this, "saved!", Toast.LENGTH_SHORT).show();
 				fillResultIntent();
 				finish();
 			}

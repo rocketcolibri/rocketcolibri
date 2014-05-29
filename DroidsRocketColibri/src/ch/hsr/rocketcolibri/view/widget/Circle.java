@@ -58,10 +58,10 @@ public final class Circle extends RCWidget {
 	public static final int maxChannel = 1000;
 	private static final float rimSize = 0.02f;
 	private Map<String, String> protocolMap = new HashMap<String, String>();
-	private int tChannelV;
-	private int tChannelH;
+	private int tChannelV = -1;
+	private int tChannelH = -1;
 	private OnChannelChangeListener tControlModusListener;
-	private MyOnTouchListener mListener = new MyOnTouchListener();
+	private MyOnTouchListener tInternalControlListener = new MyOnTouchListener();
 	
 	public Circle(Context context, ViewElementConfig elementConfig) {
 		super(context, elementConfig);
@@ -105,7 +105,12 @@ public final class Circle extends RCWidget {
 	@Override
 	public void setControlModusListener(OnChannelChangeListener channelListener) {
 		tControlModusListener = channelListener;
-		setOnTouchListener(mListener); 
+		if(areChannelsValid())
+			setOnTouchListener(tInternalControlListener); 
+	}
+	
+	private boolean areChannelsValid(){
+		return tChannelH>-1 || tChannelV>-1;
 	}
 
 	/**
@@ -187,7 +192,8 @@ public final class Circle extends RCWidget {
 	private void initListener(){
 		setModusChangeListener(new ModusChangeListener() {
 			public void customizeModeDeactivated() {
-				setOnTouchListener(mListener); 
+				if(areChannelsValid())
+					setOnTouchListener(tInternalControlListener); 
 			}
 			public void customizeModeActivated() {
 				setOnTouchListener(tCustomizeModusListener);
