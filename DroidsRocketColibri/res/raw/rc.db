@@ -10,7 +10,7 @@
                  "minHeight": 50,
                  "minWidth": 100
              },
-             "classPath": "ch.hsr.rocketcolibri.view.widget.TelemetryWidget",
+             "classPath": "ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget",
              "layoutParams": {
                  "layoutAnimationParameters": null,
                  "height": 100,
@@ -70,7 +70,7 @@
                  "minHeight": 50,
                  "minWidth": 100
              },
-             "classPath": "ch.hsr.rocketcolibri.view.widget.TelemetryWidget",
+             "classPath": "ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget",
              "layoutParams": {
                  "layoutAnimationParameters": null,
                  "height": 100,

@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Toast;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
+import ch.hsr.rocketcolibri.db.model.RCModel;
 import ch.hsr.rocketcolibri.manager.DesktopViewManager;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
@@ -139,78 +140,83 @@ public class DesktopActivity extends RCActivity{
 	 * Finds all the views we need and configure them to send click events to the activity.
 	 */
 	private void setupViews(){
-		/**
+		
 		RCModel model = rcService.getRocketColibriDB().fetchRCModelByName("Test Model");
 		for(ViewElementConfig vec : model.getViewElementConfigs()){
-			tDesktopViewManager.createView(vec);
-		}
-		**/
-		if(setupViewsOnce){
-			try{
-				ResizeConfig rc;
-				LayoutParams lp;
-				ViewElementConfig elementConfig;
-				View view;
-			    
-			    rc = new ResizeConfig();
-			    rc.maxHeight=745;
-			    rc.minHeight=50;
-			    rc.maxWidth=400;
-			    rc.minWidth=30;
-			    lp = new LayoutParams(100, 100, 50,200);
-			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
-			    view = tDesktopViewManager.createAndAddView(elementConfig);
-			    view.setBackgroundColor(Color.CYAN);
-			    
-			    rc = new ResizeConfig();
-			    rc.keepRatio=false;
-			    rc.maxHeight=700;
-			    rc.minHeight=10;
-			    rc.maxWidth=900;
-			    rc.minWidth=10;
-			    lp = new LayoutParams(50, 50, 250, 200);
-			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
-			    view = tDesktopViewManager.createAndAddView(elementConfig);
-			    view.setBackgroundColor(Color.RED);
-			    
-			    rc = new ResizeConfig();
-			    rc.keepRatio=true;
-			    rc.maxHeight=900;
-			    rc.minHeight=90;
-			    rc.maxWidth=500;
-			    rc.minWidth=50;
-			    lp = new LayoutParams(70, 70, 400, 200);
-			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
-			    view = tDesktopViewManager.createAndAddView(elementConfig);
-			    view.setBackgroundColor(Color.LTGRAY);
-
-			    rc = new ResizeConfig();
-			    rc.keepRatio=true;
-			    rc.maxHeight=500;
-			    rc.minHeight=50;
-			    rc.maxWidth=500;
-			    rc.minWidth=50;
-			    lp = new LayoutParams(380, 380 , 100, 300);
-			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
-	
-			    Circle circleView = (Circle) tDesktopViewManager.createAndAddView(elementConfig);
-			    circleView.getProtocolMap().put(RCConstants.CHANNEL_H, "3");
-			    circleView.getProtocolMap().put(RCConstants.CHANNEL_V, "2");
-			    circleView.updateProtocolMap();
-			    
-			    lp = new LayoutParams(380, 380 , 600, 300);
-			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
-			    circleView = (Circle)tDesktopViewManager.createAndAddView(elementConfig);
-			    circleView.getProtocolMap().put(RCConstants.CHANNEL_H, "0");
-			    circleView.getProtocolMap().put(RCConstants.CHANNEL_V, "1");
-			    circleView.updateProtocolMap();
-	
-			}catch(Exception e){
+			try {
+				tDesktopViewManager.createAndAddView(vec);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		
+//		if(setupViewsOnce){
+//			try{
+//				ResizeConfig rc;
+//				LayoutParams lp;
+//				ViewElementConfig elementConfig;
+//				View view;
+//			    
+//			    rc = new ResizeConfig();
+//			    rc.maxHeight=745;
+//			    rc.minHeight=50;
+//			    rc.maxWidth=400;
+//			    rc.minWidth=30;
+//			    lp = new LayoutParams(100, 100, 50,200);
+//			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
+//			    view = tDesktopViewManager.createAndAddView(elementConfig);
+//			    view.setBackgroundColor(Color.CYAN);
+//			    
+//			    rc = new ResizeConfig();
+//			    rc.keepRatio=false;
+//			    rc.maxHeight=700;
+//			    rc.minHeight=10;
+//			    rc.maxWidth=900;
+//			    rc.minWidth=10;
+//			    lp = new LayoutParams(50, 50, 250, 200);
+//			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
+//			    view = tDesktopViewManager.createAndAddView(elementConfig);
+//			    view.setBackgroundColor(Color.RED);
+//			    
+//			    rc = new ResizeConfig();
+//			    rc.keepRatio=true;
+//			    rc.maxHeight=900;
+//			    rc.minHeight=90;
+//			    rc.maxWidth=500;
+//			    rc.minWidth=50;
+//			    lp = new LayoutParams(70, 70, 400, 200);
+//			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
+//			    view = tDesktopViewManager.createAndAddView(elementConfig);
+//			    view.setBackgroundColor(Color.LTGRAY);
+//
+//			    rc = new ResizeConfig();
+//			    rc.keepRatio=true;
+//			    rc.maxHeight=500;
+//			    rc.minHeight=50;
+//			    rc.maxWidth=500;
+//			    rc.minWidth=50;
+//			    lp = new LayoutParams(380, 380 , 100, 300);
+//			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
+//	
+//			    Circle circleView = (Circle) tDesktopViewManager.createAndAddView(elementConfig);
+//			    circleView.getProtocolMap().put(RCConstants.CHANNEL_H, "3");
+//			    circleView.getProtocolMap().put(RCConstants.CHANNEL_V, "2");
+//			    circleView.updateProtocolMap();
+//			    
+//			    lp = new LayoutParams(380, 380 , 600, 300);
+//			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
+//			    circleView = (Circle)tDesktopViewManager.createAndAddView(elementConfig);
+//			    circleView.getProtocolMap().put(RCConstants.CHANNEL_H, "0");
+//			    circleView.getProtocolMap().put(RCConstants.CHANNEL_V, "1");
+//			    circleView.updateProtocolMap();
+//	
+//			}catch(Exception e){
+//				e.printStackTrace();
+//			}
 		    
 		    setupViewsOnce = false;
-		}
+//		}
 	}
 	
 	public IDesktopViewManager getDesktopViewManager(){
