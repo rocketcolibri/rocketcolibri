@@ -319,8 +319,16 @@ public final class Circle extends RCWidget {
 
 	@Override
 	public void updateProtocolMap() {
-		tChannelH = Integer.parseInt(protocolMap.get(RCConstants.CHANNEL_H));
-		tChannelV = Integer.parseInt(protocolMap.get(RCConstants.CHANNEL_V));
+		tChannelH = getInt(RCConstants.CHANNEL_H);
+		tChannelV = getInt(RCConstants.CHANNEL_V);
+	}
+	
+	private int getInt(String key){
+		try{
+			return Integer.parseInt(protocolMap.get(key));
+		}catch(NumberFormatException e){
+			return -1;
+		}
 	}
 
 	@Override

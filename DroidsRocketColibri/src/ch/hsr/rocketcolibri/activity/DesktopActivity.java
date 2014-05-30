@@ -140,7 +140,7 @@ public class DesktopActivity extends RCActivity{
 	 * Finds all the views we need and configure them to send click events to the activity.
 	 */
 	private void setupViews(){
-		
+		if(setupViewsOnce){
 		RCModel model = rcService.getRocketColibriDB().fetchRCModelByName("Test Model");
 		for(ViewElementConfig vec : model.getViewElementConfigs()){
 			try {
@@ -151,7 +151,7 @@ public class DesktopActivity extends RCActivity{
 			}
 		}
 		
-//		if(setupViewsOnce){
+//		
 //			try{
 //				ResizeConfig rc;
 //				LayoutParams lp;
@@ -216,7 +216,7 @@ public class DesktopActivity extends RCActivity{
 //			}
 		    
 		    setupViewsOnce = false;
-//		}
+		}
 	}
 	
 	public IDesktopViewManager getDesktopViewManager(){
