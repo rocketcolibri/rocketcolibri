@@ -52,10 +52,10 @@ public class RocketColibriDatabaseTest extends AndroidTestCase {
     	List<ViewElementConfig> tElementConfigList = new ArrayList<ViewElementConfig>();
     	LayoutParams tLParam = new LayoutParams(100, 100, 50,200);
 
-	    tRConfig.setMaxHeight(745);
-	    tRConfig.setMinHeight(50);
-	    tRConfig.setMaxWidth(400);
-	    tRConfig.setMinWidth(30);
+	    tRConfig.maxHeight = 745;
+	    tRConfig.minHeight = 50;
+	    tRConfig.maxWidth =400;
+	    tRConfig.minWidth = 30;
 
 	    ViewElementConfig elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", tLParam, tRConfig); 
 		tElementConfigList.add(elementConfig);
@@ -78,11 +78,11 @@ public class RocketColibriDatabaseTest extends AndroidTestCase {
     	List<ViewElementConfig> tElementConfigList = new ArrayList<ViewElementConfig>();
     	LayoutParams tLParam = new LayoutParams(50, 20, 50,200);
 
-	    tRConfig.setMaxHeight(500);
-	    tRConfig.setMinHeight(50);
-	    tRConfig.setMaxWidth(300);
-	    tRConfig.setMinWidth(30);
-
+    	tRConfig.maxHeight = 500;
+	    tRConfig.minHeight = 50;
+	    tRConfig.maxWidth =300;
+	    tRConfig.minWidth = 30;
+	    
 	    ViewElementConfig elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", tLParam, tRConfig); 
 		tElementConfigList.add(elementConfig);
 

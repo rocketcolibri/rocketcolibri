@@ -40,8 +40,8 @@ at(s.DISC, 	s.TRY_CONN, 	null,	 		null, 					null, 					null, 				null, 				null
 at(s.TRY_CONN,null, 		s.DISC, 		s.CONN_OBSERVE, 		s.CONN_LCK_OUT, 		null,				null,				null,				s.TRY_CONN);
 at(s.CONN_OBSERVE, null, 	s.DISC, 		null, 					s.CONN_LCK_OUT, 		null,				s.CONN_TRY_CONTROL,	null,				s.TRY_CONN);
 at(s.CONN_LCK_OUT, null, 	s.DISC,			s.CONN_OBSERVE,			null,					null,				null,				null,				s.TRY_CONN);
-//at(s.CONN_TRY_ACT, null, 	s.DISC, 		null, 					s.CONN_LCK_OUT,			s.CONN_ACT,			null,				s.TRY_CONN,			s.TRY_CONN);
-at(s.CONN_TRY_CONTROL, null,s.DISC, 		s.CONN_CONTROL, 		s.CONN_LCK_OUT,			s.CONN_CONTROL,		null,				s.TRY_CONN,			s.TRY_CONN);
+at(s.CONN_TRY_CONTROL, null,s.DISC, 		null, 					s.CONN_LCK_OUT,			s.CONN_CONTROL,		null,				s.TRY_CONN,			s.TRY_CONN);
+//at(s.CONN_TRY_CONTROL, null,s.DISC, 		s.CONN_CONTROL, 		s.CONN_LCK_OUT,			s.CONN_CONTROL,		null,				s.TRY_CONN,			s.TRY_CONN);
 at(s.CONN_CONTROL, null, 	s.DISC, 		null, 					null, 					null, 				null, 				s.TRY_CONN,			null);
 // @formatter:on
 

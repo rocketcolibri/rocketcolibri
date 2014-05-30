@@ -46,15 +46,23 @@ public class RocketColibriMessageTelemetry extends RocketColibriMessage {
 		}
 		
 		// read the telemetry data
-		ja = jObject.getJSONArray("telemetry");
-		if(null != ja)	{
-			for (int i = 0; i < ja.length(); i++) {
-				
-				if(ja.getJSONObject(i).getString("type").equals("video")) {
-					tVideoUrl.setVideoUrl(ja.getJSONObject(i).getString("value"));
+		try
+		{
+			ja = jObject.getJSONArray("telemetry");
+			if(null != ja)	{
+				for (int i = 0; i < ja.length(); i++) {
+					
+					if(ja.getJSONObject(i).getString("type").equals("video")) {
+						tVideoUrl.setVideoUrl(ja.getJSONObject(i).getString("value"));
+					}
 				}
-			}
+			}	
 		}
+		catch (JSONException e) 
+		{
+			// no telemetry data available
+		}
+
 	} 
 	
 	public RcOperator getActiveUser(){
