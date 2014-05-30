@@ -8,12 +8,13 @@ import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.VideoUrl;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
 public class VideoStreamWidget extends RCWidget {
 
-	
+	static final String TAG = "VideoStreamWidget";
     private VideoStreamWidgetSurface tVideoSurfaceView;
     
     RelativeLayout tRel;
@@ -39,10 +40,14 @@ public class VideoStreamWidget extends RCWidget {
 	/**
 	 * RocketColibriService sends UiSink change notification with this methods
 	 * The Object class depends on the return value of getType
-	 * @param data
+	 * The media player is capable to play RTSP video streams.
+	 * @param data (VideoUrl)
 	 */
 	public void onNotifyUiOutputSink(Object data) {
-		tVideoSurfaceView.setVideoUrl(((VideoUrl)data).getVideoUrl());
+		if(((VideoUrl)data).getVideoUrl().startsWith("rtsp://")) {
+			Log.d(TAG, "start stream " + ((VideoUrl)data).getVideoUrl());			
+			tVideoSurfaceView.setVideoUrl(((VideoUrl)data).getVideoUrl());
+		}
 	}
 	
 	/**

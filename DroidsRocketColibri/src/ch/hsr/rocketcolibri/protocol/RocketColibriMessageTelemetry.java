@@ -9,14 +9,17 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
+import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.VideoUrl;
 
 public class RocketColibriMessageTelemetry extends RocketColibriMessage {
 	final String TAG = this.getClass().getName();		
 	private RcOperator tActiveuser = new RcOperator();
 	private List<RcOperator> tPassivuser = new ArrayList<RcOperator>() ;
 	private int tSequence;
+	private VideoUrl tVideoUrl = new VideoUrl();
 	
 	public RocketColibriMessageTelemetry(JSONObject jObject) throws JSONException	{
 		// read sequence number
@@ -42,6 +45,16 @@ public class RocketColibriMessageTelemetry extends RocketColibriMessage {
 				this.tPassivuser.removeAll(tPassivuser);
 		}
 		
+		// read the telemetry data
+		ja = jObject.getJSONArray("telemetry");
+		if(null != ja)	{
+			for (int i = 0; i < ja.length(); i++) {
+				
+				if(ja.getJSONObject(i).getString("type").equals("video")) {
+					tVideoUrl.setVideoUrl(ja.getJSONObject(i).getString("value"));
+				}
+			}
+		}
 	} 
 	
 	public RcOperator getActiveUser(){
@@ -71,7 +84,7 @@ public class RocketColibriMessageTelemetry extends RocketColibriMessage {
 
 	@Override
 	public void sendUpdateUiSinkAndSendEvents(RocketColibriService service) {
-		service.tVdeoUrl.setVideoUrl("rtsp://192.168.200.1:8554/unicast");
+		service.tVdeoUrl.setVideoUrl(tVideoUrl.getVideoUrl());
 		
 		service.tUsers.setConnectedUsers(this.tActiveuser, this.tPassivuser);
 		if(null == this.tActiveuser)

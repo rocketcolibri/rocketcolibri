@@ -39,6 +39,7 @@ public class RocketColibriProtocol
 	public static final String ActionTelemetryUpdate = "protocol.updatetelemetry";
 
 	
+	
 	private RocketColibriProtocolFsm fsm;
 	private RocketColibriService service;
 	final String TAG = this.getClass().getName();
