@@ -91,6 +91,16 @@ public abstract class RCActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		RocketColibriDefaults.setDefaultViewSettings(getWindow().getDecorView().getRootView());
+		getWindow().getDecorView()
+        .setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                	RocketColibriDefaults.setDefaultViewSettings(getWindow().getDecorView());
+                }
+            }
+        });
 	}
 
 	@Override
