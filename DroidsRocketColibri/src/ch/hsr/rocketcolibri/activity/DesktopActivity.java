@@ -41,9 +41,6 @@ public class DesktopActivity extends RCActivity{
 	SurfaceHolder.Callback sh_callback = null;
 	private IDesktopViewManager tDesktopViewManager;
 	
-	private ConnectionStatusWidget connectionStatusWidget;
-	private ConnectedUserInfoWidget telemetryWidget;
-	private VideoStreamWidget tVideoStreamWidget;
 	public static final boolean Debugging = false;
 	private DesktopMenu tDesktopMenu;
 	private OnChannelChangeListener tControlModusListener = new OnChannelChangeListener() {
@@ -186,37 +183,6 @@ public class DesktopActivity extends RCActivity{
 			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
 			    view = tDesktopViewManager.createAndAddView(elementConfig);
 			    view.setBackgroundColor(Color.LTGRAY);
-
-			    rc = new ResizeConfig();
-			    rc.maxHeight=300;
-			    rc.minHeight=50;
-			    rc.maxWidth=800;
-			    rc.minWidth=100;
-			    lp = new LayoutParams(600, 100 , 100, 0);
-			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget", lp, rc);
-			    this.telemetryWidget = (ConnectedUserInfoWidget) tDesktopViewManager.createAndAddView(elementConfig);
-			    this.telemetryWidget.setBackgroundColor(Color.CYAN);
-			    this.telemetryWidget.setAlpha((float) .5);
-			    
-			    rc = new ResizeConfig();
-			    rc.maxHeight=150;
-			    rc.minHeight=50;
-			    rc.maxWidth=150;
-			    rc.minWidth=50;
-			    lp = new LayoutParams(100, 100 , 0, 0);
-			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget", lp, rc);
-			    this.connectionStatusWidget = (ConnectionStatusWidget) tDesktopViewManager.createAndAddView(elementConfig);
-			    this.connectionStatusWidget.setAlpha(1);
-
-			    rc = new ResizeConfig();
-			    rc.maxHeight=600;
-			    rc.minHeight=100;
-			    rc.maxWidth=800;
-			    rc.minWidth=200;
-			    lp = new LayoutParams(400, 300 , 100, 100);
-			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.VideoStreamWidget", lp, rc);
-			    this.tVideoStreamWidget = (VideoStreamWidget) tDesktopViewManager.createAndAddView(elementConfig);
-			    this.tVideoStreamWidget.setAlpha(1);
 
 			    rc = new ResizeConfig();
 			    rc.keepRatio=true;

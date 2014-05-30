@@ -11,6 +11,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RcOperator;
@@ -25,6 +29,7 @@ import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.UserData;
  */
 public class ConnectedUserInfoWidget extends RCWidget 
 {
+	
 	private Paint tUserBitmapPaint;
 	private Bitmap tObserverBitmap;
 	private Bitmap tControlBitmap;
@@ -33,6 +38,11 @@ public class ConnectedUserInfoWidget extends RCWidget
 	static final int tFontSize = 20;
 	static final int tLineSpace = 4;
 	static final int tBorderSize = 10;
+    private Paint tRectPaint;
+    private Rect tRectRect;
+    private RectF tRectRectF;
+    
+
 	private UserData tUserData;
 	
 	public ConnectedUserInfoWidget(Context context, ViewElementConfig elementConfig) {
@@ -41,8 +51,15 @@ public class ConnectedUserInfoWidget extends RCWidget
 	}
 	
 	private void init(Context context, AttributeSet attrs) {
+		tRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		tRectPaint.setColor(Color.WHITE);
+		tRectPaint.setAlpha(100);
+		tRectRect = new Rect();
+		tRectRectF  = new RectF();
+		
 		tTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		tTextPaint.setColor(Color.BLACK);
+		tTextPaint.setColor(Color.WHITE);
+		tTextPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XOR));
 		tTextPaint.setTextSize(tFontSize);
 		tObserverBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_connected), tFontSize, tFontSize, true);	
 		tControlBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_control), tFontSize, tFontSize, true);
@@ -88,6 +105,16 @@ public class ConnectedUserInfoWidget extends RCWidget
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
+		// draw background rectangle
+		tRectRect.set(0, 0, canvas.getWidth(),canvas.getHeight());
+		tRectRectF.set(tRectRect);
+		canvas.drawRoundRect( tRectRectF, 10f,10f, tRectPaint);
+		
+		// draw bitmap
+		int size = Math.min(canvas.getHeight(),canvas.getWidth());
+		canvas.drawBitmap(resizeBitmap(this.tUsersBitmap,size,size), canvas.getWidth()-size, 0, null);
+		
+		// draw text
 		if(null != tUserData) {
 			int line = 0;
 			if(null != tUserData.getActiveUser()) {
@@ -98,10 +125,6 @@ public class ConnectedUserInfoWidget extends RCWidget
 				drawUserLine(canvas, line++, tObserverBitmap, user);
 			}
 		}
-		
-		int size = Math.min(canvas.getHeight(),canvas.getWidth());
-		canvas.drawBitmap(resizeBitmap(this.tUsersBitmap,size,size), canvas.getWidth()-size, 0, null);
-		
 		super.onDraw(canvas);
 	}
 
