@@ -27,21 +27,23 @@ import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.ConnectionState;
  * 
  *  The status of the connection is indicated with a icon according to the Systemschnittstellen document 
  */
-public class ConnectionStatusWidget extends RCWidget
-{
+public class ConnectionStatusWidget extends RCWidget {
 	private RectF connectionIconRect;
 	private Paint connectionIconPaint;
 	private Bitmap connectionIconBitmap;
 	
 	
-	public ConnectionStatusWidget(Context context, ViewElementConfig elementConfig) 
-	{
+	public ConnectionStatusWidget(Context context, ViewElementConfig elementConfig) {
 		super(context, elementConfig);
 		init(context, null);
 	}
 	
-	private void init(Context context, AttributeSet attrs) 
-	{
+	public ConnectionStatusWidget(Context context, RCWidgetConfig widgetConfig) {
+		super(context, widgetConfig);
+		init(context, null);
+	}
+	
+	private void init(Context context, AttributeSet attrs) {
 		connectionIconRect = new RectF(0.0f, 0.0f, 1.0f, 1.0f);
 		connectionIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_disconneted);
 		BitmapShader paperShader = new BitmapShader(connectionIconBitmap, Shader.TileMode.MIRROR, Shader.TileMode.MIRROR);
@@ -55,8 +57,7 @@ public class ConnectionStatusWidget extends RCWidget
 	}
 	
 	@Override
-	protected void onDraw(Canvas canvas) 
-	{
+	protected void onDraw(Canvas canvas) {
 		float scale = (float) getWidth();
 		canvas.save(Canvas.MATRIX_SAVE_FLAG);
 		canvas.scale(scale, scale);
@@ -101,6 +102,12 @@ public class ConnectionStatusWidget extends RCWidget
 	public UiOutputDataType getType()
 	{
 		return UiOutputDataType.ConnectionState;
+	}
+	
+	@Override
+	public void updateProtocolMap() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	public static ViewElementConfig getDefaultViewElementConfig() {

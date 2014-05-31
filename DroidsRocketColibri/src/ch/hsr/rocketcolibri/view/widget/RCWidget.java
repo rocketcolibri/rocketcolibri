@@ -7,7 +7,6 @@ import java.util.Map;
 
 import android.app.Service;
 import android.content.Context;
-import android.util.AttributeSet;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
@@ -16,21 +15,23 @@ import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 /**
  * Describes the interface between a widget and the RocketColibriService
  */
-public class RCWidget extends CustomizableView {
+public abstract class RCWidget extends CustomizableView {
+	protected RCWidgetConfig tWidgetConfig;
 	protected OnTouchListener tCustomizeModusListener;
 	
-	public RCWidget(Context context, AttributeSet attrs) {
-		super(context, attrs);
+	/**This Constructor will be called on loading the whole Model at startup*/
+	public RCWidget(Context context, RCWidgetConfig rcWidgetConfig){
+		this(context, rcWidgetConfig.viewElementConfig);
+		tWidgetConfig = rcWidgetConfig;
+		updateProtocolMap();
 	}
 	
-    public RCWidget(Context context, ViewElementConfig cElementConfig) {
-		super(context, cElementConfig);
+	/**This Constructor will be called on runtime in customize Mode by creating a new Widget*/
+    public RCWidget(Context context, ViewElementConfig vElementConfig) {
+		super(context, vElementConfig);
+		tWidgetConfig = new RCWidgetConfig(null, vElementConfig);
 	}
 
-	public RCWidget(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-	}
-	
 	/** should be overridden from the child */
 	public void setControlModusListener(OnChannelChangeListener channelListener) {}
 	
@@ -41,14 +42,25 @@ public class RCWidget extends CustomizableView {
 		setOnTouchListener(tCustomizeModusListener);
 	}
 	
-	/** should be overridden from the child */
-	public Map<String, String> getProtocolMap(){
-		return null;
+	public RCWidgetConfig getWidgetConfig(){
+		tWidgetConfig.viewElementConfig = getViewElementConfig();
+		return tWidgetConfig;
 	}
 	
-	/** should be overridden from the child */
-	public void updateProtocolMap(){
+	public Map<String, String> getProtocolMap(){
+		return tWidgetConfig.protocolMap;
 	}
+	
+	public void setProtocolMap(Map<String, String> protocolMap){
+		tWidgetConfig.protocolMap = protocolMap;
+		updateProtocolMap();
+	}
+	
+	/** Will be called bei the RCWidget itself if the RCWidgetConfig Constuctor is called
+	 *  or if setProtocolMap is called.
+	 *  If the protocolMap will change by calling getProtocolMap then updateProtocolMap should
+	 *  called manually */
+	public abstract void updateProtocolMap();
 	
 	/**
 	 * RocketColibriService sends UiSink change notification with this methods

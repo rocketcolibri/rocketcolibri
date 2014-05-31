@@ -57,11 +57,20 @@ public final class Circle extends RCWidget {
 	public int diameterInDP;
 	public static final int maxChannel = 1000;
 	private static final float rimSize = 0.02f;
-	private Map<String, String> protocolMap = new HashMap<String, String>();
 	private int tChannelV = -1;
 	private int tChannelH = -1;
 	private OnChannelChangeListener tControlModusListener;
 	private MyOnTouchListener tInternalControlListener = new MyOnTouchListener();
+	
+	public Circle(Context context, RCWidgetConfig rcWidgetConfig){
+		super(context, rcWidgetConfig);
+		backgroundResource = R.drawable.cross;
+		positionInPercentX = 20;
+		positionInPercentY = 100;
+		orientationSide = "left";
+		diameterInDP = rcWidgetConfig.viewElementConfig.getLayoutParams().width;
+		init(context, null);
+	}
 	
 	public Circle(Context context, ViewElementConfig elementConfig) {
 		super(context, elementConfig);
@@ -71,16 +80,23 @@ public final class Circle extends RCWidget {
 		orientationSide = "left";
 		diameterInDP = elementConfig.getLayoutParams().width;
 		init(context, null);
+		initDefaultProtocolConfig();
 	}
 
-	public Circle(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		init(context, attrs);
-	}
-
-	public Circle(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-		init(context, attrs);
+	private void initDefaultProtocolConfig(){
+		//init protocol mapping
+		tWidgetConfig.protocolMap = new HashMap<String, String>();
+		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_H, "");
+		tWidgetConfig.protocolMap.put(RCConstants.INVERTED_H, "");
+		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE_H, "");
+		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE_H, "");
+		tWidgetConfig.protocolMap.put(RCConstants.TRIMM_H, "");
+		
+		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_V, "");
+		tWidgetConfig.protocolMap.put(RCConstants.INVERTED_V, "");
+		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE_V, "");
+		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE_V, "");
+		tWidgetConfig.protocolMap.put(RCConstants.TRIMM_V, "");
 	}
 	
 	/**
@@ -174,19 +190,6 @@ public final class Circle extends RCWidget {
 		}
 		initDrawingTools();
 		initListener();
-		
-		//init protocol mapping
-		protocolMap.put(RCConstants.CHANNEL_H, "");
-		protocolMap.put(RCConstants.INVERTED_H, "");
-		protocolMap.put(RCConstants.MAX_RANGE_H, "");
-		protocolMap.put(RCConstants.MIN_RANGE_H, "");
-		protocolMap.put(RCConstants.TRIMM_H, "");
-		
-		protocolMap.put(RCConstants.CHANNEL_V, "");
-		protocolMap.put(RCConstants.INVERTED_V, "");
-		protocolMap.put(RCConstants.MAX_RANGE_V, "");
-		protocolMap.put(RCConstants.MIN_RANGE_V, "");
-		protocolMap.put(RCConstants.TRIMM_V, "");
 	}
 	
 	private void initListener(){
@@ -313,11 +316,6 @@ public final class Circle extends RCWidget {
 	}
 
 	@Override
-	public Map<String, String> getProtocolMap() {
-		return protocolMap;
-	}
-
-	@Override
 	public void updateProtocolMap() {
 		tChannelH = getInt(RCConstants.CHANNEL_H);
 		tChannelV = getInt(RCConstants.CHANNEL_V);
@@ -325,7 +323,7 @@ public final class Circle extends RCWidget {
 	
 	private int getInt(String key){
 		try{
-			return Integer.parseInt(protocolMap.get(key));
+			return Integer.parseInt(tWidgetConfig.protocolMap.get(key));
 		}catch(NumberFormatException e){
 			return -1;
 		}

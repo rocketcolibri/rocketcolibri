@@ -6,12 +6,13 @@ package ch.hsr.rocketcolibri.db.model;
 import java.util.List;
 
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
+import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 /**
  * @author Artan Veliju
  */
 public class RCModel {
 	private String name;
-	private List<ViewElementConfig> viewElementConfigs;
+	private List<RCWidgetConfig> widgetConfigs;
 	
 	public String getName() {
 		return this.name;
@@ -21,19 +22,19 @@ public class RCModel {
 		this.name = name;
 	}
 
-	public List<ViewElementConfig> getViewElementConfigs() {
-		return viewElementConfigs;
+	public List<RCWidgetConfig> getWidgetConfigs() {
+		return widgetConfigs;
 	}
 
-	public void setViewElementConfigs(List<ViewElementConfig> viewElementConfigs) {
-		this.viewElementConfigs = viewElementConfigs;
+	public void setWidgetConfigs(List<RCWidgetConfig> viewElementConfigs) {
+		this.widgetConfigs = viewElementConfigs;
 	}
 	
 	@Override
 	public boolean equals(Object theModel) {
 		if (this.getName().equals(((RCModel)theModel).getName())) {
-			for (int i = 0; i < viewElementConfigs.size(); i++) {
-				if (!viewElementConfigs.get(i).equals(((RCModel)theModel).getViewElementConfigs().get(i))) {
+			for (int i = 0; i < widgetConfigs.size(); i++) {
+				if (!widgetConfigs.get(i).equals(((RCModel)theModel).getWidgetConfigs().get(i))) {
 					return false;
 				}
 			}

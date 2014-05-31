@@ -40,6 +40,13 @@ public class VideoStreamWidget extends RCWidget {
   	  	init(context, null);
 	}
 	
+	public VideoStreamWidget(Context context, RCWidgetConfig widgetConfig) 	{
+		super(context, widgetConfig.viewElementConfig);
+  	  	tVideoSurfaceView = new VideoStreamWidgetSurface(context);
+  	  	tVideoSurfaceView.setLayoutParams(widgetConfig.viewElementConfig.getLayoutParams());
+  	  	init(context, null);
+	}
+	
 	private void init(Context context, AttributeSet attrs) {
 		tRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		tRectPaint.setColor(Color.WHITE);
@@ -92,6 +99,12 @@ public class VideoStreamWidget extends RCWidget {
 	@Override
 	public View getOperateOverlayView() {
 		return tVideoSurfaceView;
+	}
+	
+	@Override
+	public void updateProtocolMap() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	public static ViewElementConfig getDefaultViewElementConfig() {

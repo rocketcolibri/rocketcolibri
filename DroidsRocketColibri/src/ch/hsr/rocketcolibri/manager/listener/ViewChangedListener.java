@@ -3,11 +3,13 @@
  */
 package ch.hsr.rocketcolibri.manager.listener;
 
-import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
+import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 
 /**
  * @author Artan Veliju
  */
 public interface ViewChangedListener {
-	void onViewChange(ViewElementConfig viewElementConfig);
+	void onViewAdd(RCWidgetConfig widgetConfig);
+	void onViewChange(RCWidgetConfig widgetConfig);
+	void onViewDelete(RCWidgetConfig widgetConfig);
 }

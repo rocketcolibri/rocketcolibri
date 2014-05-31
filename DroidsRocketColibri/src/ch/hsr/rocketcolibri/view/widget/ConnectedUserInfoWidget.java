@@ -27,8 +27,7 @@ import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.UserData;
 /**
  * @short widget to display the user data received from the ServoController 
  */
-public class ConnectedUserInfoWidget extends RCWidget 
-{
+public class ConnectedUserInfoWidget extends RCWidget {
 	
 	private Paint tUserBitmapPaint;
 	private Bitmap tObserverBitmap;
@@ -47,6 +46,11 @@ public class ConnectedUserInfoWidget extends RCWidget
 	
 	public ConnectedUserInfoWidget(Context context, ViewElementConfig elementConfig) {
 		super(context, elementConfig);
+		init(context, null);
+	}
+	
+	public ConnectedUserInfoWidget(Context context, RCWidgetConfig widgetConfig) {
+		super(context, widgetConfig);
 		init(context, null);
 	}
 	
@@ -148,5 +152,11 @@ public class ConnectedUserInfoWidget extends RCWidget
 	@Override
 	public UiOutputDataType getType() {
 		return UiOutputDataType.ConnectedUsers;
+	}
+
+	@Override
+	public void updateProtocolMap() {
+		// TODO Auto-generated method stub
+		
 	}
 }

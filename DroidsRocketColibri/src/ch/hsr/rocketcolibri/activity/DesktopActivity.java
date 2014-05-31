@@ -28,6 +28,7 @@ import ch.hsr.rocketcolibri.view.widget.Circle;
 import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
 import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
 import ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget;
+import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 import ch.hsr.rocketcolibri.view.widget.VideoStreamWidget;
 
 /**
@@ -35,6 +36,7 @@ import ch.hsr.rocketcolibri.view.widget.VideoStreamWidget;
  */
 public class DesktopActivity extends RCActivity{
 	private static final String TAG = "DesktopActivity";
+	private RCModel tModel;
 	private SurfaceView surface_view;
 	// private Camera mCamera;
 	SurfaceHolder.Callback sh_ob = null;
@@ -103,10 +105,20 @@ public class DesktopActivity extends RCActivity{
 		AbsoluteLayout absolutLayout = (AbsoluteLayout) findViewById(R.id.drag_layer);
 		tDesktopViewManager = new DesktopViewManager(this, rootLayer, absolutLayout, tControlModusListener, new ViewChangedListener() {
 			@Override
-			public void onViewChange(ViewElementConfig viewElementConfig) {
-				Log.d("changed", "changed");
-				//TODO 
-				//rcService.getRocketColibriDB().store(viewElementConfig);
+			public void onViewChange(RCWidgetConfig widgetConfig) {
+				rcService.getRocketColibriDB().store(widgetConfig);
+			}
+
+			@Override
+			public void onViewAdd(RCWidgetConfig widgetConfig) {
+				tModel.getWidgetConfigs().add(widgetConfig);
+				rcService.getRocketColibriDB().store(tModel);
+			}
+
+			@Override
+			public void onViewDelete(RCWidgetConfig widgetConfig) {
+				tModel.getWidgetConfigs().remove(widgetConfig);
+				rcService.getRocketColibriDB().store(tModel);
 			}
 		});
 		tDesktopMenu = tDesktopViewManager.getDesktopMenu();
@@ -141,10 +153,11 @@ public class DesktopActivity extends RCActivity{
 	 */
 	private void setupViews(){
 		if(setupViewsOnce){
-		RCModel model = rcService.getRocketColibriDB().fetchRCModelByName("Test Model");
-		for(ViewElementConfig vec : model.getViewElementConfigs()){
+		tModel = rcService.getRocketColibriDB().fetchRCModelByName("Test Model");
+		if(tModel!=null)
+		for(RCWidgetConfig vec : tModel.getWidgetConfigs()){
 			try {
-				tDesktopViewManager.createAndAddView(vec);
+				tDesktopViewManager.initCreateAndAddView(vec);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

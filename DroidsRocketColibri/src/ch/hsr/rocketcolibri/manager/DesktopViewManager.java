@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.activity.EditChannelActivity;
 import ch.hsr.rocketcolibri.manager.listener.CustomizeModusListener;
@@ -37,6 +38,7 @@ import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeController;
 import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
 import ch.hsr.rocketcolibri.view.widget.RCWidget;
+import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 
 
 /**
@@ -111,26 +113,45 @@ public class DesktopViewManager implements IDesktopViewManager{
 	}
 	
 	@Override
-	public CustomizableView createAndAddView(ViewElementConfig cElementConfig) throws Exception{
-	    CustomizableView view = createView(cElementConfig);
-	    view.setCustomizeModusListener(tCustomizeModusListener);
-	    //temporary
-	    try{((RCWidget)view).setControlModusListener(tControlModusListener);}catch(ClassCastException e){}
-	    view.setCustomizeModus(tCustomizeModus);
-	    tControlElementParentView.addView(view);
-	    if(null != tService)view.notifyServiceReady(tService);
-	    return view;
+	public RCWidget createAndAddView(ViewElementConfig vElementConfig) throws Exception{
+		RCWidget widget = createView(vElementConfig);
+		processRCWidget(widget);
+	    tViewChangeListener.onViewAdd(widget.getWidgetConfig());
+	    return widget;
 	}
 	
 	@Override
-	public CustomizableView createView(ViewElementConfig vElementConfig) throws Exception{
+	public RCWidget initCreateAndAddView(RCWidgetConfig widgetConfig) throws Exception{
+		RCWidget widget = createView(widgetConfig);
+		processRCWidget(widget);
+	    return widget;
+	}
+	
+	private void processRCWidget(RCWidget widget){
+		widget.setCustomizeModusListener(tCustomizeModusListener);
+	    try{widget.setControlModusListener(tControlModusListener);}catch(ClassCastException e){}
+	    widget.setCustomizeModus(tCustomizeModus);
+	    tControlElementParentView.addView(widget);
+	    if(null != tService)widget.notifyServiceReady(tService);
+	}
+	
+	@Override
+	public RCWidget createView(ViewElementConfig vElementConfig) throws Exception{
 	    Class<?> c = Class.forName(vElementConfig.getClassPath());
 	    Constructor<?> cons = c.getConstructor(Context.class, ViewElementConfig.class);
-	    return (CustomizableView)cons.newInstance(tContext, vElementConfig);
+	    return (RCWidget)cons.newInstance(tContext, vElementConfig);
+	}
+	
+	@Override
+	public RCWidget createView(RCWidgetConfig vElementConfig) throws Exception{
+	    Class<?> c = Class.forName(vElementConfig.viewElementConfig.getClassPath());
+	    Constructor<?> cons = c.getConstructor(Context.class, RCWidgetConfig.class);
+	    return (RCWidget)cons.newInstance(tContext, vElementConfig);
 	}
 	
 	@Override
 	public void deleteView(View view){
+		tViewChangeListener.onViewDelete(((RCWidget)view).getWidgetConfig());
 		tControlElementParentView.removeView(view);
 	}
 
@@ -198,6 +219,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 			rcw.getProtocolMap().put(key, editChannelIntent.getStringExtra(key));
 		}
 		rcw.updateProtocolMap();
+		tViewChangeListener.onViewChange(rcw.getWidgetConfig());
 	}
 	
 	private IResizeDoneListener createResizeDoneListener() {
@@ -223,7 +245,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	
 	private void viewChanged(View view){
 		try{
-			tViewChangeListener.onViewChange(((CustomizableView)view).getViewElementConfig());
+			tViewChangeListener.onViewChange(((RCWidget)view).getWidgetConfig());
 		}catch(Exception e){
 		}
 	}
