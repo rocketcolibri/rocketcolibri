@@ -1,7 +1,9 @@
 package ch.hsr.rocketcolibri.view.widget;
 
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
+import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
@@ -31,34 +33,45 @@ public class VideoStreamWidget extends RCWidget {
     private RectF tRectRectF;
     
     RelativeLayout tRel;
-	
+    private AbsoluteLayout tParent;
 	
 	public VideoStreamWidget(Context context, ViewElementConfig elementConfig) 	{
 		super(context, elementConfig);
-  	  	tVideoSurfaceView = new VideoStreamWidgetSurface(context);
-  	  	tVideoSurfaceView.setLayoutParams(elementConfig.getLayoutParams());
-  	  	init(context, null);
+		init(context, null);
 	}
 	
 	public VideoStreamWidget(Context context, RCWidgetConfig widgetConfig) 	{
 		super(context, widgetConfig.viewElementConfig);
-  	  	tVideoSurfaceView = new VideoStreamWidgetSurface(context);
-  	  	tVideoSurfaceView.setLayoutParams(widgetConfig.viewElementConfig.getLayoutParams());
   	  	init(context, null);
 	}
 	
 	private void init(Context context, AttributeSet attrs) {
+  	  	tVideoSurfaceView = new VideoStreamWidgetSurface(context);
+  	  	tVideoSurfaceView.setLayoutParams(new android.view.ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		tRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		tRectPaint.setColor(Color.WHITE);
 		tRectPaint.setAlpha(100);
 		tRectRect = new Rect();
 		tRectRectF  = new RectF();
 		tVideoBitmap =  BitmapFactory.decodeResource(getContext().getResources(), R.drawable.video_camera);
+		setModusChangeListener(new ModusChangeListener() {
+			@Override
+			public void customizeModeDeactivated() {
+				tParent.addView(tVideoSurfaceView, 0);
+			}
+			
+			@Override
+			public void customizeModeActivated() {
+				tParent.removeView(tVideoSurfaceView);
+			}
+		});
 	}
 	
 	@Override
-	protected void onLayout (boolean changed, int left, int top, int right, int bottom)	{	
-		tVideoSurfaceView.setLayoutParams(this.getLayoutParams());
+	protected void onAttachedToWindow() {
+		tParent = (AbsoluteLayout) this.getParent();
+		tParent.addView(tVideoSurfaceView, 0);
+		super.onAttachedToWindow();
 	}
 	
 	@Override
@@ -104,7 +117,6 @@ public class VideoStreamWidget extends RCWidget {
 	@Override
 	public void updateProtocolMap() {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	public static ViewElementConfig getDefaultViewElementConfig() {
