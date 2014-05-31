@@ -20,6 +20,7 @@ import ch.hsr.rocketcolibri.view.widget.Circle;
 import ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget;
 import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
 import ch.hsr.rocketcolibri.view.widget.RCWidget;
+import ch.hsr.rocketcolibri.view.widget.SwitchWidget;
 import ch.hsr.rocketcolibri.view.widget.VideoStreamWidget;
 import ch.hsr.rocketcolibri.widgetdirectory.IUiOutputSinkChangeObservable;
 import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
@@ -109,6 +110,7 @@ public class RocketColibriService extends Service implements IUiOutputSinkChange
 		this.tWidgetDirectory.add(new WidgetEntry("Connection Status", ConnectionStatusWidget.class.getName(), ConnectionStatusWidget.getDefaultViewElementConfig()));
 		this.tWidgetDirectory.add(new WidgetEntry("User Info", ConnectedUserInfoWidget.class.getName(), ConnectedUserInfoWidget.getDefaultViewElementConfig()));
 		this.tWidgetDirectory.add(new WidgetEntry("Video Stream", VideoStreamWidget.class.getName(), VideoStreamWidget.getDefaultViewElementConfig()));
+		this.tWidgetDirectory.add(new WidgetEntry("Switch", SwitchWidget.class.getName(), SwitchWidget.getDefaultViewElementConfig()));
 
 		// observer map
 		tUiOutputSinkChangeObserver = new HashMap<UiOutputDataType, List<RCWidget>>();

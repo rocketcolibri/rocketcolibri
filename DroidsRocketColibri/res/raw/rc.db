@@ -75,6 +75,38 @@
                 "id": 0,
                 "alpha": 0.5
             }
+        }, {
+            "protocolMap": {
+                "rc_max_range_v": "",
+                "rc_inverted_v": "",
+                "rc_trimm_h": "",
+                "rc_trimm_v": "",
+                "rc_inverted_h": "1",
+                "rc_min_range_v": "",
+                "rc_min_range_h": "",
+                "rc_max_range_h": "",
+                "rc_channel_h": "3",
+                "rc_channel_v": ""
+            },
+            "viewElementConfig": {
+                "resizeConfig": {
+                    "keepRatio": true,
+                    "maxHeight": 300,
+                    "maxWidth": 800,
+                    "minHeight": 34,
+                    "minWidth": 137
+                },
+                "classPath": "ch.hsr.rocketcolibri.view.widget.SwitchWidget",
+                "layoutParams": {
+                    "layoutAnimationParameters": null,
+                    "height": 34,
+                    "width": 137,
+                    "x": 1100,
+                    "y": 340
+                },
+                "id": 0,
+                "alpha": 0.5
+            }
         }]
     },
     "process": "insert"
