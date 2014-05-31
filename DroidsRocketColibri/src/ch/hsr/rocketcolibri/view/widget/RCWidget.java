@@ -29,7 +29,7 @@ public abstract class RCWidget extends CustomizableView {
 	/**This Constructor will be called on runtime in customize Mode by creating a new Widget*/
     public RCWidget(Context context, ViewElementConfig vElementConfig) {
 		super(context, vElementConfig);
-		tWidgetConfig = new RCWidgetConfig(null, vElementConfig);
+		tWidgetConfig = new RCWidgetConfig(vElementConfig);
 	}
 
 	/** should be overridden from the child */
