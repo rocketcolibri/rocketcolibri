@@ -24,6 +24,7 @@ public interface IDesktopViewManager {
 	RCWidget initCreateAndAddView(RCWidgetConfig widgetConfig) throws Exception;
 	RCWidget createView(ViewElementConfig vElementConfig) throws Exception;
 	RCWidget createView(RCWidgetConfig rcWidgetConfig) throws Exception;
+	void viewChanged(View view);
 	void deleteView(View view);
 	boolean isInCustomizeModus();
 	void switchCustomieModus();

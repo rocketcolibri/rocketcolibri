@@ -243,7 +243,8 @@ public class DesktopViewManager implements IDesktopViewManager{
 		};
 	}
 	
-	private void viewChanged(View view){
+	@Override
+	public void viewChanged(View view){
 		try{
 			tViewChangeListener.onViewChange(((RCWidget)view).getWidgetConfig());
 		}catch(Exception e){

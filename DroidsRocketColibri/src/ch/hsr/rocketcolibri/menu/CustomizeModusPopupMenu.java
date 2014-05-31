@@ -80,7 +80,9 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		
 		alphaChangeSlider = (SeekBar)findViewById(R.id.alphaSlider);
 		alphaChangeSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-			public void onStopTrackingTouch(SeekBar seekBar) {}
+			public void onStopTrackingTouch(SeekBar seekBar) {
+				tDesktopViewManager.viewChanged(tTargetView);
+			}
 			public void onStartTrackingTouch(SeekBar seekBar) {}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				tTargetView.setAlpha(progress/100f);
