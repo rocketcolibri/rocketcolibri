@@ -15,6 +15,7 @@ import android.graphics.Shader;
 import android.view.View;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
+import ch.hsr.rocketcolibri.channel.Channel;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
@@ -24,7 +25,8 @@ public class SwitchWidget extends RCWidget {
 	private RectF switchIconRect;
 	private Paint switchIconPaint;
 	private Bitmap switchIconBitmap;
-	private int tChannelH = -1;
+	private Channel tChannelH = new Channel();
+	private int bitmapResource;
 	private int tPosition = 0;
 	private OnChannelChangeListener tControlModusListener;
 	private Map<String, String> protocolMap = new HashMap<String, String>();
@@ -32,16 +34,18 @@ public class SwitchWidget extends RCWidget {
 
 	public SwitchWidget(Context context, ViewElementConfig elementConfig) {
 		super(context, elementConfig);
+		bitmapResource = R.drawable.switch_off;
 		init(context, null);
 	}
 	
 	public SwitchWidget(Context context, RCWidgetConfig widgetConfig) {
 		super(context, widgetConfig);
+		bitmapResource = R.drawable.switch_off;
 		init(context, null);
 	}
 	
 	private boolean isChannelValid(){
-		return tChannelH>-1;
+		return tChannelH.getDefaultChannelValue() > -1;
 	}
 
 	OnClickListener onclicklistener = new OnClickListener() {
@@ -50,31 +54,25 @@ public class SwitchWidget extends RCWidget {
 	    public void onClick(View v) {
 	    	if (switchSetOn) {
 	    		switchSetOn = false;
+	    		bitmapResource = R.drawable.switch_off;
 	    		tPosition = 0;
 	        }
 	    	else {
 	    		switchSetOn = true;
+	    		bitmapResource = R.drawable.switch_on;
 	    		tPosition = 1;
 	    	}
 	    	setSwitchState();
 	    	
 	    	if (isChannelValid()) {
-	    		tControlModusListener.onChannelChange(tChannelH, tPosition);
+	    		tControlModusListener.onChannelChange(tChannelH.getDefaultChannelValue(), tPosition);
 	    	}
 	    }
 	};
 
 	private void init(Context context, Object object) {
 		switchIconRect = new RectF(0.0f, 0.0f, 1.0f, 1.0f);
-		switchIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.switch_off);
-		BitmapShader paperShader = new BitmapShader(switchIconBitmap, Shader.TileMode.MIRROR, Shader.TileMode.MIRROR);
-		Matrix paperMatrix = new Matrix();
-		paperMatrix.setScale(1.0f / switchIconBitmap.getWidth(), 1.0f / switchIconBitmap.getHeight());
-		paperShader.setLocalMatrix(paperMatrix);
-		switchIconPaint = new Paint();
-		switchIconPaint.setFilterBitmap(false);
-		switchIconPaint.setStyle(Paint.Style.FILL);
-		switchIconPaint.setShader(paperShader);
+		this.createWidget();
 
 		this.setOnClickListener(onclicklistener);
 
@@ -110,7 +108,15 @@ public class SwitchWidget extends RCWidget {
 
 	@Override
 	public void updateProtocolMap() {
-		tChannelH = getInt(RCConstants.CHANNEL_H);
+		try{
+			tChannelH.setDefaultChannelValue(getInt(RCConstants.CHANNEL_H));
+			tChannelH.setInverted(getBoolean(RCConstants.INVERTED_H));
+			tChannelH.setMaxRange(getInt(RCConstants.MAX_RANGE_H));
+			tChannelH.setMinRange(getInt(RCConstants.MIN_RANGE_H));
+			tChannelH.setTrimm(getInt(RCConstants.TRIMM_H));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 
 	private int getInt(String key){
@@ -121,20 +127,27 @@ public class SwitchWidget extends RCWidget {
 		}
 	}
 
+	public boolean getBoolean(String key){
+		try{
+			return Boolean.parseBoolean(tWidgetConfig.protocolMap.get(key));
+		}catch(Exception e){
+			return false;
+		}
+	}
+
 	@Override
 	public int getNumberOfChannelListener() {
 		return 1; 
 	}
 
 	private void setSwitchState() {
-    	if (switchSetOn) {
-    		switchIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.switch_on);
-    	}
-    	else {
-    		switchIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.switch_off);    		
-    	}
+		this.createWidget();
+		postInvalidate();
+	}
 
-    	BitmapShader paperShader = new BitmapShader(switchIconBitmap, Shader.TileMode.MIRROR, Shader.TileMode.MIRROR);
+	private void createWidget() {
+		switchIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), bitmapResource);
+		BitmapShader paperShader = new BitmapShader(switchIconBitmap, Shader.TileMode.MIRROR, Shader.TileMode.MIRROR);
 		Matrix paperMatrix = new Matrix();
 		paperMatrix.setScale(1.0f / switchIconBitmap.getWidth(), 1.0f / switchIconBitmap.getHeight());
 		paperShader.setLocalMatrix(paperMatrix);
@@ -142,7 +155,6 @@ public class SwitchWidget extends RCWidget {
 		switchIconPaint.setFilterBitmap(false);
 		switchIconPaint.setStyle(Paint.Style.FILL);
 		switchIconPaint.setShader(paperShader);
-		postInvalidate();
 	}
 
 	public static ViewElementConfig getDefaultViewElementConfig() {
