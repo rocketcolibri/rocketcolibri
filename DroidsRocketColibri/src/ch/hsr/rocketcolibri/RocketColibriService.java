@@ -225,7 +225,7 @@ public class RocketColibriService extends Service implements IUiOutputSinkChange
 		}
 	}
 	
-	public List<WidgetEntry> getWdgetEntries(){
+	public List<WidgetEntry> getWidgetEntries(){
 		return tWidgetDirectory;
 	}
 }

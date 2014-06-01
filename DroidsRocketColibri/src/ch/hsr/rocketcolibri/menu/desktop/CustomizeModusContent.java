@@ -34,8 +34,8 @@ public class CustomizeModusContent extends ModusContent{
 	protected void onCreate(List<WidgetEntry> widgetEntries) {
 		GridLayout gLayout = (GridLayout) findViewById(R.id.widgetEntryContent);
 		CacheUtil cacheUtil = new CacheUtil(tContext);
-		int width = 300;
-		int height = 300;
+		int width = 200;
+		int height = 200;
 		for(WidgetEntry wEntry : widgetEntries){
 			try {
 				ImageView iView = new ImageView(tContext);
