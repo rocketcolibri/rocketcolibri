@@ -22,7 +22,6 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 public class VideoStreamWidget extends RCWidget {
-
 	
 	static final String TAG = "VideoStreamWidget";
     private VideoStreamWidgetSurface tVideoSurfaceView;
@@ -31,7 +30,7 @@ public class VideoStreamWidget extends RCWidget {
     private Paint tRectPaint;
     private Rect tRectRect;
     private RectF tRectRectF;
-    
+    private boolean tIsCustomzible = false;
     RelativeLayout tRel;
     private AbsoluteLayout tParent;
 	
@@ -47,21 +46,24 @@ public class VideoStreamWidget extends RCWidget {
 	
 	private void init(Context context, AttributeSet attrs) {
   	  	tVideoSurfaceView = new VideoStreamWidgetSurface(context);
-  	  	tVideoSurfaceView.setLayoutParams(new android.view.ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+  	  	tVideoSurfaceView.setLayoutParams(new android.view.ViewGroup.LayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams()));
 		tRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		tRectPaint.setColor(Color.WHITE);
 		tRectPaint.setAlpha(100);
 		tRectRect = new Rect();
 		tRectRectF  = new RectF();
 		tVideoBitmap =  BitmapFactory.decodeResource(getContext().getResources(), R.drawable.video_camera);
+		
 		setModusChangeListener(new ModusChangeListener() {
 			@Override
 			public void customizeModeDeactivated() {
-				tParent.addView(tVideoSurfaceView, 0);
+				tIsCustomzible = false;
+				tParent.addView(tVideoSurfaceView, 0, tWidgetConfig.viewElementConfig.getLayoutParams());
 			}
 			
 			@Override
 			public void customizeModeActivated() {
+				tIsCustomzible = true;
 				tParent.removeView(tVideoSurfaceView);
 			}
 		});
@@ -70,20 +72,22 @@ public class VideoStreamWidget extends RCWidget {
 	@Override
 	protected void onAttachedToWindow() {
 		tParent = (AbsoluteLayout) this.getParent();
-		tParent.addView(tVideoSurfaceView, 0);
+		tParent.addView(tVideoSurfaceView, 0, tWidgetConfig.viewElementConfig.getLayoutParams());
 		super.onAttachedToWindow();
 	}
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
 		// draw background rectangle
-		tRectRect.set(0, 0, canvas.getWidth(),canvas.getHeight());
-		tRectRectF.set(tRectRect);
-		canvas.drawRoundRect( tRectRectF, 10f,10f, tRectPaint);
-	
-		// draw bitmap
-		canvas.drawBitmap(tVideoBitmap, canvas.getWidth()/2 - tVideoBitmap.getWidth()/2 , canvas.getHeight()/2 - tVideoBitmap.getHeight()/2 , null);
-
+		if(tIsCustomzible)
+		{
+			tRectRect.set(0, 0, canvas.getWidth(),canvas.getHeight());
+			tRectRectF.set(tRectRect);
+			canvas.drawRoundRect( tRectRectF, 10f,10f, tRectPaint);
+			// draw bitmap
+			canvas.drawBitmap(tVideoBitmap, canvas.getWidth()/2 - tVideoBitmap.getWidth()/2 , canvas.getHeight()/2 - tVideoBitmap.getHeight()/2 , null);
+		}
+		
 		super.onDraw(canvas);
 	}
 	
@@ -107,11 +111,6 @@ public class VideoStreamWidget extends RCWidget {
 	@Override
 	public UiOutputDataType getType() {
 		return UiOutputDataType.Video;
-	}
-
-	@Override
-	public View getOperateOverlayView() {
-		return tVideoSurfaceView;
 	}
 	
 	@Override
