@@ -71,6 +71,7 @@ public final class Circle extends RCWidget {
 		orientationSide = "left";
 		diameterInDP = rcWidgetConfig.viewElementConfig.getLayoutParams().width;
 		init(context, null);
+		updateProtocolMap();
 	}
 	
 	public Circle(Context context, ViewElementConfig elementConfig) {
@@ -320,6 +321,7 @@ public final class Circle extends RCWidget {
 	public void updateProtocolMap() {
 		Log.d("tWidgetConfig.protocolMap", ""+tWidgetConfig.protocolMap);
 		try{
+			Log.d("should be null", ""+tWidgetConfig.protocolMap.get(RCConstants.CHANNEL_H));
 			Log.d("", ""+getInt(RCConstants.CHANNEL_H));
 		tChannelH.setDefaultChannelValue(getInt(RCConstants.CHANNEL_H));
 		tChannelH.setInverted(getBoolean(RCConstants.INVERTED_H));

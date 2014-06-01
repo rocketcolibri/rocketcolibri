@@ -23,7 +23,6 @@ public abstract class RCWidget extends CustomizableView {
 	public RCWidget(Context context, RCWidgetConfig rcWidgetConfig){
 		this(context, rcWidgetConfig.viewElementConfig);
 		tWidgetConfig = rcWidgetConfig;
-		updateProtocolMap();
 	}
 	
 	/**This Constructor will be called on runtime in customize Mode by creating a new Widget*/
