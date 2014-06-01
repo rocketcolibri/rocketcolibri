@@ -46,7 +46,6 @@ public class RocketColibriDB {
 		try{
 			return  (RCModel)tOdb.getObjects(new CriteriaQuery(RCModel.class, Where.equal("name", name))).getFirst();
 		}catch(Exception e){
-			e.printStackTrace();
 			return null;
 		}
 	}

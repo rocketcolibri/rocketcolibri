@@ -8,6 +8,7 @@ import java.util.Map;
 
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
+import ch.hsr.rocketcolibri.channel.Channel;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
@@ -57,8 +58,8 @@ public final class Circle extends RCWidget {
 	public int diameterInDP;
 	public static final int maxChannel = 1000;
 	private static final float rimSize = 0.02f;
-	private int tChannelV = -1;
-	private int tChannelH = -1;
+	private Channel tChannelV = new Channel();
+	private Channel tChannelH = new Channel();
 	private OnChannelChangeListener tControlModusListener;
 	private MyOnTouchListener tInternalControlListener = new MyOnTouchListener();
 	
@@ -109,8 +110,8 @@ public final class Circle extends RCWidget {
 				Log.d("onTouchListener", 
 						String.valueOf(event.getAxisValue(MotionEvent.AXIS_Y)) + "," + 
 					    String.valueOf(event.getAxisValue(MotionEvent.AXIS_X)));
-				tControlModusListener.onChannelChange(tChannelH, eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_X)));
-				tControlModusListener.onChannelChange(tChannelV, eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_Y)));
+				tControlModusListener.onChannelChange(tChannelH.getDefaultChannelValue(), tChannelH.calculateChannelValue(eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_X))));
+				tControlModusListener.onChannelChange(tChannelV.getDefaultChannelValue(), tChannelV.calculateChannelValue(eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_Y))));
 			}catch(Exception e){
 				Toast.makeText(Circle.this.getContext(), "check your channel configuration!", Toast.LENGTH_SHORT).show();
 			}
@@ -126,7 +127,7 @@ public final class Circle extends RCWidget {
 	}
 	
 	private boolean areChannelsValid(){
-		return tChannelH>-1 || tChannelV>-1;
+		return tChannelH.getDefaultChannelValue()>-1 || tChannelV.getDefaultChannelValue()>-1;
 	}
 
 	/**
@@ -317,8 +318,23 @@ public final class Circle extends RCWidget {
 
 	@Override
 	public void updateProtocolMap() {
-		tChannelH = getInt(RCConstants.CHANNEL_H);
-		tChannelV = getInt(RCConstants.CHANNEL_V);
+		Log.d("tWidgetConfig.protocolMap", ""+tWidgetConfig.protocolMap);
+		try{
+			Log.d("", ""+getInt(RCConstants.CHANNEL_H));
+		tChannelH.setDefaultChannelValue(getInt(RCConstants.CHANNEL_H));
+		tChannelH.setInverted(getBoolean(RCConstants.INVERTED_H));
+		tChannelH.setMaxRange(getInt(RCConstants.MAX_RANGE_H));
+		tChannelH.setMinRange(getInt(RCConstants.MIN_RANGE_H));
+		tChannelH.setTrimm(getInt(RCConstants.TRIMM_H));
+		
+		tChannelV.setDefaultChannelValue(getInt(RCConstants.CHANNEL_V));
+		tChannelV.setInverted(getBoolean(RCConstants.INVERTED_V));
+		tChannelV.setMaxRange(getInt(RCConstants.MAX_RANGE_V));
+		tChannelV.setMinRange(getInt(RCConstants.MIN_RANGE_V));
+		tChannelV.setTrimm(getInt(RCConstants.TRIMM_V));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	private int getInt(String key){
@@ -326,6 +342,14 @@ public final class Circle extends RCWidget {
 			return Integer.parseInt(tWidgetConfig.protocolMap.get(key));
 		}catch(NumberFormatException e){
 			return -1;
+		}
+	}
+	
+	public boolean getBoolean(String key){
+		try{
+			return Boolean.parseBoolean(tWidgetConfig.protocolMap.get(key));
+		}catch(Exception e){
+			return false;
 		}
 	}
 

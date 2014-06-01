@@ -63,11 +63,6 @@ public class RocketColibriService extends Service implements IUiOutputSinkChange
 	// database
 	private RocketColibriDB tRocketColibriDB;
 
-	
-	// --- UI Input Sink
-	// ..  Channels
-	public Channel[] tChannel = {new Channel(), new Channel(), new Channel(), new Channel(), 
-			                     new Channel(), new Channel(), new Channel(), new Channel()};
 	// ..  used for Wifi connect / disconnect
 	public WifiConnection tWifi;
 	
@@ -102,7 +97,6 @@ public class RocketColibriService extends Service implements IUiOutputSinkChange
 		this.tProtocolFsm = new RocketColibriProtocolFsm(s.DISC);
 		this.tProtocol = new RocketColibriProtocol(tProtocolFsm, this);
 		this.tTelemetryReceiver = new RocketColibriProtocolTelemetryReceiver(this, 30001);
-		this.tProtocol.setChannels(tChannel);
 		this.tWifi = new WifiConnection();
 
 		// list all available Widgets here: 
@@ -176,6 +170,10 @@ public class RocketColibriService extends Service implements IUiOutputSinkChange
     
     public RocketColibriDB getRocketColibriDB() {
     	return tRocketColibriDB;
+    }
+    
+    public void updateControl(int channel, int position){
+    	this.tProtocol.updateControl(channel, position);
     }
 
 	/**

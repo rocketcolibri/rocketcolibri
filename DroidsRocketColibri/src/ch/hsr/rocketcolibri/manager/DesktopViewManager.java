@@ -146,6 +146,8 @@ public class DesktopViewManager implements IDesktopViewManager{
 	public RCWidget createView(RCWidgetConfig vElementConfig) throws Exception{
 	    Class<?> c = Class.forName(vElementConfig.viewElementConfig.getClassPath());
 	    Constructor<?> cons = c.getConstructor(Context.class, RCWidgetConfig.class);
+	    Log.d("createView", ""+vElementConfig);
+	    Log.d("createView map", ""+vElementConfig.protocolMap);
 	    return (RCWidget)cons.newInstance(tContext, vElementConfig);
 	}
 	

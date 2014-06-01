@@ -48,7 +48,7 @@ public class RocketColibriProtocol
 	
 	DatagramSocket channelDataSocket;
 	private int sequenceNumber;
-	private Channel[] allChannels;
+	private int[] allChannels = new int[8];
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	private Future<?> executorFuture=null;
 	
@@ -121,14 +121,15 @@ public class RocketColibriProtocol
 		} 
 	}
 
-	public void setChannels(Channel[] channels)
+	public void updateControl(int channel, int position)
 	{
-		this.allChannels = channels;
+		this.allChannels[channel]=position;
 	}
 	
 	private void sendJsonMsgString(String msg)
 	{
 		try {
+			Log.d("sent", msg);
 			this.channelDataSocket.send(new DatagramPacket(msg.getBytes(), msg.length(), this.address, this.port));
 		} catch (IOException e) {
 			Log.d( TAG, "Failed to send UDP packet due to IOException: " + e.getMessage() ); 
@@ -154,8 +155,8 @@ public class RocketColibriProtocol
 					cdcMsg.put("sequence", sequenceNumber++);
 					cdcMsg.put("user", user);
 					JSONArray channels = new JSONArray();
-					for (Channel channel : allChannels)
-						channels.put(channel.getChannelValue());			
+					for (int channel : allChannels)
+						channels.put(channel);			
 					cdcMsg.put("channels", channels);
 				} 
 				catch (JSONException e) 

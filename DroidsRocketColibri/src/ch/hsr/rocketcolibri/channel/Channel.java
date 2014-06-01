@@ -30,13 +30,13 @@ public class Channel
 		maxRange = MAX_VALUE;
 		trimm = 0;
 		inverted = false;
-		defaultChannelValue = 0;
+		defaultChannelValue = -1;
 	}
 	
 	/** setter */
-	public void setMinRange(int r)	{ minRange = r;	}
-	public void setMaxRange(int r)	{ maxRange = r;	}
-	public void setTrimm(int t)	{ trimm = t;	}
+	public void setMinRange(int r)	{ if(r>-1)minRange = r;	}
+	public void setMaxRange(int r)	{ if(r>-1)maxRange = r;	}
+	public void setTrimm(int t)	{ if(t>-1)trimm = t;	}
 	public void setInverted(boolean i)	{ inverted = i;	}
 	public void setDefaultChannelValue(int d)	{ defaultChannelValue = d;	}
 	/** getter */
@@ -49,26 +49,21 @@ public class Channel
 	/**
 	 * set the value from the control widget
 	 */
-	public void setControl(int inputFromWidget)
-	{
+	public int calculateChannelValue(int inputFromWidget) {
 		inputFromWidget = inputFromWidget + trimm;
-		
 		if(inputFromWidget <  MIN_VALUE)
 			inputFromWidget = MIN_VALUE;
 		
 		if(inputFromWidget >  MAX_VALUE)
 			inputFromWidget = MAX_VALUE;
 		
-
 		// check if inverted
-		if(inverted)
-		{
+		if(inverted) {
 			inputFromWidget  = MAX_VALUE-inputFromWidget; 
 		}
-
-		
 		// adjust range
 		currentChannelValue = inputFromWidget;
+		return currentChannelValue;
 	}
 	
 	/**

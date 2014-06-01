@@ -48,7 +48,7 @@ public class DesktopActivity extends RCActivity{
 	private DesktopMenu tDesktopMenu;
 	private OnChannelChangeListener tControlModusListener = new OnChannelChangeListener() {
 		public void onChannelChange(int channel, int position) {
-			rcService.tChannel[channel].setControl(position);
+			rcService.updateControl(channel, position);;
 		}
 	};
 
