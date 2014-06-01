@@ -82,17 +82,10 @@ public class SwitchWidget extends RCWidget {
 		protocolMap.put(RCConstants.MAX_RANGE_H, "");
 		protocolMap.put(RCConstants.MIN_RANGE_H, "");
 		protocolMap.put(RCConstants.TRIMM_H, "");
-		
-		protocolMap.put(RCConstants.CHANNEL_V, "");
-		protocolMap.put(RCConstants.INVERTED_V, "");
-		protocolMap.put(RCConstants.MAX_RANGE_V, "");
-		protocolMap.put(RCConstants.MIN_RANGE_V, "");
-		protocolMap.put(RCConstants.TRIMM_V, "");
 	}
 
 	@Override
-	protected void onDraw(Canvas canvas) 
-	{
+	protected void onDraw(Canvas canvas) {
 		float scale = (float) getWidth();
 		canvas.save(Canvas.MATRIX_SAVE_FLAG);
 		canvas.scale(scale, scale);
@@ -109,29 +102,13 @@ public class SwitchWidget extends RCWidget {
 	@Override
 	public void updateProtocolMap() {
 		try{
-			tChannelH.setDefaultChannelValue(getInt(RCConstants.CHANNEL_H));
-			tChannelH.setInverted(getBoolean(RCConstants.INVERTED_H));
-			tChannelH.setMaxRange(getInt(RCConstants.MAX_RANGE_H));
-			tChannelH.setMinRange(getInt(RCConstants.MIN_RANGE_H));
-			tChannelH.setTrimm(getInt(RCConstants.TRIMM_H));
+			tChannelH.setDefaultChannelValue(getProtocolMapInt(RCConstants.CHANNEL_H));
+			tChannelH.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_H));
+			tChannelH.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_H));
+			tChannelH.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_H));
+			tChannelH.setTrimm(getProtocolMapInt(RCConstants.TRIMM_H));
 		}catch(Exception e){
 			e.printStackTrace();
-		}
-	}
-
-	private int getInt(String key){
-		try{
-			return Integer.parseInt(tWidgetConfig.protocolMap.get(key));
-		}catch(NumberFormatException e){
-			return -1;
-		}
-	}
-
-	public boolean getBoolean(String key){
-		try{
-			return Boolean.parseBoolean(tWidgetConfig.protocolMap.get(key));
-		}catch(Exception e){
-			return false;
 		}
 	}
 
