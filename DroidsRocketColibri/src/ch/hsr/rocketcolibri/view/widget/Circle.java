@@ -319,39 +319,20 @@ public final class Circle extends RCWidget {
 
 	@Override
 	public void updateProtocolMap() {
-		Log.d("tWidgetConfig.protocolMap", ""+tWidgetConfig.protocolMap);
 		try{
-			Log.d("should be null", ""+tWidgetConfig.protocolMap.get(RCConstants.CHANNEL_H));
-			Log.d("", ""+getInt(RCConstants.CHANNEL_H));
-		tChannelH.setDefaultChannelValue(getInt(RCConstants.CHANNEL_H));
-		tChannelH.setInverted(getBoolean(RCConstants.INVERTED_H));
-		tChannelH.setMaxRange(getInt(RCConstants.MAX_RANGE_H));
-		tChannelH.setMinRange(getInt(RCConstants.MIN_RANGE_H));
-		tChannelH.setTrimm(getInt(RCConstants.TRIMM_H));
+		tChannelH.setDefaultChannelValue(getProtocolMapInt(RCConstants.CHANNEL_H));
+		tChannelH.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_H));
+		tChannelH.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_H));
+		tChannelH.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_H));
+		tChannelH.setTrimm(getProtocolMapInt(RCConstants.TRIMM_H));
 		
-		tChannelV.setDefaultChannelValue(getInt(RCConstants.CHANNEL_V));
-		tChannelV.setInverted(getBoolean(RCConstants.INVERTED_V));
-		tChannelV.setMaxRange(getInt(RCConstants.MAX_RANGE_V));
-		tChannelV.setMinRange(getInt(RCConstants.MIN_RANGE_V));
-		tChannelV.setTrimm(getInt(RCConstants.TRIMM_V));
+		tChannelV.setDefaultChannelValue(getProtocolMapInt(RCConstants.CHANNEL_V));
+		tChannelV.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_V));
+		tChannelV.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_V));
+		tChannelV.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_V));
+		tChannelV.setTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
 		}catch(Exception e){
 			e.printStackTrace();
-		}
-	}
-	
-	private int getInt(String key){
-		try{
-			return Integer.parseInt(tWidgetConfig.protocolMap.get(key));
-		}catch(NumberFormatException e){
-			return -1;
-		}
-	}
-	
-	public boolean getBoolean(String key){
-		try{
-			return Boolean.parseBoolean(tWidgetConfig.protocolMap.get(key));
-		}catch(Exception e){
-			return false;
 		}
 	}
 

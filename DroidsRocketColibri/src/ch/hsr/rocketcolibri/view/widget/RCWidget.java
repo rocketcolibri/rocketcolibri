@@ -92,4 +92,20 @@ public abstract class RCWidget extends CustomizableView {
 		}catch(Exception e){
 		}
 	}
+	
+	protected int getProtocolMapInt(String key){
+		try{
+			return Integer.parseInt(tWidgetConfig.protocolMap.get(key));
+		}catch(NumberFormatException e){
+			return -1;
+		}
+	}
+	
+	protected boolean getProtocolMapBoolean(String key){
+		try{
+			return Boolean.parseBoolean(tWidgetConfig.protocolMap.get(key));
+		}catch(Exception e){
+			return false;
+		}
+	}
 }
