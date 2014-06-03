@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>420</x>
+      <y>150</y>
+      <w>420</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>/Protocol/
+--
++eventConnectionEstablished()
++eventConnectionDown
++eventUserStartControl()
++eventUserStopControl()
++registerStateChangeNotification(IProtocolListener)
+--
+diese sind jetzt im RocketColibriService
++registerUiOutputSinkChangeObserver(RCWidget observer);
++unregisterUiOutputSinkChangeObserver(RCWidget observer);
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>10</x>
+      <y>330</y>
+      <w>160</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>Channel
+--
++ getChannelValue():int</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>10</x>
+      <y>260</y>
+      <w>160</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>RCWidget
+--
+getUiOutputSinkType</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>140</x>
+      <y>230</y>
+      <w>300</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=*
+notifies UiOutputSink</panel_attributes>
+    <additional_attributes>30;50;280;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>140</x>
+      <y>290</y>
+      <w>300</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=8
+get UiInputSource</panel_attributes>
+    <additional_attributes>30;50;280;50</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>420</x>
+      <y>480</y>
+      <w>420</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>RocketColibriProtocol
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>590</x>
+      <y>360</y>
+      <w>50</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;30;120</additional_attributes>
+  </element>
+</diagram>
