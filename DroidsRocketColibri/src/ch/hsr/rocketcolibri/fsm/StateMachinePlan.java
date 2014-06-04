@@ -1,7 +1,7 @@
 /**
  * Rocket Colibri © 2014
  */
-package ch.hsr.rocketcolibri.protocol.fsm;
+package ch.hsr.rocketcolibri.fsm;
 
 import java.util.*;
 

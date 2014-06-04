@@ -3,8 +3,8 @@
  */
 package ch.hsr.rocketcolibri.protocol;
 
-import ch.hsr.rocketcolibri.protocol.fsm.StateMachine;
-import ch.hsr.rocketcolibri.protocol.fsm.StateMachinePlan;
+import ch.hsr.rocketcolibri.fsm.StateMachine;
+import ch.hsr.rocketcolibri.fsm.StateMachinePlan;
 
 /**
  * Implementation of the state RocketColibri state machine

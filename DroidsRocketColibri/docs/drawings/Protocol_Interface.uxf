@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="11.3">
+<diagram program="umlet" version="12.2">
   <zoom_level>10</zoom_level>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>420</x>
-      <y>150</y>
-      <w>420</w>
+      <x>520</x>
+      <y>110</y>
+      <w>490</w>
       <h>240</h>
     </coordinates>
     <panel_attributes>/Protocol/
@@ -15,20 +15,22 @@
 +eventConnectionDown
 +eventUserStartControl()
 +eventUserStopControl()
-+registerStateChangeNotification(IProtocolListener)
+
 --
 diese sind jetzt im RocketColibriService
 +registerUiOutputSinkChangeObserver(RCWidget observer);
 +unregisterUiOutputSinkChangeObserver(RCWidget observer);
-</panel_attributes>
+ 
+This is the function to register an assign a channel to the protocol
++registerUiInputSource(ch: Channel, channelNumber: integer)</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>10</x>
-      <y>330</y>
-      <w>160</w>
+      <x>60</x>
+      <y>290</y>
+      <w>210</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>Channel
@@ -39,9 +41,9 @@ diese sind jetzt im RocketColibriService
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>10</x>
-      <y>260</y>
-      <w>160</w>
+      <x>60</x>
+      <y>220</y>
+      <w>210</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>RCWidget
@@ -52,8 +54,8 @@ getUiOutputSinkType</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>140</x>
-      <y>230</y>
+      <x>240</x>
+      <y>190</y>
       <w>300</w>
       <h>70</h>
     </coordinates>
@@ -65,8 +67,8 @@ notifies UiOutputSink</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>140</x>
-      <y>290</y>
+      <x>240</x>
+      <y>250</y>
       <w>300</w>
       <h>70</h>
     </coordinates>
@@ -78,9 +80,9 @@ get UiInputSource</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>420</x>
-      <y>480</y>
-      <w>420</w>
+      <x>520</x>
+      <y>440</y>
+      <w>490</w>
       <h>170</h>
     </coordinates>
     <panel_attributes>RocketColibriProtocol
@@ -91,8 +93,8 @@ get UiInputSource</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>590</x>
-      <y>360</y>
+      <x>740</x>
+      <y>320</y>
       <w>50</w>
       <h>140</h>
     </coordinates>

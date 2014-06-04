@@ -22,7 +22,7 @@ import org.json.JSONObject;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.channel.Channel;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
-import ch.hsr.rocketcolibri.protocol.fsm.Action;
+import ch.hsr.rocketcolibri.fsm.Action;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
