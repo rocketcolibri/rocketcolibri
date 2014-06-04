@@ -5,7 +5,6 @@ package ch.hsr.rocketcolibri.menu;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;

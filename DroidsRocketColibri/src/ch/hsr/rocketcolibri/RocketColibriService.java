@@ -4,7 +4,6 @@
 package ch.hsr.rocketcolibri;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import ch.hsr.rocketcolibri.db.RocketColibriDB;
@@ -15,20 +14,12 @@ import ch.hsr.rocketcolibri.protocol.WifiConnection;
 import ch.hsr.rocketcolibri.view.widget.Circle;
 import ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget;
 import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
-import ch.hsr.rocketcolibri.view.widget.RCWidget;
 import ch.hsr.rocketcolibri.view.widget.SwitchWidget;
 import ch.hsr.rocketcolibri.view.widget.VideoStreamWidget;
-import ch.hsr.rocketcolibri.widgetdirectory.IUiOutputSinkChangeObservable;
-import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 import ch.hsr.rocketcolibri.widgetdirectory.WidgetEntry;
-import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.ConnectionState;
-import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.UiOutputData;
-import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.UserData;
-import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.VideoUrl;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
@@ -41,37 +32,29 @@ import android.util.Log;
  * - Provide a binder for the activities
  * - holds protocol and wifi connection objects
  * - holds DBService object
- * - updates RCWidgets with changeds telemetry data
  */
 public class RocketColibriService extends Service  {
 	final String TAG = this.getClass().getName();
 	public static final int NOF_CHANNEL = 8;
-	// used by RCActivity
+
 	public static volatile boolean tRunning;
 	private final IBinder tBinder = new RocketColibriServiceBinder();
-	
 
 	// GUI Widget collection
 	List <WidgetEntry> tWidgetDirectory= new ArrayList<WidgetEntry>();
-	
 
-	// protocol
 	public RCProtocol tProtocol;
 
-	// database
 	private RocketColibriDB tRocketColibriDB;
 
-	// ..  used for Wifi connect / disconnect
 	public WifiConnection tWifi;
 
 	@Override
-	public IBinder onBind(Intent intent) 
-	{
+	public IBinder onBind(Intent intent) {
 		return tBinder;
 	}
 	
-	private String getUserName()
-	{
+	private String getUserName(){
 		AccountManager accountManager = AccountManager.get(this);
  	    Account[] accounts =  accountManager.getAccountsByType("com.google");
  	    return accounts[0].name;	
@@ -82,11 +65,8 @@ public class RocketColibriService extends Service  {
 		super.onCreate();
 		Log.d(TAG, "RocketColibriService started");
 		RocketColibriService.tRunning = true;
-
 		this.tWifi = new WifiConnection();
-
 		tProtocol = new RCProtocolUdp(getUserName()) ;
-		
 		// list all available Widgets here: 
 		this.tWidgetDirectory.add(new WidgetEntry("Cross Control", Circle.class.getName(), Circle.getDefaultViewElementConfig()));
 		this.tWidgetDirectory.add(new WidgetEntry("Connection Status", ConnectionStatusWidget.class.getName(), ConnectionStatusWidget.getDefaultViewElementConfig()));

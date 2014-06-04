@@ -19,14 +19,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ch.hsr.rocketcolibri.RocketColibriService;
-import ch.hsr.rocketcolibri.channel.Channel;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.fsm.Action;
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.content.Context;
 import android.util.Log;
 
 /**

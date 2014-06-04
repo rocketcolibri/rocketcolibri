@@ -7,10 +7,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.PopupWindow;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
-import ch.hsr.rocketcolibri.menu.CustomizeModusPopupMenu;
-import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.popup.PopupWindow.OnDismissListener;
 

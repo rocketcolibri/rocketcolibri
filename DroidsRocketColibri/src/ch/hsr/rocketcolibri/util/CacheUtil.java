@@ -1,8 +1,6 @@
 package ch.hsr.rocketcolibri.util;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,10 +10,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout.LayoutParams;
-import android.widget.Toast;
 
 public class CacheUtil {
 	private Context tContext;

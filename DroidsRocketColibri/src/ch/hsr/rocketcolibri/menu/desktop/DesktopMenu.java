@@ -5,17 +5,13 @@ package ch.hsr.rocketcolibri.menu.desktop;
 
 import android.content.Context;
 import android.app.Activity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.ToggleButton;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
-import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import ch.hsr.rocketcolibri.view.widget.SwipeInMenu;
 import ch.hsr.rocketcolibri.view.widget.SwipeInMenu.OnDrawerOpenListener;
 

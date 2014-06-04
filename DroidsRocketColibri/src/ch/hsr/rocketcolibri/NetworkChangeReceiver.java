@@ -3,7 +3,6 @@
  */
 package ch.hsr.rocketcolibri;
 
-import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import ch.hsr.rocketcolibri.protocol.WifiConnection;
 import android.content.BroadcastReceiver;
 import android.content.Context;

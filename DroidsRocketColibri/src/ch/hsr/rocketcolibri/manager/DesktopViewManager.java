@@ -4,8 +4,6 @@
 package ch.hsr.rocketcolibri.manager;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,13 +11,10 @@ import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.activity.EditChannelActivity;
 import ch.hsr.rocketcolibri.manager.listener.CustomizeModusListener;

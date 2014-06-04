@@ -4,18 +4,15 @@
 package ch.hsr.rocketcolibri.view.widget;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.channel.Channel;
 import ch.hsr.rocketcolibri.protocol.RCProtocolUdp;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
-import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
-import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,7 +29,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -258,8 +254,6 @@ public final class Circle extends RCWidget {
 					@Override
 					public void onGlobalLayout() {
 						setMeasuredDimension(diameterInDP, diameterInDP);
-					    float density  = getResources().getDisplayMetrics().density;
-					    // FIXME @artan I fixed that but I'm not sure if we have am mess with dp an pixels 
 					    float dpHeight = getResources().getDisplayMetrics().heightPixels; /* removed / density */
 					    float dpWidth  = getResources().getDisplayMetrics().widthPixels; /* removed / density */
 						Circle.this.getViewTreeObserver().removeOnGlobalLayoutListener(this);

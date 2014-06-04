@@ -6,7 +6,6 @@ package ch.hsr.rocketcolibri.manager;
 import ch.hsr.rocketcolibri.menu.CustomizeModusPopupMenu;
 import ch.hsr.rocketcolibri.menu.desktop.DesktopMenu;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
-import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.widget.RCWidget;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
