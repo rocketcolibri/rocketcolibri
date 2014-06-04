@@ -21,15 +21,15 @@ public class RocketColibriProtocolTelemetryReceiver
 {	
 	final String TAG = this.getClass().getName();
 	final static int telemetryTimeout = 3000; // 3s
-	DatagramSocket serverSocket;
-	private int port;
-	private static RocketColibriService context;
+	DatagramSocket tServerSocket;
+	private int tPort;
 	private RocketColibriProtocolFsm tFsm;
-	public RocketColibriProtocolTelemetryReceiver(final RocketColibriService context, int port, RocketColibriProtocolFsm fsm)
+	private RCProtocol tProtocol;
+	public RocketColibriProtocolTelemetryReceiver(int port, RocketColibriProtocolFsm fsm, RCProtocol proto)
 	{	
-		this.port = port;
+		tPort = port;
+		tProtocol = proto;
 		tFsm = fsm;
-		RocketColibriProtocolTelemetryReceiver.context = context;
 	}
 				
 
@@ -46,21 +46,21 @@ public class RocketColibriProtocolTelemetryReceiver
 			{    
 				try 
 				{	
-					serverSocket = new DatagramSocket(RocketColibriProtocolTelemetryReceiver.this.port);
+					tServerSocket = new DatagramSocket(RocketColibriProtocolTelemetryReceiver.this.tPort);
 					byte[] receiveData = new byte[1500];
-			        Log.d(TAG, "Listening on udp " + InetAddress.getLocalHost().getHostAddress() + ":" + RocketColibriProtocolTelemetryReceiver.this.port);     
+			        Log.d(TAG, "Listening on udp " + InetAddress.getLocalHost().getHostAddress() + ":" + RocketColibriProtocolTelemetryReceiver.this.tPort);     
 			        DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 
-			        serverSocket.setSoTimeout(telemetryTimeout);   // set the timeout in millisecounds.
+			        tServerSocket.setSoTimeout(telemetryTimeout);   // set the timeout in millisecounds.
 			        while(true)
 			        {
 			        	try 
 			        	{
-				        	serverSocket.receive(receivePacket);
+				        	tServerSocket.receive(receivePacket);
 				        	RocketColibriMessage msg = msgFactory.Create(receivePacket);
 				        	if(null != msg)
 				        	{
-				        		msg.sendUpdateUiSinkAndSendEvents(RocketColibriProtocolTelemetryReceiver.context, tFsm);
+				        		msg.sendUpdateUiSinkAndSendEvents(tFsm, tProtocol);
 				        	}
 				        	else
 				        	{
@@ -85,7 +85,7 @@ public class RocketColibriProtocolTelemetryReceiver
 	public void stopReceiveTelemetry()
 	{
 		setTelemetryOffline();
-		serverSocket.close();  
+		tServerSocket.close();  
 	}
 
 
@@ -99,12 +99,12 @@ public class RocketColibriProtocolTelemetryReceiver
 	 */
 	private void handleTimeout() 
 	{
-		if (null != RocketColibriProtocolTelemetryReceiver.context.tUsers.getActiveUser())
+		if (null != tProtocol.tUsers.getActiveUser())
 		{	
-			RocketColibriProtocolTelemetryReceiver.context.tUsers.removeAllUsers();
+			tProtocol.tUsers.removeAllUsers();
 			tFsm.queue(e.E8_TIMEOUT);
 			tFsm.processNextEvent();
 		}
-		RocketColibriProtocolTelemetryReceiver.context.tVdeoUrl.setVideoUrl("");
+		tProtocol.tVdeoUrl.setVideoUrl("");
 	}
 }

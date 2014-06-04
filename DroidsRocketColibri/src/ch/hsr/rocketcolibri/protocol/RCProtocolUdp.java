@@ -32,8 +32,7 @@ import android.util.Log;
 /**
  * @short implementation of the RocketColibri protocol 
  */
-public class RCProtocolUdp extends RCProtocol
-{
+public class RCProtocolUdp extends RCProtocol{
 	public static final int MAX_CHANNEL_VALUE = 1000;
 	public static final int MIN_CHANNEL_VALUE = 0;
 	public static final String ActionStateUpdate = "protocol.updatestate";
@@ -44,8 +43,6 @@ public class RCProtocolUdp extends RCProtocol
 	private RocketColibriProtocolFsm tFsm;
 	private RocketColibriProtocolTelemetryReceiver tTelemetryReceiver;
 	
-	
-	private RocketColibriService service;
 	final String TAG = this.getClass().getName();
 	int port;
 	InetAddress address;
@@ -60,12 +57,10 @@ public class RCProtocolUdp extends RCProtocol
 	
 	
 	
-	public RCProtocolUdp(RocketColibriService service, String username) 
+	public RCProtocolUdp( String username) 
 	{
-		
-		this.service = service;
 		this.tFsm = new RocketColibriProtocolFsm(s.DISC);
-		this.tTelemetryReceiver = new RocketColibriProtocolTelemetryReceiver(service, 30001, tFsm);
+		this.tTelemetryReceiver = new RocketColibriProtocolTelemetryReceiver( 30001, tFsm, this);
 		this.tUsername = username;
 		// don't send any message
 		this.tFsm.getStateMachinePlan().entryAction(s.DISC, stopSendMessage);
@@ -247,7 +242,7 @@ public class RCProtocolUdp extends RCProtocol
 		public void apply(RocketColibriProtocolFsm fsm, Object event,	Object nextState) 
 		{
 			Log.d(TAG, "execute action updateState");
-			service.tConnState.setState((s)nextState);
+			tConnState.setState((s)nextState);
 		}
 	};
 	

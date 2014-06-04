@@ -91,10 +91,9 @@ public class RocketColibriMessageTelemetry extends RocketColibriMessage {
 	}
 
 	@Override
-	public void sendUpdateUiSinkAndSendEvents(RocketColibriService service, RocketColibriProtocolFsm fsm) {
-		service.tVdeoUrl.setVideoUrl(tVideoUrl.getVideoUrl());
-		
-		service.tUsers.setConnectedUsers(this.tActiveuser, this.tPassivuser);
+	public void sendUpdateUiSinkAndSendEvents(RocketColibriProtocolFsm fsm, RCProtocol proto) {
+		proto.tVdeoUrl.setVideoUrl(tVideoUrl.getVideoUrl());
+		proto.tUsers.setConnectedUsers(this.tActiveuser, this.tPassivuser);
 		if(null == this.tActiveuser)
 			fsm.queue(e.E3_RECV_TELE_NONE);
 		else{

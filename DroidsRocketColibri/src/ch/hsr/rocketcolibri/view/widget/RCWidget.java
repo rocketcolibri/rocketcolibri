@@ -88,7 +88,7 @@ public abstract class RCWidget extends CustomizableView {
 	@Override
 	public void notifyServiceReady(Service rcService) {
 		try {
-			((RocketColibriService) rcService).registerUiOutputSinkChangeObserver(this);
+			((RocketColibriService) rcService).tProtocol.registerUiOutputSinkChangeObserver(this);
 		}catch(Exception e){
 		}
 	}

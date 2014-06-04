@@ -65,9 +65,9 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 			RocketColibriService rcService = ((RocketColibriService.RocketColibriServiceBinder) serviceBinder).getService();
 
 			if (getConnectivityStatus(context)) {
-				rcService.setConnectionEstablished();
+				rcService.tProtocol.eventConnectionEstablished();
 			} else {
-				rcService.setConnectionInterrupted();
+				rcService.tProtocol.eventConnectionInterrupted();
 			}
 		}catch(NullPointerException e){
 		}
