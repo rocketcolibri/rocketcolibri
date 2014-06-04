@@ -9,7 +9,7 @@ import java.util.Map;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.channel.Channel;
-import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
+import ch.hsr.rocketcolibri.protocol.RCProtocolUdp;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
@@ -137,9 +137,9 @@ public final class Circle extends RCWidget {
 	 * @return channel position
 	 */
 	public int eventPoistionToChannelValue(float eventPos) {
-		int channelPos = (int)(eventPos * RocketColibriProtocol.MAX_CHANNEL_VALUE / diameterInDP);
-		if (channelPos > RocketColibriProtocol.MAX_CHANNEL_VALUE) return RocketColibriProtocol.MAX_CHANNEL_VALUE;
-		else if (channelPos < RocketColibriProtocol.MIN_CHANNEL_VALUE) return RocketColibriProtocol.MIN_CHANNEL_VALUE;
+		int channelPos = (int)(eventPos * RCProtocolUdp.MAX_CHANNEL_VALUE / diameterInDP);
+		if (channelPos > RCProtocolUdp.MAX_CHANNEL_VALUE) return RCProtocolUdp.MAX_CHANNEL_VALUE;
+		else if (channelPos < RCProtocolUdp.MIN_CHANNEL_VALUE) return RCProtocolUdp.MIN_CHANNEL_VALUE;
 		else return channelPos;
 	}
 	

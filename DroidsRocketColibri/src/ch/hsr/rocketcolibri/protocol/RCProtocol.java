@@ -5,10 +5,10 @@ import ch.hsr.rocketcolibri.view.widget.RCWidget;
 import ch.hsr.rocketcolibri.widgetdirectory.IUiOutputSinkChangeObservable;
 
 
-public class RCProtocol implements IUiOutputSinkChangeObservable {
+public class RCProtocol implements IUiOutputSinkChangeObservable{
 	static final int MAX_CHANNEL = 8;
 	Channel[] tChannel = new Channel[MAX_CHANNEL];
-
+	
 	/**
 	 * physical connection established (e.g. Wifi connected)
 	 */

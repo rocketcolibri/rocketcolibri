@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.channel.Channel;
+import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.fsm.Action;
 import android.accounts.Account;
@@ -31,7 +32,7 @@ import android.util.Log;
 /**
  * @short implementation of the RocketColibri protocol 
  */
-public class RocketColibriProtocol 
+public class RCProtocolUdp extends RCProtocol
 {
 	public static final int MAX_CHANNEL_VALUE = 1000;
 	public static final int MIN_CHANNEL_VALUE = 0;
@@ -40,7 +41,10 @@ public class RocketColibriProtocol
 
 	
 	
-	private RocketColibriProtocolFsm fsm;
+	private RocketColibriProtocolFsm tFsm;
+	private RocketColibriProtocolTelemetryReceiver tTelemetryReceiver;
+	
+	
 	private RocketColibriService service;
 	final String TAG = this.getClass().getName();
 	int port;
@@ -52,41 +56,37 @@ public class RocketColibriProtocol
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	private Future<?> executorFuture=null;
 	
-	private String user;
+	private String tUsername;
 	
-	private String getUserName(Context context)
-	{
-		AccountManager accountManager = AccountManager.get(context);
- 	    Account[] accounts =  accountManager.getAccountsByType("com.google");
- 	    return accounts[0].name;	
-	}
 	
-	public RocketColibriProtocol(RocketColibriProtocolFsm fsm, RocketColibriService service) 
+	
+	public RCProtocolUdp(RocketColibriService service, String username) 
 	{
+		
 		this.service = service;
-		this.fsm = fsm;
+		this.tFsm = new RocketColibriProtocolFsm(s.DISC);
+		this.tTelemetryReceiver = new RocketColibriProtocolTelemetryReceiver(service, 30001, tFsm);
+		this.tUsername = username;
 		// don't send any message
-		this.fsm.getStateMachinePlan().entryAction(s.DISC, stopSendMessage);
+		this.tFsm.getStateMachinePlan().entryAction(s.DISC, stopSendMessage);
 				
 		// send hello message
-		this.fsm.getStateMachinePlan().entryAction(s.TRY_CONN, startSendHelloMessage);
-		this.fsm.getStateMachinePlan().entryAction(s.CONN_LCK_OUT, startSendHelloMessage);
-		this.fsm.getStateMachinePlan().entryAction(s.CONN_OBSERVE, startSendHelloMessage);
+		this.tFsm.getStateMachinePlan().entryAction(s.TRY_CONN, startSendHelloMessage);
+		this.tFsm.getStateMachinePlan().entryAction(s.CONN_LCK_OUT, startSendHelloMessage);
+		this.tFsm.getStateMachinePlan().entryAction(s.CONN_OBSERVE, startSendHelloMessage);
 		
 		// send channel message
-		this.fsm.getStateMachinePlan().entryAction(s.CONN_TRY_CONTROL, startSendChannelMessage);
-		this.fsm.getStateMachinePlan().entryAction(s.CONN_CONTROL, startSendChannelMessage);
+		this.tFsm.getStateMachinePlan().entryAction(s.CONN_TRY_CONTROL, startSendChannelMessage);
+		this.tFsm.getStateMachinePlan().entryAction(s.CONN_CONTROL, startSendChannelMessage);
 		
 		
 		// send Broadcast on every state change
-		this.fsm.getStateMachinePlan().leaveAction(s.DISC, updateState);
-		this.fsm.getStateMachinePlan().leaveAction(s.TRY_CONN, updateState); 
-		this.fsm.getStateMachinePlan().leaveAction(s.CONN_OBSERVE, updateState); 
-		this.fsm.getStateMachinePlan().leaveAction(s.CONN_LCK_OUT,  updateState);
-		this.fsm.getStateMachinePlan().leaveAction(s.CONN_TRY_CONTROL,  updateState);
-		this.fsm.getStateMachinePlan().leaveAction(s.CONN_CONTROL, updateState);
-		
-		user = getUserName(service);
+		this.tFsm.getStateMachinePlan().leaveAction(s.DISC, updateState);
+		this.tFsm.getStateMachinePlan().leaveAction(s.TRY_CONN, updateState); 
+		this.tFsm.getStateMachinePlan().leaveAction(s.CONN_OBSERVE, updateState); 
+		this.tFsm.getStateMachinePlan().leaveAction(s.CONN_LCK_OUT,  updateState);
+		this.tFsm.getStateMachinePlan().leaveAction(s.CONN_TRY_CONTROL,  updateState);
+		this.tFsm.getStateMachinePlan().leaveAction(s.CONN_CONTROL, updateState);
 		
 		InitSocket();
 	}
@@ -153,7 +153,7 @@ public class RocketColibriProtocol
 					cdcMsg.put("v", 1);
 					cdcMsg.put("cmd", "cdc");
 					cdcMsg.put("sequence", sequenceNumber++);
-					cdcMsg.put("user", user);
+					cdcMsg.put("user", tUsername);
 					JSONArray channels = new JSONArray();
 					for (int channel : allChannels)
 						channels.put(channel);			
@@ -200,7 +200,7 @@ public class RocketColibriProtocol
 					cdcMsg.put("v", 1);
 					cdcMsg.put("cmd", "hello");
 					cdcMsg.put("sequence", sequenceNumber++);
-					cdcMsg.put("name", user);
+					cdcMsg.put("name", tUsername);
 				}
 				catch (JSONException e) 
 				{
@@ -219,7 +219,7 @@ public class RocketColibriProtocol
 				Object nextState) 
 		{
 			Log.d(TAG, "execute action startSendHelloMessage");
-			service.tTelemetryReceiver.startReceiveTelemetry();
+			tTelemetryReceiver.startReceiveTelemetry();
 			sendHelloCommand();			
 		}
 	};
@@ -238,7 +238,7 @@ public class RocketColibriProtocol
 				Object nextState) 
 		{
 			Log.d(TAG, "execute action stopSendMessage");
-			service.tTelemetryReceiver.stopReceiveTelemetry();
+			tTelemetryReceiver.stopReceiveTelemetry();
 			cancelOldCommandJob();
 		}
 	};
@@ -250,4 +250,44 @@ public class RocketColibriProtocol
 			service.tConnState.setState((s)nextState);
 		}
 	};
+	
+	/**
+	 * physical connection established (e.g. Wifi connected)
+	 */
+	@Override
+	public void eventConnectionEstablished() {
+		tFsm.queue(e.E1_CONN_SSID);
+		tFsm.processOutstandingEvents();
+	}
+	
+	/**
+	 * physical connection interrupted
+	 */
+	@Override
+	public void eventConnectionInterrupted() {
+		tFsm.queue(e.E2_DISC_SSID);
+		tFsm.processOutstandingEvents();
+	}
+	
+	/**
+	 * User input: start control
+	 * @return true if the event is processed
+	 */
+	@Override
+	public boolean eventUserStartControl(){
+		tFsm.queue(e.E6_USR_CONNECT);
+		tFsm.processOutstandingEvents();
+		return true;
+	}
+	
+	/**
+	 * User input stop control
+	 * @return true if the event is processed
+	 */
+	@Override
+	public boolean eventUserStopControl(){
+		tFsm.queue(e.E7_USR_OBSERVE);
+		tFsm.processOutstandingEvents();
+		return true;
+	}
 }

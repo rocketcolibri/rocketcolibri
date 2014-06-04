@@ -65,11 +65,10 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 			RocketColibriService rcService = ((RocketColibriService.RocketColibriServiceBinder) serviceBinder).getService();
 
 			if (getConnectivityStatus(context)) {
-				rcService.tProtocolFsm.queue(e.E1_CONN_SSID);
+				rcService.setConnectionEstablished();
 			} else {
-				rcService.tProtocolFsm.queue(e.E2_DISC_SSID);
+				rcService.setConnectionInterrupted();
 			}
-			rcService.tProtocolFsm.processOutstandingEvents();
 		}catch(NullPointerException e){
 		}
 

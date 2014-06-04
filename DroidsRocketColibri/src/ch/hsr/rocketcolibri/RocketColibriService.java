@@ -9,11 +9,8 @@ import java.util.List;
 
 import ch.hsr.rocketcolibri.db.RocketColibriDB;
 import ch.hsr.rocketcolibri.db.RocketColibriDataHandler;
-import ch.hsr.rocketcolibri.protocol.RocketColibriProtocol;
-import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm;
-import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
-import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
-import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolTelemetryReceiver;
+import ch.hsr.rocketcolibri.protocol.RCProtocol;
+import ch.hsr.rocketcolibri.protocol.RCProtocolUdp;
 import ch.hsr.rocketcolibri.protocol.WifiConnection;
 import ch.hsr.rocketcolibri.view.widget.Circle;
 import ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget;
@@ -28,7 +25,10 @@ import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.ConnectionState;
 import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.UiOutputData;
 import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.UserData;
 import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.VideoUrl;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
@@ -54,10 +54,9 @@ public class RocketColibriService extends Service implements IUiOutputSinkChange
 	// GUI Widget collection
 	List <WidgetEntry> tWidgetDirectory= new ArrayList<WidgetEntry>();
 	
-	// reference to the protocol components
-	public RocketColibriProtocolFsm tProtocolFsm;
-	public RocketColibriProtocol tProtocol;
-	public RocketColibriProtocolTelemetryReceiver tTelemetryReceiver;
+
+	// protocol
+	RCProtocol tProtocol;
 
 	// database
 	private RocketColibriDB tRocketColibriDB;
@@ -80,6 +79,13 @@ public class RocketColibriService extends Service implements IUiOutputSinkChange
 		return tBinder;
 	}
 	
+	private String getUserName()
+	{
+		AccountManager accountManager = AccountManager.get(this);
+ 	    Account[] accounts =  accountManager.getAccountsByType("com.google");
+ 	    return accounts[0].name;	
+	}
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -91,13 +97,10 @@ public class RocketColibriService extends Service implements IUiOutputSinkChange
 		tConnState = new ConnectionState();
 		tVdeoUrl = new VideoUrl();
 
-		
-		// create a protocol instance
-		this.tProtocolFsm = new RocketColibriProtocolFsm(s.DISC);
-		this.tProtocol = new RocketColibriProtocol(tProtocolFsm, this);
-		this.tTelemetryReceiver = new RocketColibriProtocolTelemetryReceiver(this, 30001);
 		this.tWifi = new WifiConnection();
 
+		tProtocol = new RCProtocolUdp(this, getUserName()) ;
+		
 		// list all available Widgets here: 
 		this.tWidgetDirectory.add(new WidgetEntry("Cross Control", Circle.class.getName(), Circle.getDefaultViewElementConfig()));
 		this.tWidgetDirectory.add(new WidgetEntry("Connection Status", ConnectionStatusWidget.class.getName(), ConnectionStatusWidget.getDefaultViewElementConfig()));
@@ -172,23 +175,32 @@ public class RocketColibriService extends Service implements IUiOutputSinkChange
     }
     
     public void updateControl(int channel, int position){
-    	this.tProtocol.updateControl(channel, position);
+    	// TODO
+    	//this.tProtocol.updateControl(channel, position);
     }
 
 	/**
 	 * Set the application to the 'Control' state
 	 */
 	public void setUserControl() {
-		this.tProtocolFsm.queue(e.E6_USR_CONNECT);
-		this.tProtocolFsm.processOutstandingEvents();
+		tProtocol.eventUserStartControl();
+
 	}
 	
 	/**
 	 * Set the application to the 'Passiv' state
 	 */
 	public void setUserPassive() {
-		this.tProtocolFsm.queue(e.E7_USR_OBSERVE);
-		this.tProtocolFsm.processOutstandingEvents();
+		tProtocol.eventUserStopControl();
+	}
+	
+	public void setConnectionEstablished() {
+		tProtocol.eventConnectionEstablished();
+	}
+	
+
+	public void setConnectionInterrupted(){
+		tProtocol.eventConnectionInterrupted();
 	}
 	
 	/**

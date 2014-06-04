@@ -24,10 +24,11 @@ public class RocketColibriProtocolTelemetryReceiver
 	DatagramSocket serverSocket;
 	private int port;
 	private static RocketColibriService context;
-
-	public RocketColibriProtocolTelemetryReceiver(final RocketColibriService context, int port)
+	private RocketColibriProtocolFsm tFsm;
+	public RocketColibriProtocolTelemetryReceiver(final RocketColibriService context, int port, RocketColibriProtocolFsm fsm)
 	{	
 		this.port = port;
+		tFsm = fsm;
 		RocketColibriProtocolTelemetryReceiver.context = context;
 	}
 				
@@ -59,7 +60,7 @@ public class RocketColibriProtocolTelemetryReceiver
 				        	RocketColibriMessage msg = msgFactory.Create(receivePacket);
 				        	if(null != msg)
 				        	{
-				        		msg.sendUpdateUiSinkAndSendEvents(RocketColibriProtocolTelemetryReceiver.context);
+				        		msg.sendUpdateUiSinkAndSendEvents(RocketColibriProtocolTelemetryReceiver.context, tFsm);
 				        	}
 				        	else
 				        	{
@@ -101,8 +102,8 @@ public class RocketColibriProtocolTelemetryReceiver
 		if (null != RocketColibriProtocolTelemetryReceiver.context.tUsers.getActiveUser())
 		{	
 			RocketColibriProtocolTelemetryReceiver.context.tUsers.removeAllUsers();
-			RocketColibriProtocolTelemetryReceiver.context.tProtocolFsm.queue(e.E8_TIMEOUT);
-			RocketColibriProtocolTelemetryReceiver.context.tProtocolFsm.processNextEvent();
+			tFsm.queue(e.E8_TIMEOUT);
+			tFsm.processNextEvent();
 		}
 		RocketColibriProtocolTelemetryReceiver.context.tVdeoUrl.setVideoUrl("");
 	}

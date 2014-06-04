@@ -102,11 +102,9 @@ public class DesktopMenu {
 		b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
 	    		if (isChecked){
-					tService.tProtocolFsm.queue(e.E6_USR_CONNECT);
-					tService.tProtocolFsm.processOutstandingEvents();
+					tService.setUserControl();
 	    		}else{
-					tService.tProtocolFsm.queue(e.E7_USR_OBSERVE);
-					tService.tProtocolFsm.processOutstandingEvents();
+					tService.setUserPassive();
 		        }
 		    }
 		});
