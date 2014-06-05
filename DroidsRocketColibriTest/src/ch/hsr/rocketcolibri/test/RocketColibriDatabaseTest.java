@@ -12,6 +12,7 @@ import ch.hsr.rocketcolibri.db.model.RCModel;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
+import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 
 /**
  * Unit test class for testing the database connection
@@ -49,19 +50,19 @@ public class RocketColibriDatabaseTest extends AndroidTestCase {
     protected RCModel prepareFirstItem(String pModelName) {
     	RCModel tModel = new RCModel();
     	ResizeConfig tRConfig = new ResizeConfig();
-    	List<ViewElementConfig> tElementConfigList = new ArrayList<ViewElementConfig>();
+		List<RCWidgetConfig> widgetConfigs = new ArrayList<RCWidgetConfig>();
     	LayoutParams tLParam = new LayoutParams(100, 100, 50,200);
 
 	    tRConfig.maxHeight = 745;
 	    tRConfig.minHeight = 50;
-	    tRConfig.maxWidth =400;
+	    tRConfig.maxWidth = 400;
 	    tRConfig.minWidth = 30;
 
 	    ViewElementConfig elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", tLParam, tRConfig); 
-		tElementConfigList.add(elementConfig);
+		widgetConfigs.add(new RCWidgetConfig(elementConfig));
 
 		tModel.setName(pModelName);
-		tModel.setViewElementConfigs(tElementConfigList);
+		tModel.setWidgetConfigs(widgetConfigs);
 
 		return tModel;
     }
@@ -75,7 +76,7 @@ public class RocketColibriDatabaseTest extends AndroidTestCase {
     protected RCModel prepareSecondItem(String pModelName) {
     	RCModel tModel = new RCModel();
     	ResizeConfig tRConfig = new ResizeConfig();
-    	List<ViewElementConfig> tElementConfigList = new ArrayList<ViewElementConfig>();
+		List<RCWidgetConfig> widgetConfigs = new ArrayList<RCWidgetConfig>();
     	LayoutParams tLParam = new LayoutParams(50, 20, 50,200);
 
     	tRConfig.maxHeight = 500;
@@ -84,10 +85,10 @@ public class RocketColibriDatabaseTest extends AndroidTestCase {
 	    tRConfig.minWidth = 30;
 	    
 	    ViewElementConfig elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", tLParam, tRConfig); 
-		tElementConfigList.add(elementConfig);
+		widgetConfigs.add(new RCWidgetConfig(elementConfig));
 
 		tModel.setName(pModelName);
-		tModel.setViewElementConfigs(tElementConfigList);
+		tModel.setWidgetConfigs(widgetConfigs);
 
 		return tModel;
     }
@@ -150,12 +151,14 @@ public class RocketColibriDatabaseTest extends AndroidTestCase {
 
 		// Update the object read from the database
     	LayoutParams tLParam = new LayoutParams(115, 125, 50, 250);
-    	List<ViewElementConfig> tElementConfigList = new ArrayList<ViewElementConfig>();
-		tElementConfigList = tModelFromDBActual.getViewElementConfigs();
-		tElementConfigList.get(0).setLayoutParams(tLParam);
+		List<RCWidgetConfig> widgetConfigs = new ArrayList<RCWidgetConfig>();
+    	widgetConfigs = tModelFromDBActual.getWidgetConfigs();
+	    ViewElementConfig elementConfig = widgetConfigs.get(0).viewElementConfig;
+	    elementConfig.setLayoutParams(tLParam);
+	    widgetConfigs.get(0).viewElementConfig = elementConfig;
 
 		// Store the updated object in database
-		tModelFromDBActual.setViewElementConfigs(tElementConfigList);
+		tModelFromDBActual.setWidgetConfigs(widgetConfigs);
 		tDB.store(tModelFromDBActual);
 
 		// Fetch the updated object from database
