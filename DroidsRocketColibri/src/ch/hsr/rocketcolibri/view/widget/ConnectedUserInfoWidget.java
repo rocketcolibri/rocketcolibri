@@ -4,6 +4,7 @@
 package ch.hsr.rocketcolibri.view.widget;
 
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -19,6 +20,7 @@ import android.util.AttributeSet;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RcOperator;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
+import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
@@ -27,8 +29,9 @@ import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.UserData;
 /**
  * @short widget to display the user data received from the ServoController 
  */
-public class ConnectedUserInfoWidget extends RCWidget {
+public class ConnectedUserInfoWidget extends CustomizableView implements IRCWidget {
 	
+	protected RCWidgetConfig tWidgetConfig;
 	private Paint tUserBitmapPaint;
 	private Bitmap tObserverBitmap;
 	private Bitmap tControlBitmap;
@@ -40,7 +43,6 @@ public class ConnectedUserInfoWidget extends RCWidget {
     private Paint tRectPaint;
     private Rect tRectRect;
     private RectF tRectRectF;
-    
 
 	private UserData tUserData;
 	
@@ -50,7 +52,7 @@ public class ConnectedUserInfoWidget extends RCWidget {
 	}
 	
 	public ConnectedUserInfoWidget(Context context, RCWidgetConfig widgetConfig) {
-		super(context, widgetConfig);
+		super(context, widgetConfig.viewElementConfig);
 		init(context, null);
 	}
 	
@@ -131,12 +133,6 @@ public class ConnectedUserInfoWidget extends RCWidget {
 		}
 		super.onDraw(canvas);
 	}
-
-	@Override
-	public void onNotifyUiOutputSink(Object p)	{
-		tUserData = (UserData)p;
-		postInvalidate();
-	}
 	
 	public static ViewElementConfig getDefaultViewElementConfig(){
 		ResizeConfig rc = new ResizeConfig();
@@ -149,14 +145,53 @@ public class ConnectedUserInfoWidget extends RCWidget {
 	    return vec;
 	}
 	
+	/**
+	 * Implementation of the interfaces
+	 */
+
 	@Override
-	public UiOutputDataType getType() {
-		return UiOutputDataType.ConnectedUsers;
+	public void create(RCWidgetConfig rcWidgetConfig) {
+		tWidgetConfig = rcWidgetConfig;
+		init(getContext(), null);
 	}
 
 	@Override
-	public void updateProtocolMap() {
-		// TODO Auto-generated method stub
-		
+	public void create(ViewElementConfig vElementConfig) {
+		tWidgetConfig = new RCWidgetConfig(vElementConfig);
+		init(getContext(), null);
+	}
+
+	@Override
+	public void setControlModusListener(OnChannelChangeListener channelListener) {}
+
+	@Override
+	public RCWidgetConfig getWidgetConfig() {
+		tWidgetConfig.viewElementConfig = getViewElementConfig();
+		return tWidgetConfig;
+	}
+
+	@Override
+	public Map<String, String> getProtocolMap() {
+		return tWidgetConfig.protocolMap;
+	}
+
+	@Override
+	public void setProtocolMap(Map<String, String> protocolMap) {
+		tWidgetConfig.protocolMap = protocolMap;
+		updateProtocolMap();
+	}
+
+	@Override
+	public void updateProtocolMap() {}
+
+	@Override
+	public void onNotifyUiOutputSink(Object p)	{
+		tUserData = (UserData)p;
+		postInvalidate();
+	}
+
+	@Override
+	public UiOutputDataType getType() {
+		return UiOutputDataType.ConnectedUsers;
 	}
 }
