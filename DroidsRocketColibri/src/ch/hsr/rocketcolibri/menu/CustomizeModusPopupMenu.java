@@ -19,7 +19,7 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.HoldButton.OnHoldListener;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.popup.PopupWindow;
-import ch.hsr.rocketcolibri.view.widget.RCWidget;
+import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 
 /**
  * @author Artan Veliju
@@ -93,7 +93,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		dismissPopupIfIsShowing();
 		tTargetView = cView;
 		try {
-			if (((RCWidget) cView).getProtocolMap() != null) {
+			if (((IRCWidget) cView).getProtocolMap() != null) {
 				setVisibilityOfEditChannelBtn(View.VISIBLE);
 			} else {setVisibilityOfEditChannelBtn(View.GONE);}
 		} catch (Exception e) {setVisibilityOfEditChannelBtn(View.GONE);}

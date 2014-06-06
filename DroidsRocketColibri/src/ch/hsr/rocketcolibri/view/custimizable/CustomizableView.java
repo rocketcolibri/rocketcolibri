@@ -10,7 +10,9 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
+import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 
 /**
  * @author Artan Veliju
@@ -99,8 +101,11 @@ public class CustomizableView extends View implements ICustomizableView{
 	}
 	
 	@Override
-	public void notifyServiceReady(Service service) {
-		
+	public void notifyServiceReady(Service rcService) {
+		try {
+			((RocketColibriService) rcService).tProtocol.registerUiOutputSinkChangeObserver((IRCWidget)this);
+		}catch(Exception e){
+		}
 	}
 }
 

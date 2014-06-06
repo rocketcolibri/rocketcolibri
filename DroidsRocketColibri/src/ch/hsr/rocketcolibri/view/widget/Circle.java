@@ -132,6 +132,13 @@ public final class Circle extends CustomizableView implements IRCWidget  {
 			setOnTouchListener(tInternalControlListener); 
 	}
 	
+	@Override
+	public void setCustomizeModusListener(OnTouchListener customizeModusListener){
+		tCustomizeModusListener = customizeModusListener;
+		setOnTouchListener(tCustomizeModusListener);
+	}
+	
+	
 	private boolean areChannelsValid(){
 		return tChannelH.getDefaultChannelValue()>-1 || tChannelV.getDefaultChannelValue()>-1;
 	}
@@ -359,13 +366,11 @@ public final class Circle extends CustomizableView implements IRCWidget  {
 	@Override
 	public void create(RCWidgetConfig rcWidgetConfig) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void create(ViewElementConfig vElementConfig) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -386,13 +391,10 @@ public final class Circle extends CustomizableView implements IRCWidget  {
 	}
 
 	@Override
-	public void onNotifyUiOutputSink(Object data) {
-		
-	}
+	public void onNotifyUiOutputSink(Object data) {}
 
 	@Override
 	public UiOutputDataType getType() {
-		// TODO Auto-generated method stub
 		return UiOutputDataType.None;
 	}
 	

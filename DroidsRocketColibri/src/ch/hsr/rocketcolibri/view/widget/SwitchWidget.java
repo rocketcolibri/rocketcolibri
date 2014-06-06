@@ -3,6 +3,7 @@ package ch.hsr.rocketcolibri.view.widget;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.app.Service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,15 +14,19 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.ui_data.input.Channel;
+import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
+import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 
-public class SwitchWidget extends RCWidget {
-
+public class SwitchWidget extends CustomizableView implements IRCWidget {
+	protected RCWidgetConfig tWidgetConfig;
+	protected OnTouchListener tCustomizeModusListener;
 	private RectF switchIconRect;
 	private Paint switchIconPaint;
 	private Bitmap switchIconBitmap;
@@ -34,12 +39,15 @@ public class SwitchWidget extends RCWidget {
 
 	public SwitchWidget(Context context, ViewElementConfig elementConfig) {
 		super(context, elementConfig);
+		tWidgetConfig = new RCWidgetConfig();
+		tWidgetConfig.viewElementConfig = elementConfig;
 		bitmapResource = R.drawable.switch_off;
 		init(context, null);
 	}
-	
+	 
 	public SwitchWidget(Context context, RCWidgetConfig widgetConfig) {
-		super(context, widgetConfig);
+		super(context, widgetConfig.viewElementConfig);
+		tWidgetConfig = widgetConfig;
 		bitmapResource = R.drawable.switch_off;
 		init(context, null);
 	}
@@ -95,11 +103,6 @@ public class SwitchWidget extends RCWidget {
 	}
 
 	@Override
-	public Map<String, String> getProtocolMap() {
-		return protocolMap;
-	}
-
-	@Override
 	public void updateProtocolMap() {
 		try{
 			tChannelH.setDefaultChannelValue(getProtocolMapInt(RCConstants.CHANNEL_H));
@@ -112,7 +115,7 @@ public class SwitchWidget extends RCWidget {
 		}
 	}
 
-	@Override
+	
 	public int getNumberOfChannelListener() {
 		return 1; 
 	}
@@ -147,5 +150,68 @@ public class SwitchWidget extends RCWidget {
 	    ViewElementConfig elementConfig = new ViewElementConfig(SwitchWidget.class.getName(), lp, rc);
 	    elementConfig.setAlpha(1);
 	    return elementConfig;
+	}
+
+
+	@Override
+	public void setControlModusListener(OnChannelChangeListener channelListener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setCustomizeModusListener(OnTouchListener customizeModusListener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void create(RCWidgetConfig rcWidgetConfig) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void create(ViewElementConfig vElementConfig) {
+		// TODO Auto-generated method stub
+	}
+	@Override
+	public void setProtocolMap(Map<String, String> protocolMap) {
+		tWidgetConfig.protocolMap = protocolMap;
+		updateProtocolMap();
+	}
+
+	@Override
+	public void onNotifyUiOutputSink(Object data) {}
+
+	@Override
+	public UiOutputDataType getType() {
+		return UiOutputDataType.None;
+	}
+	
+	protected int getProtocolMapInt(String key){
+		try{
+			return Integer.parseInt(tWidgetConfig.protocolMap.get(key));
+		}catch(NumberFormatException e){
+			return -1;
+		}
+	}
+	
+	protected boolean getProtocolMapBoolean(String key){
+		try{
+			return Boolean.parseBoolean(tWidgetConfig.protocolMap.get(key));
+		}catch(Exception e){
+			return false;
+		}
+	}
+
+	@Override
+	public RCWidgetConfig getWidgetConfig() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public Map<String, String> getProtocolMap() {
+		return tWidgetConfig.protocolMap;
 	}
 }

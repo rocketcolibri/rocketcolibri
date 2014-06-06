@@ -33,7 +33,6 @@ import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeController;
 import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
-import ch.hsr.rocketcolibri.view.widget.RCWidget;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 
 
@@ -209,7 +208,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	}
 	
 	private void putProtocolExtras(Intent intent, View targetView){
-		RCWidget rcWidget = (RCWidget)targetView;
+		IRCWidget rcWidget = (IRCWidget)targetView;
 		Map<String, String> pm = rcWidget.getProtocolMap();
 		Set<String> keySet = pm.keySet();
 		for(String key : keySet){
@@ -220,7 +219,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	@Override
 	public void editActivityResult(int viewIndex, Intent editChannelIntent){
 		Log.d(""+viewIndex, "editActivityResult");
-		RCWidget rcw = (RCWidget)tControlElementParentView.getChildAt(viewIndex);
+		IRCWidget rcw = (IRCWidget)tControlElementParentView.getChildAt(viewIndex);
 		Set<String> keySet = rcw.getProtocolMap().keySet();
 		for(String key : keySet){
 			Log.d(""+key, ""+editChannelIntent.getStringExtra(key));
@@ -254,7 +253,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	@Override
 	public void viewChanged(View view){
 		try{
-			tViewChangeListener.onViewChange(((RCWidget)view).getWidgetConfig());
+			tViewChangeListener.onViewChange(((IRCWidget)view).getWidgetConfig());
 		}catch(Exception e){
 		}
 	}

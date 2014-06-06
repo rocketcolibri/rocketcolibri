@@ -1,13 +1,17 @@
 package ch.hsr.rocketcolibri.view.widget;
 
+import java.util.Map;
+
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.ui_data.output.VideoUrl;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
+import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
+import android.app.Service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,9 +23,10 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.RelativeLayout;
 
-public class VideoStreamWidget extends RCWidget {
+public class VideoStreamWidget extends CustomizableView implements IRCWidget {
 	
 	static final String TAG = "VideoStreamWidget";
     private VideoStreamWidgetSurface tVideoSurfaceView;
@@ -33,13 +38,18 @@ public class VideoStreamWidget extends RCWidget {
     RelativeLayout tRel;
     private AbsoluteLayout tParent;
 	
+	protected RCWidgetConfig tWidgetConfig;
+	protected OnTouchListener tCustomizeModusListener;
+    
 	public VideoStreamWidget(Context context, ViewElementConfig elementConfig) 	{
 		super(context, elementConfig);
+		tWidgetConfig = new RCWidgetConfig();
 		init(context, null);
 	}
 	
 	public VideoStreamWidget(Context context, RCWidgetConfig widgetConfig) 	{
 		super(context, widgetConfig.viewElementConfig);
+		tWidgetConfig = widgetConfig;
   	  	init(context, null);
 	}
 	
@@ -51,8 +61,10 @@ public class VideoStreamWidget extends RCWidget {
 		tRectRectF  = new RectF();
 		tVideoBitmap =  BitmapFactory.decodeResource(getContext().getResources(), R.drawable.video_camera);
 
+		
 	  	tVideoSurfaceView = new VideoStreamWidgetSurface(context);
-	  	tVideoSurfaceView.setLayoutParams(new android.view.ViewGroup.LayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams()));
+	  	if(null != tWidgetConfig.viewElementConfig)
+	  		tVideoSurfaceView.setLayoutParams(new android.view.ViewGroup.LayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams()));
 	  	tVideoSurfaceView.setTag(tVideoSurfaceViewTag);
 	  	
 		setModusChangeListener(new ModusChangeListener() {
@@ -132,5 +144,59 @@ public class VideoStreamWidget extends RCWidget {
 	    LayoutParams lp = new LayoutParams(400, 300 , 100, 100);
 	    ViewElementConfig elementConfig = new ViewElementConfig(VideoStreamWidget.class.getName(), lp, rc);
 	    return elementConfig;
+	}
+
+	@Override
+	public void create(RCWidgetConfig rcWidgetConfig) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void create(ViewElementConfig vElementConfig) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setControlModusListener(OnChannelChangeListener channelListener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setCustomizeModusListener(OnTouchListener customizeModusListener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public RCWidgetConfig getWidgetConfig() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<String, String> getProtocolMap() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setProtocolMap(Map<String, String> protocolMap) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyServiceReady(Service tService) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setCustomizeModus(boolean tCustomizeModus) {
+		// TODO Auto-generated method stub
+		
 	}
 }
