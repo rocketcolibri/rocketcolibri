@@ -15,7 +15,7 @@ import android.graphics.Shader;
 import android.view.View;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
-import ch.hsr.rocketcolibri.channel.Channel;
+import ch.hsr.rocketcolibri.ui_data.input.Channel;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;

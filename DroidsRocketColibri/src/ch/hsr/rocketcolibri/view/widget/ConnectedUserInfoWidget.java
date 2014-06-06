@@ -19,12 +19,12 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RcOperator;
+import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
+import ch.hsr.rocketcolibri.ui_data.output.UserData;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
-import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
-import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.UserData;
 
 /**
  * @short widget to display the user data received from the ServoController 

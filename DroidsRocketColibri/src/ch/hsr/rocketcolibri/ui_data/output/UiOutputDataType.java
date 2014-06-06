@@ -1,7 +1,7 @@
 /**
  * Rocket Colibri © 2014
  */
-package ch.hsr.rocketcolibri.widgetdirectory;
+package ch.hsr.rocketcolibri.ui_data.output;
 
 /**
  * user interface output data type

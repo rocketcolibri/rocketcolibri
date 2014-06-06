@@ -1,7 +1,7 @@
 /**
  * Rocket Colibri © 2014
  */
-package ch.hsr.rocketcolibri.channel;
+package ch.hsr.rocketcolibri.ui_data.input;
 
 /**
  * @short modell of an RC channel

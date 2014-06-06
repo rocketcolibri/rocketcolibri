@@ -11,7 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
-import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.VideoUrl;
+import ch.hsr.rocketcolibri.ui_data.output.VideoUrl;
 
 public class RocketColibriMessageTelemetry extends RocketColibriMessage {
 	final String TAG = this.getClass().getName();		

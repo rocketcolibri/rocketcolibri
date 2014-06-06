@@ -17,12 +17,12 @@ import android.graphics.Shader;
 import android.util.AttributeSet;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
+import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
+import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
-import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
-import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.ConnectionState;
 
 
 /**

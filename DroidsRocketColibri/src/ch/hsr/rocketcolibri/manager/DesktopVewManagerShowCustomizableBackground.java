@@ -1,6 +1,8 @@
 package ch.hsr.rocketcolibri.manager;
 
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
+import ch.hsr.rocketcolibri.ui_data.output.VideoUrl;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
@@ -9,8 +11,6 @@ import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 import ch.hsr.rocketcolibri.view.widget.VideoStreamWidget;
 import ch.hsr.rocketcolibri.view.widget.VideoStreamWidgetSurface;
-import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
-import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.VideoUrl;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

@@ -1,8 +1,7 @@
 /**
  * Rocket Colibri © 2014
  */
-package ch.hsr.rocketcolibri.widgetdirectory.uioutputdata;
-import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
+package ch.hsr.rocketcolibri.ui_data.output;
 
 /**
  * parent class of all objects that are provided from

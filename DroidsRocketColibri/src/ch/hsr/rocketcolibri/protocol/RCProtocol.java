@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.net.wifi.p2p.WifiP2pManager.Channel;
+import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
+import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObservable;
+import ch.hsr.rocketcolibri.ui_data.output.UiOutputData;
+import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
+import ch.hsr.rocketcolibri.ui_data.output.UserData;
+import ch.hsr.rocketcolibri.ui_data.output.VideoUrl;
 import ch.hsr.rocketcolibri.view.widget.RCWidget;
-import ch.hsr.rocketcolibri.widgetdirectory.IUiOutputSinkChangeObservable;
-import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
-import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.ConnectionState;
-import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.UiOutputData;
-import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.UserData;
-import ch.hsr.rocketcolibri.widgetdirectory.uioutputdata.VideoUrl;
 
 
 public class RCProtocol implements IUiOutputSinkChangeObservable{

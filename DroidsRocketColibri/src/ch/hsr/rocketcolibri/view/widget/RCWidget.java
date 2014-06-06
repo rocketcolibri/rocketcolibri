@@ -8,9 +8,9 @@ import java.util.Map;
 import android.app.Service;
 import android.content.Context;
 import ch.hsr.rocketcolibri.RocketColibriService;
+import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 
 /**
  * Describes the interface between a widget and the RocketColibriService

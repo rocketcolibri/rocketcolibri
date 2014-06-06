@@ -1,10 +1,9 @@
 /**
  * Rocket Colibri © 2014
  */
-package ch.hsr.rocketcolibri.widgetdirectory.uioutputdata;
+package ch.hsr.rocketcolibri.ui_data.output;
 
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
-import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 
 /**
  * Contains the information about the state of the connection

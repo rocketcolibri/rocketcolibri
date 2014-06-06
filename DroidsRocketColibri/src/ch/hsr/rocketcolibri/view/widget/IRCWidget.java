@@ -3,8 +3,8 @@ package ch.hsr.rocketcolibri.view.widget;
 import java.util.Map;
 
 import android.view.View.OnTouchListener;
+import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import ch.hsr.rocketcolibri.widgetdirectory.UiOutputDataType;
 
 public interface IRCWidget {
     /**This Method will be called on loading the whole Model at startup*/
