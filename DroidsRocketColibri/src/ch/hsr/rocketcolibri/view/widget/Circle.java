@@ -4,12 +4,15 @@
 package ch.hsr.rocketcolibri.view.widget;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.protocol.RCProtocolUdp;
 import ch.hsr.rocketcolibri.ui_data.input.Channel;
+import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
+import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
@@ -31,6 +34,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.Toast;
 import android.content.res.TypedArray;
@@ -38,7 +42,7 @@ import android.content.res.TypedArray;
 /**
  * @author Artan Veliju
  */
-public final class Circle extends RCWidget {
+public final class Circle extends CustomizableView implements IRCWidget  {
 //	private static final String TAG = Circle.class.getSimpleName();
 	private RectF rimRect;
 	private Paint rimPaint;
@@ -59,8 +63,12 @@ public final class Circle extends RCWidget {
 	private OnChannelChangeListener tControlModusListener;
 	private MyOnTouchListener tInternalControlListener = new MyOnTouchListener();
 	
+	protected RCWidgetConfig tWidgetConfig;
+	protected OnTouchListener tCustomizeModusListener;
+	
 	public Circle(Context context, RCWidgetConfig rcWidgetConfig){
-		super(context, rcWidgetConfig);
+		super(context, rcWidgetConfig.viewElementConfig);
+		tWidgetConfig = rcWidgetConfig;
 		backgroundResource = R.drawable.cross;
 		positionInPercentX = 20;
 		positionInPercentY = 100;
@@ -72,8 +80,9 @@ public final class Circle extends RCWidget {
 	
 	public Circle(Context context, ViewElementConfig elementConfig) {
 		super(context, elementConfig);
+		tWidgetConfig = new RCWidgetConfig();
 		backgroundResource = R.drawable.cross;
-		positionInPercentX = 20;
+		positionInPercentX = 20; 
 		positionInPercentY = 100;
 		orientationSide = "left";
 		diameterInDP = elementConfig.getLayoutParams().width;
@@ -330,7 +339,7 @@ public final class Circle extends RCWidget {
 		}
 	}
 
-	@Override
+
 	public int getNumberOfChannelListener() {
 		return 2; 
 	}
@@ -346,5 +355,61 @@ public final class Circle extends RCWidget {
 	    ViewElementConfig elementConfig = new ViewElementConfig(Circle.class.getName(), lp, rc);
 	    return elementConfig;
 	}
+
+	@Override
+	public void create(RCWidgetConfig rcWidgetConfig) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void create(ViewElementConfig vElementConfig) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public RCWidgetConfig getWidgetConfig() {
+		tWidgetConfig.viewElementConfig = getViewElementConfig();
+		return tWidgetConfig;
+	}
+
+	@Override
+	public Map<String, String> getProtocolMap() {
+		return tWidgetConfig.protocolMap;
+	}
+
+	@Override
+	public void setProtocolMap(Map<String, String> protocolMap) {
+		tWidgetConfig.protocolMap = protocolMap;
+		updateProtocolMap();
+	}
+
+	@Override
+	public void onNotifyUiOutputSink(Object data) {
+		
+	}
+
+	@Override
+	public UiOutputDataType getType() {
+		// TODO Auto-generated method stub
+		return UiOutputDataType.None;
+	}
 	
+	protected int getProtocolMapInt(String key){
+		try{
+			return Integer.parseInt(tWidgetConfig.protocolMap.get(key));
+		}catch(NumberFormatException e){
+			return -1;
+		}
+	}
+	
+	protected boolean getProtocolMapBoolean(String key){
+		try{
+			return Boolean.parseBoolean(tWidgetConfig.protocolMap.get(key));
+		}catch(Exception e){
+			return false;
+		}
+	}
 }
+

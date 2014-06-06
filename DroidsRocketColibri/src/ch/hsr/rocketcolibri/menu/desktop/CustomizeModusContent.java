@@ -8,6 +8,7 @@ import ch.hsr.rocketcolibri.util.CacheUtil;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
+import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 import ch.hsr.rocketcolibri.widgetdirectory.WidgetEntry;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -43,7 +44,7 @@ public class CustomizeModusContent extends ModusContent{
 					Log.d("loadBitmap", ""+wEntry.getClassPath());
 				}catch(FileNotFoundException e){ 
 					Log.d("createBitmap", ""+wEntry.getClassPath());
-					viewBitmap = cacheUtil.createBitmap(createIconView(wEntry, width, height), wEntry.getClassPath());
+					viewBitmap = cacheUtil.createBitmap((View)createIconView(wEntry, width, height), wEntry.getClassPath());
 				}
 				iView.setImageBitmap(viewBitmap);
 				iView.setBackgroundResource(R.drawable.border);
@@ -88,7 +89,7 @@ public class CustomizeModusContent extends ModusContent{
 	 * not for interaction with the View itself.
 	 * @throws Exception 
 	 */
-	private CustomizableView createIconView(WidgetEntry wEntry, int width, int height) throws Exception{
+	private IRCWidget createIconView(WidgetEntry wEntry, int width, int height) throws Exception{
 		ViewElementConfig vec = wEntry.getDefaultViewElementConfig();
 		vec.setLayoutParams(new AbsoluteLayout.LayoutParams(width, height, 0, 0));
 		return tDesktopViewManager.createView(vec);

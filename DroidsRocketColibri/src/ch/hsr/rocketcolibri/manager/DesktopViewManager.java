@@ -31,6 +31,7 @@ import ch.hsr.rocketcolibri.view.draggable.IDragSource;
 import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeController;
+import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
 import ch.hsr.rocketcolibri.view.widget.RCWidget;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
@@ -109,47 +110,47 @@ public class DesktopViewManager implements IDesktopViewManager{
 	}
 	
 	@Override
-	public RCWidget createAndAddView(ViewElementConfig vElementConfig) throws Exception{
-		RCWidget widget = createView(vElementConfig);
+	public IRCWidget createAndAddView(ViewElementConfig vElementConfig) throws Exception{
+		IRCWidget widget = createView(vElementConfig);
 		processRCWidget(widget);
 	    tViewChangeListener.onViewAdd(widget.getWidgetConfig());
 	    return widget;
 	}
 	
 	@Override
-	public RCWidget initCreateAndAddView(RCWidgetConfig widgetConfig) throws Exception{
-		RCWidget widget = createView(widgetConfig);
+	public IRCWidget initCreateAndAddView(RCWidgetConfig widgetConfig) throws Exception{
+		IRCWidget widget = createView(widgetConfig);
 		processRCWidget(widget);
 	    return widget;
 	}
 	
-	private void processRCWidget(RCWidget widget){
+	private void processRCWidget(IRCWidget widget){
 		widget.setCustomizeModusListener(tCustomizeModusListener);
 	    try{widget.setControlModusListener(tControlModusListener);}catch(ClassCastException e){}
 	    widget.setCustomizeModus(tCustomizeModus);
-	    tControlElementParentView.addView(widget);
+	    tControlElementParentView.addView((View)widget);
 	    if(null != tService)widget.notifyServiceReady(tService);
 	}
 	
 	@Override
-	public RCWidget createView(ViewElementConfig vElementConfig) throws Exception{
+	public IRCWidget createView(ViewElementConfig vElementConfig) throws Exception{
 	    Class<?> c = Class.forName(vElementConfig.getClassPath());
 	    Constructor<?> cons = c.getConstructor(Context.class, ViewElementConfig.class);
-	    return (RCWidget)cons.newInstance(tContext, vElementConfig);
+	    return (IRCWidget)cons.newInstance(tContext, vElementConfig);
 	}
 	
 	@Override
-	public RCWidget createView(RCWidgetConfig vElementConfig) throws Exception{
+	public IRCWidget createView(RCWidgetConfig vElementConfig) throws Exception{
 	    Class<?> c = Class.forName(vElementConfig.viewElementConfig.getClassPath());
 	    Constructor<?> cons = c.getConstructor(Context.class, RCWidgetConfig.class);
 	    Log.d("createView", ""+vElementConfig);
 	    Log.d("createView map", ""+vElementConfig.protocolMap);
-	    return (RCWidget)cons.newInstance(tContext, vElementConfig);
+	    return (IRCWidget)cons.newInstance(tContext, vElementConfig);
 	}
 	
 	@Override
 	public void deleteView(View view){
-		tViewChangeListener.onViewDelete(((RCWidget)view).getWidgetConfig());
+		tViewChangeListener.onViewDelete(((IRCWidget)view).getWidgetConfig());
 		tControlElementParentView.removeView(view);
 	}
 

@@ -2,6 +2,7 @@ package ch.hsr.rocketcolibri.view.widget;
 
 import java.util.Map;
 
+import android.app.Service;
 import android.view.View.OnTouchListener;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
@@ -62,5 +63,9 @@ public interface IRCWidget {
 	 * @return type
 	 */
 	UiOutputDataType getType();
+
+	void notifyServiceReady(Service tService);
+
+	void setCustomizeModus(boolean tCustomizeModus);
 
 }
