@@ -68,7 +68,7 @@ public class SwitchWidget extends CustomizableView implements IRCWidget {
 	    	else {
 	    		switchSetOn = true;
 	    		bitmapResource = R.drawable.switch_on;
-	    		tPosition = 1;
+	    		tPosition = 1000;
 	    	}
 	    	setSwitchState();
 	    	
@@ -160,20 +160,17 @@ public class SwitchWidget extends CustomizableView implements IRCWidget {
 	}
 
 	@Override
-	public void setCustomizeModusListener(OnTouchListener customizeModusListener) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void create(RCWidgetConfig rcWidgetConfig) {
-		// TODO Auto-generated method stub
+		tWidgetConfig = rcWidgetConfig;
+		init(getContext(), null);
 	}
 
 	@Override
 	public void create(ViewElementConfig vElementConfig) {
-		// TODO Auto-generated method stub
+		tWidgetConfig = new RCWidgetConfig(vElementConfig);
+		init(getContext(), null);
 	}
+
 	@Override
 	public void setProtocolMap(Map<String, String> protocolMap) {
 		tWidgetConfig.protocolMap = protocolMap;
@@ -206,8 +203,8 @@ public class SwitchWidget extends CustomizableView implements IRCWidget {
 
 	@Override
 	public RCWidgetConfig getWidgetConfig() {
-		// TODO Auto-generated method stub
-		return null;
+		tWidgetConfig.viewElementConfig = getViewElementConfig();
+		return tWidgetConfig;
 	}
 	
 	@Override
