@@ -14,6 +14,7 @@ import ch.hsr.rocketcolibri.protocol.WifiConnection;
 import ch.hsr.rocketcolibri.view.widget.Circle;
 import ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget;
 import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
+import ch.hsr.rocketcolibri.view.widget.RotaryKnobWidget;
 import ch.hsr.rocketcolibri.view.widget.SwitchWidget;
 import ch.hsr.rocketcolibri.view.widget.VideoStreamWidget;
 import ch.hsr.rocketcolibri.widgetdirectory.WidgetEntry;
@@ -73,6 +74,7 @@ public class RocketColibriService extends Service  {
 		this.tWidgetDirectory.add(new WidgetEntry("User Info", ConnectedUserInfoWidget.class.getName(), ConnectedUserInfoWidget.getDefaultViewElementConfig()));
 		this.tWidgetDirectory.add(new WidgetEntry("Video Stream", VideoStreamWidget.class.getName(), VideoStreamWidget.getDefaultViewElementConfig()));
 		this.tWidgetDirectory.add(new WidgetEntry("Switch", SwitchWidget.class.getName(), SwitchWidget.getDefaultViewElementConfig()));
+		this.tWidgetDirectory.add(new WidgetEntry("Rotary knob", RotaryKnobWidget.class.getName(), RotaryKnobWidget.getDefaultViewElementConfig()));
 		
 		// create database instance
 		tRocketColibriDB = new RocketColibriDB(this);
