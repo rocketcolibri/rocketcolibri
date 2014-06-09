@@ -74,7 +74,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	    tCustomizeModusListener = new CustomizeModusListener(this);
 	    tDesktopMenu = new DesktopMenu(tContext, this);
 	    tControlModusListener = controlModusListener;
-	    tBacktgroundView = new DesktopVewManagerShowCustomizableBackground(tContext);
+	    tBacktgroundView = new DesktopViewManagerShowCustomizableBackground(tContext);
 	}
 
 	@Override

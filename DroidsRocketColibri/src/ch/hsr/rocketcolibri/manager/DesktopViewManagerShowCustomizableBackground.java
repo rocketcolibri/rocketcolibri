@@ -24,7 +24,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-public class DesktopVewManagerShowCustomizableBackground extends View{
+public class DesktopViewManagerShowCustomizableBackground extends View{
 	
     
     
@@ -35,7 +35,7 @@ public class DesktopVewManagerShowCustomizableBackground extends View{
     RelativeLayout tRel;
 
     
-	public DesktopVewManagerShowCustomizableBackground(Context context) {
+	public DesktopViewManagerShowCustomizableBackground(Context context) {
 		super(context);
 		init(context);
 		// TODO Auto-generated constructor stub
