@@ -48,11 +48,13 @@ public class ConnectedUserInfoWidget extends CustomizableView implements IRCWidg
 	
 	public ConnectedUserInfoWidget(Context context, ViewElementConfig elementConfig) {
 		super(context, elementConfig);
+		tWidgetConfig = new RCWidgetConfig();
 		init(context, null);
 	}
 	
 	public ConnectedUserInfoWidget(Context context, RCWidgetConfig widgetConfig) {
 		super(context, widgetConfig.viewElementConfig);
+		tWidgetConfig = widgetConfig;
 		init(context, null);
 	}
 	

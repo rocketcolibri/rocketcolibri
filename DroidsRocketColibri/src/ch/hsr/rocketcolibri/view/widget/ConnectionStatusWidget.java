@@ -39,11 +39,13 @@ public class ConnectionStatusWidget extends CustomizableView implements IRCWidge
 	
 	public ConnectionStatusWidget(Context context, ViewElementConfig elementConfig) {
 		super(context, elementConfig);
+		tWidgetConfig = new RCWidgetConfig();
 		init(context, null);
 	}
 	
 	public ConnectionStatusWidget(Context context, RCWidgetConfig widgetConfig) {
 		super(context, widgetConfig.viewElementConfig);
+		tWidgetConfig = widgetConfig;
 		init(context, null);
 	}
 	

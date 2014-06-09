@@ -53,12 +53,14 @@ public class RotaryKnobWidget extends CustomizableView implements IRCWidget {
 
 	public RotaryKnobWidget(Context context, ViewElementConfig elementConfig) {
 		super(context, elementConfig);
+		tWidgetConfig = new RCWidgetConfig();
 		backgroundResource = R.drawable.rotoron;
 		initialize(context);
 	}
 
 	public RotaryKnobWidget(Context context, RCWidgetConfig widgetConfig) {
 		super(context, widgetConfig.viewElementConfig);
+		tWidgetConfig = widgetConfig;
 		backgroundResource = R.drawable.rotoron;
 		initialize(context);
 	}
