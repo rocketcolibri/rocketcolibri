@@ -43,7 +43,7 @@ public class VideoStreamWidget extends CustomizableView implements IRCWidget {
     
 	public VideoStreamWidget(Context context, ViewElementConfig elementConfig) 	{
 		super(context, elementConfig);
-		tWidgetConfig = new RCWidgetConfig();
+		tWidgetConfig = new RCWidgetConfig(elementConfig);
 		init(context, null);
 	}
 	

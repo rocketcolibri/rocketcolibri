@@ -39,8 +39,7 @@ public class SwitchWidget extends CustomizableView implements IRCWidget {
 
 	public SwitchWidget(Context context, ViewElementConfig elementConfig) {
 		super(context, elementConfig);
-		tWidgetConfig = new RCWidgetConfig();
-		tWidgetConfig.viewElementConfig = elementConfig;
+		tWidgetConfig = new RCWidgetConfig(elementConfig);
 		bitmapResource = R.drawable.switch_off;
 		init(context, null);
 	}

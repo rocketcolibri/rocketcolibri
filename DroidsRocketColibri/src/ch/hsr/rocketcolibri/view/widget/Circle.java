@@ -80,7 +80,7 @@ public final class Circle extends CustomizableView implements IRCWidget  {
 	
 	public Circle(Context context, ViewElementConfig elementConfig) {
 		super(context, elementConfig);
-		tWidgetConfig = new RCWidgetConfig();
+		tWidgetConfig = new RCWidgetConfig(elementConfig);
 		backgroundResource = R.drawable.cross;
 		positionInPercentX = 20; 
 		positionInPercentY = 100;
