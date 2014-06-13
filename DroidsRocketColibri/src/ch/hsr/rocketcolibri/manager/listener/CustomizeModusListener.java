@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
-import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.popup.PopupWindow.OnDismissListener;
 
 /**
@@ -80,7 +80,7 @@ public class CustomizeModusListener implements OnTouchListener{
 	}
 	
 	boolean singleTab(View tabbedView) {
-		tDesktopViewManager.getCustomizeModusPopupMenu().show((CustomizableView) tabbedView);
+		tDesktopViewManager.getCustomizeModusPopupMenu().show((ICustomizableView) tabbedView);
     	return true;
 	}
 	

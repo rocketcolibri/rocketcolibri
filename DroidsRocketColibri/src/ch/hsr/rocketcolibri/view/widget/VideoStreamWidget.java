@@ -7,7 +7,7 @@ import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.ui_data.output.VideoUrl;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
-import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
@@ -22,11 +22,12 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.RelativeLayout;
 
-public class VideoStreamWidget extends CustomizableView implements IRCWidget {
+public class VideoStreamWidget extends SurfaceView implements ICustomizableView, IRCWidget {
 	
 	static final String TAG = "VideoStreamWidget";
     private VideoStreamWidgetSurface tVideoSurfaceView;
@@ -39,17 +40,25 @@ public class VideoStreamWidget extends CustomizableView implements IRCWidget {
     private AbsoluteLayout tParent;
 	
 	protected RCWidgetConfig tWidgetConfig;
+	protected ViewElementConfig tViewElementConfig;
 	protected OnTouchListener tCustomizeModusListener;
     
 	public VideoStreamWidget(Context context, ViewElementConfig elementConfig) 	{
-		super(context, elementConfig);
+		super(context);
+		tViewElementConfig = elementConfig;
+		tWidgetConfig = new RCWidgetConfig(tViewElementConfig);
+		setLayoutParams(tViewElementConfig.getLayoutParams());
+		setAlpha(tViewElementConfig.getAlpha());
 		tWidgetConfig = new RCWidgetConfig(elementConfig);
 		init(context, null);
 	}
 	
 	public VideoStreamWidget(Context context, RCWidgetConfig widgetConfig) 	{
-		super(context, widgetConfig.viewElementConfig);
+		super(context);
 		tWidgetConfig = widgetConfig;
+		tViewElementConfig = widgetConfig.viewElementConfig;
+		setLayoutParams(tViewElementConfig.getLayoutParams());
+		setAlpha(tViewElementConfig.getAlpha());
   	  	init(context, null);
 	}
 	
@@ -198,5 +207,17 @@ public class VideoStreamWidget extends CustomizableView implements IRCWidget {
 	public void setCustomizeModus(boolean tCustomizeModus) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setModusChangeListener(ModusChangeListener mcl) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ViewElementConfig getViewElementConfig() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

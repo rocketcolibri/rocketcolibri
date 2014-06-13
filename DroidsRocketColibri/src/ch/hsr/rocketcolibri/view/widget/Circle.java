@@ -12,10 +12,11 @@ import ch.hsr.rocketcolibri.protocol.RCProtocolUdp;
 import ch.hsr.rocketcolibri.ui_data.input.Channel;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
-import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
+import android.app.Service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -42,7 +43,7 @@ import android.content.res.TypedArray;
 /**
  * @author Artan Veliju
  */
-public final class Circle extends CustomizableView implements IRCWidget  {
+public final class Circle extends View implements ICustomizableView, IRCWidget  {
 //	private static final String TAG = Circle.class.getSimpleName();
 	private RectF rimRect;
 	private Paint rimPaint;
@@ -67,7 +68,7 @@ public final class Circle extends CustomizableView implements IRCWidget  {
 	protected OnTouchListener tCustomizeModusListener;
 	
 	public Circle(Context context, RCWidgetConfig rcWidgetConfig){
-		super(context, rcWidgetConfig.viewElementConfig);
+		super(context);
 		tWidgetConfig = rcWidgetConfig;
 		backgroundResource = R.drawable.cross;
 		positionInPercentX = 20;
@@ -79,7 +80,7 @@ public final class Circle extends CustomizableView implements IRCWidget  {
 	}
 	
 	public Circle(Context context, ViewElementConfig elementConfig) {
-		super(context, elementConfig);
+		super(context);
 		tWidgetConfig = new RCWidgetConfig(elementConfig);
 		backgroundResource = R.drawable.cross;
 		positionInPercentX = 20; 
@@ -412,6 +413,30 @@ public final class Circle extends CustomizableView implements IRCWidget  {
 		}catch(Exception e){
 			return false;
 		}
+	}
+
+	@Override
+	public void setCustomizeModus(boolean enabled) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setModusChangeListener(ModusChangeListener mcl) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyServiceReady(Service service) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ViewElementConfig getViewElementConfig() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 

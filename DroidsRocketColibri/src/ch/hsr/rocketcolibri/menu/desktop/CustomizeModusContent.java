@@ -6,7 +6,7 @@ import java.util.List;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.util.CacheUtil;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
-import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 import ch.hsr.rocketcolibri.widgetdirectory.WidgetEntry;
@@ -95,13 +95,13 @@ public class CustomizeModusContent extends ModusContent{
 		return tDesktopViewManager.createView(vec);
 	}
 	
-	private CustomizableView setupView(WidgetEntry we, MotionEvent e) throws Exception{
+	private ICustomizableView setupView(WidgetEntry we, MotionEvent e) throws Exception{
 		ViewElementConfig vec = we.getDefaultViewElementConfig();
 		AbsoluteLayout.LayoutParams lp = vec.getLayoutParams();
 		AbsoluteLayout rootView = tDesktopViewManager.getRootView();
 		lp.x = (int) (rootView.getWidth()/2)-lp.width/2;
 		lp.y = (int) (rootView.getHeight()/2)-lp.height/2;
-		CustomizableView v1 = (CustomizableView) tDesktopViewManager.createAndAddView(vec);
+		ICustomizableView v1 = (ICustomizableView) tDesktopViewManager.createAndAddView(vec);
 		v1.setCustomizeModus(true);
 		return v1;
 	}

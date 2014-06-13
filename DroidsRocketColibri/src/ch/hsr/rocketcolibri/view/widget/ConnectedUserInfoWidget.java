@@ -6,6 +6,7 @@ package ch.hsr.rocketcolibri.view.widget;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,20 +18,24 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.View.OnTouchListener;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RcOperator;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.ui_data.output.UserData;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
-import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 
 /**
  * @short widget to display the user data received from the ServoController 
  */
-public class ConnectedUserInfoWidget extends CustomizableView implements IRCWidget {
+public class ConnectedUserInfoWidget extends View implements ICustomizableView, IRCWidget {
 	
+	protected ViewElementConfig tViewElementConfig;
 	protected RCWidgetConfig tWidgetConfig;
 	private Paint tUserBitmapPaint;
 	private Bitmap tObserverBitmap;
@@ -43,18 +48,27 @@ public class ConnectedUserInfoWidget extends CustomizableView implements IRCWidg
     private Paint tRectPaint;
     private Rect tRectRect;
     private RectF tRectRectF;
+    private Context tContext;
 
 	private UserData tUserData;
 	
 	public ConnectedUserInfoWidget(Context context, ViewElementConfig elementConfig) {
-		super(context, elementConfig);
-		tWidgetConfig = new RCWidgetConfig(elementConfig);
+		super(context);
+		tViewElementConfig = elementConfig;
+		tWidgetConfig = new RCWidgetConfig(tViewElementConfig);
+		setLayoutParams(tViewElementConfig.getLayoutParams());
+		setAlpha(tViewElementConfig.getAlpha());
+		tContext = context;
 		init(context, null);
 	}
 	
 	public ConnectedUserInfoWidget(Context context, RCWidgetConfig widgetConfig) {
-		super(context, widgetConfig.viewElementConfig);
+		super(context);
+		tViewElementConfig = widgetConfig.viewElementConfig;
 		tWidgetConfig = widgetConfig;
+		setLayoutParams(tViewElementConfig.getLayoutParams());
+		setAlpha(tViewElementConfig.getAlpha());
+		tContext = context;
 		init(context, null);
 	}
 	
@@ -69,15 +83,14 @@ public class ConnectedUserInfoWidget extends CustomizableView implements IRCWidg
 		tTextPaint.setColor(Color.WHITE);
 		tTextPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XOR));
 		tTextPaint.setTextSize(tFontSize);
-		tObserverBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_connected), tFontSize, tFontSize, true);	
-		tControlBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_control), tFontSize, tFontSize, true);
-		tUsersBitmap =  BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connected_users);
+		tObserverBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(tContext.getResources(), R.drawable.connection_status_connected), tFontSize, tFontSize, true);	
+		tControlBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(tContext.getResources(), R.drawable.connection_status_control), tFontSize, tFontSize, true);
+		tUsersBitmap =  BitmapFactory.decodeResource(tContext.getResources(), R.drawable.connected_users);
 		
 		tUserBitmapPaint = new Paint();
 		tUserBitmapPaint.setFilterBitmap(false);
 	}
 	
-	@Override
 	protected void onMeasure(int wMeasureSpec, int hMeasureSpec)	{
 		int measuredHeight = measureHeight(hMeasureSpec);
 		int measuredWidth  = measureWitdth(wMeasureSpec);
@@ -154,13 +167,13 @@ public class ConnectedUserInfoWidget extends CustomizableView implements IRCWidg
 	@Override
 	public void create(RCWidgetConfig rcWidgetConfig) {
 		tWidgetConfig = rcWidgetConfig;
-		init(getContext(), null);
+		init(tContext, null);
 	}
 
 	@Override
 	public void create(ViewElementConfig vElementConfig) {
 		tWidgetConfig = new RCWidgetConfig(vElementConfig);
-		init(getContext(), null);
+		init(tContext, null);
 	}
 
 	@Override
@@ -195,5 +208,35 @@ public class ConnectedUserInfoWidget extends CustomizableView implements IRCWidg
 	@Override
 	public UiOutputDataType getType() {
 		return UiOutputDataType.ConnectedUsers;
+	}
+
+	@Override
+	public void setCustomizeModusListener(OnTouchListener customizeModusListener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setCustomizeModus(boolean enabled) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setModusChangeListener(ModusChangeListener mcl) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyServiceReady(Service service) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ViewElementConfig getViewElementConfig() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

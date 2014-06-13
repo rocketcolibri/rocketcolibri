@@ -5,6 +5,7 @@ package ch.hsr.rocketcolibri.view.widget;
 
 import java.util.Map;
 
+import android.app.Service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,12 +16,15 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.View.OnTouchListener;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
-import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 
@@ -30,7 +34,9 @@ import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
  * 
  *  The status of the connection is indicated with a icon according to the Systemschnittstellen document 
  */
-public class ConnectionStatusWidget extends CustomizableView implements IRCWidget {
+public class ConnectionStatusWidget extends View implements ICustomizableView, IRCWidget {
+
+	protected ViewElementConfig tViewElementConfig;
 	protected RCWidgetConfig tWidgetConfig;
 	private RectF connectionIconRect;
 	private Paint connectionIconPaint;
@@ -38,14 +44,20 @@ public class ConnectionStatusWidget extends CustomizableView implements IRCWidge
 	
 	
 	public ConnectionStatusWidget(Context context, ViewElementConfig elementConfig) {
-		super(context, elementConfig);
-		tWidgetConfig = new RCWidgetConfig(elementConfig);
+		super(context);
+		tViewElementConfig = elementConfig;
+		tWidgetConfig = new RCWidgetConfig(tViewElementConfig);
+		setLayoutParams(tViewElementConfig.getLayoutParams());
+		setAlpha(tViewElementConfig.getAlpha());
 		init(context, null);
 	}
 	
 	public ConnectionStatusWidget(Context context, RCWidgetConfig widgetConfig) {
-		super(context, widgetConfig.viewElementConfig);
+		super(context);
+		tViewElementConfig = widgetConfig.viewElementConfig;
 		tWidgetConfig = widgetConfig;
+		setLayoutParams(tViewElementConfig.getLayoutParams());
+		setAlpha(tViewElementConfig.getAlpha());
 		init(context, null);
 	}
 	
@@ -160,5 +172,35 @@ public class ConnectionStatusWidget extends CustomizableView implements IRCWidge
 	public UiOutputDataType getType()
 	{
 		return UiOutputDataType.ConnectionState;
+	}
+
+	@Override
+	public void setCustomizeModusListener(OnTouchListener customizeModusListener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setCustomizeModus(boolean enabled) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setModusChangeListener(ModusChangeListener mcl) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyServiceReady(Service service) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ViewElementConfig getViewElementConfig() {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }

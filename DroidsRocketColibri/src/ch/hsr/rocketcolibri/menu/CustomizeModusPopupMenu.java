@@ -17,7 +17,7 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.HoldButton;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.HoldButton.OnHoldListener;
-import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.popup.PopupWindow;
 import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 
@@ -26,7 +26,7 @@ import ch.hsr.rocketcolibri.view.widget.IRCWidget;
  */
 public class CustomizeModusPopupMenu extends PopupWindow{
 
-	private CustomizableView tTargetView;
+	private ICustomizableView tTargetView;
 	private SeekBar alphaChangeSlider;
 	private IDesktopViewManager tDesktopViewManager;
 	private Button tEditChannelBtn;
@@ -46,7 +46,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		tEditChannelBtn = (Button) findViewById(R.id.editChannel);
 		tEditChannelBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				tDesktopViewManager.startEditActivity(tTargetView);
+				tDesktopViewManager.startEditActivity((View) tTargetView);
 			}
 		});
 		;
@@ -55,7 +55,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		b.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				dismiss();
-				tDesktopViewManager.resizeView(tTargetView);
+				tDesktopViewManager.resizeView((View) tTargetView);
 			}
 		});
 
@@ -68,7 +68,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 				tTargetView.startAnimation(deleteAnimation);
 			}
 			public void onHoldEnd(View v) {
-				tDesktopViewManager.deleteView(tTargetView);
+				tDesktopViewManager.deleteView((View) tTargetView);
 				dismiss();
 			}
 			public void onHoldCanceled() {
@@ -80,7 +80,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		alphaChangeSlider = (SeekBar)findViewById(R.id.alphaSlider);
 		alphaChangeSlider.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			public void onStopTrackingTouch(SeekBar seekBar) {
-				tDesktopViewManager.viewChanged(tTargetView);
+				tDesktopViewManager.viewChanged((View) tTargetView);
 			}
 			public void onStartTrackingTouch(SeekBar seekBar) {}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -89,7 +89,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		});
 	}
 	
-	public void show(CustomizableView cView){
+	public void show(ICustomizableView cView){
 		dismissPopupIfIsShowing();
 		tTargetView = cView;
 		try {
@@ -98,7 +98,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 			} else {setVisibilityOfEditChannelBtn(View.GONE);}
 		} catch (Exception e) {setVisibilityOfEditChannelBtn(View.GONE);}
 		alphaChangeSlider.setProgress((int)(tTargetView.getAlpha()*100f));
-		showAtBestPosition(cView);
+		showAtBestPosition((View) cView);
 	}
 	
 	private void setVisibilityOfEditChannelBtn(int visibility){

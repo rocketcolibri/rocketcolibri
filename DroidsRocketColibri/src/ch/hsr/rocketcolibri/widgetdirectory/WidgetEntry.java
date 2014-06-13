@@ -6,7 +6,7 @@ package ch.hsr.rocketcolibri.widgetdirectory;
 import java.lang.reflect.Constructor;
 
 import android.content.Context;
-import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 
 /**
@@ -25,7 +25,7 @@ public class WidgetEntry {
 		tViewElementConfig = defaultConfig;
 	}
 
-	public CustomizableView createWidget(Context context) throws Exception{
+	public ICustomizableView createWidget(Context context) throws Exception{
 		return createWidget(context, getDefaultViewElementConfig());
 	}
 	
@@ -36,10 +36,10 @@ public class WidgetEntry {
 	 * @return widget view
 	 * @throws Exception
 	 */
-	public CustomizableView createWidget(Context context, ViewElementConfig elementConfig) throws Exception{
+	public ICustomizableView createWidget(Context context, ViewElementConfig elementConfig) throws Exception{
 	    Class<?> c = Class.forName(this.tLabelText);
 	    Constructor<?> cons = c.getConstructor(Context.class, ViewElementConfig.class);
-	    CustomizableView view = (CustomizableView)cons.newInstance(context, elementConfig);
+	    ICustomizableView view = (ICustomizableView)cons.newInstance(context, elementConfig);
 	    return view;
 	}
 	

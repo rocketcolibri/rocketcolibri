@@ -20,12 +20,15 @@ import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.ui_data.input.Channel;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
-import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 
-public class SwitchWidget extends CustomizableView implements IRCWidget {
+public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
+
 	protected RCWidgetConfig tWidgetConfig;
+	protected ViewElementConfig tViewElementConfig;
 	protected OnTouchListener tCustomizeModusListener;
 	private RectF switchIconRect;
 	private Paint switchIconPaint;
@@ -38,15 +41,21 @@ public class SwitchWidget extends CustomizableView implements IRCWidget {
 	private boolean switchSetOn = false;
 
 	public SwitchWidget(Context context, ViewElementConfig elementConfig) {
-		super(context, elementConfig);
-		tWidgetConfig = new RCWidgetConfig(elementConfig);
+		super(context);
+		tViewElementConfig = elementConfig;
+		tWidgetConfig = new RCWidgetConfig(tViewElementConfig);
+		setLayoutParams(tViewElementConfig.getLayoutParams());
+		setAlpha(tViewElementConfig.getAlpha());
 		bitmapResource = R.drawable.switch_off;
 		init(context, null);
 	}
 	 
 	public SwitchWidget(Context context, RCWidgetConfig widgetConfig) {
-		super(context, widgetConfig.viewElementConfig);
+		super(context);
+		tViewElementConfig = widgetConfig.viewElementConfig;
 		tWidgetConfig = widgetConfig;
+		setLayoutParams(tViewElementConfig.getLayoutParams());
+		setAlpha(tViewElementConfig.getAlpha());
 		bitmapResource = R.drawable.switch_off;
 		init(context, null);
 	}
@@ -209,5 +218,35 @@ public class SwitchWidget extends CustomizableView implements IRCWidget {
 	@Override
 	public Map<String, String> getProtocolMap() {
 		return tWidgetConfig.protocolMap;
+	}
+
+	@Override
+	public void setCustomizeModusListener(OnTouchListener customizeModusListener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setCustomizeModus(boolean enabled) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setModusChangeListener(ModusChangeListener mcl) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyServiceReady(Service service) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ViewElementConfig getViewElementConfig() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

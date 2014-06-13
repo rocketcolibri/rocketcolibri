@@ -22,7 +22,7 @@ import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
 import ch.hsr.rocketcolibri.menu.CustomizeModusPopupMenu;
 import ch.hsr.rocketcolibri.menu.desktop.DesktopMenu;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
-import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.draggable.DragController;
 import ch.hsr.rocketcolibri.view.draggable.DragLayer;
@@ -81,7 +81,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	public void resizeView(View resizeTarget){
 		ResizeConfig rConfig = null;
 		try{
-			rConfig = ((CustomizableView)resizeTarget).getViewElementConfig().getResizeConfig();
+			rConfig = ((ICustomizableView)resizeTarget).getViewElementConfig().getResizeConfig();
 			tResizeController.startResize(tControlElementParentView, resizeTarget, rConfig);
 		}catch(Exception e){
 			tResizeController.startResize(tControlElementParentView, resizeTarget);
@@ -175,10 +175,10 @@ public class DesktopViewManager implements IDesktopViewManager{
 	
 	private void updateModusOfCustomizableViews(){
     	int size = tControlElementParentView.getChildCount();
-    	CustomizableView view = null;
+    	ICustomizableView view = null;
     	for(int i = 0; i < size; ++i){
     		try{
-    			view = (CustomizableView) tControlElementParentView.getChildAt(i);
+    			view = (ICustomizableView) tControlElementParentView.getChildAt(i);
     			view.setCustomizeModus(tCustomizeModus);
     		}catch(Exception e){
     		}
@@ -283,10 +283,10 @@ public class DesktopViewManager implements IDesktopViewManager{
 	public void serviceReady(Service service) {
 		tService = service;
 		int size = tControlElementParentView.getChildCount();
-    	CustomizableView view = null;
+    	ICustomizableView view = null;
     	for(int i = 0; i < size; ++i){
     		try{
-    			view = (CustomizableView) tControlElementParentView.getChildAt(i);
+    			view = (ICustomizableView) tControlElementParentView.getChildAt(i);
     			view.notifyServiceReady(service);
     		}catch(Exception e){
     		}

@@ -8,7 +8,7 @@ import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.ui_data.input.Channel;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
-import ch.hsr.rocketcolibri.view.custimizable.CustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
@@ -29,10 +29,11 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 
-public class RotaryKnobWidget extends CustomizableView implements IRCWidget {
+public class RotaryKnobWidget extends View implements ICustomizableView, IRCWidget {
 
 	private int backgroundResource;
 	protected RCWidgetConfig tWidgetConfig;
+	protected ViewElementConfig tViewElementConfig;
 	ImageView ivBack = null;
 	private float angle = 0f;
 	private float theta_old = 0f;
@@ -52,15 +53,21 @@ public class RotaryKnobWidget extends CustomizableView implements IRCWidget {
 	private RotaryKnobListener listener;
 
 	public RotaryKnobWidget(Context context, ViewElementConfig elementConfig) {
-		super(context, elementConfig);
-		tWidgetConfig = new RCWidgetConfig(elementConfig);
+		super(context);
+		tViewElementConfig = elementConfig;
+		tWidgetConfig = new RCWidgetConfig(tViewElementConfig);
+		setLayoutParams(tViewElementConfig.getLayoutParams());
+		setAlpha(tViewElementConfig.getAlpha());
 		backgroundResource = R.drawable.rotoron;
 		initialize(context);
 	}
 
 	public RotaryKnobWidget(Context context, RCWidgetConfig widgetConfig) {
-		super(context, widgetConfig.viewElementConfig);
+		super(context);
+		tViewElementConfig = widgetConfig.viewElementConfig;
 		tWidgetConfig = widgetConfig;
+		setLayoutParams(tViewElementConfig.getLayoutParams());
+		setAlpha(tViewElementConfig.getAlpha());
 		backgroundResource = R.drawable.rotoron;
 		initialize(context);
 	}
@@ -299,6 +306,24 @@ public class RotaryKnobWidget extends CustomizableView implements IRCWidget {
 		} catch (Exception e) {
 			return false;
 		}
+	}
+
+	@Override
+	public void setCustomizeModus(boolean enabled) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setModusChangeListener(ModusChangeListener mcl) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ViewElementConfig getViewElementConfig() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
