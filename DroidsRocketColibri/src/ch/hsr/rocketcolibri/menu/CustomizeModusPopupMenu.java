@@ -26,7 +26,7 @@ import ch.hsr.rocketcolibri.view.widget.IRCWidget;
  */
 public class CustomizeModusPopupMenu extends PopupWindow{
 
-	private ICustomizableView tTargetView;
+	private View tTargetView;
 	private SeekBar alphaChangeSlider;
 	private IDesktopViewManager tDesktopViewManager;
 	private Button tEditChannelBtn;
@@ -89,7 +89,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		});
 	}
 	
-	public void show(ICustomizableView cView){
+	public void show(View cView){
 		dismissPopupIfIsShowing();
 		tTargetView = cView;
 		try {

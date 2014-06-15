@@ -80,7 +80,7 @@ public class CustomizeModusListener implements OnTouchListener{
 	}
 	
 	boolean singleTab(View tabbedView) {
-		tDesktopViewManager.getCustomizeModusPopupMenu().show((ICustomizableView) tabbedView);
+		tDesktopViewManager.getCustomizeModusPopupMenu().show(tabbedView);
     	return true;
 	}
 	
