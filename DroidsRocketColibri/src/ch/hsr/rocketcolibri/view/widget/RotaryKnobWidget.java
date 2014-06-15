@@ -5,6 +5,7 @@ import java.util.Map;
 
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
+import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.ui_data.input.Channel;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
@@ -23,6 +24,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,6 +51,7 @@ public class RotaryKnobWidget extends View implements ICustomizableView, IRCWidg
 	private Channel tChannelH = new Channel();
 	private Map<String, String> protocolMap = new HashMap<String, String>();
 	private boolean isInitialized = false;
+	private boolean tCustomizeModusActive = false;
 
 	private RotaryKnobListener listener;
 
@@ -191,6 +194,16 @@ public class RotaryKnobWidget extends View implements ICustomizableView, IRCWidg
 			listener.onKnobChanged(arg);
 	}
 
+	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
+		@Override
+		public void customizeModeDeactivated() {
+		}
+
+		@Override
+		public void customizeModeActivated() {
+		}
+	};
+
 	protected void onDraw(Canvas canvas) {
 		canvas.getClipBounds(bounds);
 
@@ -204,7 +217,26 @@ public class RotaryKnobWidget extends View implements ICustomizableView, IRCWidg
 		canvas.drawOval(faceRect, facePaint);
 		canvas.rotate(angle, midX, midY);
 		canvas.restore();
-		super.onDraw(canvas);
+
+		if (!tCustomizeModusActive)
+			return;
+		final Drawable foreground = getResources().getDrawable(
+				R.drawable.dragforeground);
+		if (foreground != null) {
+			foreground.setBounds(0, 0, getRight() - getLeft(), getBottom()
+					- getTop());
+
+			final int scrollX = getScrollX();
+			final int scrollY = getScrollY();
+
+			if ((scrollX | scrollY) == 0) {
+				foreground.draw(canvas);
+			} else {
+				canvas.translate(scrollX, scrollY);
+				foreground.draw(canvas);
+				canvas.translate(-scrollX, -scrollY);
+			}
+		}
 	}
 
 	@Override
@@ -250,14 +282,12 @@ public class RotaryKnobWidget extends View implements ICustomizableView, IRCWidg
 
 	@Override
 	public void setCustomizeModusListener(OnTouchListener customizeModusListener) {
-		tCustomizeModusListener = customizeModusListener;
 		setOnTouchListener(tCustomizeModusListener);
 	}
 
 	@Override
 	public void setControlModusListener(OnChannelChangeListener channelListener) {
 		tControlModusListener = channelListener;
-		setOnTouchListener(tInternalControlListener);
 	}
 
 	@Override
@@ -287,9 +317,12 @@ public class RotaryKnobWidget extends View implements ICustomizableView, IRCWidg
 	}
 
 	@Override
-	public void notifyServiceReady(Service tService) {
-		// TODO Auto-generated method stub
-
+	public void notifyServiceReady(Service rcService) {
+		try {
+			((RocketColibriService) rcService).tProtocol
+					.registerUiOutputSinkChangeObserver((IRCWidget) this);
+		} catch (Exception e) {
+		}
 	}
 
 	protected int getProtocolMapInt(String key) {
@@ -310,20 +343,24 @@ public class RotaryKnobWidget extends View implements ICustomizableView, IRCWidg
 
 	@Override
 	public void setCustomizeModus(boolean enabled) {
-		// TODO Auto-generated method stub
-		
+		if (tCustomizeModusActive != enabled) {
+			if (enabled) {
+				tModusChangeListener.customizeModeActivated();
+			} else {
+				tModusChangeListener.customizeModeDeactivated();
+			}
+			invalidate();
+			tCustomizeModusActive = enabled;
+		}
 	}
 
 	@Override
 	public void setModusChangeListener(ModusChangeListener mcl) {
-		// TODO Auto-generated method stub
-		
+		tModusChangeListener = mcl;
 	}
 
 	@Override
 	public ViewElementConfig getViewElementConfig() {
-		// TODO Auto-generated method stub
-		return null;
+		return tViewElementConfig;
 	}
-
 }

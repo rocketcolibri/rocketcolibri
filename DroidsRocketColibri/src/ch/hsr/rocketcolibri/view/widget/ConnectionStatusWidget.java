@@ -19,6 +19,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
@@ -41,7 +42,7 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 	private RectF connectionIconRect;
 	private Paint connectionIconPaint;
 	private Bitmap connectionIconBitmap;
-	
+	private boolean tCustomizeModusActive = false;
 	
 	public ConnectionStatusWidget(Context context, ViewElementConfig elementConfig) {
 		super(context);
@@ -108,6 +109,16 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 		connectionIconPaint.setShader(paperShader);
 		postInvalidate();
 	}
+
+	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
+		@Override
+		public void customizeModeDeactivated() {
+		}
+
+		@Override
+		public void customizeModeActivated() {
+		}
+	};
 
 	public static ViewElementConfig getDefaultViewElementConfig() {
 		ResizeConfig rc = new ResizeConfig();
@@ -176,31 +187,38 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 
 	@Override
 	public void setCustomizeModusListener(OnTouchListener customizeModusListener) {
-		// TODO Auto-generated method stub
-		
+		setOnTouchListener(customizeModusListener);
 	}
 
 	@Override
 	public void setCustomizeModus(boolean enabled) {
-		// TODO Auto-generated method stub
-		
+		if (tCustomizeModusActive != enabled) {
+			if (enabled) {
+				tModusChangeListener.customizeModeActivated();
+			} else {
+				tModusChangeListener.customizeModeDeactivated();
+			}
+			invalidate();
+			tCustomizeModusActive = enabled;
+		}
 	}
 
 	@Override
 	public void setModusChangeListener(ModusChangeListener mcl) {
-		// TODO Auto-generated method stub
-		
+		tModusChangeListener = mcl;
 	}
 
 	@Override
-	public void notifyServiceReady(Service service) {
-		// TODO Auto-generated method stub
-		
+	public void notifyServiceReady(Service rcService) {
+		try {
+			((RocketColibriService) rcService).tProtocol
+					.registerUiOutputSinkChangeObserver((IRCWidget) this);
+		} catch (Exception e) {
+		}
 	}
 
 	@Override
 	public ViewElementConfig getViewElementConfig() {
-		// TODO Auto-generated method stub
-		return null;
+		return tViewElementConfig;
 	}	
 }

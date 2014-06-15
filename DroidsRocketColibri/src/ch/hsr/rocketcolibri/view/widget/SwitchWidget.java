@@ -13,10 +13,12 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
+import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.ui_data.input.Channel;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
@@ -39,6 +41,7 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 	private OnChannelChangeListener tControlModusListener;
 	private Map<String, String> protocolMap = new HashMap<String, String>();
 	private boolean switchSetOn = false;
+	private boolean tCustomizeModusActive = false;
 
 	public SwitchWidget(Context context, ViewElementConfig elementConfig) {
 		super(context);
@@ -49,7 +52,7 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 		bitmapResource = R.drawable.switch_off;
 		init(context, null);
 	}
-	 
+
 	public SwitchWidget(Context context, RCWidgetConfig widgetConfig) {
 		super(context);
 		tViewElementConfig = widgetConfig.viewElementConfig;
@@ -59,31 +62,41 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 		bitmapResource = R.drawable.switch_off;
 		init(context, null);
 	}
-	
-	private boolean isChannelValid(){
+
+	private boolean isChannelValid() {
 		return tChannelH.getDefaultChannelValue() > -1;
 	}
 
 	OnClickListener onclicklistener = new OnClickListener() {
 
-	    @Override
-	    public void onClick(View v) {
-	    	if (switchSetOn) {
-	    		switchSetOn = false;
-	    		bitmapResource = R.drawable.switch_off;
-	    		tPosition = 0;
-	        }
-	    	else {
-	    		switchSetOn = true;
-	    		bitmapResource = R.drawable.switch_on;
-	    		tPosition = 1000;
-	    	}
-	    	setSwitchState();
-	    	
-	    	if (isChannelValid()) {
-	    		tControlModusListener.onChannelChange(tChannelH.getDefaultChannelValue(), tPosition);
-	    	}
-	    }
+		@Override
+		public void onClick(View v) {
+			if (switchSetOn) {
+				switchSetOn = false;
+				bitmapResource = R.drawable.switch_off;
+				tPosition = 0;
+			} else {
+				switchSetOn = true;
+				bitmapResource = R.drawable.switch_on;
+				tPosition = 1000;
+			}
+			setSwitchState();
+
+			if (isChannelValid()) {
+				tControlModusListener.onChannelChange(
+						tChannelH.getDefaultChannelValue(), tPosition);
+			}
+		}
+	};
+
+	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
+		@Override
+		public void customizeModeDeactivated() {
+		}
+
+		@Override
+		public void customizeModeActivated() {
+		}
 	};
 
 	private void init(Context context, Object object) {
@@ -107,25 +120,45 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 		canvas.scale(scale, scale);
 		canvas.drawRect(switchIconRect, switchIconPaint);
 		canvas.restore();
-		super.onDraw(canvas);
+
+		if (!tCustomizeModusActive)
+			return;
+		final Drawable foreground = getResources().getDrawable(
+				R.drawable.dragforeground);
+		if (foreground != null) {
+			foreground.setBounds(0, 0, getRight() - getLeft(), getBottom()
+					- getTop());
+
+			final int scrollX = getScrollX();
+			final int scrollY = getScrollY();
+
+			if ((scrollX | scrollY) == 0) {
+				foreground.draw(canvas);
+			} else {
+				canvas.translate(scrollX, scrollY);
+				foreground.draw(canvas);
+				canvas.translate(-scrollX, -scrollY);
+			}
+		}
 	}
 
 	@Override
 	public void updateProtocolMap() {
-		try{
-			tChannelH.setDefaultChannelValue(getProtocolMapInt(RCConstants.CHANNEL_H));
-			tChannelH.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_H));
+		try {
+			tChannelH
+					.setDefaultChannelValue(getProtocolMapInt(RCConstants.CHANNEL_H));
+			tChannelH
+					.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_H));
 			tChannelH.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_H));
 			tChannelH.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_H));
 			tChannelH.setTrimm(getProtocolMapInt(RCConstants.TRIMM_H));
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	
 	public int getNumberOfChannelListener() {
-		return 1; 
+		return 1;
 	}
 
 	private void setSwitchState() {
@@ -134,10 +167,13 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 	}
 
 	private void createWidget() {
-		switchIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), bitmapResource);
-		BitmapShader paperShader = new BitmapShader(switchIconBitmap, Shader.TileMode.MIRROR, Shader.TileMode.MIRROR);
+		switchIconBitmap = BitmapFactory.decodeResource(getContext()
+				.getResources(), bitmapResource);
+		BitmapShader paperShader = new BitmapShader(switchIconBitmap,
+				Shader.TileMode.MIRROR, Shader.TileMode.MIRROR);
 		Matrix paperMatrix = new Matrix();
-		paperMatrix.setScale(1.0f / switchIconBitmap.getWidth(), 1.0f / switchIconBitmap.getHeight());
+		paperMatrix.setScale(1.0f / switchIconBitmap.getWidth(),
+				1.0f / switchIconBitmap.getHeight());
 		paperShader.setLocalMatrix(paperMatrix);
 		switchIconPaint = new Paint();
 		switchIconPaint.setFilterBitmap(false);
@@ -147,24 +183,23 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 
 	public static ViewElementConfig getDefaultViewElementConfig() {
 		ResizeConfig rc = new ResizeConfig();
-	    rc.keepRatio = true;
+		rc.keepRatio = true;
 		rc.maxHeight = 300;
-	    rc.minHeight = 34;
-	    rc.maxWidth = 800;
-	    rc.minWidth = 137;
+		rc.minHeight = 34;
+		rc.maxWidth = 800;
+		rc.minWidth = 137;
 
-	    LayoutParams lp = new LayoutParams(137, 34 , 0, 0);
+		LayoutParams lp = new LayoutParams(137, 34, 0, 0);
 
-	    ViewElementConfig elementConfig = new ViewElementConfig(SwitchWidget.class.getName(), lp, rc);
-	    elementConfig.setAlpha(1);
-	    return elementConfig;
+		ViewElementConfig elementConfig = new ViewElementConfig(
+				SwitchWidget.class.getName(), lp, rc);
+		elementConfig.setAlpha(1);
+		return elementConfig;
 	}
-
 
 	@Override
 	public void setControlModusListener(OnChannelChangeListener channelListener) {
-		// TODO Auto-generated method stub
-		
+		tControlModusListener = channelListener;
 	}
 
 	@Override
@@ -186,25 +221,26 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 	}
 
 	@Override
-	public void onNotifyUiOutputSink(Object data) {}
+	public void onNotifyUiOutputSink(Object data) {
+	}
 
 	@Override
 	public UiOutputDataType getType() {
 		return UiOutputDataType.None;
 	}
-	
-	protected int getProtocolMapInt(String key){
-		try{
+
+	protected int getProtocolMapInt(String key) {
+		try {
 			return Integer.parseInt(tWidgetConfig.protocolMap.get(key));
-		}catch(NumberFormatException e){
+		} catch (NumberFormatException e) {
 			return -1;
 		}
 	}
-	
-	protected boolean getProtocolMapBoolean(String key){
-		try{
+
+	protected boolean getProtocolMapBoolean(String key) {
+		try {
 			return Boolean.parseBoolean(tWidgetConfig.protocolMap.get(key));
-		}catch(Exception e){
+		} catch (Exception e) {
 			return false;
 		}
 	}
@@ -214,7 +250,7 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 		tWidgetConfig.viewElementConfig = getViewElementConfig();
 		return tWidgetConfig;
 	}
-	
+
 	@Override
 	public Map<String, String> getProtocolMap() {
 		return tWidgetConfig.protocolMap;
@@ -222,31 +258,38 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 
 	@Override
 	public void setCustomizeModusListener(OnTouchListener customizeModusListener) {
-		// TODO Auto-generated method stub
-		
+		setOnTouchListener(customizeModusListener);
 	}
 
 	@Override
 	public void setCustomizeModus(boolean enabled) {
-		// TODO Auto-generated method stub
-		
+		if (tCustomizeModusActive != enabled) {
+			if (enabled) {
+				tModusChangeListener.customizeModeActivated();
+			} else {
+				tModusChangeListener.customizeModeDeactivated();
+			}
+			invalidate();
+			tCustomizeModusActive = enabled;
+		}
 	}
 
 	@Override
 	public void setModusChangeListener(ModusChangeListener mcl) {
-		// TODO Auto-generated method stub
-		
+		tModusChangeListener = mcl;
 	}
 
 	@Override
-	public void notifyServiceReady(Service service) {
-		// TODO Auto-generated method stub
-		
+	public void notifyServiceReady(Service rcService) {
+		try {
+			((RocketColibriService) rcService).tProtocol
+					.registerUiOutputSinkChangeObserver((IRCWidget) this);
+		} catch (Exception e) {
+		}
 	}
 
 	@Override
 	public ViewElementConfig getViewElementConfig() {
-		// TODO Auto-generated method stub
-		return null;
+		return tViewElementConfig;
 	}
 }

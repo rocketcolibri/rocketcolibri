@@ -8,6 +8,7 @@ import java.util.Map;
 
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
+import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.protocol.RCProtocolUdp;
 import ch.hsr.rocketcolibri.ui_data.input.Channel;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
@@ -63,6 +64,7 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	private Channel tChannelH = new Channel();
 	private OnChannelChangeListener tControlModusListener;
 	private MyOnTouchListener tInternalControlListener = new MyOnTouchListener();
+	private boolean tCustomizeModusActive = false;
 	
 	protected RCWidgetConfig tWidgetConfig;
 	protected OnTouchListener tCustomizeModusListener;
@@ -126,6 +128,16 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 		}
 	}
 	
+	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
+		@Override
+		public void customizeModeDeactivated() {
+		}
+
+		@Override
+		public void customizeModeActivated() {
+		}
+	};
+
 	@Override
 	public void setControlModusListener(OnChannelChangeListener channelListener) {
 		tControlModusListener = channelListener;
@@ -366,12 +378,14 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 
 	@Override
 	public void create(RCWidgetConfig rcWidgetConfig) {
-		// TODO Auto-generated method stub
+		tWidgetConfig = rcWidgetConfig;
+		init(getContext(), null);
 	}
 
 	@Override
 	public void create(ViewElementConfig vElementConfig) {
-		// TODO Auto-generated method stub
+		tWidgetConfig = new RCWidgetConfig(vElementConfig);
+		init(getContext(), null);
 	}
 
 	@Override
@@ -417,26 +431,33 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 
 	@Override
 	public void setCustomizeModus(boolean enabled) {
-		// TODO Auto-generated method stub
-		
+		if (tCustomizeModusActive != enabled) {
+			if (enabled) {
+				tModusChangeListener.customizeModeActivated();
+			} else {
+				tModusChangeListener.customizeModeDeactivated();
+			}
+			invalidate();
+			tCustomizeModusActive = enabled;
+		}
 	}
 
 	@Override
 	public void setModusChangeListener(ModusChangeListener mcl) {
-		// TODO Auto-generated method stub
-		
+		tModusChangeListener = mcl;
 	}
 
 	@Override
-	public void notifyServiceReady(Service service) {
-		// TODO Auto-generated method stub
-		
+	public void notifyServiceReady(Service rcService) {
+		try {
+			((RocketColibriService) rcService).tProtocol
+					.registerUiOutputSinkChangeObserver((IRCWidget) this);
+		} catch (Exception e) {
+		}
 	}
 
 	@Override
 	public ViewElementConfig getViewElementConfig() {
-		// TODO Auto-generated method stub
-		return null;
+		return tWidgetConfig.viewElementConfig;
 	}
 }
-
