@@ -30,7 +30,6 @@ import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 
 	protected RCWidgetConfig tWidgetConfig;
-	protected ViewElementConfig tViewElementConfig;
 	protected OnTouchListener tCustomizeModusListener;
 	private RectF switchIconRect;
 	private Paint switchIconPaint;
@@ -39,26 +38,23 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 	private int bitmapResource;
 	private int tPosition = 0;
 	private OnChannelChangeListener tControlModusListener;
-	private Map<String, String> protocolMap = new HashMap<String, String>();
 	private boolean switchSetOn = false;
 	private boolean tCustomizeModusActive = false;
 
 	public SwitchWidget(Context context, ViewElementConfig elementConfig) {
 		super(context);
-		tViewElementConfig = elementConfig;
-		tWidgetConfig = new RCWidgetConfig(tViewElementConfig);
-		setLayoutParams(tViewElementConfig.getLayoutParams());
-		setAlpha(tViewElementConfig.getAlpha());
+		tWidgetConfig = new RCWidgetConfig(elementConfig);
+		setLayoutParams(elementConfig.getLayoutParams());
+		setAlpha(elementConfig.getAlpha());
 		bitmapResource = R.drawable.switch_off;
 		init(context, null);
 	}
 
 	public SwitchWidget(Context context, RCWidgetConfig widgetConfig) {
 		super(context);
-		tViewElementConfig = widgetConfig.viewElementConfig;
 		tWidgetConfig = widgetConfig;
-		setLayoutParams(tViewElementConfig.getLayoutParams());
-		setAlpha(tViewElementConfig.getAlpha());
+		setLayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams());
+		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
 		bitmapResource = R.drawable.switch_off;
 		init(context, null);
 	}
@@ -106,11 +102,12 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 		this.setOnClickListener(onclicklistener);
 
 		// init protocol mapping
-		protocolMap.put(RCConstants.CHANNEL_H, "");
-		protocolMap.put(RCConstants.INVERTED_H, "");
-		protocolMap.put(RCConstants.MAX_RANGE_H, "");
-		protocolMap.put(RCConstants.MIN_RANGE_H, "");
-		protocolMap.put(RCConstants.TRIMM_H, "");
+		tWidgetConfig.protocolMap = new HashMap<String, String>();
+		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_H, "");
+		tWidgetConfig.protocolMap.put(RCConstants.INVERTED_H, "");
+		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE_H, "");
+		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE_H, "");
+		tWidgetConfig.protocolMap.put(RCConstants.TRIMM_H, "");
 	}
 
 	@Override
@@ -247,7 +244,7 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 
 	@Override
 	public RCWidgetConfig getWidgetConfig() {
-		tWidgetConfig.viewElementConfig = getViewElementConfig();
+		tWidgetConfig.viewElementConfig = this.getViewElementConfig();
 		return tWidgetConfig;
 	}
 
@@ -290,6 +287,8 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 
 	@Override
 	public ViewElementConfig getViewElementConfig() {
-		return tViewElementConfig;
+		tWidgetConfig.viewElementConfig.setLayoutParams((LayoutParams) getLayoutParams());
+		tWidgetConfig.viewElementConfig.setAlpha(getAlpha());
+		return tWidgetConfig.viewElementConfig;
 	}
 }

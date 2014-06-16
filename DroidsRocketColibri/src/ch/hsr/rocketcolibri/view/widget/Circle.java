@@ -72,6 +72,8 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	public Circle(Context context, RCWidgetConfig rcWidgetConfig){
 		super(context);
 		tWidgetConfig = rcWidgetConfig;
+		setLayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams());
+		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
 		backgroundResource = R.drawable.cross;
 		positionInPercentX = 20;
 		positionInPercentY = 100;
@@ -84,6 +86,8 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	public Circle(Context context, ViewElementConfig elementConfig) {
 		super(context);
 		tWidgetConfig = new RCWidgetConfig(elementConfig);
+		setLayoutParams(elementConfig.getLayoutParams());
+		setAlpha(elementConfig.getAlpha());
 		backgroundResource = R.drawable.cross;
 		positionInPercentX = 20; 
 		positionInPercentY = 100;
@@ -390,7 +394,7 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 
 	@Override
 	public RCWidgetConfig getWidgetConfig() {
-		tWidgetConfig.viewElementConfig = getViewElementConfig();
+		tWidgetConfig.viewElementConfig = this.getViewElementConfig();
 		return tWidgetConfig;
 	}
 
@@ -458,6 +462,8 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 
 	@Override
 	public ViewElementConfig getViewElementConfig() {
+		tWidgetConfig.viewElementConfig.setLayoutParams((LayoutParams) getLayoutParams());
+		tWidgetConfig.viewElementConfig.setAlpha(getAlpha());
 		return tWidgetConfig.viewElementConfig;
 	}
 }

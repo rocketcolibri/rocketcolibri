@@ -44,18 +44,15 @@ public class VideoStreamWidget extends SurfaceView implements
 	private AbsoluteLayout tParent;
 
 	protected RCWidgetConfig tWidgetConfig;
-	protected ViewElementConfig tViewElementConfig;
 	protected OnTouchListener tCustomizeModusListener;
 	protected OnChannelChangeListener tControlModusListener;
-	private Map<String, String> protocolMap = new HashMap<String, String>();
 	private boolean tCustomizeModusActive = false;
 
 	public VideoStreamWidget(Context context, ViewElementConfig elementConfig) {
 		super(context);
-		tViewElementConfig = elementConfig;
-		tWidgetConfig = new RCWidgetConfig(tViewElementConfig);
-		setLayoutParams(tViewElementConfig.getLayoutParams());
-		setAlpha(tViewElementConfig.getAlpha());
+		tWidgetConfig = new RCWidgetConfig(elementConfig);
+		setLayoutParams(elementConfig.getLayoutParams());
+		setAlpha(elementConfig.getAlpha());
 		tWidgetConfig = new RCWidgetConfig(elementConfig);
 		init(context, null);
 	}
@@ -63,9 +60,8 @@ public class VideoStreamWidget extends SurfaceView implements
 	public VideoStreamWidget(Context context, RCWidgetConfig widgetConfig) {
 		super(context);
 		tWidgetConfig = widgetConfig;
-		tViewElementConfig = widgetConfig.viewElementConfig;
-		setLayoutParams(tViewElementConfig.getLayoutParams());
-		setAlpha(tViewElementConfig.getAlpha());
+		setLayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams());
+		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
 		init(context, null);
 	}
 
@@ -227,6 +223,7 @@ public class VideoStreamWidget extends SurfaceView implements
 
 	@Override
 	public RCWidgetConfig getWidgetConfig() {
+		tWidgetConfig.viewElementConfig = this.getViewElementConfig();
 		return tWidgetConfig;
 	}
 
@@ -270,6 +267,8 @@ public class VideoStreamWidget extends SurfaceView implements
 
 	@Override
 	public ViewElementConfig getViewElementConfig() {
-		return tViewElementConfig;
+		tWidgetConfig.viewElementConfig.setLayoutParams((LayoutParams) getLayoutParams());
+		tWidgetConfig.viewElementConfig.setAlpha(getAlpha());
+		return tWidgetConfig.viewElementConfig;
 	}
 }

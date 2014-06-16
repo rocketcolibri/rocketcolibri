@@ -35,7 +35,6 @@ public class RotaryKnobWidget extends View implements ICustomizableView, IRCWidg
 
 	private int backgroundResource;
 	protected RCWidgetConfig tWidgetConfig;
-	protected ViewElementConfig tViewElementConfig;
 	ImageView ivBack = null;
 	private float angle = 0f;
 	private float theta_old = 0f;
@@ -49,7 +48,6 @@ public class RotaryKnobWidget extends View implements ICustomizableView, IRCWidg
 	private OnChannelChangeListener tControlModusListener;
 	private MyOnTouchListener tInternalControlListener = new MyOnTouchListener();
 	private Channel tChannelH = new Channel();
-	private Map<String, String> protocolMap = new HashMap<String, String>();
 	private boolean isInitialized = false;
 	private boolean tCustomizeModusActive = false;
 
@@ -57,20 +55,18 @@ public class RotaryKnobWidget extends View implements ICustomizableView, IRCWidg
 
 	public RotaryKnobWidget(Context context, ViewElementConfig elementConfig) {
 		super(context);
-		tViewElementConfig = elementConfig;
-		tWidgetConfig = new RCWidgetConfig(tViewElementConfig);
-		setLayoutParams(tViewElementConfig.getLayoutParams());
-		setAlpha(tViewElementConfig.getAlpha());
+		tWidgetConfig = new RCWidgetConfig(elementConfig);
+		setLayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams());
+		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
 		backgroundResource = R.drawable.rotoron;
 		initialize(context);
 	}
 
 	public RotaryKnobWidget(Context context, RCWidgetConfig widgetConfig) {
 		super(context);
-		tViewElementConfig = widgetConfig.viewElementConfig;
 		tWidgetConfig = widgetConfig;
-		setLayoutParams(tViewElementConfig.getLayoutParams());
-		setAlpha(tViewElementConfig.getAlpha());
+		setLayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams());
+		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
 		backgroundResource = R.drawable.rotoron;
 		initialize(context);
 	}
@@ -167,11 +163,12 @@ public class RotaryKnobWidget extends View implements ICustomizableView, IRCWidg
 			initListener();
 
 			// init protocol mapping
-			protocolMap.put(RCConstants.CHANNEL_H, "");
-			protocolMap.put(RCConstants.INVERTED_H, "");
-			protocolMap.put(RCConstants.MAX_RANGE_H, "");
-			protocolMap.put(RCConstants.MIN_RANGE_H, "");
-			protocolMap.put(RCConstants.TRIMM_H, "");
+			tWidgetConfig.protocolMap = new HashMap<String, String>();
+			tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_H, "");
+			tWidgetConfig.protocolMap.put(RCConstants.INVERTED_H, "");
+			tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE_H, "");
+			tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE_H, "");
+			tWidgetConfig.protocolMap.put(RCConstants.TRIMM_H, "");
 
 			this.setKnobListener(new RotaryKnobWidget.RotaryKnobListener() {
 				@Override
@@ -292,7 +289,7 @@ public class RotaryKnobWidget extends View implements ICustomizableView, IRCWidg
 
 	@Override
 	public RCWidgetConfig getWidgetConfig() {
-		tWidgetConfig.viewElementConfig = getViewElementConfig();
+		tWidgetConfig.viewElementConfig = this.getViewElementConfig();
 		return tWidgetConfig;
 	}
 
@@ -361,6 +358,8 @@ public class RotaryKnobWidget extends View implements ICustomizableView, IRCWidg
 
 	@Override
 	public ViewElementConfig getViewElementConfig() {
-		return tViewElementConfig;
+		tWidgetConfig.viewElementConfig.setLayoutParams((LayoutParams) getLayoutParams());
+		tWidgetConfig.viewElementConfig.setAlpha(getAlpha());
+		return tWidgetConfig.viewElementConfig;
 	}
 }

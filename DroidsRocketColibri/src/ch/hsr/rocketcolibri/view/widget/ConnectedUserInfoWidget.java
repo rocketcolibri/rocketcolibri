@@ -36,7 +36,6 @@ import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
  */
 public class ConnectedUserInfoWidget extends View implements ICustomizableView, IRCWidget {
 	
-	protected ViewElementConfig tViewElementConfig;
 	protected RCWidgetConfig tWidgetConfig;
 	private Paint tUserBitmapPaint;
 	private Bitmap tObserverBitmap;
@@ -56,20 +55,18 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 	
 	public ConnectedUserInfoWidget(Context context, ViewElementConfig elementConfig) {
 		super(context);
-		tViewElementConfig = elementConfig;
-		tWidgetConfig = new RCWidgetConfig(tViewElementConfig);
-		setLayoutParams(tViewElementConfig.getLayoutParams());
-		setAlpha(tViewElementConfig.getAlpha());
+		tWidgetConfig = new RCWidgetConfig(elementConfig);
+		setLayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams());
+		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
 		tContext = context;
 		init(context, null);
 	}
 	
 	public ConnectedUserInfoWidget(Context context, RCWidgetConfig widgetConfig) {
 		super(context);
-		tViewElementConfig = widgetConfig.viewElementConfig;
 		tWidgetConfig = widgetConfig;
-		setLayoutParams(tViewElementConfig.getLayoutParams());
-		setAlpha(tViewElementConfig.getAlpha());
+		setLayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams());
+		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
 		tContext = context;
 		init(context, null);
 	}
@@ -193,7 +190,7 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 
 	@Override
 	public RCWidgetConfig getWidgetConfig() {
-		tWidgetConfig.viewElementConfig = getViewElementConfig();
+		tWidgetConfig.viewElementConfig = this.getViewElementConfig();
 		return tWidgetConfig;
 	}
 
@@ -256,6 +253,8 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 
 	@Override
 	public ViewElementConfig getViewElementConfig() {
-		return tViewElementConfig;
+		tWidgetConfig.viewElementConfig.setLayoutParams((LayoutParams) getLayoutParams());
+		tWidgetConfig.viewElementConfig.setAlpha(getAlpha());
+		return tWidgetConfig.viewElementConfig;
 	}
 }

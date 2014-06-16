@@ -152,7 +152,7 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 
 	@Override
 	public RCWidgetConfig getWidgetConfig() {
-		tWidgetConfig.viewElementConfig = getViewElementConfig();
+		tWidgetConfig.viewElementConfig = this.getViewElementConfig();
 		return tWidgetConfig;
 	}
 
@@ -219,6 +219,8 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 
 	@Override
 	public ViewElementConfig getViewElementConfig() {
-		return tViewElementConfig;
+		tWidgetConfig.viewElementConfig.setLayoutParams((LayoutParams) getLayoutParams());
+		tWidgetConfig.viewElementConfig.setAlpha(getAlpha());
+		return tWidgetConfig.viewElementConfig;
 	}	
 }
