@@ -15,7 +15,6 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.RocketColibriService;

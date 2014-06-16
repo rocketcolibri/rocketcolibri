@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
@@ -17,9 +16,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.*;
 import android.view.accessibility.AccessibilityEvent;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.ScaleAnimation;
 

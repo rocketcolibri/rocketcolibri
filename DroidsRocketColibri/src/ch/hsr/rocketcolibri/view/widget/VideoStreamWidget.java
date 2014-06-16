@@ -1,6 +1,6 @@
 package ch.hsr.rocketcolibri.view.widget;
 
-import java.util.HashMap;
+import java.io.IOException;
 import java.util.Map;
 
 import ch.hsr.rocketcolibri.R;
@@ -17,25 +17,30 @@ import android.app.Service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Shader;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnErrorListener;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.View.OnTouchListener;
 import android.widget.RelativeLayout;
 
 public class VideoStreamWidget extends SurfaceView implements
-		ICustomizableView, IRCWidget {
+		ICustomizableView, IRCWidget, SurfaceHolder.Callback, OnPreparedListener, OnErrorListener{
 
 	static final String TAG = "VideoStreamWidget";
-	private VideoStreamWidgetSurface tVideoSurfaceView;
-	private Object tVideoSurfaceViewTag = new Object();
 	private Bitmap tVideoBitmap;
 	private Paint tRectPaint;
 	private Rect tRectRect;
@@ -47,6 +52,14 @@ public class VideoStreamWidget extends SurfaceView implements
 	protected OnTouchListener tCustomizeModusListener;
 	protected OnChannelChangeListener tControlModusListener;
 	private boolean tCustomizeModusActive = false;
+	
+	private String tVideoUrl = new String("");
+	private MediaPlayer tMediaPlayer;
+	private SurfaceHolder tHolder;
+	private RectF videoNotAvailIconRect;
+	private Paint videoNotAvailIconPaint;
+	private Bitmap videoNotAvailIconBitmap;
+
 
 	public VideoStreamWidget(Context context, ViewElementConfig elementConfig) {
 		super(context);
@@ -74,33 +87,35 @@ public class VideoStreamWidget extends SurfaceView implements
 		tVideoBitmap = BitmapFactory.decodeResource(
 				getContext().getResources(), R.drawable.video_camera);
 
-		tVideoSurfaceView = new VideoStreamWidgetSurface(context);
-		if (null != tWidgetConfig.viewElementConfig)
-			tVideoSurfaceView
-					.setLayoutParams(new android.view.ViewGroup.LayoutParams(
-							tWidgetConfig.viewElementConfig.getLayoutParams()));
-		tVideoSurfaceView.setTag(tVideoSurfaceViewTag);
 
 		setModusChangeListener(new ModusChangeListener() {
 			@Override
 			public void customizeModeDeactivated() {
 				if (null != tParent) {
-					if (null == tParent.findViewWithTag(tVideoSurfaceViewTag))
-						tParent.addView(tVideoSurfaceView, 0,
-								tWidgetConfig.viewElementConfig
-										.getLayoutParams());
+
 				}
 			}
 
 			@Override
 			public void customizeModeActivated() {
-				if (null != tParent) {
-					View v = tParent.findViewWithTag(tVideoSurfaceViewTag);
-					if (null != v)
-						tParent.removeView(v);
-				}
+
 			}
 		});
+		
+		tHolder = getHolder();
+  	  	tHolder.addCallback(this);
+		videoNotAvailIconRect = new RectF(0.0f, 0.0f, 1.0f, 1.0f);
+		videoNotAvailIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.video_stream_not_available);
+		BitmapShader paperShader = new BitmapShader(videoNotAvailIconBitmap, Shader.TileMode.MIRROR, Shader.TileMode.MIRROR);
+		Matrix paperMatrix = new Matrix();
+		paperMatrix.setScale(1.0f/videoNotAvailIconBitmap.getWidth(), 1.0f/videoNotAvailIconBitmap.getWidth());
+		paperShader.setLocalMatrix(paperMatrix);
+		videoNotAvailIconPaint = new Paint();
+		videoNotAvailIconPaint.setFilterBitmap(false);
+		videoNotAvailIconPaint.setStyle(Paint.Style.FILL);
+		videoNotAvailIconPaint.setShader(paperShader);
+		setWillNotDraw(false);
+		postInvalidate();
 	}
 
 	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
@@ -116,17 +131,15 @@ public class VideoStreamWidget extends SurfaceView implements
 	@Override
 	protected void onAttachedToWindow() {
 		tParent = (AbsoluteLayout) this.getParent();
-		if (null == tParent.findViewWithTag(tVideoSurfaceViewTag))
-			tParent.addView(tVideoSurfaceView, 0,
-					tWidgetConfig.viewElementConfig.getLayoutParams());
 		super.onAttachedToWindow();
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		if ((null == tParent)
-				|| (null == tParent.findViewWithTag(tVideoSurfaceViewTag))) {
-			// draw background rectangle
+
+		// draw background rectangle
+		if (tCustomizeModusActive)
+		{
 			tRectRect.set(0, 0, canvas.getWidth(), canvas.getHeight());
 			tRectRectF.set(tRectRect);
 			canvas.drawRoundRect(tRectRectF, 10f, 10f, tRectPaint);
@@ -134,24 +147,36 @@ public class VideoStreamWidget extends SurfaceView implements
 			canvas.drawBitmap(tVideoBitmap, canvas.getWidth() / 2
 					- tVideoBitmap.getWidth() / 2, canvas.getHeight() / 2
 					- tVideoBitmap.getHeight() / 2, null);
+	
+			final Drawable foreground = getResources().getDrawable(
+					R.drawable.dragforeground);
+			if (foreground != null) {
+				foreground.setBounds(0, 0, getRight() - getLeft(), getBottom()
+						- getTop());
+	
+				final int scrollX = getScrollX();
+				final int scrollY = getScrollY();
+	
+				if ((scrollX | scrollY) == 0) {
+					foreground.draw(canvas);
+				} else {
+					canvas.translate(scrollX, scrollY);
+					foreground.draw(canvas);
+					canvas.translate(-scrollX, -scrollY);
+				}
+			}
 		}
-		if (!tCustomizeModusActive)
-			return;
-		final Drawable foreground = getResources().getDrawable(
-				R.drawable.dragforeground);
-		if (foreground != null) {
-			foreground.setBounds(0, 0, getRight() - getLeft(), getBottom()
-					- getTop());
-
-			final int scrollX = getScrollX();
-			final int scrollY = getScrollY();
-
-			if ((scrollX | scrollY) == 0) {
-				foreground.draw(canvas);
-			} else {
-				canvas.translate(scrollX, scrollY);
-				foreground.draw(canvas);
-				canvas.translate(-scrollX, -scrollY);
+		else
+		{
+			if(tVideoUrl.length() > 2)
+				canvas.drawColor(0, Mode.CLEAR);
+			else
+			{
+				float scale = (float) getWidth();
+				canvas.save(Canvas.MATRIX_SAVE_FLAG);
+				canvas.scale(scale, scale);
+				canvas.drawRect(videoNotAvailIconRect, videoNotAvailIconPaint);
+				canvas.restore();
 			}
 		}
 	}
@@ -167,7 +192,7 @@ public class VideoStreamWidget extends SurfaceView implements
 	public void onNotifyUiOutputSink(Object data) {
 		if (((VideoUrl) data).getVideoUrl().startsWith("rtsp://")) {
 			Log.d(TAG, "start stream " + ((VideoUrl) data).getVideoUrl());
-			tVideoSurfaceView.setVideoUrl(((VideoUrl) data).getVideoUrl());
+			setVideoUrl(((VideoUrl) data).getVideoUrl());
 		}
 	}
 
@@ -270,5 +295,96 @@ public class VideoStreamWidget extends SurfaceView implements
 		tWidgetConfig.viewElementConfig.setLayoutParams((LayoutParams) getLayoutParams());
 		tWidgetConfig.viewElementConfig.setAlpha(getAlpha());
 		return tWidgetConfig.viewElementConfig;
+	}
+	
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){
+    	holder.setFixedSize(width, height);
+    }
+    
+    private void playVideo() {
+    	if(tVideoUrl.length() > 2) {
+            try {
+            	if(null == tMediaPlayer)
+            		tMediaPlayer = new MediaPlayer();
+                tMediaPlayer.setDisplay(tHolder);
+                tMediaPlayer.setDataSource(tVideoUrl);
+                tMediaPlayer.prepareAsync();
+                tMediaPlayer.setOnPreparedListener(this);
+                tMediaPlayer.setOnErrorListener(this);
+                tMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+         } catch (IllegalArgumentException e) {
+        	 e.printStackTrace();
+         } catch (SecurityException e) {
+        	 e.printStackTrace();
+         } catch (IllegalStateException e) {
+        	 e.printStackTrace();
+         } catch (IOException e) {
+        	 e.printStackTrace();
+         }     		
+    	}  		
+    	postInvalidate();
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+    	tHolder = holder;
+    	playVideo();
+    }
+    
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder)
+    {
+          releaseMediaPlayer();
+    }
+    
+    private void releaseMediaPlayer()
+    {
+          if (tMediaPlayer != null)
+          {
+                tMediaPlayer.release();
+                tMediaPlayer = null;             
+          }
+    }
+
+	@Override
+	public void onPrepared(MediaPlayer mp) {
+		tMediaPlayer.start();
+	}
+	
+	public void restart(){
+        try {
+	        for (int u=1; u<=5; u++) {
+		        Thread.sleep(5000);
+		        tMediaPlayer.stop();
+		        tMediaPlayer.release();
+	        };
+
+        }
+        catch (Exception e)
+        {
+        }
+        tMediaPlayer=null;
+        playVideo();
+    }
+	
+	@Override
+	public boolean onError(MediaPlayer mp, int what, int extra) {
+		restart();
+		Log.d(TAG, "Video Player Error:" + what + "Extra:" +extra);
+		return true;
+	}
+	
+	public String getVideoUrl() {
+		return tVideoUrl;
+	}
+
+	public void setVideoUrl(String videoUrl) {
+		tVideoUrl = videoUrl;
+		if(tVideoUrl.length() > 2)
+			playVideo();
+		else
+			releaseMediaPlayer();
+		postInvalidate();
 	}
 }
