@@ -28,7 +28,6 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 
 public class RotaryKnobWidget extends View implements ICustomizableView, IRCWidget {
@@ -46,7 +45,7 @@ public class RotaryKnobWidget extends View implements ICustomizableView, IRCWidg
 	private static final float rimSize = 0.02f;
 	protected OnTouchListener tCustomizeModusListener;
 	private OnChannelChangeListener tControlModusListener;
-	private MyOnTouchListener tInternalControlListener = new MyOnTouchListener();
+//	private MyOnTouchListener tInternalControlListener = new MyOnTouchListener();
 	private Channel tChannelH = new Channel();
 	private boolean isInitialized = false;
 	private boolean tCustomizeModusActive = false;
@@ -107,19 +106,6 @@ public class RotaryKnobWidget extends View implements ICustomizableView, IRCWidg
 		}
 	}
 
-	private void initListener() {
-		setModusChangeListener(new ModusChangeListener() {
-			public void customizeModeDeactivated() {
-				if (isChannelValid())
-					setOnTouchListener(tInternalControlListener);
-			}
-
-			public void customizeModeActivated() {
-				setOnTouchListener(tCustomizeModusListener);
-			}
-		});
-	}
-
 	private float getTheta(float x, float y) {
 		float sx = x - (getWidth() / 2.0f);
 		float sy = y - (getHeight() / 2.0f);
@@ -159,8 +145,6 @@ public class RotaryKnobWidget extends View implements ICustomizableView, IRCWidg
 			facePaint.setFilterBitmap(true);
 			facePaint.setStyle(Paint.Style.FILL);
 			facePaint.setShader(paperShader);
-
-			initListener();
 
 			// init protocol mapping
 			tWidgetConfig.protocolMap = new HashMap<String, String>();
@@ -279,7 +263,7 @@ public class RotaryKnobWidget extends View implements ICustomizableView, IRCWidg
 
 	@Override
 	public void setCustomizeModusListener(OnTouchListener customizeModusListener) {
-		setOnTouchListener(tCustomizeModusListener);
+		setOnTouchListener(customizeModusListener);
 	}
 
 	@Override
