@@ -30,6 +30,7 @@ import android.graphics.Paint;
 import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -340,7 +341,26 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 		drawRim(canvas);
 		drawFace(canvas);
 		canvas.restore();
-		super.onDraw(canvas);
+
+		if (!tCustomizeModusActive)
+			return;
+		final Drawable foreground = getResources().getDrawable(
+				R.drawable.dragforeground);
+		if (foreground != null) {
+			foreground.setBounds(0, 0, getRight() - getLeft(), getBottom()
+					- getTop());
+
+			final int scrollX = getScrollX();
+			final int scrollY = getScrollY();
+
+			if ((scrollX | scrollY) == 0) {
+				foreground.draw(canvas);
+			} else {
+				canvas.translate(scrollX, scrollY);
+				foreground.draw(canvas);
+				canvas.translate(-scrollX, -scrollY);
+			}
+		}
 	}
 
 	@Override

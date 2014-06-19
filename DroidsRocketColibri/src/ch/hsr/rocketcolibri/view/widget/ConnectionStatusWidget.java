@@ -15,6 +15,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import ch.hsr.rocketcolibri.R;
@@ -81,7 +82,26 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 		canvas.scale(scale, scale);
 		canvas.drawRect(connectionIconRect, connectionIconPaint);
 		canvas.restore();
-		super.onDraw(canvas);
+
+		if (!tCustomizeModusActive)
+			return;
+		final Drawable foreground = getResources().getDrawable(
+				R.drawable.dragforeground);
+		if (foreground != null) {
+			foreground.setBounds(0, 0, getRight() - getLeft(), getBottom()
+					- getTop());
+
+			final int scrollX = getScrollX();
+			final int scrollY = getScrollY();
+
+			if ((scrollX | scrollY) == 0) {
+				foreground.draw(canvas);
+			} else {
+				canvas.translate(scrollX, scrollY);
+				foreground.draw(canvas);
+				canvas.translate(-scrollX, -scrollY);
+			}
+		}
 	}
 	
 	private void setConnectionState(s state)

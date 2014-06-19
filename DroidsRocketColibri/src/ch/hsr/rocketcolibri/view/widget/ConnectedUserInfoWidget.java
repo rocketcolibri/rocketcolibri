@@ -17,6 +17,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import ch.hsr.rocketcolibri.R;
@@ -154,7 +155,26 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 				drawUserLine(canvas, line++, tObserverBitmap, user);
 			}
 		}
-		super.onDraw(canvas);
+
+		if (!tCustomizeModusActive)
+			return;
+		final Drawable foreground = getResources().getDrawable(
+				R.drawable.dragforeground);
+		if (foreground != null) {
+			foreground.setBounds(0, 0, getRight() - getLeft(), getBottom()
+					- getTop());
+
+			final int scrollX = getScrollX();
+			final int scrollY = getScrollY();
+
+			if ((scrollX | scrollY) == 0) {
+				foreground.draw(canvas);
+			} else {
+				canvas.translate(scrollX, scrollY);
+				foreground.draw(canvas);
+				canvas.translate(-scrollX, -scrollY);
+			}
+		}
 	}
 	
 	public static ViewElementConfig getDefaultViewElementConfig(){
