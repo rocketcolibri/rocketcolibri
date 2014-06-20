@@ -7,7 +7,6 @@ import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.ui_data.output.VideoUrl;
-import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
@@ -22,21 +21,17 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.RectF;
+import android.graphics.Paint.Style;
 import android.graphics.Shader;
 import android.graphics.PorterDuff.Mode;
-import android.graphics.drawable.Drawable;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.widget.RelativeLayout;
 
 public class VideoStreamWidget extends SurfaceView implements
 		ICustomizableView, IRCWidget, SurfaceHolder.Callback, OnPreparedListener, OnErrorListener{
@@ -45,18 +40,29 @@ public class VideoStreamWidget extends SurfaceView implements
 	private Bitmap tVideoBitmap;
 	private Paint tVideoBitmapPaint;
 
-	private Paint tLinePaint;
+	private Paint tLinePaintVideoUnavailable;
 	
+	// progress dots
+	private float tDotRadius;
+	private int tDotIndex = 0;
+	private int tDotMargin = 4;
+	private int tDotCount = 3;
+	private Paint tDotFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private Paint tDotPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+	private Handler tDotProressHandler = new Handler();
+
 	protected RCWidgetConfig tWidgetConfig;
 	protected OnTouchListener tCustomizeModusListener;
 	protected OnChannelChangeListener tControlModusListener;
-	private boolean tCustomizeModusActive = false;
+	
 	
 	private String tVideoUrl = new String("");
 	private MediaPlayer tMediaPlayer;
 	private SurfaceHolder tHolder;
 
-
+	private boolean tCustomizeModusActive = false;
+	private boolean tIsPrepared = false; 	
+	
 
 	public VideoStreamWidget(Context context, ViewElementConfig elementConfig) {
 		super(context);
@@ -89,12 +95,24 @@ public class VideoStreamWidget extends SurfaceView implements
 		tVideoBitmapPaint.setStyle(Paint.Style.FILL);
 		tVideoBitmapPaint.setFilterBitmap(false);
 		tVideoBitmapPaint.setShader(paperShader1);
-		
-		tLinePaint  = new Paint();
-		tLinePaint.setColor(Color.RED);
-		tLinePaint.setStrokeWidth(tVideoBitmap.getWidth()/20);
-		tLinePaint.setAlpha(100);
 
+		
+		tLinePaintVideoUnavailable  = new Paint();
+		tLinePaintVideoUnavailable.setColor(Color.RED);
+		tLinePaintVideoUnavailable.setStrokeWidth(tVideoBitmap.getWidth()/20);
+		tLinePaintVideoUnavailable.setAlpha(100);
+
+		// progress dots
+		tDotRadius = 10;
+		// dot fill color
+		tDotFillPaint.setStyle(Style.FILL);
+		tDotFillPaint.setColor(Color.LTGRAY);
+		// dot background color
+		tDotPaint.setStyle(Style.FILL);
+		tDotPaint.setColor(0x33000000);
+		tDotCount = 3;
+		
+		
 		setModusChangeListener(new ModusChangeListener() {
 			@Override
 			public void customizeModeDeactivated() {
@@ -124,31 +142,81 @@ public class VideoStreamWidget extends SurfaceView implements
 		}
 	};
 
+	private void startDotProgress() {
+		tIsPrepared = false;
+		tDotIndex = -1;
+		tDotProressHandler.removeCallbacks(mRunnable);
+		tDotProressHandler.post(mRunnable);
+	}
+
+	private void stopDotProgress() {
+		tIsPrepared = true;
+		tDotProressHandler.removeCallbacks(mRunnable);
+	}
+	
+	private int step = 1;
+	private Runnable mRunnable = new Runnable() {
+
+		@Override
+		public void run() {
+			tDotIndex += step;
+			if (tDotIndex < 0) {
+				tDotIndex = 1;
+				step = 1;
+			} else if (tDotIndex > (tDotCount - 1)) {
+				if ((tDotCount - 2) >= 0) {
+					tDotIndex = tDotCount - 2;
+					step = -1;
+				} else{
+					tDotIndex = 0;
+					step = 1;
+				}
+
+			}
+
+			invalidate();
+			tDotProressHandler.postDelayed(mRunnable, 300);
+		}
+
+	};
+
+	private void onDrawDotProgress(Canvas canvas){
+		if(tIsPrepared)	{
+			canvas.drawColor(0, Mode.CLEAR);			
+		}else{
+			float dX = (canvas.getWidth() - tDotCount * tDotRadius * 2 - (tDotCount - 1) * tDotMargin) / 2.0f;
+			float dY = canvas.getHeight() / 2;
+			for (int i = 0; i < tDotCount; i++) {
+				if (i == tDotIndex)
+					canvas.drawCircle(dX, dY, tDotRadius, tDotFillPaint);
+				else
+					canvas.drawCircle(dX, dY, tDotRadius, tDotPaint);
+				dX += (2 * tDotRadius + tDotMargin);
+			}
+		}
+	}
+	
 	@Override
 	protected void onDraw(Canvas canvas) {
 		
 		// draw background rectangle
-		if (tCustomizeModusActive)
-		{
+		if (tCustomizeModusActive){
 			canvas.drawBitmap(DrawingTools.resizeBitmap(tVideoBitmap, canvas.getWidth(), canvas.getHeight()),0 ,0,tVideoBitmapPaint);	
 			DrawingTools.drawCustomizableForground(this, canvas);
-		}
-		else
-		{
-			if(tVideoUrl.length() > 2)
-				canvas.drawColor(0, Mode.CLEAR);
-			else
-			{
+		}else{
+			if(tVideoUrl.length() > 2){
+				onDrawDotProgress(canvas);
+			}else{
 				int borderX = canvas.getWidth()/5;
 				int borderY = canvas.getHeight()/5;
 				canvas.drawBitmap(DrawingTools.resizeBitmap(tVideoBitmap, canvas.getWidth(), canvas.getHeight()),0 ,0,tVideoBitmapPaint);
-				canvas.drawLine(borderX, borderY, canvas.getWidth()-borderX, canvas.getHeight()-borderY, tLinePaint);
-	            canvas.drawLine(canvas.getWidth()-borderX, borderY, borderX, canvas.getHeight()-borderY, tLinePaint);
-
+				canvas.drawLine(borderX, borderY, canvas.getWidth()-borderX, canvas.getHeight()-borderY, tLinePaintVideoUnavailable);
+	            canvas.drawLine(canvas.getWidth()-borderX, borderY, borderX, canvas.getHeight()-borderY, tLinePaintVideoUnavailable);
 			}
 		}
 	}
 
+	
 	/**
 	 * RocketColibriService sends UiSink change notification with this methods
 	 * The Object class depends on the return value of getType The media player
@@ -158,10 +226,11 @@ public class VideoStreamWidget extends SurfaceView implements
 	 *            (VideoUrl)
 	 */
 	public void onNotifyUiOutputSink(Object data) {
-		if (((VideoUrl) data).getVideoUrl().startsWith("rtsp://")) {
+		if (((VideoUrl) data).getVideoUrl().startsWith("rtsp://")) 
 			Log.d(TAG, "start stream " + ((VideoUrl) data).getVideoUrl());
-			setVideoUrl(((VideoUrl) data).getVideoUrl());
-		}
+		else
+			Log.d(TAG, "stop stream " );
+		setVideoUrl(((VideoUrl) data).getVideoUrl());
 	}
 
 	/**
@@ -267,6 +336,7 @@ public class VideoStreamWidget extends SurfaceView implements
 	
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height){
+		Log.d(TAG, "surfaceChanged");
     	holder.setFixedSize(width, height);
     }
     
@@ -280,7 +350,7 @@ public class VideoStreamWidget extends SurfaceView implements
                 tMediaPlayer.prepareAsync();
                 tMediaPlayer.setOnPreparedListener(this);
                 tMediaPlayer.setOnErrorListener(this);
-                tMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+				startDotProgress();
          } catch (IllegalArgumentException e) {
         	 e.printStackTrace();
          } catch (SecurityException e) {
@@ -296,14 +366,15 @@ public class VideoStreamWidget extends SurfaceView implements
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+		Log.d(TAG, "surfaceDestroyed");
     	tHolder = holder;
-    	playVideo();
     }
     
     @Override
     public void surfaceDestroyed(SurfaceHolder holder)
     {
-          releaseMediaPlayer();
+		Log.d(TAG, "surfaceDestroyed");
+		releaseMediaPlayer();
     }
     
     private void releaseMediaPlayer()
@@ -317,7 +388,10 @@ public class VideoStreamWidget extends SurfaceView implements
 
 	@Override
 	public void onPrepared(MediaPlayer mp) {
+		Log.d(TAG, "onPrepared");
+		stopDotProgress();
 		tMediaPlayer.start();
+		postInvalidate();
 	}
 	
 	public void restart(){

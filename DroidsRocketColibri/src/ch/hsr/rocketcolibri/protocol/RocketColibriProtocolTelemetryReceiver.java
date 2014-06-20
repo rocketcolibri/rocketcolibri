@@ -68,7 +68,7 @@ public class RocketColibriProtocolTelemetryReceiver
 			        	}
 			        	catch (SocketTimeoutException te) 
 			        	{
-			        		handleTimeout();	        		
+			        		handleTimeout();
 			            }
 			        }
 				}
@@ -98,12 +98,9 @@ public class RocketColibriProtocolTelemetryReceiver
 	 */
 	private void handleTimeout() 
 	{
-		if (null != tProtocol.tUsers.getActiveUser())
-		{	
-			tProtocol.tUsers.removeAllUsers();
-			tFsm.queue(e.E8_TIMEOUT);
-			tFsm.processNextEvent();
-		}
+		tProtocol.tUsers.removeAllUsers();
 		tProtocol.tVdeoUrl.setVideoUrl("");
+		tFsm.queue(e.E8_TIMEOUT);
+		tFsm.processNextEvent();
 	}
 }
