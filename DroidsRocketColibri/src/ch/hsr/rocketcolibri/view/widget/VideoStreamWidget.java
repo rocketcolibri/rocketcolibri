@@ -35,6 +35,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 public class VideoStreamWidget extends SurfaceView implements
@@ -43,7 +44,6 @@ public class VideoStreamWidget extends SurfaceView implements
 	static final String TAG = "VideoStreamWidget";
 	private Bitmap tVideoBitmap;
 	private Paint tRectPaint;
-	private Rect tRectRect;
 	private RectF tRectRectF;
 	RelativeLayout tRel;
 	private AbsoluteLayout tParent;
@@ -79,14 +79,29 @@ public class VideoStreamWidget extends SurfaceView implements
 	}
 
 	private void init(Context context, AttributeSet attrs) {
+		tRectRectF = new RectF(0.0f, 0.0f, 1.0f, 1.0f);
+		tVideoBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.video_camera);
+		BitmapShader paperShader1 = new BitmapShader(tVideoBitmap, Shader.TileMode.MIRROR, Shader.TileMode.MIRROR);
+		Matrix paperMatrix1 = new Matrix();
+		paperMatrix1.setScale(1.0f/tVideoBitmap.getWidth(), 1.0f/tVideoBitmap.getWidth());
+		paperShader1.setLocalMatrix(paperMatrix1);
 		tRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		tRectPaint.setFilterBitmap(false);
 		tRectPaint.setColor(Color.WHITE);
-		tRectPaint.setAlpha(100);
-		tRectRect = new Rect();
-		tRectRectF = new RectF();
-		tVideoBitmap = BitmapFactory.decodeResource(
-				getContext().getResources(), R.drawable.video_camera);
+		tRectPaint.setAlpha(1000);
+		tRectPaint.setShader(paperShader1);
+		
 
+		videoNotAvailIconRect = new RectF(0.0f, 0.0f, 1.0f, 1.0f);
+		videoNotAvailIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.video_stream_not_available);
+		BitmapShader paperShader = new BitmapShader(videoNotAvailIconBitmap, Shader.TileMode.MIRROR, Shader.TileMode.MIRROR);
+		Matrix paperMatrix = new Matrix();
+		paperMatrix.setScale(1.0f/videoNotAvailIconBitmap.getWidth(), 1.0f/videoNotAvailIconBitmap.getWidth());
+		paperShader.setLocalMatrix(paperMatrix);
+		videoNotAvailIconPaint = new Paint();
+		videoNotAvailIconPaint.setFilterBitmap(false);
+		videoNotAvailIconPaint.setStyle(Paint.Style.FILL);
+		videoNotAvailIconPaint.setShader(paperShader);
 
 		setModusChangeListener(new ModusChangeListener() {
 			@Override
@@ -104,16 +119,7 @@ public class VideoStreamWidget extends SurfaceView implements
 		
 		tHolder = getHolder();
   	  	tHolder.addCallback(this);
-		videoNotAvailIconRect = new RectF(0.0f, 0.0f, 1.0f, 1.0f);
-		videoNotAvailIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.video_stream_not_available);
-		BitmapShader paperShader = new BitmapShader(videoNotAvailIconBitmap, Shader.TileMode.MIRROR, Shader.TileMode.MIRROR);
-		Matrix paperMatrix = new Matrix();
-		paperMatrix.setScale(1.0f/videoNotAvailIconBitmap.getWidth(), 1.0f/videoNotAvailIconBitmap.getWidth());
-		paperShader.setLocalMatrix(paperMatrix);
-		videoNotAvailIconPaint = new Paint();
-		videoNotAvailIconPaint.setFilterBitmap(false);
-		videoNotAvailIconPaint.setStyle(Paint.Style.FILL);
-		videoNotAvailIconPaint.setShader(paperShader);
+
 		setWillNotDraw(false);
 		postInvalidate();
 	}
@@ -140,31 +146,13 @@ public class VideoStreamWidget extends SurfaceView implements
 		// draw background rectangle
 		if (tCustomizeModusActive)
 		{
-			tRectRect.set(0, 0, canvas.getWidth(), canvas.getHeight());
-			tRectRectF.set(tRectRect);
-			canvas.drawRoundRect(tRectRectF, 10f, 10f, tRectPaint);
-			// draw bitmap
-			canvas.drawBitmap(tVideoBitmap, canvas.getWidth() / 2
-					- tVideoBitmap.getWidth() / 2, canvas.getHeight() / 2
-					- tVideoBitmap.getHeight() / 2, null);
-	
-			final Drawable foreground = getResources().getDrawable(
-					R.drawable.dragforeground);
-			if (foreground != null) {
-				foreground.setBounds(0, 0, getRight() - getLeft(), getBottom()
-						- getTop());
-	
-				final int scrollX = getScrollX();
-				final int scrollY = getScrollY();
-	
-				if ((scrollX | scrollY) == 0) {
-					foreground.draw(canvas);
-				} else {
-					canvas.translate(scrollX, scrollY);
-					foreground.draw(canvas);
-					canvas.translate(-scrollX, -scrollY);
-				}
-			}
+//			DrawingTools.drawRoundWidgetBacktground(tRectRectF, canvas, tRectPaint);			
+//			canvas.drawBitmap(DrawingTools.resizeBitmap(tVideoBitmap, canvas.getWidth(), canvas.getHeight()),0 ,0,tRectPaint);
+//			DrawingTools.drawCustomizableForground(this, canvas);
+			canvas.save(Canvas.MATRIX_SAVE_FLAG);
+			canvas.scale(getWidth(), getHeight());
+			canvas.drawRect(tRectRectF, tRectPaint);
+			canvas.restore();
 		}
 		else
 		{
@@ -172,11 +160,12 @@ public class VideoStreamWidget extends SurfaceView implements
 				canvas.drawColor(0, Mode.CLEAR);
 			else
 			{
-				float scale = (float) getWidth();
+				float scale = Math.min(getWidth(), getHeight());
 				canvas.save(Canvas.MATRIX_SAVE_FLAG);
 				canvas.scale(scale, scale);
 				canvas.drawRect(videoNotAvailIconRect, videoNotAvailIconPaint);
 				canvas.restore();
+
 			}
 		}
 	}

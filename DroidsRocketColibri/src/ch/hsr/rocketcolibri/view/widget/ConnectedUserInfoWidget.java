@@ -46,7 +46,6 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 	static final int tLineSpace = 4;
 	static final int tBorderSize = 10;
     private Paint tRectPaint;
-    private Rect tRectRect;
     private RectF tRectRectF;
     private Context tContext;
 	private boolean tCustomizeModusActive = false;
@@ -75,7 +74,6 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 		tRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		tRectPaint.setColor(Color.WHITE);
 		tRectPaint.setAlpha(100);
-		tRectRect = new Rect();
 		tRectRectF  = new RectF();
 		
 		tTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -127,22 +125,14 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 		canvas.drawText(getUserText(user), tFontSize+tBorderSize+tLineSpace  , tBorderSize+tFontSize+(tLineSpace+tFontSize)*line, tTextPaint);
 	}
 	
-	public static Bitmap resizeBitmap(Bitmap bitmap, int width, int height) { //width - height in pixel not in DP
-	    bitmap.setDensity(Bitmap.DENSITY_NONE); 
-	    Bitmap newbmp = Bitmap.createScaledBitmap(bitmap, width, height, true);
-	    return newbmp;
-	}
-	
 	@Override
 	protected void onDraw(Canvas canvas) {
 		// draw background rectangle
-		tRectRect.set(0, 0, canvas.getWidth(),canvas.getHeight());
-		tRectRectF.set(tRectRect);
-		canvas.drawRoundRect( tRectRectF, 10f,10f, tRectPaint);
+		DrawingTools.drawRoundWidgetBacktground(tRectRectF, canvas, tRectPaint);
 		
 		// draw bitmap
 		int size = Math.min(canvas.getHeight(),canvas.getWidth());
-		canvas.drawBitmap(resizeBitmap(this.tUsersBitmap,size,size), canvas.getWidth()-size, 0, null);
+		canvas.drawBitmap(DrawingTools.resizeBitmap(this.tUsersBitmap,size,size), canvas.getWidth()-size, 0, null);
 		
 		// draw text
 		if(null != tUserData) {
@@ -156,25 +146,9 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 			}
 		}
 
-		if (!tCustomizeModusActive)
-			return;
-		final Drawable foreground = getResources().getDrawable(
-				R.drawable.dragforeground);
-		if (foreground != null) {
-			foreground.setBounds(0, 0, getRight() - getLeft(), getBottom()
-					- getTop());
+		if (tCustomizeModusActive) 
+			DrawingTools.drawCustomizableForground(this, canvas);
 
-			final int scrollX = getScrollX();
-			final int scrollY = getScrollY();
-
-			if ((scrollX | scrollY) == 0) {
-				foreground.draw(canvas);
-			} else {
-				canvas.translate(scrollX, scrollY);
-				foreground.draw(canvas);
-				canvas.translate(-scrollX, -scrollY);
-			}
-		}
 	}
 	
 	public static ViewElementConfig getDefaultViewElementConfig(){
