@@ -412,6 +412,8 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 			tChannelV.setTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
 			tChannelV.setSticky(getProtocolMapBoolean(RCConstants.STICKY_V));
 			
+      	  	updateInnerCirclePosition(tChannelH.getSticky()?getLayoutParams().width/2:-1, tChannelV.getSticky()?getLayoutParams().height/2:-1);
+
 		}catch(Exception e){
 			e.printStackTrace();
 		}
