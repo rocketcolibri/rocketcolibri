@@ -30,7 +30,6 @@ import android.graphics.Paint;
 import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -66,6 +65,12 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	private MyOnTouchListener tInternalControlListener = new MyOnTouchListener();
 	private boolean tCustomizeModusActive = false;
 	
+	//inner circle stuff
+    private final static int RADIUS_LIMIT = 100;
+    private CircleArea tInnerCircleDimension;
+    private Paint tCirclePaint;
+	//--------
+    
 	protected RCWidgetConfig tWidgetConfig;
 	protected OnTouchListener tCustomizeModusListener;
 	
@@ -119,10 +124,13 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	class MyOnTouchListener implements OnTouchListener {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
+			//change inner circle position
+			updateInnerCirclePosition((int) event.getX(0), (int) event.getY(0));
 			try{
 				Log.d("onTouchListener", 
 						String.valueOf(event.getAxisValue(MotionEvent.AXIS_Y)) + "," + 
 					    String.valueOf(event.getAxisValue(MotionEvent.AXIS_X)));
+                
 				tControlModusListener.onChannelChange(tChannelH.getDefaultChannelValue(), tChannelH.calculateChannelValue(eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_X))));
 				tControlModusListener.onChannelChange(tChannelV.getDefaultChannelValue(), tChannelV.calculateChannelValue(eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_Y))));
 			}catch(Exception e){
@@ -130,6 +138,14 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 			}
 			return true;
 		}
+	}
+	
+	private void updateInnerCirclePosition(int x, int y){
+		if(x + RADIUS_LIMIT<=this.getWidth()&&x - RADIUS_LIMIT>=0)
+			 tInnerCircleDimension.centerX = x;
+		if(y + RADIUS_LIMIT<=this.getHeight()&&y - RADIUS_LIMIT>=0)
+			tInnerCircleDimension.centerY = y;
+		invalidate();
 	}
 	
 	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
@@ -277,9 +293,20 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 		facePaint.setFilterBitmap(true);
 		facePaint.setStyle(Paint.Style.FILL);
 		facePaint.setShader(paperShader);
+		
+		initInnerStickyCircle();
 
 	}
 	
+	private void initInnerStickyCircle(){
+	    tInnerCircleDimension = new CircleArea(tWidgetConfig.viewElementConfig.getLayoutParams().width/2, tWidgetConfig.viewElementConfig.getLayoutParams().width/2, RADIUS_LIMIT);
+	    tCirclePaint = new Paint();
+	
+	    tCirclePaint.setColor(Color.BLUE);
+	    tCirclePaint.setStrokeWidth(40);
+	    tCirclePaint.setStyle(Paint.Style.FILL);
+	}
+    
 	private void initPosition(){
 		if (this.getViewTreeObserver().isAlive()) {
 			this.getViewTreeObserver().addOnGlobalLayoutListener(
@@ -341,7 +368,7 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 		drawRim(canvas);
 		drawFace(canvas);
 		canvas.restore();
-
+		canvas.drawCircle(tInnerCircleDimension.centerX, tInnerCircleDimension.centerY, tInnerCircleDimension.radius, tCirclePaint);
 		if (tCustomizeModusActive) 
 			DrawingTools.drawCustomizableForground(this, canvas);
 	}
@@ -349,17 +376,17 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	@Override
 	public void updateProtocolMap() {
 		try{
-		tChannelH.setDefaultChannelValue(getProtocolMapInt(RCConstants.CHANNEL_H));
-		tChannelH.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_H));
-		tChannelH.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_H));
-		tChannelH.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_H));
-		tChannelH.setTrimm(getProtocolMapInt(RCConstants.TRIMM_H));
-		
-		tChannelV.setDefaultChannelValue(getProtocolMapInt(RCConstants.CHANNEL_V));
-		tChannelV.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_V));
-		tChannelV.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_V));
-		tChannelV.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_V));
-		tChannelV.setTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
+			tChannelH.setDefaultChannelValue(getProtocolMapInt(RCConstants.CHANNEL_H));
+			tChannelH.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_H));
+			tChannelH.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_H));
+			tChannelH.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_H));
+			tChannelH.setTrimm(getProtocolMapInt(RCConstants.TRIMM_H));
+			
+			tChannelV.setDefaultChannelValue(getProtocolMapInt(RCConstants.CHANNEL_V));
+			tChannelV.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_V));
+			tChannelV.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_V));
+			tChannelV.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_V));
+			tChannelV.setTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -468,4 +495,22 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 		tWidgetConfig.viewElementConfig.setAlpha(getAlpha());
 		return tWidgetConfig.viewElementConfig;
 	}
+	
+    /** Stores dimension data about single circle */
+    private static class CircleArea {
+        int radius;
+        int centerX;
+        int centerY;
+
+        CircleArea(int centerX, int centerY, int radius) {
+            this.radius = radius;
+            this.centerX = centerX;
+            this.centerY = centerY;
+        }
+
+        @Override
+        public String toString() {
+            return "Circle[" + centerX + ", " + centerY + ", " + radius + "]";
+        }
+    }
 }
