@@ -8,6 +8,7 @@ import java.util.Map;
 
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
+import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.protocol.RCProtocolUdp;
 import ch.hsr.rocketcolibri.ui_data.input.Channel;
@@ -77,6 +78,8 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	public Circle(Context context, RCWidgetConfig rcWidgetConfig){
 		super(context);
 		tWidgetConfig = rcWidgetConfig;
+		
+//		RocketColibriDefaults.dpToPixel(getContext().getResources().getDisplayMetrics().density, tWidgetConfig);
 		setLayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams());
 		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
 		backgroundResource = R.drawable.cross;
