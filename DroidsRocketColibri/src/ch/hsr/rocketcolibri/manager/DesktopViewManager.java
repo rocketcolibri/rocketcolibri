@@ -55,7 +55,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	private DesktopMenu tDesktopMenu;
 	private OnChannelChangeListener tControlModusListener;
 	private Service tService;
-	private View tBacktgroundView;
+	
 	public DesktopViewManager(Activity context, AbsoluteLayout rootView, AbsoluteLayout controlElementParentView, OnChannelChangeListener controlModusListener, ViewChangedListener vcListener){
 		tContext = context;
 		tRootView = rootView;
@@ -74,7 +74,6 @@ public class DesktopViewManager implements IDesktopViewManager{
 	    tCustomizeModusListener = new CustomizeModusListener(this);
 	    tDesktopMenu = new DesktopMenu(tContext, this);
 	    tControlModusListener = controlModusListener;
-	    tBacktgroundView = new DesktopViewManagerShowCustomizableBackground(tContext);
 	}
 
 	@Override
@@ -167,9 +166,9 @@ public class DesktopViewManager implements IDesktopViewManager{
 
 	private void updateBackground(){
 		if(tCustomizeModus)
-			tRootView.addView(tBacktgroundView);
+			tRootView.findViewById(R.id.configuration_background).setVisibility(View.VISIBLE);
 		else
-			tRootView.removeView(tBacktgroundView);
+			tRootView.findViewById(R.id.configuration_background).setVisibility(View.INVISIBLE);
 	}
 
 	

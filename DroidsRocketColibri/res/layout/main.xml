@@ -9,7 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
     </SurfaceView>
-
+    
+	<ImageView
+	    android:id="@+id/configuration_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.2"
+        android:visibility="invisible"
+	    android:src="@drawable/configuration_background"
+	    />
+	
     <ch.hsr.rocketcolibri.view.draggable.DragLayer
         android:id="@+id/drag_layer"
         android:layout_width="match_parent"
@@ -20,7 +29,6 @@
         <!-- handled by DesktopViewManager -->
 
     </ch.hsr.rocketcolibri.view.draggable.DragLayer>
-
     <include layout="@layout/desktop_menu" />
 
 </ch.hsr.rocketcolibri.view.AbsoluteLayout>
