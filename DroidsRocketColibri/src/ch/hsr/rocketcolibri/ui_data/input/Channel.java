@@ -20,6 +20,7 @@ public class Channel
 	int minRange;
 	int maxRange;
 	int trimm;
+	boolean sticky;
 
 	/* current value transmitted for this channel */
 	int currentChannelValue;
@@ -39,12 +40,14 @@ public class Channel
 	public void setTrimm(int t)	{ if(t>-1)trimm = t;	}
 	public void setInverted(boolean i)	{ inverted = i;	}
 	public void setDefaultChannelValue(int d)	{ defaultChannelValue = d;	}
+	public void setSticky(boolean d)	{ sticky = d;	}
 	/** getter */
 	public int getMinRange()	{ return minRange;	}
 	public int getMaxRange()	{ return maxRange;	}
 	public int getTrimm()	{ return trimm;	}
 	public boolean getInverted()	{ return inverted;	}
 	public int getDefaultChannelValue() { return defaultChannelValue;	}
+	public boolean getSticky() { return sticky;	}
 	
 	/**
 	 * set the value from the control widget

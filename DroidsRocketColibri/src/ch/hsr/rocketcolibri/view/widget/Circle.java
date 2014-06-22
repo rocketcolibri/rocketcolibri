@@ -110,35 +110,57 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE_H, "");
 		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE_H, "");
 		tWidgetConfig.protocolMap.put(RCConstants.TRIMM_H, "");
+		tWidgetConfig.protocolMap.put(RCConstants.STICKY_H, "");
 		
 		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_V, "");
 		tWidgetConfig.protocolMap.put(RCConstants.INVERTED_V, "");
 		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE_V, "");
 		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE_V, "");
 		tWidgetConfig.protocolMap.put(RCConstants.TRIMM_V, "");
+		tWidgetConfig.protocolMap.put(RCConstants.STICKY_V, "");
 	}
 	
 	/**
 	 * the MyOnTouchListener holds a horizontal an vertical channel listener
 	 */
+	private boolean tChannelError = false;
 	class MyOnTouchListener implements OnTouchListener {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
-			//change inner circle position
-			updateInnerCirclePosition((int) event.getX(0), (int) event.getY(0));
-			try{
-				Log.d("onTouchListener", 
-						String.valueOf(event.getAxisValue(MotionEvent.AXIS_Y)) + "," + 
-					    String.valueOf(event.getAxisValue(MotionEvent.AXIS_X)));
-                
-				tControlModusListener.onChannelChange(tChannelH.getDefaultChannelValue(), tChannelH.calculateChannelValue(eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_X))));
-				tControlModusListener.onChannelChange(tChannelV.getDefaultChannelValue(), tChannelV.calculateChannelValue(eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_Y))));
-			}catch(Exception e){
-				Toast.makeText(Circle.this.getContext(), "check your channel configuration!", Toast.LENGTH_SHORT).show();
-			}
-			return true;
+	        switch (event.getActionMasked()) {
+	          case MotionEvent.ACTION_DOWN:
+	        	  updateInnerCirclePosition((int) event.getX(0), (int) event.getY(0));
+	              return true;
+	          case MotionEvent.ACTION_POINTER_DOWN:
+	        	  updateInnerCirclePosition((int) event.getX(0), (int) event.getY(0));
+	              return true;
+	          case MotionEvent.ACTION_MOVE:
+	        	  updateInnerCirclePosition((int) event.getX(0), (int) event.getY(0));
+	      		try{
+//	    			Log.d("onTouchListener", String.valueOf(event.getAxisValue(MotionEvent.AXIS_Y)) + "," + String.valueOf(event.getAxisValue(MotionEvent.AXIS_X)));
+	    			tControlModusListener.onChannelChange(tChannelH.getDefaultChannelValue(), tChannelH.calculateChannelValue(eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_X))));
+	    			tControlModusListener.onChannelChange(tChannelV.getDefaultChannelValue(), tChannelV.calculateChannelValue(eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_Y))));
+	    		}catch(Exception e){
+	    			tChannelError = true;
+	    		}
+	              return true;
+	          case MotionEvent.ACTION_UP:
+	        	  updateInnerCirclePosition(tChannelH.getSticky()?getLayoutParams().width/2:(int) event.getX(0), tChannelV.getSticky()?getLayoutParams().height/2:(int) event.getY(0));
+	              if(tChannelError){
+	            	  Toast.makeText(Circle.this.getContext(), "check your channel configuration!", Toast.LENGTH_SHORT).show();
+	            	  tChannelError = false;
+	              }
+	              return true;
+	          case MotionEvent.ACTION_POINTER_UP:
+	              invalidate();
+	              return true;
+	          case MotionEvent.ACTION_CANCEL:
+	              return true;
+	        }
+			return false;
 		}
 	}
+	
 	
 	private void updateInnerCirclePosition(int x, int y){
 		if(x + RADIUS_LIMIT<=this.getWidth()&&x - RADIUS_LIMIT>=0)
@@ -381,12 +403,15 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 			tChannelH.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_H));
 			tChannelH.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_H));
 			tChannelH.setTrimm(getProtocolMapInt(RCConstants.TRIMM_H));
+			tChannelH.setSticky(getProtocolMapBoolean(RCConstants.STICKY_H));
 			
 			tChannelV.setDefaultChannelValue(getProtocolMapInt(RCConstants.CHANNEL_V));
 			tChannelV.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_V));
 			tChannelV.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_V));
 			tChannelV.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_V));
 			tChannelV.setTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
+			tChannelV.setSticky(getProtocolMapBoolean(RCConstants.STICKY_V));
+			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
