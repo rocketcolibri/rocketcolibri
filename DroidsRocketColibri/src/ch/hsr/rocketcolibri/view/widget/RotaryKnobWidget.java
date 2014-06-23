@@ -15,34 +15,31 @@ import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import android.app.Service;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.graphics.Shader;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 		IRCWidget {
 
 	private int tRotaryKnobResource;
-	private int tBackgroundResource;
+	private int tRimImageResource;
 	protected RCWidgetConfig tWidgetConfig;
-	ImageView tIvBack = null;
-	private float tAngle = 0f;
+	private float tAngle;
+	private float tAngleMin = 215f;
+	private float tAngleMax = 145f + 360;	// +360 because tAngle is not set to zero at 360 as usual
 	private float theta_old = 0f;
-	private static final float tRimSize = 0.02f;
-
-	private RectF tRotaryKnobRimRect;
-	private Paint tRimPaint;
-	private RectF tFaceRect;
-	private Bitmap tFaceTexture;
+	private float tResolution = tAngleMax - tAngleMin;	// Available range in degrees
+	private float tKnobRange;
+	private float tKnobRangeResolution;
+	private float tKnobRangeIncDecValue;
+	private float tKnobValue;
+	private int tKnobValueMin;
+	private int tKnobValueMax;
+	private int tKnobIncDecValue = 2;
 
 	protected OnTouchListener tCustomizeModusListener;
 	private OnChannelChangeListener tControlModusListener;
@@ -58,8 +55,8 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 		tWidgetConfig = new RCWidgetConfig(elementConfig);
 		setLayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams());
 		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
-		tRotaryKnobResource = R.drawable.rotoroff;
-		initialize(context);
+		initProtocolMapping();
+		initialize();
 	}
 
 	public RotaryKnobWidget(Context context, RCWidgetConfig widgetConfig) {
@@ -67,8 +64,8 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 		tWidgetConfig = widgetConfig;
 		setLayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams());
 		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
-		tRotaryKnobResource = R.drawable.rotoroff;
-		initialize(context);
+		updateProtocolMap();
+		initialize();
 	}
 
 	public interface RotaryKnobListener {
@@ -102,12 +99,32 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 			case MotionEvent.ACTION_POINTER_DOWN:
 				theta_old = theta;
 				break;
+
 			case MotionEvent.ACTION_MOVE:
 				invalidate();
 				float delta_theta = theta - theta_old;
 				theta_old = theta;
 				int direction = (delta_theta > 0) ? 1 : -1;
-				tAngle += 3 * direction;
+				tAngle += tKnobIncDecValue * direction;
+
+				if ((tAngle <= 360) && (tAngle >= 180)) {
+					if (tAngle < tAngleMin) {
+						tAngle = tAngleMin;
+					} else {
+						tKnobValue += tKnobRangeIncDecValue * direction;
+						tControlModusListener.onChannelChange(tChannelH.getDefaultChannelValue(), (int) tKnobValue);
+						Log.d("Testing", "tKnobValue is set: " + (int) tKnobValue);
+					}
+				} else {
+					if (tAngle > tAngleMax) {
+						tAngle = tAngleMax;
+					} else {
+						tKnobValue += tKnobRangeIncDecValue * direction;
+						tControlModusListener.onChannelChange(tChannelH.getDefaultChannelValue(), (int) tKnobValue);
+						Log.d("Testing", "tKnobValue is set: " + (int) tKnobValue);
+					}
+				}
+
 				notifyListener(direction);
 				break;
 			}
@@ -130,9 +147,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 		return (thetaDeg < 0) ? thetaDeg + 360.0f : thetaDeg;
 	}
 
-	public void initialize(Context context) {
-		this.setImageResource(tRotaryKnobResource);
-
+	public void initProtocolMapping() {
 		// init protocol mapping
 		tWidgetConfig.protocolMap = new HashMap<String, String>();
 		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_H, "");
@@ -140,23 +155,45 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE_H, "");
 		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE_H, "");
 		tWidgetConfig.protocolMap.put(RCConstants.TRIMM_H, "");
+	}
+
+	public void initialize() {
+		tRotaryKnobResource = R.drawable.rotoroff;
+		tRimImageResource = R.drawable.stator;
+
+		this.setBackgroundResource(tRimImageResource);
+		this.setImageResource(tRotaryKnobResource);
+
+		calculateKnobValues();
 
 		this.setKnobListener(new RotaryKnobWidget.RotaryKnobListener() {
 			@Override
 			public void onKnobChanged(int arg) {
-
-				Log.d("onKnobChanged", "arg= " + arg);
-				if (arg > 0)
-					; // rotate right
-				else
-					; // rotate left
+//				Log.d("onKnobChanged", "arg= " + arg);
+//				if (arg > 0)
+//					; // rotate right
+//				else
+//					; // rotate left
 			}
 		});
 	}
 
+	private void calculateKnobValues() {
+		tAngle = tAngleMin;
+
+		tKnobValueMin = tChannelH.getMinRange();
+		tKnobValueMax = tChannelH.getMaxRange();;
+		tKnobValue = tKnobValueMin;
+
+		tKnobRangeResolution = (int) tResolution / tKnobIncDecValue;
+		tKnobRange = tKnobValueMax - tKnobValueMin;
+		tKnobRangeIncDecValue = tKnobRange / tKnobRangeResolution;
+	}
+
 	private void notifyListener(int arg) {
-		if (null != tListener)
+		if (null != tListener) {
 			tListener.onKnobChanged(arg);
+		}
 	}
 
 	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
@@ -191,6 +228,9 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 			tChannelH.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_H));
 			tChannelH.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_H));
 			tChannelH.setTrimm(getProtocolMapInt(RCConstants.TRIMM_H));
+
+			// Protocol values has changed recalculate the values
+			calculateKnobValues();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -215,13 +255,19 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	@Override
 	public void create(RCWidgetConfig rcWidgetConfig) {
 		tWidgetConfig = rcWidgetConfig;
-		initialize(getContext());
+		setLayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams());
+		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
+		updateProtocolMap();
+		initialize();
 	}
 
 	@Override
 	public void create(ViewElementConfig vElementConfig) {
 		tWidgetConfig = new RCWidgetConfig(vElementConfig);
-		initialize(getContext());
+		setLayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams());
+		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
+		initProtocolMapping();
+		initialize();
 	}
 
 	@Override
