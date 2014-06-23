@@ -67,7 +67,7 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	private boolean tCustomizeModusActive = false;
 	
 	//inner circle stuff
-    private final static int RADIUS_LIMIT = 100;
+    private int tRadius = 100;
     private CircleArea tInnerCircleDimension;
     private Paint tCirclePaint;
 	//--------
@@ -166,11 +166,18 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	
 	
 	private void updateInnerCirclePosition(int x, int y){
-		if(x + RADIUS_LIMIT<=this.getWidth()&&x - RADIUS_LIMIT>=0)
+		if(x + tRadius<=this.getWidth()&&x - tRadius>=0)
 			 tInnerCircleDimension.centerX = x;
-		if(y + RADIUS_LIMIT<=this.getHeight()&&y - RADIUS_LIMIT>=0)
+		if(y + tRadius<=this.getHeight()&&y - tRadius>=0)
 			tInnerCircleDimension.centerY = y;
 		invalidate();
+	}
+	
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		tInnerCircleDimension.radius = tRadius = tWidgetConfig.viewElementConfig.getLayoutParams().width/6;
+		updateInnerCirclePosition(getLayoutParams().width/2, getLayoutParams().height/2);
 	}
 	
 	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
@@ -324,7 +331,8 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	}
 	
 	private void initInnerStickyCircle(){
-	    tInnerCircleDimension = new CircleArea(tWidgetConfig.viewElementConfig.getLayoutParams().width/2, tWidgetConfig.viewElementConfig.getLayoutParams().width/2, RADIUS_LIMIT);
+		tRadius = tWidgetConfig.viewElementConfig.getLayoutParams().width/6;
+	    tInnerCircleDimension = new CircleArea(tWidgetConfig.viewElementConfig.getLayoutParams().width/2, tWidgetConfig.viewElementConfig.getLayoutParams().width/2, tRadius);
 	    tCirclePaint = new Paint();
 	
 	    tCirclePaint.setColor(Color.BLUE);
