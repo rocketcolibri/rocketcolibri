@@ -20,7 +20,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 		IRCWidget {
@@ -28,9 +27,9 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	private int tRotaryKnobResource;
 	private int tRimImageResource;
 	protected RCWidgetConfig tWidgetConfig;
-	private float tAngle;
+	private float tAngle;					// Has the range 215° up to 505°
 	private float tAngleMin = 215f;
-	private float tAngleMax = 145f + 360;	// +360 because tAngle is not set to zero at 360 as usual
+	private float tAngleMax = 145f + 360;	// +360 because tAngle is not set to zero at 360°
 	private float theta_old = 0f;
 	private float tResolution = tAngleMax - tAngleMin;	// Available range in degrees
 	private float tKnobRange;
