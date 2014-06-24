@@ -1,4 +1,4 @@
-package ch.hsr.rocketcolibri.view.widget;
+package ch.hsr.rocketcolibri.util;
 
 import ch.hsr.rocketcolibri.R;
 import android.graphics.Bitmap;
@@ -12,6 +12,12 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
+/**
+ * Helper function for the rocket colibri application.
+ * 
+ * @author lorenz
+ *
+ */
 public class DrawingTools {
 	
 	static final int radiusEdge=10;
@@ -23,6 +29,12 @@ public class DrawingTools {
 	    return newbmp;
 	}
 
+	/**
+	 * cut rounded edges of a bitmap
+	 * @param bitmap original bitmap
+	 * @param pixels (radius of the edge)
+	 * @return cutted bitmap
+	 */
 	public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
         Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
                 .getHeight(), Config.ARGB_8888);
@@ -44,12 +56,26 @@ public class DrawingTools {
 
         return output;
     }
+	
+	/**
+	 * draw a background with rounded edges
+	 * @param r
+	 * @param canvas
+	 * @param paint
+	 */
 	public static void drawRoundWidgetBacktground(RectF r, Canvas canvas, Paint paint) {
 		rect.set(0, 0, canvas.getWidth(),canvas.getHeight());
 		r.set(rect);
 		canvas.drawRoundRect( r, 10f,10f, paint);
 	}
 	
+	/**
+	 * this function should be used by all widgets in customizable mode to draw the green
+	 * shadow in the widget forground.
+	 * 
+	 * @param view
+	 * @param canvas
+	 */
 	public static void drawCustomizableForground(View view, Canvas canvas) {
 		final Drawable foreground = view.getResources().getDrawable(
 				R.drawable.dragforeground);

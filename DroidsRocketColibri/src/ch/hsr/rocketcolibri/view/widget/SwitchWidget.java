@@ -20,6 +20,7 @@ import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.ui_data.input.Channel;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
+import ch.hsr.rocketcolibri.util.DrawingTools;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;

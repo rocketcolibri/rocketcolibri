@@ -7,6 +7,7 @@ import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.ui_data.output.VideoUrl;
+import ch.hsr.rocketcolibri.util.DrawingTools;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
@@ -25,6 +26,7 @@ import android.graphics.Paint.Style;
 import android.graphics.Shader;
 import android.graphics.PorterDuff.Mode;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Handler;
@@ -33,8 +35,20 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+/**
+ * The widgets dispays the video stream coming from the servo controller.
+ * 
+ * The video display shows an camera icon if the RocketColibri application is in the customizable mode.
+ * 
+ * If the video stream is not availabel the camera icon is displayed with a red cross
+ * 
+ *  During the buffering phase of the video, a dotted progress bar is dispöayed.
+ *  
+ * @author lorenz
+ *
+ */
 public class VideoStreamWidget extends SurfaceView implements
-		ICustomizableView, IRCWidget, SurfaceHolder.Callback, OnPreparedListener, OnErrorListener{
+		ICustomizableView, IRCWidget, SurfaceHolder.Callback, OnPreparedListener, OnErrorListener, OnBufferingUpdateListener{
 
 	static final String TAG = "VideoStreamWidget";
 	private Bitmap tVideoBitmap;
@@ -145,17 +159,17 @@ public class VideoStreamWidget extends SurfaceView implements
 	private void startDotProgress() {
 		tIsPrepared = false;
 		tDotIndex = -1;
-		tDotProressHandler.removeCallbacks(mRunnable);
-		tDotProressHandler.post(mRunnable);
+		tDotProressHandler.removeCallbacks(tRunnable);
+		tDotProressHandler.post(tRunnable);
 	}
 
 	private void stopDotProgress() {
 		tIsPrepared = true;
-		tDotProressHandler.removeCallbacks(mRunnable);
+		tDotProressHandler.removeCallbacks(tRunnable);
 	}
 	
 	private int step = 1;
-	private Runnable mRunnable = new Runnable() {
+	private Runnable tRunnable = new Runnable() {
 
 		@Override
 		public void run() {
@@ -175,15 +189,22 @@ public class VideoStreamWidget extends SurfaceView implements
 			}
 
 			invalidate();
-			tDotProressHandler.postDelayed(mRunnable, 300);
+			tDotProressHandler.postDelayed(tRunnable, 300);
 		}
 
 	};
 
+	
+	/**
+	 * draws the progress dots during buffering the video stream
+	 * @param canvas
+	 */
 	private void onDrawDotProgress(Canvas canvas){
 		if(tIsPrepared)	{
+			// display video stream
 			canvas.drawColor(0, Mode.CLEAR);			
 		}else{
+			// diplay dotted progress bar
 			float dX = (canvas.getWidth() - tDotCount * tDotRadius * 2 - (tDotCount - 1) * tDotMargin) / 2.0f;
 			float dY = canvas.getHeight() / 2;
 			for (int i = 0; i < tDotCount; i++) {
@@ -204,6 +225,7 @@ public class VideoStreamWidget extends SurfaceView implements
 			canvas.drawBitmap(DrawingTools.resizeBitmap(tVideoBitmap, canvas.getWidth(), canvas.getHeight()),0 ,0,tVideoBitmapPaint);	
 			DrawingTools.drawCustomizableForground(this, canvas);
 		}else{
+			// dispölay camera icon
 			if(tVideoUrl.length() > 2){
 				onDrawDotProgress(canvas);
 			}else{
@@ -428,5 +450,10 @@ public class VideoStreamWidget extends SurfaceView implements
 		else
 			releaseMediaPlayer();
 		postInvalidate();
+	}
+
+	@Override
+	public void onBufferingUpdate(MediaPlayer mp, int percent) {
+		Log.d(TAG, "onBufferingUpdate:" + percent + "%");
 	}
 }

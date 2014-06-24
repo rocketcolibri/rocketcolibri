@@ -8,6 +8,7 @@ import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.ui_data.input.Channel;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
+import ch.hsr.rocketcolibri.util.DrawingTools;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
@@ -27,9 +28,9 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	private int tRotaryKnobResource;
 	private int tRimImageResource;
 	protected RCWidgetConfig tWidgetConfig;
-	private float tAngle;					// Has the range 215° up to 505°
+	private float tAngle;					// Has the range 215ï¿½ up to 505ï¿½
 	private float tAngleMin = 215f;
-	private float tAngleMax = 145f + 360;	// +360 because tAngle is not set to zero at 360°
+	private float tAngleMax = 145f + 360;	// +360 because tAngle is not set to zero at 360ï¿½
 	private float theta_old = 0f;
 	private float tResolution = tAngleMax - tAngleMin;	// Available range in degrees
 	private float tKnobRange;
