@@ -15,7 +15,7 @@ public class Channel
 	public static final int MAX_VALUE = 1000;
 
 	/* attributes according to the requirements */
-	int defaultChannelValue;
+	int PositionChannelValue;
 	boolean inverted;
 	int minRange;
 	int maxRange;
@@ -31,7 +31,7 @@ public class Channel
 		maxRange = MAX_VALUE;
 		trimm = 0;
 		inverted = false;
-		defaultChannelValue = -1;
+		PositionChannelValue = -1;
 	}
 	
 	/** setter */
@@ -39,14 +39,14 @@ public class Channel
 	public void setMaxRange(int r)	{ if(r>-1)maxRange = r;	}
 	public void setTrimm(int t)	{ if(t>-1)trimm = t;	}
 	public void setInverted(boolean i)	{ inverted = i;	}
-	public void setDefaultChannelValue(int d)	{ defaultChannelValue = d;	}
+	public void setDefaultChannelValue(int d)	{ PositionChannelValue = d;	}
 	public void setSticky(boolean d)	{ sticky = d;	}
 	/** getter */
 	public int getMinRange()	{ return minRange;	}
 	public int getMaxRange()	{ return maxRange;	}
 	public int getTrimm()	{ return trimm;	}
 	public boolean getInverted()	{ return inverted;	}
-	public int getDefaultChannelValue() { return defaultChannelValue;	}
+	public int getDefaultChannelValue() { return PositionChannelValue;	}
 	public boolean getSticky() { return sticky;	}
 	
 	/**
