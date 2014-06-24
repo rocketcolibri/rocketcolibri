@@ -96,6 +96,10 @@ public class EditChannelActivity extends RCActivity{
 //		tv.setRawInputType(inputType);
 		tv.setText(value);
 		tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		
+		// set the cursor at the end..
+		int textLength = tv.getText().length();
+		tv.setSelection(textLength, textLength);
 		channelViewMap.put(key, tv);
 		return tv;
 	}
