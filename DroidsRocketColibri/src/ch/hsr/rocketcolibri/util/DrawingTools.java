@@ -20,7 +20,7 @@ import android.view.View;
  */
 public class DrawingTools {
 	
-	static final int radiusEdge=10;
+	public static final int radiusEdge=10;
 	static Rect rect = new Rect();
 	
 	public static Bitmap resizeBitmap(Bitmap bitmap, int width, int height) { //width - height in pixel not in DP
