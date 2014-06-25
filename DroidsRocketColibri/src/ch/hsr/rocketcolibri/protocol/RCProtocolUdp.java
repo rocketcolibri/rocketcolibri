@@ -190,7 +190,8 @@ public class RCProtocolUdp extends RCProtocol{
 					cdcMsg.put("v", 1);
 					cdcMsg.put("cmd", "hello");
 					cdcMsg.put("sequence", sequenceNumber++);
-					cdcMsg.put("name", tUsername);
+					cdcMsg.put("user"
+							+ "", tUsername);
 				}
 				catch (JSONException e) 
 				{
