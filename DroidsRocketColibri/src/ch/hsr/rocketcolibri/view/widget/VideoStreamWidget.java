@@ -34,6 +34,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * The widgets dispays the video stream coming from the servo controller.
@@ -159,7 +161,7 @@ public class VideoStreamWidget extends SurfaceView implements
 	private void startDotProgress() {
 		tIsPrepared = false;
 		tDotIndex = -1;
-		tDotProressHandler.removeCallbacks(tRunnable);
+		//tDotProressHandler.removeCallbacks(tRunnable);
 		tDotProressHandler.post(tRunnable);
 	}
 
@@ -188,7 +190,7 @@ public class VideoStreamWidget extends SurfaceView implements
 
 			}
 
-			invalidate();
+			postInvalidate();
 			tDotProressHandler.postDelayed(tRunnable, 300);
 		}
 
@@ -200,6 +202,8 @@ public class VideoStreamWidget extends SurfaceView implements
 	 * @param canvas
 	 */
 	private void onDrawDotProgress(Canvas canvas){
+		canvas.drawColor(0, Mode.CLEAR);
+		
 		if(tIsPrepared)	{
 			// display video stream
 			canvas.drawColor(0, Mode.CLEAR);			
@@ -225,7 +229,7 @@ public class VideoStreamWidget extends SurfaceView implements
 			canvas.drawBitmap(DrawingTools.resizeBitmap(tVideoBitmap, canvas.getWidth(), canvas.getHeight()),0 ,0,tVideoBitmapPaint);	
 			DrawingTools.drawCustomizableForground(this, canvas);
 		}else{
-			// dispölay camera icon
+			// display camera icon
 			if(tVideoUrl.length() > 2){
 				onDrawDotProgress(canvas);
 			}else{
@@ -238,6 +242,22 @@ public class VideoStreamWidget extends SurfaceView implements
 		}
 	}
 
+	private void moveToBack(View currentView) 
+	{
+	    ViewGroup vg = ((ViewGroup) currentView.getParent());
+	    int index = vg.indexOfChild(currentView);
+	    for(int i = 0; i<index; i++)
+	    {
+	    vg.bringChildToFront(vg.getChildAt(0));
+	    }
+	}
+	
+	@Override
+	protected void onAttachedToWindow()
+	{
+		moveToBack(this);
+		super.onAttachedToWindow();
+	}
 	
 	/**
 	 * RocketColibriService sends UiSink change notification with this methods
@@ -273,10 +293,10 @@ public class VideoStreamWidget extends SurfaceView implements
 
 	public static ViewElementConfig getDefaultViewElementConfig() {
 		ResizeConfig rc = new ResizeConfig();
-		rc.maxHeight = 600;
+		rc.maxHeight = 1080;
 		rc.minHeight = 100;
-		rc.maxWidth = 800;
-		rc.minWidth = 200;
+		rc.maxWidth = 1920;
+		rc.minWidth = 180;
 		LayoutParams lp = new LayoutParams(400, 300, 100, 100);
 		ViewElementConfig elementConfig = new ViewElementConfig(
 				VideoStreamWidget.class.getName(), lp, rc);
@@ -412,6 +432,7 @@ public class VideoStreamWidget extends SurfaceView implements
 	public void onPrepared(MediaPlayer mp) {
 		Log.d(TAG, "onPrepared");
 		stopDotProgress();
+		tIsPrepared = true;
 		tMediaPlayer.start();
 		postInvalidate();
 	}
