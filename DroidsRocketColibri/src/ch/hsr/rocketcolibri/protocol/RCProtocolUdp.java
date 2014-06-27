@@ -229,7 +229,7 @@ public class RCProtocolUdp extends RCProtocol{
 				Object nextState) 
 		{
 			Log.d(TAG, "execute action stopSendMessage");
-			tTelemetryReceiver.stopReceiveTelemetry();
+			tTelemetryReceiver.setTelemetryOffline();
 			cancelOldCommandJob();
 		}
 	};

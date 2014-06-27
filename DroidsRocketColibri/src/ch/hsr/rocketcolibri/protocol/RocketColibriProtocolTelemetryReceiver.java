@@ -75,6 +75,7 @@ public class RocketColibriProtocolTelemetryReceiver
 				catch (IOException e)
 				{
 					Log.e(TAG, "socket closed");
+					setTelemetryOffline();
 		            return;
 				}
 			}
@@ -87,19 +88,18 @@ public class RocketColibriProtocolTelemetryReceiver
 		tServerSocket.close();  
 	}
 
-
-	private void setTelemetryOffline() {
-		
-
+	public void setTelemetryOffline() {
+		tProtocol.tUsers.removeAllUsers();
+		tProtocol.tVdeoUrl.setVideoUrl("");
 	}
+	
 	
 	/**
 	 * this actions must be performed if a Telemetry Receive Timeout occurs
 	 */
 	private void handleTimeout() 
 	{
-		tProtocol.tUsers.removeAllUsers();
-		tProtocol.tVdeoUrl.setVideoUrl("");
+		setTelemetryOffline();
 		tFsm.queue(e.E8_TIMEOUT);
 		tFsm.processNextEvent();
 	}
