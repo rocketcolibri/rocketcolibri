@@ -97,6 +97,12 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 		case CONN_CONTROL:
 			connectionIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_control);
 			break;
+		case CONN_LCK_OUT:
+			connectionIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_connected_locked);
+			break;
+		case CONN_OBSERVE:
+			connectionIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_connected_observe);
+			break;
 		default:
 			connectionIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_connected);
 			break;

@@ -54,9 +54,10 @@ public class RCProtocolUdp extends RCProtocol{
 	
 	public RCProtocolUdp( String username) 
 	{
+		this.tUsername = username;
 		this.tFsm = new RocketColibriProtocolFsm(s.DISC);
 		this.tTelemetryReceiver = new RocketColibriProtocolTelemetryReceiver( 30001, tFsm, this);
-		this.tUsername = username;
+		
 		// don't send any message
 		this.tFsm.getStateMachinePlan().entryAction(s.DISC, stopSendMessage);
 				
@@ -280,5 +281,9 @@ public class RCProtocolUdp extends RCProtocol{
 		tFsm.queue(e.E7_USR_OBSERVE);
 		tFsm.processOutstandingEvents();
 		return true;
+	}
+
+	public String getUserName(){
+		return tUsername;
 	}
 }

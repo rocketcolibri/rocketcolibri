@@ -22,7 +22,7 @@ public class RcOperator {
 		if (null != obj)
 		{
 			RcOperator other = (RcOperator)obj;
-			return this.getName().equals(other.getName());
+			return this.getName().equals(other.getName()) && this.getIpAddress().equals(other.ipAddress);
 		}
 		else
 			return false;

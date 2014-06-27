@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import ch.hsr.rocketcolibri.ui_data.output.VideoUrl;
+import ch.hsr.rocketcolibri.util.NetworkUtils;
 
 public class RocketColibriMessageTelemetry extends RocketColibriMessage {
 	final String TAG = this.getClass().getName();		
@@ -96,8 +97,10 @@ public class RocketColibriMessageTelemetry extends RocketColibriMessage {
 		if(null == this.tActiveuser)
 			fsm.queue(e.E3_RECV_TELE_NONE);
 		else{
-			// TODO
-			fsm.queue(e.E3_RECV_TELE_NONE);
+			if(NetworkUtils.getIPAddress(true).equals(this.tActiveuser.getIpAddress()))
+				fsm.queue(e.E5_RECV_TELE_OWN);
+			else
+				fsm.queue(e.E4_RECV_TELE_ALIEN);
 		}
 		fsm.processNextEvent();
 	}
