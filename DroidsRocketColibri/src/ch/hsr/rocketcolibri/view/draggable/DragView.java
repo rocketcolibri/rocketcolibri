@@ -50,12 +50,13 @@ public class DragView extends View
     // Number of pixels to add to the dragged item for scaling.  Should be even for pixel alignment.
     private static final int DRAG_SCALE = 0;   // In Launcher, value is 40
     private static final int HELPLINE_OFFSET = 20;
-    private View horizontalLine;
-    private View verticalLine;
+    private View topHorizontalLine;
+    private View leftVerticalLine;
+    private View bottomHorizontalLine;
+    private View rightVerticalLine;
     private int[] tXOfViewsInParent;
     private int[] tYOfViewsInParent;
     private boolean loopSuccess;
-    private int[] tStickyCoords = new int[2];
 
     private Bitmap tBitmap;
     private Paint mPaint;
@@ -97,15 +98,10 @@ public class DragView extends View
         	tYOfViewsInParent[i+1] = (int) childView.getY()+childView.getHeight();
         }
         
-        horizontalLine = new View(context);
-        horizontalLine.setBackgroundColor(Color.RED);
-        horizontalLine.setLayoutParams(new LayoutParams(tWindowManager.getWidth(), 1, 0, 0));
-        horizontalLine.setVisibility(View.INVISIBLE);
-        
-        verticalLine = new View(context);
-        verticalLine.setBackgroundColor(Color.RED);
-        verticalLine.setLayoutParams(new LayoutParams(1, tWindowManager.getWidth(), 0, 0));
-        verticalLine.setVisibility(View.INVISIBLE);
+        topHorizontalLine = createLine(context, Color.RED, tWindowManager.getWidth(), 1);
+        bottomHorizontalLine = createLine(context, Color.RED, tWindowManager.getWidth(), 1);
+        leftVerticalLine = createLine(context, Color.RED, 1, tWindowManager.getWidth());
+        rightVerticalLine = createLine(context, Color.RED, 1, tWindowManager.getWidth());
         
         
         Matrix scale = new Matrix();
@@ -125,6 +121,14 @@ public class DragView extends View
 //        mBgPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 //        mBgPaint.setColor(0x88dd0011);
 //        mBgPaint.setAlpha(50);
+    }
+    
+    private View createLine(Context context, int color, int width, int height){
+    	View line = new View(context);
+        line.setBackgroundColor(color);
+        line.setLayoutParams(new LayoutParams(width, height, 0, 0));
+        line.setVisibility(View.INVISIBLE);
+        return line;
     }
 
     @Override
@@ -169,8 +173,10 @@ public class DragView extends View
         tLayoutParams.x = touchX-tRegistrationX;
         tLayoutParams.y = touchY-tRegistrationY;
         tWindowManager.addView(this, tLayoutParams);
-        tWindowManager.addView(horizontalLine);
-        tWindowManager.addView(verticalLine);
+        tWindowManager.addView(topHorizontalLine);
+        tWindowManager.addView(leftVerticalLine);
+        tWindowManager.addView(rightVerticalLine);
+        tWindowManager.addView(bottomHorizontalLine);
     }
     
     /**
@@ -181,35 +187,68 @@ public class DragView extends View
      */
     void move(int touchX, int touchY) {
     	touchX = calculateXPosition(touchX - tRegistrationX);
+    	touchY = calculateYPosition(touchY - tRegistrationY);
+    	//left
     	loopSuccess = false;
     	for(int i = 0; i < tXOfViewsInParent.length; ++i){
     		if(touchX+HELPLINE_OFFSET>=tXOfViewsInParent[i] && touchX-HELPLINE_OFFSET<=tXOfViewsInParent[i]){
-    			((AbsoluteLayout.LayoutParams)verticalLine.getLayoutParams()).x = tXOfViewsInParent[i];
-    			verticalLine.setVisibility(View.VISIBLE);
-    			tWindowManager.updateViewLayout(verticalLine, verticalLine.getLayoutParams());
+    			((AbsoluteLayout.LayoutParams)leftVerticalLine.getLayoutParams()).x = tXOfViewsInParent[i];
+    			leftVerticalLine.setVisibility(View.VISIBLE);
+    			tWindowManager.updateViewLayout(leftVerticalLine, leftVerticalLine.getLayoutParams());
     			touchX = tXOfViewsInParent[i];
     			loopSuccess = true;
     			break;
     		}
     	}
-    	
     	if(!loopSuccess)
-    		verticalLine.setVisibility(View.INVISIBLE);
+    		leftVerticalLine.setVisibility(View.INVISIBLE);
+    	
+    	//top
     	loopSuccess = false;
-    	touchY = calculateYPosition(touchY - tRegistrationY);
     	for(int i = 0; i < tYOfViewsInParent.length; ++i){
     		if(touchY+HELPLINE_OFFSET>=tYOfViewsInParent[i] && touchY-HELPLINE_OFFSET<=tYOfViewsInParent[i]){
-    			((AbsoluteLayout.LayoutParams)horizontalLine.getLayoutParams()).y = tYOfViewsInParent[i];
-    			horizontalLine.setVisibility(View.VISIBLE);
-    			tWindowManager.updateViewLayout(horizontalLine, horizontalLine.getLayoutParams());
+    			((AbsoluteLayout.LayoutParams)topHorizontalLine.getLayoutParams()).y = tYOfViewsInParent[i];
+    			topHorizontalLine.setVisibility(View.VISIBLE);
+    			tWindowManager.updateViewLayout(topHorizontalLine, topHorizontalLine.getLayoutParams());
     			touchY = tYOfViewsInParent[i];
     			loopSuccess = true;
     			break;
     		}
     	}
-    	
     	if(!loopSuccess)
-    		horizontalLine.setVisibility(View.INVISIBLE);
+    		topHorizontalLine.setVisibility(View.INVISIBLE);
+    	
+    	//right
+    	loopSuccess = false;
+    	for(int i = 0; i < tXOfViewsInParent.length; ++i){
+    		if(touchX+getWidth()+HELPLINE_OFFSET>=tXOfViewsInParent[i] && touchX+getWidth()-HELPLINE_OFFSET<=tXOfViewsInParent[i]){
+    			((AbsoluteLayout.LayoutParams)rightVerticalLine.getLayoutParams()).x = tXOfViewsInParent[i];
+    			rightVerticalLine.setVisibility(View.VISIBLE);
+    			tWindowManager.updateViewLayout(rightVerticalLine, rightVerticalLine.getLayoutParams());
+    			touchX = tXOfViewsInParent[i]-getWidth();
+    			loopSuccess = true;
+    			break;
+    		}
+    	}
+    	if(!loopSuccess)
+    		rightVerticalLine.setVisibility(View.INVISIBLE);
+
+    	//bottom
+    	loopSuccess = false;
+    	for(int i = 0; i < tYOfViewsInParent.length; ++i){
+    		if(touchY+getHeight()+HELPLINE_OFFSET>=tYOfViewsInParent[i] && touchY+getHeight()-HELPLINE_OFFSET<=tYOfViewsInParent[i]){
+    			((AbsoluteLayout.LayoutParams)bottomHorizontalLine.getLayoutParams()).y = tYOfViewsInParent[i];
+    			bottomHorizontalLine.setVisibility(View.VISIBLE);
+    			tWindowManager.updateViewLayout(bottomHorizontalLine, bottomHorizontalLine.getLayoutParams());
+    			touchY = tYOfViewsInParent[i]-getHeight();
+    			loopSuccess = true;
+    			break;
+    		}
+    	}
+    	if(!loopSuccess)
+    		bottomHorizontalLine.setVisibility(View.INVISIBLE);
+    	
+
     	tLayoutParams.x = touchX;
     	tLayoutParams.y = touchY;
     	tWindowManager.updateViewLayout(this, tLayoutParams);
@@ -260,8 +299,10 @@ public class DragView extends View
     }
 
     void remove() {
-    	tWindowManager.removeView(horizontalLine);
-    	tWindowManager.removeView(verticalLine);
+    	tWindowManager.removeView(bottomHorizontalLine);
+    	tWindowManager.removeView(rightVerticalLine);
+    	tWindowManager.removeView(topHorizontalLine);
+    	tWindowManager.removeView(leftVerticalLine);
         tWindowManager.removeView(this);
     }
 }

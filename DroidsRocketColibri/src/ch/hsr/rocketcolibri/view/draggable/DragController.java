@@ -64,10 +64,7 @@ public class DragController {
     private Context mContext;
     private Vibrator mVibrator;
 
-    // temporaries to avoid gc thrash
-//    private Rect mRectTemp = new Rect();
     private final int[] mCoordinatesTemp = new int[2];
-//    private int[] tStickyCoords = new int[2];
 
     /** Whether or not we're dragging. */
     private boolean mDragging;
@@ -101,8 +98,6 @@ public class DragController {
     private IBinder mWindowToken;
 
     private View mMoveTarget;
-
-//    private IDropTarget mLastDropTarget;
 
     private InputMethodManager mInputMethodManager;
 
