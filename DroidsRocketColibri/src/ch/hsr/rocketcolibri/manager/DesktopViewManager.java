@@ -66,7 +66,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 		tDragController = new DragController(context);
 		DragLayer dragLayer = (DragLayer) tControlElementParentView;
 		dragLayer.setDragController(tDragController);
-	    tDragController.addDropTarget (dragLayer);
+	    tDragController.setDropTarget (dragLayer);
 	    tDragController.setDragListener(createDragListener());
 	    LayoutInflater li = LayoutInflater.from(context);
 		LinearLayout ll = (LinearLayout) li.inflate(R.layout.customize_modus_popup, null, false);

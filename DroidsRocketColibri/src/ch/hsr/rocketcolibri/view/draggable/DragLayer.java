@@ -23,15 +23,15 @@
 
 package ch.hsr.rocketcolibri.view.draggable;
 
-import ch.hsr.rocketcolibri.activity.DesktopActivity;
-import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
+import ch.hsr.rocketcolibri.activity.DesktopActivity;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 
 /**
  * A ViewGroup that coordinates dragging across its dscendants.
@@ -137,17 +137,11 @@ public void onDrop(IDragSource source, int x, int y, int xOffset, int yOffset,
         DragView dragView, Object dragInfo)
 {
     View v = (View) dragInfo;
-    toast ("DragLayer2.onDrop accepts view: " + v.getId ()
-          + "x, y, xO, yO :" + new Integer (x) + ", " + new Integer (y) + ", "
-          + new Integer (xOffset) + ", " + new Integer (yOffset));
-
-    int w = v.getWidth ();
-    int h = v.getHeight ();
-    int left = dragView.calculateXPosition(x - xOffset);
-    int top = dragView.calculateYPosition(y - yOffset);
-    
-    DragLayer.LayoutParams lp = new DragLayer.LayoutParams (w, h, left, top);
-    this.updateViewLayout(v, lp);
+    DragLayer.LayoutParams lpOrg = ((DragLayer.LayoutParams)v.getLayoutParams());
+    DragLayer.LayoutParams lpDrag = ((DragLayer.LayoutParams)dragView.getLayoutParams());
+    lpOrg.x = lpDrag.x;
+    lpOrg.y = lpDrag.y;
+    this.updateViewLayout(v, lpOrg);
 }
 
 public void onDragEnter(IDragSource source, int x, int y, int xOffset, int yOffset,
