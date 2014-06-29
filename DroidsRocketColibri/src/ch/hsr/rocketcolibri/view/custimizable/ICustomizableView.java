@@ -17,6 +17,5 @@ public interface ICustomizableView {
 	 */
 	void setCustomizeModus(boolean enabled);
 	void setModusChangeListener(ModusChangeListener mcl);
-	void notifyServiceReady(Service service); 
 	ViewElementConfig getViewElementConfig();
 }

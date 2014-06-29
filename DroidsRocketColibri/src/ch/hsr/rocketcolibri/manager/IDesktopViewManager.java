@@ -35,5 +35,4 @@ public interface IDesktopViewManager {
 	void editActivityResult(int viewIndex, Intent editChannelIntent);
 	void closeSpecialThings();
 	void release();
-	void serviceReady(Service service);
 }

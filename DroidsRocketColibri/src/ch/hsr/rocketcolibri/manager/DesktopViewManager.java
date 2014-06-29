@@ -127,7 +127,6 @@ public class DesktopViewManager implements IDesktopViewManager{
 	    try{widget.setControlModusListener(tControlModusListener);}catch(ClassCastException e){}
 	    widget.setCustomizeModus(tCustomizeModus);
 	    tControlElementParentView.addView((View)widget);
-	    if(null != tService)widget.notifyServiceReady(tService);
 	}
 	
 	@Override
@@ -278,18 +277,4 @@ public class DesktopViewManager implements IDesktopViewManager{
 		tCustomizeModusPopupMenu.dismiss();
 		tResizeController.stopResize();
 	}
-
-	public void serviceReady(Service service) {
-		tService = service;
-		int size = tControlElementParentView.getChildCount();
-    	ICustomizableView view = null;
-    	for(int i = 0; i < size; ++i){
-    		try{
-    			view = (ICustomizableView) tControlElementParentView.getChildAt(i);
-    			view.notifyServiceReady(service);
-    		}catch(Exception e){
-    		}
-    	}
-	}
-	
 }

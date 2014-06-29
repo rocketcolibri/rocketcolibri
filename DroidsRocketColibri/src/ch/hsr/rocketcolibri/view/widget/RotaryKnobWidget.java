@@ -298,15 +298,6 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 		return UiOutputDataType.None;
 	}
 
-	@Override
-	public void notifyServiceReady(Service rcService) {
-		try {
-			((RocketColibriService) rcService).tProtocol
-					.registerUiOutputSinkChangeObserver((IRCWidget) this);
-		} catch (Exception e) {
-		}
-	}
-
 	protected int getProtocolMapInt(String key) {
 		try {
 			return Integer.parseInt(tWidgetConfig.protocolMap.get(key));

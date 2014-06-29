@@ -22,10 +22,12 @@ import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
 import ch.hsr.rocketcolibri.menu.desktop.DesktopMenu;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
+import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.widget.Circle;
 import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
+import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
 import ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
@@ -52,18 +54,7 @@ public class DesktopActivity extends RCActivity{
 		}
 	};
 
-	@Override
-	public void onResume() 
-	{
-	  super.onResume();
-	}
-	
-	@Override
-	protected void onPause()
-	{
-	  super.onPause();
-	}
-	
+
 //  TODO add video stream display here
 //	SurfaceHolder.Callback my_callback() {
 //		SurfaceHolder.Callback ob1 = new SurfaceHolder.Callback() {
@@ -268,7 +259,29 @@ public class DesktopActivity extends RCActivity{
 	protected void onServiceReady() {
 		setupViews();
 		tDesktopMenu.setService(rcService) ;
-		tDesktopViewManager.serviceReady(rcService);
+		int size = tDesktopViewManager.getControlElementParentView().getChildCount();
+    	IRCWidget view = null;
+    	for(int i = 0; i < size; ++i){
+    		try{
+    			view = (IRCWidget) tDesktopViewManager.getControlElementParentView().getChildAt(i);
+    			rcService.tProtocol.registerUiOutputSinkChangeObserver(view);
+    		} catch (Exception e) {}
+    	}
+	}
+
+	@Override
+	protected void onPause()
+	{
+		int size = tDesktopViewManager.getControlElementParentView().getChildCount();
+    	IRCWidget view = null;
+    	for(int i = 0; i < size; ++i){
+    		try{
+    			view = (IRCWidget) tDesktopViewManager.getControlElementParentView().getChildAt(i);
+    			rcService.tProtocol.unregisterUiOutputSinkChangeObserver(view);
+    		} catch (Exception e) {}
+    	}
+    	
+	  super.onPause();
 	}
 
 	@Override

@@ -335,15 +335,6 @@ public class VideoStreamWidget extends SurfaceView implements
 	}
 
 	@Override
-	public void notifyServiceReady(Service rcService) {
-		try {
-			((RocketColibriService) rcService).tProtocol
-					.registerUiOutputSinkChangeObserver((IRCWidget) this);
-		} catch (Exception e) {
-		}
-	}
-
-	@Override
 	public void setCustomizeModus(boolean enabled) {
 		if (tCustomizeModusActive != enabled) {
 			if (enabled) {

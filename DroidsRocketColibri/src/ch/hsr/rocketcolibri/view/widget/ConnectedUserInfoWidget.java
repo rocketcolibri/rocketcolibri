@@ -230,15 +230,6 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 	}
 
 	@Override
-	public void notifyServiceReady(Service rcService) {
-		try {
-			((RocketColibriService) rcService).tProtocol
-					.registerUiOutputSinkChangeObserver((IRCWidget) this);
-		} catch (Exception e) {
-		}
-	}
-
-	@Override
 	public ViewElementConfig getViewElementConfig() {
 		tWidgetConfig.viewElementConfig.setLayoutParams((LayoutParams) getLayoutParams());
 		tWidgetConfig.viewElementConfig.setAlpha(getAlpha());

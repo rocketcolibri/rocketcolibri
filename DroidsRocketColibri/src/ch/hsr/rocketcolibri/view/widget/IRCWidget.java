@@ -64,8 +64,6 @@ public interface IRCWidget {
 	 */
 	UiOutputDataType getType();
 
-	void notifyServiceReady(Service tService);
-
 	void setCustomizeModus(boolean tCustomizeModus);
 
 }
