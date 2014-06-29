@@ -166,6 +166,7 @@ public class RCProtocolUdp extends RCProtocol{
 	/**
 	 *  cancel the running command Executor
 	 */
+	@Override
 	public void cancelOldCommandJob()
 	{
 		if(null != this.executorFuture)
@@ -257,6 +258,7 @@ public class RCProtocolUdp extends RCProtocol{
 	 */
 	@Override
 	public void eventConnectionInterrupted() {
+		cancelOldCommandJob();
 		tFsm.queue(e.E2_DISC_SSID);
 		tFsm.processOutstandingEvents();
 	}
@@ -282,7 +284,7 @@ public class RCProtocolUdp extends RCProtocol{
 		tFsm.processOutstandingEvents();
 		return true;
 	}
-
+	
 	public String getUserName(){
 		return tUsername;
 	}

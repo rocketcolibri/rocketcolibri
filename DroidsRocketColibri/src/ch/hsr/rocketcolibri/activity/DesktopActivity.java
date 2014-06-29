@@ -132,6 +132,9 @@ public class DesktopActivity extends RCActivity{
 	
 	@Override
 	protected void onDestroy() {
+		rcService.tWifi.disconnectRocketColibriSSID(rcService);
+		rcService.tProtocol.cancelOldCommandJob();
+		
 		tDesktopViewManager.release();
 		tDesktopViewManager = null;
 		super.onDestroy();
