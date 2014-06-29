@@ -81,7 +81,7 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 		tTextPaint.setColor(Color.WHITE);
 		tTextPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XOR));
 		tTextPaint.setTextSize(tFontSize);
-		tObserverBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(tContext.getResources(), R.drawable.connection_status_connected), tFontSize, tFontSize, true);	
+		tObserverBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(tContext.getResources(), R.drawable.connection_status_connected_observe), tFontSize, tFontSize, true);	
 		tControlBitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(tContext.getResources(), R.drawable.connection_status_control), tFontSize, tFontSize, true);
 		tUsersBitmap =  BitmapFactory.decodeResource(tContext.getResources(), R.drawable.connected_users);
 		
