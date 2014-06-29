@@ -8,6 +8,7 @@ import java.io.File;
 import org.neodatis.odb.ODB;
 import org.neodatis.odb.ODBFactory;
 import org.neodatis.odb.Objects;
+import org.neodatis.odb.OdbConfiguration;
 import org.neodatis.odb.core.query.IQuery;
 import org.neodatis.odb.core.query.criteria.Where;
 import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
@@ -25,6 +26,9 @@ public class RocketColibriDB {
 	public RocketColibriDB(Context context){
 		File directory = context.getDir("data", Context.MODE_PRIVATE);
         String fileName = directory.getAbsolutePath() + "/rocketcolibri.db";
+        OdbConfiguration.setUseCache(false);
+        OdbConfiguration.setUseLazyCache(false);
+        OdbConfiguration.useMultiThread(false);
         tOdb = ODBFactory.open(fileName);
 	}
 
