@@ -37,7 +37,7 @@ public class RocketColibriDefaults {
 		viewElementConfig.getLayoutParams().width = (int) (viewElementConfig.getLayoutParams().width * density + 0.5f);
 		viewElementConfig.getResizeConfig().maxHeight = (int) (viewElementConfig.getResizeConfig().maxHeight * density + 0.5f);
 		viewElementConfig.getResizeConfig().minHeight = (int) (viewElementConfig.getResizeConfig().minHeight * density + 0.5f);
-		viewElementConfig.getResizeConfig().maxWidth = (int) (viewElementConfig.getResizeConfig().minHeight * density + 0.5f);
+		viewElementConfig.getResizeConfig().maxWidth = (int) (viewElementConfig.getResizeConfig().maxWidth * density + 0.5f);
 		viewElementConfig.getResizeConfig().minWidth = (int) (viewElementConfig.getResizeConfig().minWidth * density + 0.5f);
 	}
 	

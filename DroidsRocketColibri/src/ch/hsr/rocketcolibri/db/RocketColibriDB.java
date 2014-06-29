@@ -26,9 +26,6 @@ public class RocketColibriDB {
 	public RocketColibriDB(Context context){
 		File directory = context.getDir("data", Context.MODE_PRIVATE);
         String fileName = directory.getAbsolutePath() + "/rocketcolibri.db";
-        OdbConfiguration.setUseCache(false);
-        OdbConfiguration.setUseLazyCache(false);
-        OdbConfiguration.useMultiThread(false);
         tOdb = ODBFactory.open(fileName);
 	}
 
