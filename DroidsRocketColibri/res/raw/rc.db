@@ -3,5 +3,6 @@
         "name": "Test Model",
         "widgetConfigs": []
     },
-    "process": "insert"
+    "process": "insert",
+    "timestamp": "11.11.2000 11:11:11"
 }]

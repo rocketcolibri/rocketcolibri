@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.util.CacheUtil;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
@@ -31,8 +32,8 @@ public class CustomizeModusContent extends ModusContent{
 	protected void onCreate(List<WidgetEntry> widgetEntries) {
 		GridLayout gLayout = (GridLayout) findViewById(R.id.widgetEntryContent);
 		CacheUtil cacheUtil = new CacheUtil(tContext);
-		int width = 200;
-		int height = 200;
+		int width = RocketColibriDefaults.dpToPixel(tContext.getResources().getDisplayMetrics().density, 80);
+		int height = RocketColibriDefaults.dpToPixel(tContext.getResources().getDisplayMetrics().density, 80);
 		for(WidgetEntry wEntry : widgetEntries){
 			try {
 				ImageView iView = new ImageView(tContext);

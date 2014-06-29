@@ -5,6 +5,7 @@ package ch.hsr.rocketcolibri.view.widget;
 
 import java.util.Map;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -15,8 +16,13 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
-import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
@@ -28,8 +34,6 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
-
 
 /**
  * @short widget to display the connection status received from the ServoController
@@ -44,18 +48,18 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 	private Paint connectionIconPaint;
 	private Bitmap connectionIconBitmap;
 	private boolean tCustomizeModusActive = false;
+	private Context tContext;
+	// to avoid null check
+	private ModusChangeListener tModusChangeListener = new ModusChangeListener()
+	{public void customizeModeDeactivated(){}public void customizeModeActivated(){}};
 	
 	public ConnectionStatusWidget(Context context, ViewElementConfig elementConfig) {
-		super(context);
-		tViewElementConfig = elementConfig;
-		tWidgetConfig = new RCWidgetConfig(tViewElementConfig);
-		setLayoutParams(tViewElementConfig.getLayoutParams());
-		setAlpha(tViewElementConfig.getAlpha());
-		init(context, null);
+		this(context, new RCWidgetConfig(elementConfig));
 	}
 	
 	public ConnectionStatusWidget(Context context, RCWidgetConfig widgetConfig) {
 		super(context);
+		tContext = context;
 		tViewElementConfig = widgetConfig.viewElementConfig;
 		tWidgetConfig = widgetConfig;
 		setLayoutParams(tViewElementConfig.getLayoutParams());
@@ -118,26 +122,8 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 		postInvalidate();
 	}
 
-	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
-		@Override
-		public void customizeModeDeactivated() {
-		}
-
-		@Override
-		public void customizeModeActivated() {
-		}
-	};
-
 	public static ViewElementConfig getDefaultViewElementConfig() {
-		ResizeConfig rc = new ResizeConfig();
-	    rc.maxHeight=150;
-	    rc.minHeight=50;
-	    rc.maxWidth=150;
-	    rc.minWidth=50;
-	    LayoutParams lp = new LayoutParams(100, 100 , 0, 0);
-	    ViewElementConfig elementConfig = new ViewElementConfig(ConnectionStatusWidget.class.getName(), lp, rc);
-	    elementConfig.setAlpha(1);
-	    return elementConfig;
+		return DefaultViewElementConfigRepo.getDefaultConfig(ConnectionStatusWidget.class);
 	}
 
 	/**
@@ -176,20 +162,16 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 	}
 
 	@Override
-	public void updateProtocolMap() {
-		// TODO Auto-generated method stub
-	}
+	public void updateProtocolMap() {}
 
 	@Override
-	public void onNotifyUiOutputSink(Object p) 
-	{
+	public void onNotifyUiOutputSink(Object p) {
 		ConnectionState data = (ConnectionState)p;
 		setConnectionState(data.getState());
 	}
 
 	@Override
-	public UiOutputDataType getType()
-	{
+	public UiOutputDataType getType(){
 		return UiOutputDataType.ConnectionState;
 	}
 
@@ -219,10 +201,8 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 	@Override
 	public void notifyServiceReady(Service rcService) {
 		try {
-			((RocketColibriService) rcService).tProtocol
-					.registerUiOutputSinkChangeObserver((IRCWidget) this);
-		} catch (Exception e) {
-		}
+			((RocketColibriService) rcService).tProtocol.registerUiOutputSinkChangeObserver((IRCWidget) this);
+		} catch (Exception e) {}
 	}
 
 	@Override
@@ -230,5 +210,25 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 		tWidgetConfig.viewElementConfig.setLayoutParams((LayoutParams) getLayoutParams());
 		tWidgetConfig.viewElementConfig.setAlpha(getAlpha());
 		return tWidgetConfig.viewElementConfig;
-	}	
+	}
+	
+	private void setupConnectionStateReceiver(){
+		AsyncTask<Void, Void, Void> connectionStatusUpdater = new AsyncTask<Void, Void, Void>(){
+			protected Void doInBackground(Void... params) {
+				ConnectivityManager myConnManager = (ConnectivityManager) tContext.getSystemService(Activity.CONNECTIVITY_SERVICE);
+				NetworkInfo myNetworkInfo = myConnManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+				WifiManager myWifiManager = (WifiManager)tContext.getSystemService(Context.WIFI_SERVICE);
+				WifiInfo myWifiInfo = myWifiManager.getConnectionInfo();  
+				Log.d("",String.valueOf(myWifiInfo.getLinkSpeed()) + " " + WifiInfo.LINK_SPEED_UNITS);
+				return null;
+			}
+		};
+	}
+	
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+//		try{connectionStatusUpdater.cancel(true);}catch(Exception e){}
+	}
+	
 }

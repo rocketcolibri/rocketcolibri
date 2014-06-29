@@ -292,15 +292,7 @@ public class VideoStreamWidget extends SurfaceView implements
 	}
 
 	public static ViewElementConfig getDefaultViewElementConfig() {
-		ResizeConfig rc = new ResizeConfig();
-		rc.maxHeight = 1080;
-		rc.minHeight = 100;
-		rc.maxWidth = 1920;
-		rc.minWidth = 180;
-		LayoutParams lp = new LayoutParams(400, 300, 100, 100);
-		ViewElementConfig elementConfig = new ViewElementConfig(
-				VideoStreamWidget.class.getName(), lp, rc);
-		return elementConfig;
+		return DefaultViewElementConfigRepo.getDefaultConfig(VideoStreamWidget.class);
 	}
 
 	@Override

@@ -162,19 +162,7 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 	}
 
 	public static ViewElementConfig getDefaultViewElementConfig() {
-		ResizeConfig rc = new ResizeConfig();
-		rc.keepRatio = true;
-		rc.maxHeight = 300;
-		rc.minHeight = 34;
-		rc.maxWidth = 800;
-		rc.minWidth = 137;
-
-		LayoutParams lp = new LayoutParams(137, 34, 0, 0);
-
-		ViewElementConfig elementConfig = new ViewElementConfig(
-				SwitchWidget.class.getName(), lp, rc);
-		elementConfig.setAlpha(1);
-		return elementConfig;
+		return DefaultViewElementConfigRepo.getDefaultConfig(SwitchWidget.class);
 	}
 
 	@Override

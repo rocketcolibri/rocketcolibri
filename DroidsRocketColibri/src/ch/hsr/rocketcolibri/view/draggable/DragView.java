@@ -98,10 +98,10 @@ public class DragView extends View
         	tYOfViewsInParent[i+1] = (int) childView.getY()+childView.getHeight();
         }
         
-        topHorizontalLine = createLine(context, Color.RED, tWindowManager.getWidth(), 1);
-        bottomHorizontalLine = createLine(context, Color.RED, tWindowManager.getWidth(), 1);
-        leftVerticalLine = createLine(context, Color.RED, 1, tWindowManager.getWidth());
-        rightVerticalLine = createLine(context, Color.RED, 1, tWindowManager.getWidth());
+        topHorizontalLine = createLine(context, tWindowManager.getWidth(), 1);
+        bottomHorizontalLine = createLine(context, tWindowManager.getWidth(), 1);
+        leftVerticalLine = createLine(context, 1, tWindowManager.getHeight());
+        rightVerticalLine = createLine(context, 1, tWindowManager.getHeight());
         
         
         Matrix scale = new Matrix();
@@ -123,9 +123,9 @@ public class DragView extends View
 //        mBgPaint.setAlpha(50);
     }
     
-    private View createLine(Context context, int color, int width, int height){
+    private View createLine(Context context, int width, int height){
     	View line = new View(context);
-        line.setBackgroundColor(color);
+        line.setBackgroundColor(Color.RED);
         line.setLayoutParams(new LayoutParams(width, height, 0, 0));
         line.setVisibility(View.INVISIBLE);
         return line;
@@ -188,20 +188,21 @@ public class DragView extends View
     void move(int touchX, int touchY) {
     	touchX = calculateXPosition(touchX - tRegistrationX);
     	touchY = calculateYPosition(touchY - tRegistrationY);
+    	//TODO implement a better and faster way to calculate the sticky positions and the helping lines
     	//left
     	loopSuccess = false;
     	for(int i = 0; i < tXOfViewsInParent.length; ++i){
     		if(touchX+HELPLINE_OFFSET>=tXOfViewsInParent[i] && touchX-HELPLINE_OFFSET<=tXOfViewsInParent[i]){
     			((AbsoluteLayout.LayoutParams)leftVerticalLine.getLayoutParams()).x = tXOfViewsInParent[i];
     			leftVerticalLine.setVisibility(View.VISIBLE);
-    			tWindowManager.updateViewLayout(leftVerticalLine, leftVerticalLine.getLayoutParams());
     			touchX = tXOfViewsInParent[i];
     			loopSuccess = true;
     			break;
     		}
     	}
-    	if(!loopSuccess)
+    	if(!loopSuccess){
     		leftVerticalLine.setVisibility(View.INVISIBLE);
+    	}
     	
     	//top
     	loopSuccess = false;
@@ -209,14 +210,14 @@ public class DragView extends View
     		if(touchY+HELPLINE_OFFSET>=tYOfViewsInParent[i] && touchY-HELPLINE_OFFSET<=tYOfViewsInParent[i]){
     			((AbsoluteLayout.LayoutParams)topHorizontalLine.getLayoutParams()).y = tYOfViewsInParent[i];
     			topHorizontalLine.setVisibility(View.VISIBLE);
-    			tWindowManager.updateViewLayout(topHorizontalLine, topHorizontalLine.getLayoutParams());
     			touchY = tYOfViewsInParent[i];
     			loopSuccess = true;
     			break;
     		}
     	}
-    	if(!loopSuccess)
+    	if(!loopSuccess){
     		topHorizontalLine.setVisibility(View.INVISIBLE);
+    	}
     	
     	//right
     	loopSuccess = false;
@@ -224,14 +225,14 @@ public class DragView extends View
     		if(touchX+getWidth()+HELPLINE_OFFSET>=tXOfViewsInParent[i] && touchX+getWidth()-HELPLINE_OFFSET<=tXOfViewsInParent[i]){
     			((AbsoluteLayout.LayoutParams)rightVerticalLine.getLayoutParams()).x = tXOfViewsInParent[i];
     			rightVerticalLine.setVisibility(View.VISIBLE);
-    			tWindowManager.updateViewLayout(rightVerticalLine, rightVerticalLine.getLayoutParams());
     			touchX = tXOfViewsInParent[i]-getWidth();
     			loopSuccess = true;
     			break;
     		}
     	}
-    	if(!loopSuccess)
+    	if(!loopSuccess){
     		rightVerticalLine.setVisibility(View.INVISIBLE);
+    	}
 
     	//bottom
     	loopSuccess = false;
@@ -239,14 +240,14 @@ public class DragView extends View
     		if(touchY+getHeight()+HELPLINE_OFFSET>=tYOfViewsInParent[i] && touchY+getHeight()-HELPLINE_OFFSET<=tYOfViewsInParent[i]){
     			((AbsoluteLayout.LayoutParams)bottomHorizontalLine.getLayoutParams()).y = tYOfViewsInParent[i];
     			bottomHorizontalLine.setVisibility(View.VISIBLE);
-    			tWindowManager.updateViewLayout(bottomHorizontalLine, bottomHorizontalLine.getLayoutParams());
     			touchY = tYOfViewsInParent[i]-getHeight();
     			loopSuccess = true;
     			break;
     		}
     	}
-    	if(!loopSuccess)
+    	if(!loopSuccess){
     		bottomHorizontalLine.setVisibility(View.INVISIBLE);
+    	}
     	
 
     	tLayoutParams.x = touchX;

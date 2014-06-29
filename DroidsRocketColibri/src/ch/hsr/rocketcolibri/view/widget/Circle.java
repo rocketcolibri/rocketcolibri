@@ -437,15 +437,7 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	}
 	
 	public static ViewElementConfig getDefaultViewElementConfig() {
-		ResizeConfig rc = new ResizeConfig();
-	    rc.keepRatio=true;
-	    rc.maxHeight=500;
-	    rc.minHeight=50;
-	    rc.maxWidth=500;
-	    rc.minWidth=50;
-	    LayoutParams lp = new LayoutParams(380, 380 , 100, 300);
-	    ViewElementConfig elementConfig = new ViewElementConfig(Circle.class.getName(), lp, rc);
-	    return elementConfig;
+		return DefaultViewElementConfigRepo.getDefaultConfig(Circle.class);
 	}
 
 	@Override

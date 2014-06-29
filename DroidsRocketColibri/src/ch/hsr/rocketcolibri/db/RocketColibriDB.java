@@ -28,6 +28,10 @@ public class RocketColibriDB {
         tOdb = ODBFactory.open(fileName);
 	}
 
+	public Objects fetch(Class clazz){
+		return tOdb.getObjects(clazz);
+	}
+	
 	public Objects fetchAllRCModels(){
 		return tOdb.getObjects(RCModel.class);
 	}

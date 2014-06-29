@@ -3,6 +3,7 @@
  */
 package ch.hsr.rocketcolibri;
 
+import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 import android.annotation.TargetApi;
 import android.os.Build;
@@ -31,13 +32,17 @@ public class RocketColibriDefaults {
 //      | View.SYSTEM_UI_FLAG_IMMERSIVE);
 	}
 
-	public static void dpToPixel(float density, RCWidgetConfig widgetConfig) {
-		widgetConfig.viewElementConfig.getLayoutParams().height = (int) (widgetConfig.viewElementConfig.getLayoutParams().height * density + 0.5f);
-		widgetConfig.viewElementConfig.getLayoutParams().width = (int) (widgetConfig.viewElementConfig.getLayoutParams().width * density + 0.5f);
-		widgetConfig.viewElementConfig.getResizeConfig().maxHeight = (int) (widgetConfig.viewElementConfig.getResizeConfig().maxHeight * density + 0.5f);
-		widgetConfig.viewElementConfig.getResizeConfig().minHeight = (int) (widgetConfig.viewElementConfig.getResizeConfig().minHeight * density + 0.5f);
-		widgetConfig.viewElementConfig.getResizeConfig().maxWidth = (int) (widgetConfig.viewElementConfig.getResizeConfig().minHeight * density + 0.5f);
-		widgetConfig.viewElementConfig.getResizeConfig().minWidth = (int) (widgetConfig.viewElementConfig.getResizeConfig().minWidth * density + 0.5f);
+	public static void dpToPixel(float density, ViewElementConfig viewElementConfig) {
+		viewElementConfig.getLayoutParams().height = (int) (viewElementConfig.getLayoutParams().height * density + 0.5f);
+		viewElementConfig.getLayoutParams().width = (int) (viewElementConfig.getLayoutParams().width * density + 0.5f);
+		viewElementConfig.getResizeConfig().maxHeight = (int) (viewElementConfig.getResizeConfig().maxHeight * density + 0.5f);
+		viewElementConfig.getResizeConfig().minHeight = (int) (viewElementConfig.getResizeConfig().minHeight * density + 0.5f);
+		viewElementConfig.getResizeConfig().maxWidth = (int) (viewElementConfig.getResizeConfig().minHeight * density + 0.5f);
+		viewElementConfig.getResizeConfig().minWidth = (int) (viewElementConfig.getResizeConfig().minWidth * density + 0.5f);
+	}
+	
+	public static int dpToPixel(float density, int pixel){
+		return (int) (pixel * density + 0.5f);
 	}
 	
 }

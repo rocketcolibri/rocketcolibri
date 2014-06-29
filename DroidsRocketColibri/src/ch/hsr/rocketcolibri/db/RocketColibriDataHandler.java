@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,9 @@ import android.content.res.Resources;
 import ch.futuretek.json.JsonTransformer;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
+import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.db.model.JsonRCModel;
+import ch.hsr.rocketcolibri.db.model.LastUpdateFromFile;
 import ch.hsr.rocketcolibri.db.model.RCModel;
 import ch.hsr.rocketcolibri.view.widget.Circle;
 import ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget;
@@ -41,24 +44,54 @@ public class RocketColibriDataHandler {
 
 	private void process() throws Exception{
 		List<JsonRCModel> models = readJsonData();
+		LastUpdateFromFile luff = fetchLastUpdateFromFile();
+		boolean updated = false;
 		for(JsonRCModel m : models){
-			if(m.process.equals("insert")){
-				if(tRocketColibriDB.fetchRCModelByName(m.model.getName())==null)
-					tRocketColibriDB.store(m.model);
-			}else if(m.process.equals("update")){
+			if(m.process.equals("insert") && needToUpdate(luff, m.getTimestampAsDate().getTime())){
+				dpToPixel(m.model.getWidgetConfigs());
+				tRocketColibriDB.store(m.model);
+				updated = true;
+			}else if(m.process.equals("update") && needToUpdate(luff, m.getTimestampAsDate().getTime())){
 				RCModel dbModel = tRocketColibriDB.fetchRCModelByName(m.model.getName());
+				dpToPixel(m.model.getWidgetConfigs());
 				if (dbModel == null) {
 					tRocketColibriDB.store(m.model);	// couldn't find in database, insert it
-				}
-				else {
+				} else {
 					dbModel.setName(m.model.getName());
 					dbModel.setWidgetConfigs(m.model.getWidgetConfigs());
 					tRocketColibriDB.store(dbModel);	// found in database, update it
 				}
-			}else if(m.process.equals("delete")){
+				updated = true;
+			}else if(m.process.equals("delete") && needToUpdate(luff, m.getTimestampAsDate().getTime())){
 				tRocketColibriDB.delete(tRocketColibriDB.fetchRCModelByName(m.model.getName()));
+				updated = true;
 			}
 		}
+		if(updated){
+			luff.timestamp = System.currentTimeMillis();
+			tRocketColibriDB.store(luff);
+		}
+	}
+	
+	private void dpToPixel(List<RCWidgetConfig> wcs){
+		float density = tContext.getResources().getDisplayMetrics().density;
+		for(RCWidgetConfig wc : wcs){
+			RocketColibriDefaults.dpToPixel(density, wc.viewElementConfig);
+		}
+	}
+	
+	private boolean needToUpdate(LastUpdateFromFile luff, long fileTimeStamp){
+		return luff.timestamp<fileTimeStamp;
+	}
+	
+	private LastUpdateFromFile fetchLastUpdateFromFile(){
+		LastUpdateFromFile luff = null;
+		try{
+			luff = (LastUpdateFromFile) tRocketColibriDB.fetch(LastUpdateFromFile.class).getFirst();
+		}catch(Exception e){
+			luff = new LastUpdateFromFile();
+		}
+		return luff;
 	}
 
 	private List<JsonRCModel> readJsonData() throws Exception {

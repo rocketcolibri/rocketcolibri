@@ -153,14 +153,7 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 	}
 	
 	public static ViewElementConfig getDefaultViewElementConfig(){
-		ResizeConfig rc = new ResizeConfig();
-	    rc.maxHeight=300;
-	    rc.minHeight=50;
-	    rc.maxWidth=800;
-	    rc.minWidth=100;
-	    ViewElementConfig vec = new ViewElementConfig(ConnectedUserInfoWidget.class.getName(), new LayoutParams(600, 100 , 100, 0), rc);
-	    vec.setAlpha(0.5f);
-	    return vec;
+	    return DefaultViewElementConfigRepo.getDefaultConfig(ConnectedUserInfoWidget.class);
 	}
 	
 	/**

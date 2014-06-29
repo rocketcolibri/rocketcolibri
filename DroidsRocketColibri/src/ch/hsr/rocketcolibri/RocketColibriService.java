@@ -14,6 +14,7 @@ import ch.hsr.rocketcolibri.protocol.WifiConnection;
 import ch.hsr.rocketcolibri.view.widget.Circle;
 import ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget;
 import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
+import ch.hsr.rocketcolibri.view.widget.DefaultViewElementConfigRepo;
 import ch.hsr.rocketcolibri.view.widget.RotaryKnobWidget;
 import ch.hsr.rocketcolibri.view.widget.SwitchWidget;
 import ch.hsr.rocketcolibri.view.widget.VideoStreamWidget;
@@ -66,6 +67,7 @@ public class RocketColibriService extends Service  {
 		super.onCreate();
 		Log.d(TAG, "RocketColibriService started");
 		RocketColibriService.tRunning = true;
+		DefaultViewElementConfigRepo.getInstance(this);
 		this.tWifi = new WifiConnection();
 		tProtocol = new RCProtocolUdp(getUserName()) ;
 		// list all available Widgets here: 

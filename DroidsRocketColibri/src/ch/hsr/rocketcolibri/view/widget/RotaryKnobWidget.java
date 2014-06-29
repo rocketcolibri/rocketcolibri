@@ -237,19 +237,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	}
 
 	public static ViewElementConfig getDefaultViewElementConfig() {
-		ResizeConfig rc = new ResizeConfig();
-		rc.keepRatio = true;
-		rc.maxHeight = 300;
-		rc.minHeight = 34;
-		rc.maxWidth = 800;
-		rc.minWidth = 137;
-
-		LayoutParams lp = new LayoutParams(250, 250, 0, 0);
-
-		ViewElementConfig elementConfig = new ViewElementConfig(
-				RotaryKnobWidget.class.getName(), lp, rc);
-		elementConfig.setAlpha(1);
-		return elementConfig;
+		return DefaultViewElementConfigRepo.getDefaultConfig(RotaryKnobWidget.class);
 	}
 
 	@Override
