@@ -26,10 +26,10 @@ public class DefaultViewElementConfigRepo {
 		ResizeConfig rc = new ResizeConfig();
 	    rc.keepRatio=true;
 	    rc.maxHeight=200;
-	    rc.minHeight=60;
+	    rc.minHeight=40;
 	    rc.maxWidth=200;
-	    rc.minWidth=60;
-	    LayoutParams lp = new LayoutParams(380, 380 , 100, 300);
+	    rc.minWidth=40;
+	    LayoutParams lp = new LayoutParams(180, 180 , 100, 300);
 	    ViewElementConfig elementConfig = new ViewElementConfig(Circle.class.getName(), lp, rc);
 	    dpToPixel(density, elementConfig);
 	    repo.put(Circle.class, elementConfig);

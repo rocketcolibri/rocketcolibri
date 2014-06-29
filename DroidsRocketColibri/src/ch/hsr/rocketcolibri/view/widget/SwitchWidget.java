@@ -3,21 +3,11 @@ package ch.hsr.rocketcolibri.view.widget;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.app.Service;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.graphics.Shader;
-import android.graphics.drawable.Drawable;
-import android.view.View;
-import ch.hsr.rocketcolibri.R;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import ch.hsr.rocketcolibri.RCConstants;
-import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.ui_data.input.Channel;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.util.DrawingTools;
@@ -25,29 +15,25 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 
-public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
+public class SwitchWidget extends Switch implements ICustomizableView,
+		IRCWidget {
 
 	protected RCWidgetConfig tWidgetConfig;
-	protected OnTouchListener tCustomizeModusListener;
-	private RectF switchIconRect;
-	private Paint switchIconPaint;
-	private Bitmap switchIconBitmap;
 	private Channel tChannelH = new Channel();
-	private int bitmapResource;
-	private int tPosition = 0;
+
 	private OnChannelChangeListener tControlModusListener;
-	private boolean switchSetOn = false;
 	private boolean tCustomizeModusActive = false;
+	protected OnTouchListener tCustomizeModusListener;
+	private SwitchOnCheckedChangeListener tSwitchOnCheckedChangeListener = new SwitchOnCheckedChangeListener();
 
 	public SwitchWidget(Context context, ViewElementConfig elementConfig) {
 		super(context);
 		tWidgetConfig = new RCWidgetConfig(elementConfig);
 		setLayoutParams(elementConfig.getLayoutParams());
 		setAlpha(elementConfig.getAlpha());
-		bitmapResource = R.drawable.switch_off;
-		init(context, null);
+		initProtocolMapping();
+		init();
 	}
 
 	public SwitchWidget(Context context, RCWidgetConfig widgetConfig) {
@@ -55,52 +41,49 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 		tWidgetConfig = widgetConfig;
 		setLayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams());
 		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
-		bitmapResource = R.drawable.switch_off;
-		init(context, null);
+		updateProtocolMap();
+		init();
 	}
 
 	private boolean isChannelValid() {
 		return tChannelH.getDefaultChannelValue() > -1;
 	}
 
-	OnClickListener onclicklistener = new OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-			if (switchSetOn) {
-				switchSetOn = false;
-				bitmapResource = R.drawable.switch_off;
-				tPosition = 0;
-			} else {
-				switchSetOn = true;
-				bitmapResource = R.drawable.switch_on;
-				tPosition = 1000;
-			}
-			setSwitchState();
-
-			if (isChannelValid()) {
-				tControlModusListener.onChannelChange(
-						tChannelH.getDefaultChannelValue(), tPosition);
-			}
-		}
-	};
-
 	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
 		@Override
 		public void customizeModeDeactivated() {
+			if (isChannelValid()) {
+				setClickable(true);
+				setOnCheckedChangeListener(tSwitchOnCheckedChangeListener);
+			} else {
+				setClickable(false);
+			}
 		}
 
 		@Override
 		public void customizeModeActivated() {
+			setOnTouchListener(tCustomizeModusListener);
 		}
 	};
 
-	private void init(Context context, Object object) {
-		switchIconRect = new RectF(0.0f, 0.0f, 1.0f, 1.0f);
-		this.createWidget();
+	class SwitchOnCheckedChangeListener implements OnCheckedChangeListener {
+		@Override
+		public void onCheckedChanged(CompoundButton buttonView,
+				boolean isChecked) {
 
-		this.setOnClickListener(onclicklistener);
+			if (isChecked) {
+				tControlModusListener.onChannelChange(
+						tChannelH.getDefaultChannelValue(),
+						tChannelH.getMaxRange());
+			} else {
+				tControlModusListener.onChannelChange(
+						tChannelH.getDefaultChannelValue(),
+						tChannelH.getMinRange());
+			}
+		}
+	}
 
+	public void initProtocolMapping() {
 		// init protocol mapping
 		tWidgetConfig.protocolMap = new HashMap<String, String>();
 		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_H, "");
@@ -110,15 +93,15 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 		tWidgetConfig.protocolMap.put(RCConstants.TRIMM_H, "");
 	}
 
+	private void init() {
+		createWidget();
+	}
+
 	@Override
 	protected void onDraw(Canvas canvas) {
-		float scale = (float) getWidth();
-		canvas.save(Canvas.MATRIX_SAVE_FLAG);
-		canvas.scale(scale, scale);
-		canvas.drawRect(switchIconRect, switchIconPaint);
-		canvas.restore();
+		super.onDraw(canvas);
 
-		if (tCustomizeModusActive) 
+		if (tCustomizeModusActive)
 			DrawingTools.drawCustomizableForground(this, canvas);
 	}
 
@@ -141,24 +124,23 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 		return 1;
 	}
 
-	private void setSwitchState() {
-		this.createWidget();
-		postInvalidate();
-	}
-
 	private void createWidget() {
-		switchIconBitmap = BitmapFactory.decodeResource(getContext()
-				.getResources(), bitmapResource);
-		BitmapShader paperShader = new BitmapShader(switchIconBitmap,
-				Shader.TileMode.MIRROR, Shader.TileMode.MIRROR);
-		Matrix paperMatrix = new Matrix();
-		paperMatrix.setScale(1.0f / switchIconBitmap.getWidth(),
-				1.0f / switchIconBitmap.getHeight());
-		paperShader.setLocalMatrix(paperMatrix);
-		switchIconPaint = new Paint();
-		switchIconPaint.setFilterBitmap(false);
-		switchIconPaint.setStyle(Paint.Style.FILL);
-		switchIconPaint.setShader(paperShader);
+		setLayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams());
+		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
+
+		if (isChannelValid()) {
+			if (tChannelH.getDefaultChannelValue() > 0) {
+				setChecked(true);
+				setClickable(true);
+				setOnCheckedChangeListener(tSwitchOnCheckedChangeListener);
+			} else {
+				setChecked(false);
+				setClickable(false);
+			}
+		} else {
+			setChecked(false);
+			setClickable(false);
+		}
 	}
 
 	public static ViewElementConfig getDefaultViewElementConfig() {
@@ -173,13 +155,19 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 	@Override
 	public void create(RCWidgetConfig rcWidgetConfig) {
 		tWidgetConfig = rcWidgetConfig;
-		init(getContext(), null);
+		setLayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams());
+		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
+		init();
+		updateProtocolMap();
 	}
 
 	@Override
 	public void create(ViewElementConfig vElementConfig) {
 		tWidgetConfig = new RCWidgetConfig(vElementConfig);
-		init(getContext(), null);
+		setLayoutParams(vElementConfig.getLayoutParams());
+		setAlpha(vElementConfig.getAlpha());
+		init();
+		initProtocolMapping();
 	}
 
 	@Override
@@ -226,6 +214,7 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 
 	@Override
 	public void setCustomizeModusListener(OnTouchListener customizeModusListener) {
+		tCustomizeModusListener = customizeModusListener;
 		setOnTouchListener(customizeModusListener);
 	}
 
@@ -249,7 +238,8 @@ public class SwitchWidget extends View implements ICustomizableView, IRCWidget {
 
 	@Override
 	public ViewElementConfig getViewElementConfig() {
-		tWidgetConfig.viewElementConfig.setLayoutParams((LayoutParams) getLayoutParams());
+		tWidgetConfig.viewElementConfig
+				.setLayoutParams((LayoutParams) getLayoutParams());
 		tWidgetConfig.viewElementConfig.setAlpha(getAlpha());
 		return tWidgetConfig.viewElementConfig;
 	}

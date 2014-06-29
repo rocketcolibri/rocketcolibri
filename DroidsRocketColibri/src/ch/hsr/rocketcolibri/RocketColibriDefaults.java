@@ -35,6 +35,8 @@ public class RocketColibriDefaults {
 	public static void dpToPixel(float density, ViewElementConfig viewElementConfig) {
 		viewElementConfig.getLayoutParams().height = (int) (viewElementConfig.getLayoutParams().height * density + 0.5f);
 		viewElementConfig.getLayoutParams().width = (int) (viewElementConfig.getLayoutParams().width * density + 0.5f);
+		viewElementConfig.getLayoutParams().x = (int) (viewElementConfig.getLayoutParams().x * density + 0.5f);
+		viewElementConfig.getLayoutParams().y = (int) (viewElementConfig.getLayoutParams().y * density + 0.5f);
 		viewElementConfig.getResizeConfig().maxHeight = (int) (viewElementConfig.getResizeConfig().maxHeight * density + 0.5f);
 		viewElementConfig.getResizeConfig().minHeight = (int) (viewElementConfig.getResizeConfig().minHeight * density + 0.5f);
 		viewElementConfig.getResizeConfig().maxWidth = (int) (viewElementConfig.getResizeConfig().maxWidth * density + 0.5f);
