@@ -4,7 +4,6 @@
 package ch.hsr.rocketcolibri;
 
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.view.View;
@@ -33,14 +32,14 @@ public class RocketColibriDefaults {
 	}
 
 	public static void dpToPixel(float density, ViewElementConfig viewElementConfig) {
-		viewElementConfig.getLayoutParams().height = (int) (viewElementConfig.getLayoutParams().height * density + 0.5f);
-		viewElementConfig.getLayoutParams().width = (int) (viewElementConfig.getLayoutParams().width * density + 0.5f);
-		viewElementConfig.getLayoutParams().x = (int) (viewElementConfig.getLayoutParams().x * density + 0.5f);
-		viewElementConfig.getLayoutParams().y = (int) (viewElementConfig.getLayoutParams().y * density + 0.5f);
-		viewElementConfig.getResizeConfig().maxHeight = (int) (viewElementConfig.getResizeConfig().maxHeight * density + 0.5f);
-		viewElementConfig.getResizeConfig().minHeight = (int) (viewElementConfig.getResizeConfig().minHeight * density + 0.5f);
-		viewElementConfig.getResizeConfig().maxWidth = (int) (viewElementConfig.getResizeConfig().maxWidth * density + 0.5f);
-		viewElementConfig.getResizeConfig().minWidth = (int) (viewElementConfig.getResizeConfig().minWidth * density + 0.5f);
+		viewElementConfig.getLayoutParams().height = dpToPixel(density, viewElementConfig.getLayoutParams().height);
+		viewElementConfig.getLayoutParams().width = dpToPixel(density, viewElementConfig.getLayoutParams().width);
+		viewElementConfig.getLayoutParams().x = dpToPixel(density, viewElementConfig.getLayoutParams().x);
+		viewElementConfig.getLayoutParams().y = dpToPixel(density, viewElementConfig.getLayoutParams().y);
+		viewElementConfig.getResizeConfig().maxHeight = dpToPixel(density, viewElementConfig.getResizeConfig().maxHeight);
+		viewElementConfig.getResizeConfig().minHeight = dpToPixel(density, viewElementConfig.getResizeConfig().minHeight);
+		viewElementConfig.getResizeConfig().maxWidth = dpToPixel(density, viewElementConfig.getResizeConfig().maxWidth);
+		viewElementConfig.getResizeConfig().minWidth = dpToPixel(density, viewElementConfig.getResizeConfig().minWidth);
 	}
 	
 	public static int dpToPixel(float density, int pixel){
