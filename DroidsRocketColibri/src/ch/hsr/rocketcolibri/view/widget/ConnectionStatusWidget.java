@@ -104,6 +104,10 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 	
 	private void setConnectionState(s state)
 	{
+		if (connectionIconBitmap != null) {
+		    connectionIconBitmap.recycle();
+		}
+		 
 		switch(state)
 		{
 		case DISC:
