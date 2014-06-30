@@ -150,4 +150,9 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 		return true;
 	}
 
+	public void cancelOldCommandJob() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

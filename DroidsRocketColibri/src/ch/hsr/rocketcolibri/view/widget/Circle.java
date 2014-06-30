@@ -11,7 +11,9 @@ import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.protocol.RCProtocolUdp;
+import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.ui_data.input.Channel;
+import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.util.DrawingTools;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
@@ -66,7 +68,7 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	private OnChannelChangeListener tControlModusListener;
 	private MyOnTouchListener tInternalControlListener = new MyOnTouchListener();
 	private boolean tCustomizeModusActive = false;
-	
+	private boolean tIsControlling = false;
 	//inner circle stuff
     private int tRadius = 100;
     private CircleArea tInnerCircleDimension;
@@ -402,11 +404,26 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 		drawRim(canvas);
 		drawFace(canvas);
 		canvas.restore();
-		canvas.drawCircle(tInnerCircleDimension.centerX, tInnerCircleDimension.centerY, tInnerCircleDimension.radius, tCirclePaint);
+		
+		if(tIsControlling)
+			canvas.drawCircle(tInnerCircleDimension.centerX, tInnerCircleDimension.centerY, tInnerCircleDimension.radius, tCirclePaint);
+		
 		if (tCustomizeModusActive) 
 			DrawingTools.drawCustomizableForground(this, canvas);
 	}
 
+	@Override
+	public void onNotifyUiOutputSink(Object p) {
+		ConnectionState data = (ConnectionState)p;
+		tIsControlling = ((s.TRY_CONN == data.getState()) || (s.CONN_CONTROL == data.getState()));
+		postInvalidate();
+	}
+
+	@Override
+	public UiOutputDataType getType(){
+		return UiOutputDataType.ConnectionState;
+	}
+	
 	@Override
 	public void updateProtocolMap() {
 		try{
@@ -469,14 +486,6 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 		updateProtocolMap();
 	}
 
-	@Override
-	public void onNotifyUiOutputSink(Object data) {}
-
-	@Override
-	public UiOutputDataType getType() {
-		return UiOutputDataType.None;
-	}
-	
 	protected int getProtocolMapInt(String key){
 		try{
 			return Integer.parseInt(tWidgetConfig.protocolMap.get(key));
