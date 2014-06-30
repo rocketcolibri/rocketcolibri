@@ -80,6 +80,17 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 		connectionIconPaint.setShader(paperShader);
 	}
 	
+	@Override protected void finalize() throws Throwable
+	{
+	  try {
+		  connectionIconBitmap.recycle();
+		  connectionIconBitmap = null;
+	  }
+	  finally {
+	    super.finalize();
+	  }
+	}
+	
 	@Override
 	protected void onDraw(Canvas canvas) {
 		float scale = (float) getWidth();
@@ -216,12 +227,5 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 				return null;
 			}
 		};
-	}
-	
-	@Override
-	protected void finalize() throws Throwable {
-		super.finalize();
-//		try{connectionStatusUpdater.cancel(true);}catch(Exception e){}
-	}
-	
+	}	
 }

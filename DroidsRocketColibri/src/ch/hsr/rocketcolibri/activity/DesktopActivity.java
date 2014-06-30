@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
@@ -130,14 +131,27 @@ public class DesktopActivity extends RCActivity{
 		
 	}
 	
+	private void unbindDrawables(View view) {
+	       if (view.getBackground() != null) {
+	       view.getBackground().setCallback(null);
+	       }
+	       if (view instanceof ViewGroup) {
+	           for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+	           unbindDrawables(((ViewGroup) view).getChildAt(i));
+	           }
+	       ((ViewGroup) view).removeAllViews();
+	       }
+	}
+	 
 	@Override
 	protected void onDestroy() {
+		super.onDestroy();
 		rcService.tWifi.disconnectRocketColibriSSID(rcService);
 		rcService.tProtocol.cancelOldCommandJob();
-		
 		tDesktopViewManager.release();
 		tDesktopViewManager = null;
-		super.onDestroy();
+		unbindDrawables(findViewById(R.id.root_layer));
+	    System.gc();
 	}
 	
 	//tmp var
