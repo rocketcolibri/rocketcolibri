@@ -62,6 +62,7 @@ public class WifiConnection
 	{
 		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();
+		if(list==null)return;
 		for( WifiConfiguration i : list ) 
 		{
 		    if(i.SSID != null && i.SSID.equals( networkSSID )) 

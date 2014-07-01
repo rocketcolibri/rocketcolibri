@@ -58,8 +58,12 @@ public class RocketColibriService extends Service  {
 	
 	private String getUserName(){
 		AccountManager accountManager = AccountManager.get(this);
- 	    Account[] accounts =  accountManager.getAccountsByType("com.google");
- 	    return accounts[0].name;	
+		try{
+	 	    Account[] accounts =  accountManager.getAccountsByType("com.google");
+	 	    return accounts[0].name;
+		}catch(Exception e){
+			return "unknown";
+		}
 	}
 	
 	@Override
