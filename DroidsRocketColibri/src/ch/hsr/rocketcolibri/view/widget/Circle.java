@@ -162,7 +162,7 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	    		}
 	              return true;
 	          case MotionEvent.ACTION_UP:
-	        	  updateInnerCirclePosition(tChannelH.getSticky()?getLayoutParams().width/2:(int) event.getX(0), tChannelV.getSticky()?getLayoutParams().height/2:(int) event.getY(0));
+	        	  updateInnerCircleAndCheckSticky((int) event.getX(0), (int) event.getY(0));
 	              if(tChannelError){
 	            	  Toast.makeText(Circle.this.getContext(), "check your channel configuration!", Toast.LENGTH_SHORT).show();
 	            	  tChannelError = false;
@@ -176,15 +176,6 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	        }
 			return false;
 		}
-	}
-	
-	
-	private void updateInnerCirclePosition(int x, int y){
-		if(x + tRadius<=this.getWidth()&&x - tRadius>=0)
-			 tInnerCircleDimension.centerX = x;
-		if(y + tRadius<=this.getHeight()&&y - tRadius>=0)
-			tInnerCircleDimension.centerY = y;
-		invalidate();
 	}
 	
 	@Override
@@ -454,13 +445,23 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 			tChannelV.setTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
 			tChannelV.setSticky(getProtocolMapBoolean(RCConstants.STICKY_V));
 			
-      	  	updateInnerCirclePosition(tChannelH.getSticky()?getLayoutParams().width/2:-1, tChannelV.getSticky()?getLayoutParams().height/2:-1);
-
+			updateInnerCircleAndCheckSticky(-1,-1);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
-
+	
+	private void updateInnerCircleAndCheckSticky(int x, int y){
+  	  	updateInnerCirclePosition(tChannelH.getSticky()?x:getLayoutParams().width/2, tChannelV.getSticky()?y:getLayoutParams().height/2);
+	}
+	
+	private void updateInnerCirclePosition(int x, int y){
+		if(x + tRadius<=this.getWidth()&&x - tRadius>=0)
+			 tInnerCircleDimension.centerX = x;
+		if(y + tRadius<=this.getHeight()&&y - tRadius>=0)
+			tInnerCircleDimension.centerY = y;
+		invalidate();
+	}
 
 	public int getNumberOfChannelListener() {
 		return 2; 
