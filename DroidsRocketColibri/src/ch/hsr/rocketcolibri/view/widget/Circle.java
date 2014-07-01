@@ -107,7 +107,18 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 		init(context, null);
 		initDefaultProtocolConfig();
 	}
-
+	
+	@Override protected void finalize() throws Throwable
+	{
+	  try {
+		  faceTexture.recycle();
+		  faceTexture = null;
+	  }
+	  finally {
+	    super.finalize();
+	  }
+	}
+	
 	private void initDefaultProtocolConfig(){
 		//init protocol mapping
 		tWidgetConfig.protocolMap = new HashMap<String, String>();
@@ -337,8 +348,6 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 		tRadius = tWidgetConfig.viewElementConfig.getLayoutParams().width/6;
 	    tInnerCircleDimension = new CircleArea(tWidgetConfig.viewElementConfig.getLayoutParams().width/2, tWidgetConfig.viewElementConfig.getLayoutParams().width/2, tRadius);
 	    tCirclePaint = new Paint();
-	
-	    tCirclePaint.setColor(Color.BLUE);
 	    tCirclePaint.setStrokeWidth(40);
 	    tCirclePaint.setStyle(Paint.Style.FILL);
 	}
@@ -406,7 +415,11 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 		canvas.restore();
 		
 		if(tIsControlling)
-			canvas.drawCircle(tInnerCircleDimension.centerX, tInnerCircleDimension.centerY, tInnerCircleDimension.radius, tCirclePaint);
+		    tCirclePaint.setColor(Color.BLUE);
+		else
+			tCirclePaint.setColor(Color.LTGRAY);
+		
+		canvas.drawCircle(tInnerCircleDimension.centerX, tInnerCircleDimension.centerY, tInnerCircleDimension.radius, tCirclePaint);
 		
 		if (tCustomizeModusActive) 
 			DrawingTools.drawCustomizableForground(this, canvas);

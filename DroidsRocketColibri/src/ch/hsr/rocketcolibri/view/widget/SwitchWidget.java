@@ -129,13 +129,13 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
 
 		if (isChannelValid()) {
+			setOnCheckedChangeListener(tSwitchOnCheckedChangeListener);
+			setClickable(true);
+
 			if (tChannelH.getDefaultChannelValue() > 0) {
 				setChecked(true);
-				setClickable(true);
-				setOnCheckedChangeListener(tSwitchOnCheckedChangeListener);
 			} else {
 				setChecked(false);
-				setClickable(false);
 			}
 		} else {
 			setChecked(false);

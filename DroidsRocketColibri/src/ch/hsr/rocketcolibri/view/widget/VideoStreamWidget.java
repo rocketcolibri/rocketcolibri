@@ -97,6 +97,17 @@ public class VideoStreamWidget extends SurfaceView implements
 		init(context, null);
 	}
 
+	@Override protected void finalize() throws Throwable
+	{
+	  try {
+		  tVideoBitmap.recycle();
+		  tVideoBitmap = null;
+	  }
+	  finally {
+	    super.finalize();
+	  }
+	}
+	
 	private void init(Context context, AttributeSet attrs) {
 		//tRectRectF = new RectF(0.0f, 0.0f, 1.0f, 1.0f);
 		tVideoBitmap =
