@@ -111,6 +111,7 @@ public class SwipeInMenu extends ViewGroup {
 
 	private VelocityTracker mVelocityTracker;
 
+	private OrientationSpecific tOSpecific;
 	private Orientation tOrientation;
 	private Side mHandlePos;
 	private boolean tVertical;
@@ -262,10 +263,18 @@ public class SwipeInMenu extends ViewGroup {
 	 */
 	public void setOrientation (Orientation orientation) {
 		tOrientation = orientation;
-
 		tVertical = tOrientation == Orientation.BOTTOM || tOrientation == Orientation.TOP;
 		mInvert = tOrientation == Orientation.LEFT || tOrientation == Orientation.TOP;
-
+		switch(tOrientation){
+		case BOTTOM: tOSpecific = new BottomOrientation();
+			break;
+		case LEFT: tOSpecific = new LeftOrientation();
+			break;
+		case RIGHT: tOSpecific = new RightOrientation();
+			break;
+		case TOP: tOSpecific = new TopOrientation();
+			break;
+		}
 		requestLayout();
 		invalidate();
 	}
@@ -522,7 +531,7 @@ public class SwipeInMenu extends ViewGroup {
 			final int action = event.getAction();
 			switch (action) {
 				case MotionEvent.ACTION_MOVE:
-					moveHead((int)  (tVertical ? event.getY() : event.getX()) - mTouchDelta);
+					tOSpecific.moveHead((int)  (tVertical ? event.getY() : event.getX()) - mTouchDelta);
 					break;
 				case MotionEvent.ACTION_UP:
 				case MotionEvent.ACTION_CANCEL: {
@@ -561,7 +570,7 @@ public class SwipeInMenu extends ViewGroup {
 
 					if (Math.abs(velocity) < mMaximumTapVelocity) {
 
-						if (inThreshold( top, left )) {
+						if (tOSpecific.inThreshold( top, left )) {
 							if (mAllowSingleTap) {
 								playSoundEffect(SoundEffectConstants.CLICK);
 
@@ -590,23 +599,23 @@ public class SwipeInMenu extends ViewGroup {
 		return mTracking || mAnimating || super.onTouchEvent(event);
 	}
 
-	private boolean inThreshold (int top, int left) {
-		switch (tOrientation) {
-			case TOP:
-				return  (!tIsOpen && top < mTapThreshold - mBottomOffset) ||
-						( tIsOpen && top > getBottom() - getTop() - tHead.getHeight() - mTopOffset - mTapThreshold);
-			case LEFT:
-				return  (!tIsOpen && left < mTapThreshold - mBottomOffset) ||
-						( tIsOpen && left > getRight() - getLeft() - tHead.getWidth() - mTopOffset - mTapThreshold);
-			case BOTTOM:
-				return  ( tIsOpen && top < mTapThreshold + mTopOffset) ||
-						(!tIsOpen && top > mBottomOffset + getBottom() - getTop() -  tHead.getHeight() - mTapThreshold);
-			case RIGHT:
-				return  ( tIsOpen && left < mTapThreshold + mTopOffset) ||
-						(!tIsOpen && left > mBottomOffset + getRight() - getLeft() - tHead.getWidth() - mTapThreshold);
-		}
-		return false;
-	}
+//	private boolean inThreshold (int top, int left) {
+//		switch (tOrientation) {
+//			case TOP:
+//				return  (!tIsOpen && top < mTapThreshold - mBottomOffset) ||
+//						( tIsOpen && top > getBottom() - getTop() - tHead.getHeight() - mTopOffset - mTapThreshold);
+//			case LEFT:
+//				return  (!tIsOpen && left < mTapThreshold - mBottomOffset) ||
+//						( tIsOpen && left > getRight() - getLeft() - tHead.getWidth() - mTopOffset - mTapThreshold);
+//			case BOTTOM:
+//				return  ( tIsOpen && top < mTapThreshold + mTopOffset) ||
+//						(!tIsOpen && top > mBottomOffset + getBottom() - getTop() -  tHead.getHeight() - mTapThreshold);
+//			case RIGHT:
+//				return  ( tIsOpen && left < mTapThreshold + mTopOffset) ||
+//						(!tIsOpen && left > mBottomOffset + getRight() - getLeft() - tHead.getWidth() - mTapThreshold);
+//		}
+//		return false;
+//	}
 
 	private void animateClose(int position) {
 		prepareTracking(position);
@@ -709,7 +718,7 @@ public class SwipeInMenu extends ViewGroup {
 					mAnimationPosition = mBottomOffset + getWidth() - tHead.getWidth();
 					break;
 			}
-			moveHead((int) mAnimationPosition);
+			tOSpecific.moveHead((int) mAnimationPosition);
 			mAnimating = true;
 			mHandler.removeMessages(MSG_ANIMATE);
 			mAnimationLastTime = SystemClock.uptimeMillis();
@@ -719,105 +728,11 @@ public class SwipeInMenu extends ViewGroup {
 				mAnimating = false;
 				mHandler.removeMessages(MSG_ANIMATE);
 			}
-			moveHead(position);
+			tOSpecific.moveHead(position);
 		}
 	}
 
 	boolean opening = false;
-	private void moveHead(int position) {
-		switch(tOrientation) {
-			case TOP:
-				if (position == EXPANDED_FULL_OPEN) {
-					changeHeadOnOpen();
-					tHead.offsetTopAndBottom( getBottom() - getTop() - mTopOffset - tHead.getHeight() - tHead.getTop() );
-					invalidate();
-				} else if (position == COLLAPSED_FULL_CLOSED) {
-					changeHeadOnClose();
-					tHead.offsetTopAndBottom( -mBottomOffset - tHead.getTop() );
-					invalidate();
-				} else {
-					int deltaY = position - tHead.getTop();
-					if (position < -mBottomOffset) {
-						deltaY = -mBottomOffset - tHead.getTop();
-					}
-					else if (position > getBottom() - getTop() - mTopOffset - tHead.getHeight()) {
-						deltaY = getBottom() - getTop() - mTopOffset - tHead.getHeight() - tHead.getTop();
-					}
-					regionUnionYAndInvalidate(deltaY);
-				}
-				break;
-
-			case BOTTOM:
-				if (position == EXPANDED_FULL_OPEN) {
-					tHead.offsetTopAndBottom( mTopOffset - tHead.getTop());
-					changeHeadOnOpen();
-					invalidate();
-				} else if (position == COLLAPSED_FULL_CLOSED) {
-					tHead.offsetTopAndBottom( mBottomOffset + getBottom() - getTop() - tHead.getHeight() - tHead.getTop());
-					changeHeadOnClose();
-					invalidate();
-				} else { 
-//					Log.d("tHead.getLayoutParams().height", ""+(tScreenHeight-tHead.getY()));
-					if(tScreenHeight-tHead.getY()>5 && tScreenHeight-tHead.getY()<=90){
-						if(tLastPosition>position){
-							changeHeadOnOpen();
-						}else if(tScreenHeight-tHead.getY()<=90){
-							changeHeadOnClose();
-						}
-					}
-					int deltaY = position - tHead.getTop();
-					if (position < mTopOffset) {
-						deltaY = mTopOffset - tHead.getTop();
-					} else if (deltaY > mBottomOffset + getBottom() - getTop() - tHead.getHeight() - tHead.getTop()) {
-						deltaY = mBottomOffset + getBottom() - getTop() - tHead.getHeight() - tHead.getTop();
-					}
-					regionUnionYAndInvalidate(deltaY);
-					tLastPosition = position;
-				}
-				break;
-
-			case RIGHT:
-				if (position == EXPANDED_FULL_OPEN) {
-					changeHeadOnOpen();
-					tHead.offsetLeftAndRight( mTopOffset - tHead.getLeft());
-					invalidate();
-				} else if (position == COLLAPSED_FULL_CLOSED) {
-					changeHeadOnClose();
-					tHead.offsetLeftAndRight( -mBottomOffset );
-					invalidate();
-				} else {
-					int deltaX = position - tHead.getLeft();
-					if (position < mTopOffset) {
-						deltaX = mTopOffset - tHead.getLeft();
-					} else if (deltaX > mBottomOffset + getRight() - getLeft() - tHead.getWidth() - tHead.getLeft()) {
-						deltaX = mBottomOffset + getRight() - getLeft() - tHead.getWidth() - tHead.getLeft();
-					}
-					regionUnionXAndInvalidate(deltaX);
-				}
-				break;
-
-			case LEFT:
-				if (position == EXPANDED_FULL_OPEN) {
-					changeHeadOnOpen();
-					tHead.offsetLeftAndRight( getRight() - getLeft() - mTopOffset - tHead.getWidth() - tHead.getLeft() );
-					invalidate();
-				} else if (position == COLLAPSED_FULL_CLOSED) {
-					changeHeadOnClose();
-					tHead.offsetLeftAndRight(-mBottomOffset - tHead.getLeft() );
-					invalidate();
-				} else {
-					int deltaX = position - tHead.getLeft();
-					if (position < -mBottomOffset) {
-						deltaX = -mBottomOffset - tHead.getLeft();
-					}
-					else if (position > getRight() - getLeft() - mTopOffset - tHead.getWidth()) {
-						deltaX = getRight() - getLeft() - mTopOffset - tHead.getWidth() - tHead.getLeft();
-					}
-					regionUnionXAndInvalidate(deltaX);
-				}
-				break;
-		}
-	}
 	
 	private void regionUnionXAndInvalidate(int deltaX){
 		tHead.offsetLeftAndRight(deltaX);
@@ -984,7 +899,7 @@ public class SwipeInMenu extends ViewGroup {
 					mAnimating = false;
 					closeDrawer();
 				} else {
-					moveHead((int) mAnimationPosition);
+					tOSpecific.moveHead((int) mAnimationPosition);
 					mCurrentAnimationTime += ANIMATION_FRAME_DURATION;
 					mHandler.sendMessageAtTime(mHandler.obtainMessage(MSG_ANIMATE), mCurrentAnimationTime);
 				}
@@ -997,7 +912,7 @@ public class SwipeInMenu extends ViewGroup {
 					mAnimating = false;
 					openDrawer();
 				} else {
-					moveHead((int) mAnimationPosition);
+					tOSpecific.moveHead((int) mAnimationPosition);
 					mCurrentAnimationTime += ANIMATION_FRAME_DURATION;
 					mHandler.sendMessageAtTime(mHandler.obtainMessage(MSG_ANIMATE), mCurrentAnimationTime);
 				}
@@ -1127,7 +1042,7 @@ public class SwipeInMenu extends ViewGroup {
 	}
 
 	private void closeDrawer() {
-		moveHead( COLLAPSED_FULL_CLOSED );
+		tOSpecific.moveHead( COLLAPSED_FULL_CLOSED );
 		tContent.setVisibility( View.GONE );
 		tContent.destroyDrawingCache();
 
@@ -1143,7 +1058,7 @@ public class SwipeInMenu extends ViewGroup {
 	}
 
 	private void openDrawer() {
-		moveHead( EXPANDED_FULL_OPEN );
+		tOSpecific.moveHead( EXPANDED_FULL_OPEN );
 		tContent.setVisibility(View.VISIBLE);
 
 		if (tIsOpen) {
@@ -1315,6 +1230,129 @@ public class SwipeInMenu extends ViewGroup {
 					doAnimation();
 					break;
 			}
+		}
+	}
+	
+	private abstract class OrientationSpecific{
+		protected abstract void moveHead(int position);
+		protected abstract boolean inThreshold (int top, int left);
+	}
+	
+	private class TopOrientation extends OrientationSpecific{
+		protected void moveHead(int position){
+			if (position == EXPANDED_FULL_OPEN) {
+				changeHeadOnOpen();
+				tHead.offsetTopAndBottom( getBottom() - getTop() - mTopOffset - tHead.getHeight() - tHead.getTop() );
+				invalidate();
+			} else if (position == COLLAPSED_FULL_CLOSED) {
+				changeHeadOnClose();
+				tHead.offsetTopAndBottom( -mBottomOffset - tHead.getTop() );
+				invalidate();
+			} else {
+				int deltaY = position - tHead.getTop();
+				if (position < -mBottomOffset) {
+					deltaY = -mBottomOffset - tHead.getTop();
+				}
+				else if (position > getBottom() - getTop() - mTopOffset - tHead.getHeight()) {
+					deltaY = getBottom() - getTop() - mTopOffset - tHead.getHeight() - tHead.getTop();
+				}
+				regionUnionYAndInvalidate(deltaY);
+			}
+		}
+		
+		protected boolean inThreshold (int top, int left) {
+			return  (!tIsOpen && top < mTapThreshold - mBottomOffset) ||
+					( tIsOpen && top > getBottom() - getTop() - tHead.getHeight() - mTopOffset - mTapThreshold);
+		}
+	}
+
+	private class BottomOrientation extends OrientationSpecific{
+		protected void moveHead(int position){
+			if (position == EXPANDED_FULL_OPEN) {
+				tHead.offsetTopAndBottom( mTopOffset - tHead.getTop());
+				changeHeadOnOpen();
+				invalidate();
+			} else if (position == COLLAPSED_FULL_CLOSED) {
+				tHead.offsetTopAndBottom( mBottomOffset + getBottom() - getTop() - tHead.getHeight() - tHead.getTop());
+				changeHeadOnClose();
+				invalidate();
+			} else { 
+//				Log.d("tHead.getLayoutParams().height", ""+(tScreenHeight-tHead.getY()));
+				if(tScreenHeight-tHead.getY()>5 && tScreenHeight-tHead.getY()<=90){
+					if(tLastPosition>position){
+						changeHeadOnOpen();
+					}else if(tScreenHeight-tHead.getY()<=90){
+						changeHeadOnClose();
+					}
+				}
+				int deltaY = position - tHead.getTop();
+				if (position < mTopOffset) {
+					deltaY = mTopOffset - tHead.getTop();
+				} else if (deltaY > mBottomOffset + getBottom() - getTop() - tHead.getHeight() - tHead.getTop()) {
+					deltaY = mBottomOffset + getBottom() - getTop() - tHead.getHeight() - tHead.getTop();
+				}
+				regionUnionYAndInvalidate(deltaY);
+				tLastPosition = position;
+			}
+		}
+		
+		protected boolean inThreshold (int top, int left) {
+			return  ( tIsOpen && top < mTapThreshold + mTopOffset) ||
+					(!tIsOpen && top > mBottomOffset + getBottom() - getTop() -  tHead.getHeight() - mTapThreshold);
+		}
+	}
+	
+	private class LeftOrientation extends OrientationSpecific{
+		protected void moveHead(int position){
+			if (position == EXPANDED_FULL_OPEN) {
+				changeHeadOnOpen();
+				tHead.offsetLeftAndRight( getRight() - getLeft() - mTopOffset - tHead.getWidth() - tHead.getLeft() );
+				invalidate();
+			} else if (position == COLLAPSED_FULL_CLOSED) {
+				changeHeadOnClose();
+				tHead.offsetLeftAndRight(-mBottomOffset - tHead.getLeft() );
+				invalidate();
+			} else {
+				int deltaX = position - tHead.getLeft();
+				if (position < -mBottomOffset) {
+					deltaX = -mBottomOffset - tHead.getLeft();
+				}
+				else if (position > getRight() - getLeft() - mTopOffset - tHead.getWidth()) {
+					deltaX = getRight() - getLeft() - mTopOffset - tHead.getWidth() - tHead.getLeft();
+				}
+				regionUnionXAndInvalidate(deltaX);
+			}
+		}
+		
+		protected boolean inThreshold (int top, int left) {
+			return  (!tIsOpen && left < mTapThreshold - mBottomOffset) ||
+					( tIsOpen && left > getRight() - getLeft() - tHead.getWidth() - mTopOffset - mTapThreshold);
+		}
+	}
+	
+	private class RightOrientation extends OrientationSpecific{
+		protected void moveHead(int position){
+			if (position == EXPANDED_FULL_OPEN) {
+				changeHeadOnOpen();
+				tHead.offsetLeftAndRight( mTopOffset - tHead.getLeft());
+				invalidate();
+			} else if (position == COLLAPSED_FULL_CLOSED) {
+				changeHeadOnClose();
+				tHead.offsetLeftAndRight( -mBottomOffset );
+				invalidate();
+			} else {
+				int deltaX = position - tHead.getLeft();
+				if (position < mTopOffset) {
+					deltaX = mTopOffset - tHead.getLeft();
+				} else if (deltaX > mBottomOffset + getRight() - getLeft() - tHead.getWidth() - tHead.getLeft()) {
+					deltaX = mBottomOffset + getRight() - getLeft() - tHead.getWidth() - tHead.getLeft();
+				}
+				regionUnionXAndInvalidate(deltaX);
+			}
+		}
+		protected boolean inThreshold (int top, int left) {
+			return  ( tIsOpen && left < mTapThreshold + mTopOffset) ||
+					(!tIsOpen && left > mBottomOffset + getRight() - getLeft() - tHead.getWidth() - mTapThreshold);
 		}
 	}
 
