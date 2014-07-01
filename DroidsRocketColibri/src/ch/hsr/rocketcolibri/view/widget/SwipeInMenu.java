@@ -599,24 +599,6 @@ public class SwipeInMenu extends ViewGroup {
 		return mTracking || mAnimating || super.onTouchEvent(event);
 	}
 
-//	private boolean inThreshold (int top, int left) {
-//		switch (tOrientation) {
-//			case TOP:
-//				return  (!tIsOpen && top < mTapThreshold - mBottomOffset) ||
-//						( tIsOpen && top > getBottom() - getTop() - tHead.getHeight() - mTopOffset - mTapThreshold);
-//			case LEFT:
-//				return  (!tIsOpen && left < mTapThreshold - mBottomOffset) ||
-//						( tIsOpen && left > getRight() - getLeft() - tHead.getWidth() - mTopOffset - mTapThreshold);
-//			case BOTTOM:
-//				return  ( tIsOpen && top < mTapThreshold + mTopOffset) ||
-//						(!tIsOpen && top > mBottomOffset + getBottom() - getTop() -  tHead.getHeight() - mTapThreshold);
-//			case RIGHT:
-//				return  ( tIsOpen && left < mTapThreshold + mTopOffset) ||
-//						(!tIsOpen && left > mBottomOffset + getRight() - getLeft() - tHead.getWidth() - mTapThreshold);
-//		}
-//		return false;
-//	}
-
 	private void animateClose(int position) {
 		prepareTracking(position);
 		performFling(position, mMaximumAcceleration * (mInvert ? -1 : 1), true);
