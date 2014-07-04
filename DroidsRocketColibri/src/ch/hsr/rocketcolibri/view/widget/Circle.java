@@ -122,17 +122,19 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	private void initDefaultProtocolConfig(){
 		//init protocol mapping
 		tWidgetConfig.protocolMap = new HashMap<String, String>();
-		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_H, "");
+		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_ASSIGNMENT_H, "");
 		tWidgetConfig.protocolMap.put(RCConstants.INVERTED_H, "");
 		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE_H, "");
 		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE_H, "");
+		tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION_H, "");
 		tWidgetConfig.protocolMap.put(RCConstants.TRIMM_H, "");
 		tWidgetConfig.protocolMap.put(RCConstants.STICKY_H, "");
 		
-		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_V, "");
+		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_ASSIGNMENT_V, "");
 		tWidgetConfig.protocolMap.put(RCConstants.INVERTED_V, "");
 		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE_V, "");
 		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE_V, "");
+		tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION_V, "");
 		tWidgetConfig.protocolMap.put(RCConstants.TRIMM_V, "");
 		tWidgetConfig.protocolMap.put(RCConstants.STICKY_V, "");
 	}
@@ -203,7 +205,7 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	
 	
 	private boolean areChannelsValid(){
-		return tChannelH.getDefaultChannelValue()>-1 || tChannelV.getDefaultChannelValue()>-1;
+		return tChannelH.getAssignment()>-1 || tChannelV.getAssignment()>-1;
 	}
 
 	/**
@@ -424,14 +426,14 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	@Override
 	public void updateProtocolMap() {
 		try{
-			tChannelH.setDefaultChannelValue(getProtocolMapInt(RCConstants.CHANNEL_H));
+			tChannelH.setDefaultPosition(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_H));
 			tChannelH.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_H));
 			tChannelH.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_H));
 			tChannelH.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_H));
 			tChannelH.setTrimm(getProtocolMapInt(RCConstants.TRIMM_H));
 			tChannelH.setSticky(getProtocolMapBoolean(RCConstants.STICKY_H));
 			
-			tChannelV.setDefaultChannelValue(getProtocolMapInt(RCConstants.CHANNEL_V));
+			tChannelV.setDefaultPosition(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_V));
 			tChannelV.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_V));
 			tChannelV.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_V));
 			tChannelV.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_V));
@@ -456,8 +458,8 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 
 		// update channel
   		try{
-			tControlModusListener.onChannelChange(tChannelH.getDefaultChannelValue(), tChannelH.calculateChannelValue(eventPoistionToChannelValue(x)));
-			tControlModusListener.onChannelChange(tChannelV.getDefaultChannelValue(), tChannelV.calculateChannelValue(eventPoistionToChannelValue(y)));
+			tControlModusListener.onChannelChange(tChannelH.getAssignment(), tChannelH.calculateChannelValue(eventPoistionToChannelValue(x)));
+			tControlModusListener.onChannelChange(tChannelV.getAssignment(), tChannelV.calculateChannelValue(eventPoistionToChannelValue(y)));
 		}catch(Exception e){
 			tChannelError = true;
 		}

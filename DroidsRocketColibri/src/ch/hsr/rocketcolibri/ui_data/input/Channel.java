@@ -15,7 +15,8 @@ public class Channel
 	public static final int MAX_VALUE = 1000;
 
 	/* attributes according to the requirements */
-	int PositionChannelValue;
+	int assignment;
+	int defaultPosition;
 	boolean inverted;
 	int minRange;
 	int maxRange;
@@ -27,26 +28,29 @@ public class Channel
 	
 	public Channel()
 	{
+		assignment = -1; // unassigned
 		minRange = MIN_VALUE;
 		maxRange = MAX_VALUE;
 		trimm = 0;
 		inverted = false;
-		PositionChannelValue = -1;
+		currentChannelValue = defaultPosition = 0;
 	}
 	
 	/** setter */
+	public void setAssignment(int a) { assignment = a; }
 	public void setMinRange(int r)	{ if(r>-1)minRange = r;	}
 	public void setMaxRange(int r)	{ if(r>-1)maxRange = r;	}
 	public void setTrimm(int t)	{ if(t>-1)trimm = t;	}
 	public void setInverted(boolean i)	{ inverted = i;	}
-	public void setDefaultChannelValue(int d)	{ PositionChannelValue = d;	}
+	public void setDefaultPosition(int d)	{ defaultPosition = d;	}
 	public void setSticky(boolean d)	{ sticky = d;	}
 	/** getter */
+	public int getAssignment() { return assignment; }
 	public int getMinRange()	{ return minRange;	}
 	public int getMaxRange()	{ return maxRange;	}
 	public int getTrimm()	{ return trimm;	}
 	public boolean getInverted()	{ return inverted;	}
-	public int getDefaultChannelValue() { return PositionChannelValue;	}
+	public int getDefaultPosition() { return defaultPosition;	}
 	public boolean getSticky() { return sticky;	}
 	
 	/**
@@ -67,6 +71,13 @@ public class Channel
 		// adjust range
 		currentChannelValue = inputFromWidget;
 		return currentChannelValue;
+	}
+	
+	/**
+	 * set the value to the default
+	 */
+	public int setToDefaultPosition() {
+		return currentChannelValue = defaultPosition;
 	}
 	
 	/**

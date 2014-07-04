@@ -45,7 +45,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	private OnChannelChangeListener tControlModusListener;
 	private MyOnTouchListener tInternalControlListener = new MyOnTouchListener();
 
-	private Channel tChannelH = new Channel();
+	private Channel tChannel = new Channel();
 	private boolean tCustomizeModusActive = false;
 
 	private RotaryKnobListener tListener;
@@ -77,7 +77,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	}
 
 	private boolean isChannelValid() {
-		if (tChannelH.getDefaultChannelValue() > -1) {
+		if (tChannel.getAssignment() > -1) {
 			tRotaryKnobResource = R.drawable.rotoron;
 			this.setImageResource(tRotaryKnobResource);
 			return true;
@@ -112,7 +112,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 						tAngle = tAngleMin;
 					} else {
 						tKnobValue += tKnobRangeIncDecValue * direction;
-						tControlModusListener.onChannelChange(tChannelH.getDefaultChannelValue(), (int) tKnobValue);
+						tControlModusListener.onChannelChange(tChannel.getAssignment(), (int) tKnobValue);
 						Log.d("Testing", "tKnobValue is set: " + (int) tKnobValue);
 					}
 				} else {
@@ -120,7 +120,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 						tAngle = tAngleMax;
 					} else {
 						tKnobValue += tKnobRangeIncDecValue * direction;
-						tControlModusListener.onChannelChange(tChannelH.getDefaultChannelValue(), (int) tKnobValue);
+						tControlModusListener.onChannelChange(tChannel.getAssignment(), (int) tKnobValue);
 						Log.d("Testing", "tKnobValue is set: " + (int) tKnobValue);
 					}
 				}
@@ -150,11 +150,12 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	public void initProtocolMapping() {
 		// init protocol mapping
 		tWidgetConfig.protocolMap = new HashMap<String, String>();
-		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_H, "");
-		tWidgetConfig.protocolMap.put(RCConstants.INVERTED_H, "");
-		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE_H, "");
-		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE_H, "");
-		tWidgetConfig.protocolMap.put(RCConstants.TRIMM_H, "");
+		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_ASSIGNMENT, "");
+		tWidgetConfig.protocolMap.put(RCConstants.INVERTED, "");
+		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE, "");
+		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE, "");
+		tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION, "");
+		tWidgetConfig.protocolMap.put(RCConstants.TRIMM, "");
 	}
 
 	public void initialize() {
@@ -181,8 +182,8 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	private void calculateKnobValues() {
 		tAngle = tAngleMin;
 
-		tKnobValueMin = tChannelH.getMinRange();
-		tKnobValueMax = tChannelH.getMaxRange();;
+		tKnobValueMin = tChannel.getMinRange();
+		tKnobValueMax = tChannel.getMaxRange();;
 		tKnobValue = tKnobValueMin;
 
 		tKnobRangeResolution = (int) tResolution / tKnobIncDecValue;
@@ -221,13 +222,12 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	@Override
 	public void updateProtocolMap() {
 		try {
-			tChannelH
-					.setDefaultChannelValue(getProtocolMapInt(RCConstants.CHANNEL_H));
-			tChannelH
-					.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_H));
-			tChannelH.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_H));
-			tChannelH.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_H));
-			tChannelH.setTrimm(getProtocolMapInt(RCConstants.TRIMM_H));
+			tChannel.setDefaultPosition(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT));
+			tChannel.setInverted(getProtocolMapBoolean(RCConstants.INVERTED));
+			tChannel.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE));
+			tChannel.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE));
+			tChannel.setDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION));
+			tChannel.setTrimm(getProtocolMapInt(RCConstants.TRIMM));
 
 			// Protocol values has changed recalculate the values
 			calculateKnobValues();
