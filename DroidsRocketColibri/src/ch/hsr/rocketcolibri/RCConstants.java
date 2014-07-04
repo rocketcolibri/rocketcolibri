@@ -42,12 +42,13 @@ public class RCConstants {
 	 * determine the data type of the RCConstants keys 
 	 */
 	public static DataType getDataTypeOf(String key){
-//		if(key.contains(_CHANNEL)) return DataType.INT;
+//		if(key.contains(_CHANNEL_ASSIGNMENT)) return DataType.INT;
 		if(key.contains(_INVERTED)) return DataType.BOOLEAN;
 		if(key.contains(_STICKY)) return DataType.BOOLEAN;
 		if(key.contains(_DEBUG)) return DataType.BOOLEAN;
 //		if(key.contains(_MIN_RANGE)) return DataType.INT;
 //		if(key.contains(_MAX_RANGE)) return DataType.INT;
+//		if(key.contains(_MAX_DEFAULT_POSITION)) return DataType.INT;
 //		if(key.contains(_TRIMM)) return DataType.INT;
 		return DataType.INT;
 	}

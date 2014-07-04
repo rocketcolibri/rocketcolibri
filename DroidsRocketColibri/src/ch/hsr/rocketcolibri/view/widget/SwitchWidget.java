@@ -70,6 +70,7 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 		@Override
 		public void onCheckedChanged(CompoundButton buttonView,
 				boolean isChecked) {
+<<<<<<< HEAD
 			try{
 				if (isChecked) {
 					tControlModusListener.onChannelChange(
@@ -82,6 +83,17 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 				}
 			}catch(Exception e){
 				
+=======
+
+			if (isChecked) {
+				tControlModusListener.onChannelChange(
+						tChannel.getAssignment(),
+						tChannel.getMaxRange());
+			} else {
+				tControlModusListener.onChannelChange(
+						tChannel.getAssignment(),
+						tChannel.getMinRange());
+>>>>>>> branch 'master' of https://artvel@bitbucket.org/artvel/rocketcolibri.git
 			}
 		}
 	}
