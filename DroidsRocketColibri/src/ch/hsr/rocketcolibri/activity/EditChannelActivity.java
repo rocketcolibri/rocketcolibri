@@ -5,32 +5,23 @@ import java.util.Map;
 import java.util.Set;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.InputType;
+import android.text.method.DigitsKeyListener;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLayoutChangeListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.GridLayout;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import ch.hsr.rocketcolibri.DataType;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
-import ch.hsr.rocketcolibri.widgetdirectory.WidgetEntry;
 
 public class EditChannelActivity extends RCActivity{
 	private Map<String, View> channelViewMap = new HashMap<String, View>();
@@ -48,10 +39,12 @@ public class EditChannelActivity extends RCActivity{
 		GridLayout contentList = (GridLayout)findViewById(R.id.content_list);
 		Intent i = getIntent();
 		Set<String> keySet = i.getExtras().keySet();
+		String labelText = null;
 		for(String key : keySet){
 			if(key.startsWith(RCConstants.PREFIX)){
 				i.getStringExtra(key);
-				contentList.addView(createLabelView(getString(getStringResourceIdOf(key))));
+				try{labelText = getString(getStringResourceIdOf(key));}catch(Exception e){labelText="undefined";};
+				contentList.addView(createLabelView(labelText));
 				contentList.addView(createInputView(key, i.getStringExtra(key)));
 			}
 		}
@@ -82,9 +75,9 @@ public class EditChannelActivity extends RCActivity{
 			return switc;
 		case DOUBLE:
 		case FLOAT:
-			return createEditTextWithInputType(InputType.TYPE_CLASS_NUMBER, key, value);
+			return createEditTextWithInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL, key, value);
 		case INT:
-			return createEditTextWithInputType(InputType.TYPE_CLASS_NUMBER, key, value);
+			return createEditTextWithInputType(InputType.TYPE_NUMBER_FLAG_SIGNED, key, value);
 		default:
 			return createEditTextWithInputType(InputType.TYPE_CLASS_TEXT, key, value);
 		}
@@ -92,8 +85,10 @@ public class EditChannelActivity extends RCActivity{
 	
 	private View createEditTextWithInputType(int inputType, String key, String value){
 		EditText tv = new EditText(this);
-		tv.setInputType(inputType);
-//		tv.setRawInputType(inputType);
+//		tv.setInputType(inputType);
+//		tv.setRawInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+		tv.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+//		tv.setKeyListener(DigitsKeyListener.getInstance("0123456789."));
 		tv.setText(value);
 		tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		

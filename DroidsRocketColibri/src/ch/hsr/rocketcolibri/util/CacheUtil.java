@@ -10,8 +10,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.view.View;
-import android.widget.LinearLayout.LayoutParams;
 
 public class CacheUtil {
 	private Context tContext;
@@ -19,16 +19,6 @@ public class CacheUtil {
 	public CacheUtil(Context context){
 		tContext = context;
 	}
-	
-//	public Bitmap loadTumbnail(String fileName){
-//		File imgFile = new File(tContext.getCacheDir(),fileName);
-//		Bitmap map = null;
-//		Log.d("loadTumbnail", fileName+": "+imgFile.exists());
-//		if(imgFile.exists()){
-//		    map = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-//		}
-//		return map;
-//	}
 	
 	public Bitmap createBitmap(View viewToCache, String fileName) throws IOException{
 		 Bitmap map = createBitmapFromView(viewToCache);
@@ -41,8 +31,12 @@ public class CacheUtil {
 	public Bitmap createBitmapFromView(View v) {
         Bitmap b = Bitmap.createBitmap(v.getLayoutParams().width, v.getLayoutParams().height, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(b);
-        v.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        v.measure(v.getLayoutParams().width, v.getLayoutParams().width);
         v.layout(0, 0, v.getLayoutParams().width, v.getLayoutParams().height);
+        Drawable bgDrawable =v.getBackground();
+        if (bgDrawable!=null){
+            bgDrawable.draw(c);
+        }
         v.draw(c);
         return b;
     }

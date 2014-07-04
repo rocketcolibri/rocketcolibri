@@ -6,6 +6,13 @@ package ch.hsr.rocketcolibri;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.app.Service;
+import android.content.Intent;
+import android.os.Binder;
+import android.os.IBinder;
+import android.util.Log;
 import ch.hsr.rocketcolibri.db.RocketColibriDB;
 import ch.hsr.rocketcolibri.db.RocketColibriDataHandler;
 import ch.hsr.rocketcolibri.protocol.RCProtocol;
@@ -15,17 +22,11 @@ import ch.hsr.rocketcolibri.view.widget.Circle;
 import ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget;
 import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
 import ch.hsr.rocketcolibri.view.widget.DefaultViewElementConfigRepo;
+import ch.hsr.rocketcolibri.view.widget.AnalogStickWidget;
 import ch.hsr.rocketcolibri.view.widget.RotaryKnobWidget;
 import ch.hsr.rocketcolibri.view.widget.SwitchWidget;
 import ch.hsr.rocketcolibri.view.widget.VideoStreamWidget;
 import ch.hsr.rocketcolibri.widgetdirectory.WidgetEntry;
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.app.Service;
-import android.content.Intent;
-import android.os.Binder;
-import android.os.IBinder;
-import android.util.Log;
 
 /**
  * @short Service with all components that must be available during the entire App life cycle
@@ -75,6 +76,7 @@ public class RocketColibriService extends Service  {
 		this.tWifi = new WifiConnection();
 		tProtocol = new RCProtocolUdp(getUserName()) ;
 		// list all available Widgets here: 
+		this.tWidgetDirectory.add(new WidgetEntry("Joystick", AnalogStickWidget.class.getName(), AnalogStickWidget.getDefaultViewElementConfig()));
 		this.tWidgetDirectory.add(new WidgetEntry("Cross Control", Circle.class.getName(), Circle.getDefaultViewElementConfig()));
 		this.tWidgetDirectory.add(new WidgetEntry("Connection Status", ConnectionStatusWidget.class.getName(), ConnectionStatusWidget.getDefaultViewElementConfig()));
 		this.tWidgetDirectory.add(new WidgetEntry("User Info", ConnectedUserInfoWidget.class.getName(), ConnectedUserInfoWidget.getDefaultViewElementConfig()));

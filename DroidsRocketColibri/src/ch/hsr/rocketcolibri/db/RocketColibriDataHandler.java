@@ -15,6 +15,7 @@ import java.util.Map;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 import ch.futuretek.json.JsonTransformer;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
@@ -126,12 +127,12 @@ public class RocketColibriDataHandler {
 		model.setName("Test Model");
 		List<RCWidgetConfig> widgetConfigs = new ArrayList<RCWidgetConfig>();
 		Map<String, String> tProtocolMap = new HashMap<String, String>();
-		tProtocolMap.put(RCConstants.CHANNEL_H, "2");
+		tProtocolMap.put(RCConstants.CHANNEL_ASSIGNMENT_H, "2");
 		tProtocolMap.put(RCConstants.INVERTED_H, "1");
 		tProtocolMap.put(RCConstants.MAX_RANGE_H, "");
 		tProtocolMap.put(RCConstants.MIN_RANGE_H, "");
 		tProtocolMap.put(RCConstants.TRIMM_H, "");
-		tProtocolMap.put(RCConstants.CHANNEL_V, "");
+		tProtocolMap.put(RCConstants.CHANNEL_ASSIGNMENT_V, "");
 		tProtocolMap.put(RCConstants.INVERTED_V, "");
 		tProtocolMap.put(RCConstants.MAX_RANGE_V, "2");
 		tProtocolMap.put(RCConstants.MIN_RANGE_V, "1");
@@ -151,7 +152,7 @@ public class RocketColibriDataHandler {
 		model.setName("Test Model 2");
 		widgetConfigs = new ArrayList<RCWidgetConfig>();
 		tProtocolMap = new HashMap<String, String>();
-		tProtocolMap.put(RCConstants.CHANNEL, "2");
+		tProtocolMap.put(RCConstants.CHANNEL_ASSIGNMENT, "2");
 		tProtocolMap.put(RCConstants.INVERTED, "1");
 		tProtocolMap.put(RCConstants.MAX_RANGE, "");
 		tProtocolMap.put(RCConstants.MIN_RANGE, "");

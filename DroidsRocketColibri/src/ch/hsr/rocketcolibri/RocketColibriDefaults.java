@@ -46,4 +46,20 @@ public class RocketColibriDefaults {
 		return (int) (pixel * density + 0.5f);
 	}
 	
+	public static void pixelToDp(float density, ViewElementConfig viewElementConfig) {
+		viewElementConfig.getLayoutParams().height = pixelToDp(density, viewElementConfig.getLayoutParams().height);
+		viewElementConfig.getLayoutParams().width = pixelToDp(density, viewElementConfig.getLayoutParams().width);
+		viewElementConfig.getLayoutParams().x = pixelToDp(density, viewElementConfig.getLayoutParams().x);
+		viewElementConfig.getLayoutParams().y = pixelToDp(density, viewElementConfig.getLayoutParams().y);
+		viewElementConfig.getResizeConfig().maxHeight = pixelToDp(density, viewElementConfig.getResizeConfig().maxHeight);
+		viewElementConfig.getResizeConfig().minHeight = pixelToDp(density, viewElementConfig.getResizeConfig().minHeight);
+		viewElementConfig.getResizeConfig().maxWidth = pixelToDp(density, viewElementConfig.getResizeConfig().maxWidth);
+		viewElementConfig.getResizeConfig().minWidth = pixelToDp(density, viewElementConfig.getResizeConfig().minWidth);
+	}
+
+	
+	public static int pixelToDp(float density, int dp){
+		return (int) (dp / density + 0.5f);
+	}
+	
 }

@@ -20,7 +20,7 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 		IRCWidget {
 
 	protected RCWidgetConfig tWidgetConfig;
-	private Channel tChannelH = new Channel();
+	private Channel tChannel = new Channel();
 
 	private OnChannelChangeListener tControlModusListener;
 	private boolean tCustomizeModusActive = false;
@@ -46,7 +46,7 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 	}
 
 	private boolean isChannelValid() {
-		return tChannelH.getDefaultChannelValue() > -1;
+		return tChannel.getAssignment() > -1;
 	}
 
 	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
@@ -70,15 +70,18 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 		@Override
 		public void onCheckedChanged(CompoundButton buttonView,
 				boolean isChecked) {
-
-			if (isChecked) {
-				tControlModusListener.onChannelChange(
-						tChannelH.getDefaultChannelValue(),
-						tChannelH.getMaxRange());
-			} else {
-				tControlModusListener.onChannelChange(
-						tChannelH.getDefaultChannelValue(),
-						tChannelH.getMinRange());
+			try{
+				if (isChecked) {
+					tControlModusListener.onChannelChange(
+							tChannel.getAssignment(),
+							tChannel.getMaxRange());
+				} else {
+					tControlModusListener.onChannelChange(
+							tChannel.getAssignment(),
+							tChannel.getMinRange());
+				}
+			}catch(Exception e){
+				
 			}
 		}
 	}
@@ -86,11 +89,12 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 	public void initProtocolMapping() {
 		// init protocol mapping
 		tWidgetConfig.protocolMap = new HashMap<String, String>();
-		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_H, "");
-		tWidgetConfig.protocolMap.put(RCConstants.INVERTED_H, "");
-		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE_H, "");
-		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE_H, "");
-		tWidgetConfig.protocolMap.put(RCConstants.TRIMM_H, "");
+		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_ASSIGNMENT, "");
+		tWidgetConfig.protocolMap.put(RCConstants.INVERTED, "");
+		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE, "");
+		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE, "");
+		tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION, "");
+		tWidgetConfig.protocolMap.put(RCConstants.TRIMM, "");
 	}
 
 	private void init() {
@@ -108,13 +112,14 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 	@Override
 	public void updateProtocolMap() {
 		try {
-			tChannelH
-					.setDefaultChannelValue(getProtocolMapInt(RCConstants.CHANNEL_H));
-			tChannelH
-					.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_H));
-			tChannelH.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_H));
-			tChannelH.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_H));
-			tChannelH.setTrimm(getProtocolMapInt(RCConstants.TRIMM_H));
+			tChannel
+					.setAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT));
+			tChannel
+					.setInverted(getProtocolMapBoolean(RCConstants.INVERTED));
+			tChannel.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE));
+			tChannel.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE));
+			tChannel.setTrimm(getProtocolMapInt(RCConstants.TRIMM));
+			tChannel.setDefaultPosition(getProtocolMapInt(RCConstants.TRIMM));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -132,7 +137,7 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 			setOnCheckedChangeListener(tSwitchOnCheckedChangeListener);
 			setClickable(true);
 
-			if (tChannelH.getDefaultChannelValue() > 0) {
+			if (tChannel.getAssignment() > 0) {
 				setChecked(true);
 			} else {
 				setChecked(false);

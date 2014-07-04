@@ -56,6 +56,7 @@ public class RocketColibriDB {
 	}
 	
 	public void delete(Object obj){
+		if(obj==null)return;
 		tOdb.deleteCascade(obj);
 		tOdb.commit();
 	}

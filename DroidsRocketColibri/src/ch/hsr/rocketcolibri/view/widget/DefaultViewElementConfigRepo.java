@@ -35,6 +35,19 @@ public class DefaultViewElementConfigRepo {
 	    repo.put(Circle.class, elementConfig);
 		//<<<<<<<<<<<<<<<<<<<<<<<<<<< Circle <<<<<<<<<<<<<<<<<<<<<<<<<<
 
+		//>>>>>>>>>>>>>>>>>>>>>>>>>>> Analog Stick >>>>>>>>>>>>>>>>>>>>>>>>>>
+		rc = new ResizeConfig();
+	    rc.keepRatio=true;
+	    rc.maxHeight=200;
+	    rc.minHeight=40;
+	    rc.maxWidth=200;
+	    rc.minWidth=40;
+	    lp = new LayoutParams(180, 180 , 100, 300);
+	    elementConfig = new ViewElementConfig(AnalogStickWidget.class.getName(), lp, rc);
+	    dpToPixel(density, elementConfig);
+	    repo.put(AnalogStickWidget.class, elementConfig);
+		//<<<<<<<<<<<<<<<<<<<<<<<<<<< Analog Stick <<<<<<<<<<<<<<<<<<<<<<<<<<
+
 		//>>>>>>>>>>>>>>>>>>>>>>>>>>> ConnectedUserInfoWidget >>>>>>>>>
 		rc = new ResizeConfig();
 	    rc.maxHeight=300;

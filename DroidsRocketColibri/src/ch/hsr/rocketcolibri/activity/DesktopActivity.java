@@ -3,6 +3,9 @@
  */
 package ch.hsr.rocketcolibri.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -14,8 +17,12 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import ch.futuretek.json.JsonTransformer;
+import ch.futuretek.json.exception.TransformException;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
+import ch.hsr.rocketcolibri.RocketColibriDefaults;
+import ch.hsr.rocketcolibri.db.model.JsonRCModel;
 import ch.hsr.rocketcolibri.db.model.RCModel;
 import ch.hsr.rocketcolibri.manager.DesktopViewManager;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
@@ -124,7 +131,6 @@ public class DesktopActivity extends RCActivity{
 		//this line is needed because of the SwipeInMenu,
 		//there is a bug if no color is set on the surface view
 		surface_view.setBackgroundColor(Color.TRANSPARENT);
-
 //		TODO
 //		sh_callback = my_callback();
 //		surface_holder.addCallback(sh_callback);
@@ -159,84 +165,22 @@ public class DesktopActivity extends RCActivity{
 	/**
 	 * Finds all the views we need and configure them to send click events to the activity.
 	 */
-	private void setupViews(){
-		if(setupViewsOnce){
-		tModel = rcService.getRocketColibriDB().fetchRCModelByName("Test Model");
-		if(tModel!=null)
-		for(RCWidgetConfig vec : tModel.getWidgetConfigs()){
-			try {
-				tDesktopViewManager.initCreateAndAddView(vec);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-//		
-//			try{
-//				ResizeConfig rc;
-//				LayoutParams lp;
-//				ViewElementConfig elementConfig;
-//				View view;
-//			    
-//			    rc = new ResizeConfig();
-//			    rc.maxHeight=745;
-//			    rc.minHeight=50;
-//			    rc.maxWidth=400;
-//			    rc.minWidth=30;
-//			    lp = new LayoutParams(100, 100, 50,200);
-//			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
-//			    view = tDesktopViewManager.createAndAddView(elementConfig);
-//			    view.setBackgroundColor(Color.CYAN);
-//			    
-//			    rc = new ResizeConfig();
-//			    rc.keepRatio=false;
-//			    rc.maxHeight=700;
-//			    rc.minHeight=10;
-//			    rc.maxWidth=900;
-//			    rc.minWidth=10;
-//			    lp = new LayoutParams(50, 50, 250, 200);
-//			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
-//			    view = tDesktopViewManager.createAndAddView(elementConfig);
-//			    view.setBackgroundColor(Color.RED);
-//			    
-//			    rc = new ResizeConfig();
-//			    rc.keepRatio=true;
-//			    rc.maxHeight=900;
-//			    rc.minHeight=90;
-//			    rc.maxWidth=500;
-//			    rc.minWidth=50;
-//			    lp = new LayoutParams(70, 70, 400, 200);
-//			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.custimizable.CustomizableView", lp, rc);
-//			    view = tDesktopViewManager.createAndAddView(elementConfig);
-//			    view.setBackgroundColor(Color.LTGRAY);
-//
-//			    rc = new ResizeConfig();
-//			    rc.keepRatio=true;
-//			    rc.maxHeight=500;
-//			    rc.minHeight=50;
-//			    rc.maxWidth=500;
-//			    rc.minWidth=50;
-//			    lp = new LayoutParams(380, 380 , 100, 300);
-//			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
-//	
-//			    Circle circleView = (Circle) tDesktopViewManager.createAndAddView(elementConfig);
-//			    circleView.getProtocolMap().put(RCConstants.CHANNEL_H, "3");
-//			    circleView.getProtocolMap().put(RCConstants.CHANNEL_V, "2");
-//			    circleView.updateProtocolMap();
-//			    
-//			    lp = new LayoutParams(380, 380 , 600, 300);
-//			    elementConfig = new ViewElementConfig("ch.hsr.rocketcolibri.view.widget.Circle", lp, rc);
-//			    circleView = (Circle)tDesktopViewManager.createAndAddView(elementConfig);
-//			    circleView.getProtocolMap().put(RCConstants.CHANNEL_H, "0");
-//			    circleView.getProtocolMap().put(RCConstants.CHANNEL_V, "1");
-//			    circleView.updateProtocolMap();
-//	
-//			}catch(Exception e){
-//				e.printStackTrace();
-//			}
-		    
-		    setupViewsOnce = false;
+	private void setupViews() {
+		if (setupViewsOnce) {
+			tModel = rcService.getRocketColibriDB().fetchRCModelByName(
+					"Test Model");
+			if (tModel != null)
+				for (RCWidgetConfig vec : tModel.getWidgetConfigs()) {
+					try {
+						Log.d(getClassName(), "initCreateAndAddView: "+vec.viewElementConfig.getClassPath());
+						tDesktopViewManager.initCreateAndAddView(vec);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} 
+//			printOutJson();
+			setupViewsOnce = false;
 		}
 	}
 	
@@ -282,28 +226,43 @@ public class DesktopActivity extends RCActivity{
     		try{
     			view = (IRCWidget) tDesktopViewManager.getControlElementParentView().getChildAt(i);
     			rcService.tProtocol.registerUiOutputSinkChangeObserver(view);
-    		} catch (Exception e) {}
+    		} catch (Exception e) {e.printStackTrace();}
     	}
 	}
 
 	@Override
-	protected void onPause()
-	{
+	protected void onPause(){
 		int size = tDesktopViewManager.getControlElementParentView().getChildCount();
     	IRCWidget view = null;
     	for(int i = 0; i < size; ++i){
     		try{
     			view = (IRCWidget) tDesktopViewManager.getControlElementParentView().getChildAt(i);
     			rcService.tProtocol.unregisterUiOutputSinkChangeObserver(view);
-    		} catch (Exception e) {}
+    		} catch (Exception e) {e.printStackTrace();}
     	}
     	
 	  super.onPause();
 	}
+	
+	private void printOutJson(){
+		List<JsonRCModel> jsons = new ArrayList<JsonRCModel>();
+		JsonRCModel j = new JsonRCModel();
+		j.model = tModel;
+		for(RCWidgetConfig w : tModel.getWidgetConfigs()){
+			RocketColibriDefaults.pixelToDp(this.getResources().getDisplayMetrics().density, w.viewElementConfig);
+		}
+		j.process = "insert";
+		j.timestamp = "04.07.2014 21:16:00";
+		jsons.add(j);
+		try {
+			Log.d("", new JsonTransformer().transform(jsons));
+		} catch (TransformException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Override
-	protected String getClassName() 
-	{
-		return TAG;
+	protected String getClassName() {
+		return DesktopActivity.class.getSimpleName();
 	}
 }

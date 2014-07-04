@@ -98,7 +98,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 			} else {setVisibilityOfEditChannelBtn(View.GONE);}
 		} catch (Exception e) {setVisibilityOfEditChannelBtn(View.GONE);}
 		alphaChangeSlider.setProgress((int)(tTargetView.getAlpha()*100f));
-		showAtBestPosition((View) cView);
+		showAtBestPosition(cView);
 	}
 	
 	private void setVisibilityOfEditChannelBtn(int visibility){

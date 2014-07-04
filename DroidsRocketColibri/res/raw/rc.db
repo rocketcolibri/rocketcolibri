@@ -1,8 +1,76 @@
 [{
     "model": {
         "name": "Test Model",
-        "widgetConfigs": []
+        "widgetConfigs": [{
+            "protocolMap": {
+                "rc_debug": "true",
+                "rc_max_range_h": "1000",
+                "rc_inverted_v": "false",
+                "rc_inverted_h": "false",
+                "rc_max_range_v": "1000",
+                "rc_sticky": "false",
+                "rc_min_range_h": "-1000",
+                "rc_channel_assignment_h": "0",
+                "rc_trimm_h": "",
+                "rc_trimm_v": "",
+                "rc_min_range_v": "-1000",
+                "rc_channel_assignment_v": "1"
+            },
+            "viewElementConfig": {
+                "resizeConfig": {
+                    "keepRatio": true,
+                    "maxHeight": 200,
+                    "maxWidth": 200,
+                    "minHeight": 40,
+                    "minWidth": 40
+                },
+                "classPath": "ch.hsr.rocketcolibri.view.widget.AnalogStickWidget",
+                "layoutParams": {
+                    "layoutAnimationParameters": null,
+                    "height": 198,
+                    "width": 198,
+                    "x": 405,
+                    "y": 143
+                },
+                "id": 0,
+                "alpha": 1.0
+            }
+        }, {
+            "protocolMap": {
+                "rc_trimm_v": "",
+                "rc_debug": "false",
+                "rc_channel_assignment_h": "0",
+                "rc_min_range_h": "",
+                "rc_inverted_h": "false",
+                "rc_max_range_h": "",
+                "rc_sticky": "false",
+                "rc_channel_assignment_v": "1",
+                "rc_inverted_v": "false",
+                "rc_trimm_h": "",
+                "rc_min_range_v": "",
+                "rc_max_range_v": ""
+            },
+            "viewElementConfig": {
+                "resizeConfig": {
+                    "keepRatio": true,
+                    "maxHeight": 200,
+                    "maxWidth": 200,
+                    "minHeight": 40,
+                    "minWidth": 40
+                },
+                "classPath": "ch.hsr.rocketcolibri.view.widget.AnalogStickWidget",
+                "layoutParams": {
+                    "layoutAnimationParameters": null,
+                    "height": 180,
+                    "width": 180,
+                    "x": 33,
+                    "y": 162
+                },
+                "id": 0,
+                "alpha": 1.0
+            }
+        }]
     },
     "process": "insert",
-    "timestamp": "11.11.2000 11:11:11"
+    "timestamp": "05.07.2014 00:16:00"
 }]

@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,7 +55,6 @@ public class DesktopViewManager implements IDesktopViewManager{
 	private CustomizeModusPopupMenu tCustomizeModusPopupMenu;
 	private DesktopMenu tDesktopMenu;
 	private OnChannelChangeListener tControlModusListener;
-	private Service tService;
 	
 	public DesktopViewManager(Activity context, AbsoluteLayout rootView, AbsoluteLayout controlElementParentView, OnChannelChangeListener controlModusListener, ViewChangedListener vcListener){
 		tContext = context;
@@ -124,7 +124,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	
 	private void processRCWidget(IRCWidget widget){
 		widget.setCustomizeModusListener(tCustomizeModusListener);
-	    try{widget.setControlModusListener(tControlModusListener);}catch(ClassCastException e){}
+	    widget.setControlModusListener(tControlModusListener);
 	    widget.setCustomizeModus(tCustomizeModus);
 	    tControlElementParentView.addView((View)widget);
 	}
@@ -140,8 +140,6 @@ public class DesktopViewManager implements IDesktopViewManager{
 	public IRCWidget createView(RCWidgetConfig vElementConfig) throws Exception{
 	    Class<?> c = Class.forName(vElementConfig.viewElementConfig.getClassPath());
 	    Constructor<?> cons = c.getConstructor(Context.class, RCWidgetConfig.class);
-	    Log.d("createView", ""+vElementConfig);
-	    Log.d("createView map", ""+vElementConfig.protocolMap);
 	    return (IRCWidget)cons.newInstance(tContext, vElementConfig);
 	}
 	
