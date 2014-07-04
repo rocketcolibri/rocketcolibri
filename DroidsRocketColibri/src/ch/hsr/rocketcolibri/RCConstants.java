@@ -15,7 +15,7 @@ public class RCConstants {
 	public static final String INVERTED_H = PREFIX+_INVERTED+"_h";
 	public static final String MIN_RANGE_H = PREFIX+_MIN_RANGE+"_h";
 	public static final String MAX_RANGE_H = PREFIX+_MAX_RANGE+"_h";
-	public static final String DEFAULT_POSITION_H = _DEFAULT_POSITION+"_h";
+	public static final String DEFAULT_POSITION_H = PREFIX+_DEFAULT_POSITION+"_h";
 	public static final String TRIMM_H = PREFIX+_TRIMM+"_h";
 	public static final String STICKY_H = PREFIX+_STICKY+"_h";
 	
@@ -23,7 +23,7 @@ public class RCConstants {
 	public static final String INVERTED_V = PREFIX+_INVERTED+"_v";
 	public static final String MIN_RANGE_V = PREFIX+_MIN_RANGE+"_v";
 	public static final String MAX_RANGE_V = PREFIX+_MAX_RANGE+"_v";
-	public static final String DEFAULT_POSITION_V = _DEFAULT_POSITION+"_v";
+	public static final String DEFAULT_POSITION_V = PREFIX+_DEFAULT_POSITION+"_v";
 	public static final String TRIMM_V = PREFIX+_TRIMM+"_v";
 	public static final String STICKY_V = PREFIX+_STICKY+"_v";
 	
@@ -31,7 +31,7 @@ public class RCConstants {
 	public static final String INVERTED = PREFIX+_INVERTED;
 	public static final String MIN_RANGE = PREFIX+_MIN_RANGE;
 	public static final String MAX_RANGE = PREFIX+_MAX_RANGE;
-	public static final String DEFAULT_POSITION = _DEFAULT_POSITION;
+	public static final String DEFAULT_POSITION = PREFIX+_DEFAULT_POSITION;
 	public static final String TRIMM = PREFIX+_TRIMM;
 	public static final String STICKY = PREFIX+_STICKY;
 	

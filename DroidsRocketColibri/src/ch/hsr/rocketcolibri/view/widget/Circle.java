@@ -177,7 +177,7 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		tInnerCircleDimension.radius = tRadius = tWidgetConfig.viewElementConfig.getLayoutParams().width/6;
-		updateInnerCirclePosition(getLayoutParams().width/2, getLayoutParams().height/2);
+		updateWithDefaultPosition();
 	}
 	
 	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
@@ -210,10 +210,22 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 
 	/**
 	 * converts the position read from the event to the channel position
+	 * @param channel Position
+	 * @return whdget position
+	 */
+	public int channelValueToWidgetPosition(int channelWidgetPos) {
+		int channelPos = diameterInDP * channelWidgetPos / RCProtocolUdp.MAX_CHANNEL_VALUE;
+		if (channelPos > RCProtocolUdp.MAX_CHANNEL_VALUE) return RCProtocolUdp.MAX_CHANNEL_VALUE;
+		else if (channelPos < RCProtocolUdp.MIN_CHANNEL_VALUE) return RCProtocolUdp.MIN_CHANNEL_VALUE;
+		else return channelPos;
+	}
+	
+	/**
+	 * converts the position read from the event to the channel position
 	 * @param eventPos (event position)
 	 * @return channel position
 	 */
-	public int eventPoistionToChannelValue(float eventPos) {
+	public int widgetPoistionToChannelValue(float eventPos) {
 		int channelPos = (int)(eventPos * RCProtocolUdp.MAX_CHANNEL_VALUE / diameterInDP);
 		if (channelPos > RCProtocolUdp.MAX_CHANNEL_VALUE) return RCProtocolUdp.MAX_CHANNEL_VALUE;
 		else if (channelPos < RCProtocolUdp.MIN_CHANNEL_VALUE) return RCProtocolUdp.MIN_CHANNEL_VALUE;
@@ -426,17 +438,20 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	@Override
 	public void updateProtocolMap() {
 		try{
-			tChannelH.setDefaultPosition(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_H));
+			tChannelH.setAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_H));
 			tChannelH.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_H));
 			tChannelH.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_H));
 			tChannelH.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_H));
+			tChannelH.setDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION_H));
 			tChannelH.setTrimm(getProtocolMapInt(RCConstants.TRIMM_H));
 			tChannelH.setSticky(getProtocolMapBoolean(RCConstants.STICKY_H));
 			
-			tChannelV.setDefaultPosition(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_V));
+			
+			tChannelV.setAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_V));
 			tChannelV.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_V));
 			tChannelV.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_V));
 			tChannelV.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_V));
+			tChannelV.setDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION_V));
 			tChannelV.setTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
 			tChannelV.setSticky(getProtocolMapBoolean(RCConstants.STICKY_V));
 			
@@ -447,25 +462,47 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	}
 	
 	private void updateInnerCircleAndCheckSticky(int x, int y){
-  	  	updateInnerCirclePosition(tChannelH.getSticky()?x:getLayoutParams().width/2, tChannelV.getSticky()?y:getLayoutParams().height/2);
+		if(tChannelH.getSticky())
+  	  		updateInnerCirclePosition(x, y);
+		else
+			updateWithDefaultPosition();
 	}
 	
 	private void updateInnerCirclePosition(int x, int y){
-		if(x + tRadius<=this.getWidth()&&x - tRadius>=0)
-			 tInnerCircleDimension.centerX = x;
-		if(y + tRadius<=this.getHeight()&&y - tRadius>=0)
+		if(x < tRadius)
+			tInnerCircleDimension.centerX = tRadius;
+		else if (x > this.getWidth() - tRadius)
+			tInnerCircleDimension.centerX = this.getWidth() - tRadius;
+		else
+			tInnerCircleDimension.centerX = x;
+		
+		if(y < tRadius)
+			tInnerCircleDimension.centerY = tRadius;
+		else if (y > this.getWidth() - tRadius)
+			tInnerCircleDimension.centerY = this.getHeight() - tRadius;
+		else
 			tInnerCircleDimension.centerY = y;
 
-		// update channel
-  		try{
-			tControlModusListener.onChannelChange(tChannelH.getAssignment(), tChannelH.calculateChannelValue(eventPoistionToChannelValue(x)));
-			tControlModusListener.onChannelChange(tChannelV.getAssignment(), tChannelV.calculateChannelValue(eventPoistionToChannelValue(y)));
-		}catch(Exception e){
-			tChannelError = true;
-		}
+		updateChannel(x, y);
 		invalidate();
 	}
 
+	private void updateChannel(int x, int y) {
+		// update channel
+  		try{
+			tControlModusListener.onChannelChange(tChannelH.getAssignment(), tChannelH.calculateChannelValue(widgetPoistionToChannelValue(x)));
+			tControlModusListener.onChannelChange(tChannelV.getAssignment(), tChannelV.calculateChannelValue(widgetPoistionToChannelValue(y)));
+		}catch(Exception e){
+			tChannelError = true;
+		}
+	}
+
+	private void updateWithDefaultPosition() {
+		int x = channelValueToWidgetPosition(tChannelH.calculateWidgetDefaultPosition()); 
+		int y = channelValueToWidgetPosition(tChannelV.calculateWidgetDefaultPosition());
+		updateInnerCirclePosition(x,y);
+	}
+	
 	public int getNumberOfChannelListener() {
 		return 2; 
 	}

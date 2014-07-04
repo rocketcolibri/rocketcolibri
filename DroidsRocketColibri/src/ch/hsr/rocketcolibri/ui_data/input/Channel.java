@@ -74,6 +74,26 @@ public class Channel
 	}
 	
 	/**
+	 * set the value from the control widget
+	 */
+	public int calculateWidgetDefaultPosition() {
+		int val = defaultPosition;
+		if(inverted)
+			val = MAX_VALUE - val;
+		
+		val += trimm;
+		
+		if(val <  MIN_VALUE)
+			val = MIN_VALUE;
+		
+		if(val >  MAX_VALUE)
+			val = MAX_VALUE;
+		
+		return val;
+	}
+	
+	
+	/**
 	 * set the value to the default
 	 */
 	public int setToDefaultPosition() {

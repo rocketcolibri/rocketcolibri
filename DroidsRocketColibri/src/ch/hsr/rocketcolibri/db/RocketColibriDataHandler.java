@@ -157,6 +157,7 @@ public class RocketColibriDataHandler {
 		tProtocolMap.put(RCConstants.INVERTED, "1");
 		tProtocolMap.put(RCConstants.MAX_RANGE, "");
 		tProtocolMap.put(RCConstants.MIN_RANGE, "");
+		tProtocolMap.put(RCConstants.DEFAULT_POSITION, "");
 		tProtocolMap.put(RCConstants.TRIMM, "");
 		widgetConfigs.add(new RCWidgetConfig(tProtocolMap, Circle.getDefaultViewElementConfig()));
 		widgetConfigs.add(new RCWidgetConfig(ConnectionStatusWidget.getDefaultViewElementConfig()));

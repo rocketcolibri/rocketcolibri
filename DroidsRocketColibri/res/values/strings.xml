@@ -16,22 +16,25 @@
     <string name="popup_menu_delete_element_btn">Delete Element</string>
     
     <!-- Edit Channel -->
-    <string name="rc_channel_h">Channel H</string>
+    <string name="rc_channel_assignment_h">Assign Channel H</string>
     <string name="rc_inverted_h">Inverted H</string>
     <string name="rc_min_range_h">Min Range H</string>
     <string name="rc_max_range_h">Max Range H</string>
+    <string name="rc_default_position_v">Default Position V</string>
     <string name="rc_trimm_h">Trimm H</string>
     <string name="rc_sticky_h">Sticky H</string>
-    <string name="rc_channel_v">Channel V</string>
+    <string name="rc_channel_assignment_v">Assign Channel V</string>
     <string name="rc_inverted_v">Inverted V</string>
     <string name="rc_min_range_v">Min Range V</string>
+    <string name="rc_default_position_h">Default Position H</string>
     <string name="rc_max_range_v">Max Range V</string>
     <string name="rc_trimm_v">Trimm V</string>
     <string name="rc_sticky_v">Sticky V</string>
-    <string name="rc_channel">Channel</string>
+    <string name="rc_channel_assignment">Assign Channel</string>
     <string name="rc_inverted">Inverted</string>
     <string name="rc_min_range">Min Range</string>
     <string name="rc_max_range">Max Range</string>
+    <string name="rc_default_position">Default Position</string>
     <string name="rc_trimm">Trimm</string>
     <string name="rc_sticky">Sticky</string>
 </resources>
