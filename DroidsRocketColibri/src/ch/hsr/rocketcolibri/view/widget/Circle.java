@@ -153,13 +153,6 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	              return true;
 	          case MotionEvent.ACTION_MOVE:
 	        	  updateInnerCirclePosition((int) event.getX(0), (int) event.getY(0));
-	      		try{
-//	    			Log.d("onTouchListener", String.valueOf(event.getAxisValue(MotionEvent.AXIS_Y)) + "," + String.valueOf(event.getAxisValue(MotionEvent.AXIS_X)));
-	    			tControlModusListener.onChannelChange(tChannelH.getDefaultChannelValue(), tChannelH.calculateChannelValue(eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_X))));
-	    			tControlModusListener.onChannelChange(tChannelV.getDefaultChannelValue(), tChannelV.calculateChannelValue(eventPoistionToChannelValue(event.getAxisValue(MotionEvent.AXIS_Y))));
-	    		}catch(Exception e){
-	    			tChannelError = true;
-	    		}
 	              return true;
 	          case MotionEvent.ACTION_UP:
 	        	  updateInnerCircleAndCheckSticky((int) event.getX(0), (int) event.getY(0));
@@ -460,6 +453,14 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 			 tInnerCircleDimension.centerX = x;
 		if(y + tRadius<=this.getHeight()&&y - tRadius>=0)
 			tInnerCircleDimension.centerY = y;
+
+		// update channel
+  		try{
+			tControlModusListener.onChannelChange(tChannelH.getDefaultChannelValue(), tChannelH.calculateChannelValue(eventPoistionToChannelValue(x)));
+			tControlModusListener.onChannelChange(tChannelV.getDefaultChannelValue(), tChannelV.calculateChannelValue(eventPoistionToChannelValue(y)));
+		}catch(Exception e){
+			tChannelError = true;
+		}
 		invalidate();
 	}
 
