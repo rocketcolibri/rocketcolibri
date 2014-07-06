@@ -23,7 +23,7 @@ import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 public class RCProtocol implements IUiOutputSinkChangeObservable{
 	static final int MAX_CHANNEL = 8;
 
-	private List<UiInputSourceChannel> tChannelList = new ArrayList<UiInputSourceChannel>();
+	protected List<UiInputSourceChannel> tChannelList = new ArrayList<UiInputSourceChannel>();
 	
 	protected Lock tUiOutputSinkChangeObserverMutex;
 	private HashMap<UiOutputDataType, List<IRCWidget>> tUiOutputSinkChangeObserver;

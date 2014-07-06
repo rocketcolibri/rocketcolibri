@@ -117,11 +117,7 @@ public class RocketColibriService extends Service  {
     	return tRocketColibriDB;
     }
     
-    public void updateControl(int channel, int position){
-    	// TODO
-    	// the channel Objects should be registered to the protocol
-    	((RCProtocolUdp)tProtocol).updateControl(channel, position);
-    }
+
 
 	/**
      * Class used for the client Binder.  Because we know this service always

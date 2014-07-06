@@ -183,9 +183,6 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 	}
 
 	@Override
-	public void setControlModusListener(OnChannelChangeListener channelListener) {}
-
-	@Override
 	public RCWidgetConfig getWidgetConfig() {
 		tWidgetConfig.viewElementConfig = this.getViewElementConfig();
 		return tWidgetConfig;

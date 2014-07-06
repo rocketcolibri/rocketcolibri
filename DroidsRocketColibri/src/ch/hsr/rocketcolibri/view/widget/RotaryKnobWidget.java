@@ -44,7 +44,6 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	private int tKnobIncDecValue = 2;
 
 	protected OnTouchListener tCustomizeModusListener;
-	private OnChannelChangeListener tControlModusListener;
 	private MyOnTouchListener tInternalControlListener = new MyOnTouchListener();
 
 	private UiInputSourceChannel tChannel = new UiInputSourceChannel();
@@ -114,7 +113,6 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 						tAngle = tAngleMin;
 					} else {
 						tKnobValue += tKnobRangeIncDecValue * direction;
-						tControlModusListener.onChannelChange(tChannel.getAssignment(), (int) tKnobValue);
 						Log.d("Testing", "tKnobValue is set: " + (int) tKnobValue);
 					}
 				} else {
@@ -122,7 +120,6 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 						tAngle = tAngleMax;
 					} else {
 						tKnobValue += tKnobRangeIncDecValue * direction;
-						tControlModusListener.onChannelChange(tChannel.getAssignment(), (int) tKnobValue);
 						Log.d("Testing", "tKnobValue is set: " + (int) tKnobValue);
 					}
 				}
@@ -264,14 +261,6 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	public void setCustomizeModusListener(OnTouchListener customizeModusListener) {
 		tCustomizeModusListener = customizeModusListener;
 		setOnTouchListener(tCustomizeModusListener);
-	}
-
-	@Override
-	public void setControlModusListener(OnChannelChangeListener channelListener) {
-		tControlModusListener = channelListener;
-		if (isChannelValid()) {
-			setOnTouchListener(tInternalControlListener);
-		}
 	}
 
 	@Override

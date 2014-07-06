@@ -103,7 +103,6 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 	
 	private UiInputSourceChannel tChannelV = new UiInputSourceChannel();
 	private UiInputSourceChannel tChannelH = new UiInputSourceChannel();
-	private OnChannelChangeListener tControlModusListener;
 	private boolean tCustomizeModusActive = false;
 	protected RCWidgetConfig tWidgetConfig;
 	protected OnTouchListener tCustomizeModusListener;
@@ -488,10 +487,6 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 			if (userY > tChannelV.getMaxRange())
 				userY = tChannelV.getMaxRange();
 		}
-		if(tControlModusListener!=null){
-			tControlModusListener.onChannelChange(tChannelH.getAssignment(), (int) userX);
-			tControlModusListener.onChannelChange(tChannelV.getAssignment(), (int) userY);
-		}
 
 	}
 
@@ -679,13 +674,6 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 		return tWidgetConfig.viewElementConfig;
 	}
 
-	@Override
-	public void setControlModusListener(OnChannelChangeListener channelListener) {
-		tControlModusListener = channelListener;
-		if(areChannelsValid())
-			setOnTouchListener(tInternalControlListener); 
-	}
-	
 	@Override
 	public void setCustomizeModusListener(OnTouchListener customizeModusListener){
 		tCustomizeModusListener = customizeModusListener;

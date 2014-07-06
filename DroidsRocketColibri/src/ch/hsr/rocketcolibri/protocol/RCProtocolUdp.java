@@ -31,6 +31,7 @@ import android.util.Log;
 public class RCProtocolUdp extends RCProtocol{
 	public static final int MAX_CHANNEL_VALUE = 1000;
 	public static final int MIN_CHANNEL_VALUE = 0;
+	public static final int NOF_CHANNELS = 8;
 	public static final String ActionStateUpdate = "protocol.updatestate";
 	public static final String ActionTelemetryUpdate = "protocol.updatetelemetry";
 
@@ -45,7 +46,7 @@ public class RCProtocolUdp extends RCProtocol{
 	
 	DatagramSocket channelDataSocket;
 	private int sequenceNumber;
-	private int[] allChannels = new int[8];
+	private int[] allChannels = new int[NOF_CHANNELS];
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	private Future<?> executorFuture=null;
 	
@@ -113,14 +114,6 @@ public class RCProtocolUdp extends RCProtocol{
 		} 
 	}
 
-	public void updateControl(int channel, int position)
-	{
-		if((channel < 8) && (position >= UiInputSourceChannel.MIN_VALUE) && (position <= UiInputSourceChannel.MAX_VALUE))
-			this.allChannels[channel]=position;
-		else
-			Log.d( TAG, "invalid channel number:" + channel + " or position:" + position );
-	}
-	
 	private void sendJsonMsgString(String msg)
 	{
 		try {
@@ -149,6 +142,17 @@ public class RCProtocolUdp extends RCProtocol{
 					cdcMsg.put("cmd", "cdc");
 					cdcMsg.put("sequence", sequenceNumber++);
 					cdcMsg.put("user", tUsername);
+					
+					
+					for(int i=0; i < NOF_CHANNELS; i++)
+						allChannels[i] = 0;
+					
+					for(UiInputSourceChannel c :tChannelList) {
+						if(c.getAssignment() < NOF_CHANNELS)
+							allChannels[c.getAssignment()] = c.getChannelValue();
+					}
+					
+					
 					JSONArray channels = new JSONArray();
 					for (int channel : allChannels)
 						channels.put(channel);			

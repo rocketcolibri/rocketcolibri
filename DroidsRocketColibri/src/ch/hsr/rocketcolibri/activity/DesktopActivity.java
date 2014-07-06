@@ -36,7 +36,6 @@ import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.widget.Circle;
 import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
 import ch.hsr.rocketcolibri.view.widget.IRCWidget;
-import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
 import ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 import ch.hsr.rocketcolibri.view.widget.VideoStreamWidget;
@@ -56,11 +55,6 @@ public class DesktopActivity extends RCActivity{
 	
 	public static final boolean Debugging = false;
 	private DesktopMenu tDesktopMenu;
-	private OnChannelChangeListener tControlModusListener = new OnChannelChangeListener() {
-		public void onChannelChange(int channel, int position) {
-			rcService.updateControl(channel, position);;
-		}
-	};
 
 
 //  TODO add video stream display here
@@ -102,7 +96,7 @@ public class DesktopActivity extends RCActivity{
 		
 		AbsoluteLayout rootLayer = (AbsoluteLayout) findViewById(R.id.root_layer);
 		AbsoluteLayout absolutLayout = (AbsoluteLayout) findViewById(R.id.drag_layer);
-		tDesktopViewManager = new DesktopViewManager(this, rootLayer, absolutLayout, tControlModusListener, new ViewChangedListener() {
+		tDesktopViewManager = new DesktopViewManager(this, rootLayer, absolutLayout, new ViewChangedListener() {
 			@Override
 			public void onViewChange(RCWidgetConfig widgetConfig) {
 				rcService.getRocketColibriDB().store(widgetConfig);

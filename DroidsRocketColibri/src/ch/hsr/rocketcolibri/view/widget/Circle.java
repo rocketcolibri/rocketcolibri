@@ -10,8 +10,6 @@ import java.util.Map;
 
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
-import ch.hsr.rocketcolibri.RocketColibriDefaults;
-import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.protocol.RCProtocolUdp;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
@@ -22,8 +20,6 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
-import android.app.Service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -67,9 +63,8 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	private static final float rimSize = 0.02f;
 	private UiInputSourceChannel tChannelV = new UiInputSourceChannel();
 	private UiInputSourceChannel tChannelH = new UiInputSourceChannel();
-	private OnChannelChangeListener tControlModusListener;
 	private MyOnTouchListener tInternalControlListener = new MyOnTouchListener();
-	private boolean tCustomizeModusActive = false;
+	private boolean tCustomizeModusActive = true;
 	private boolean tIsControlling = false;
 	//inner circle stuff
     private int tRadius = 100;
@@ -193,23 +188,11 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	};
 
 	@Override
-	public void setControlModusListener(OnChannelChangeListener channelListener) {
-		tControlModusListener = channelListener;
-		if(areChannelsValid())
-			setOnTouchListener(tInternalControlListener); 
-	}
-	
-	@Override
 	public void setCustomizeModusListener(OnTouchListener customizeModusListener){
 		tCustomizeModusListener = customizeModusListener;
 		setOnTouchListener(tCustomizeModusListener);
 	}
 	
-	
-	private boolean areChannelsValid(){
-		return tChannelH.getAssignment()>-1 || tChannelV.getAssignment()>-1;
-	}
-
 	/**
 	 * converts the position read from the event to the channel position
 	 * @param channel Position
@@ -288,8 +271,7 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	private void initListener(){
 		setModusChangeListener(new ModusChangeListener() {
 			public void customizeModeDeactivated() {
-				if(areChannelsValid())
-					setOnTouchListener(tInternalControlListener); 
+				setOnTouchListener(tInternalControlListener); 
 			}
 			public void customizeModeActivated() {
 				setOnTouchListener(tCustomizeModusListener);
@@ -492,18 +474,15 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 			tInnerCircleDimension.centerY = this.getHeight() - tRadius;
 		else
 			tInnerCircleDimension.centerY = y;
-
-		updateChannel(x, y);
+		updateChannel( x, y);
 		invalidate();
 	}
 
 	private void updateChannel(int x, int y) {
 		// update channel
   		try{
-			tControlModusListener.onChannelChange(tChannelH.getAssignment(), tChannelH.calculateChannelValue(widgetPoistionToChannelValue(x)));
-			Log.d("Circle", "updateChannelH " + tChannelH.getAssignment() + "=" + tChannelH.calculateChannelValue(widgetPoistionToChannelValue(x)));
-			tControlModusListener.onChannelChange(tChannelV.getAssignment(), tChannelV.calculateChannelValue(widgetPoistionToChannelValue(y)));
-			Log.d("Circle", "updateChannelV " + tChannelV.getAssignment() + "=" + tChannelV.calculateChannelValue(widgetPoistionToChannelValue(y)));
+			tChannelH.calculateChannelValue(widgetPoistionToChannelValue(x));
+			tChannelV.calculateChannelValue(widgetPoistionToChannelValue(y));
 		}catch(Exception e){
 			tChannelError = true;
 		}

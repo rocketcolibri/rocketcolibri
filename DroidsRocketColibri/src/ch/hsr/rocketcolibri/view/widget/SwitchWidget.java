@@ -24,7 +24,6 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 	protected RCWidgetConfig tWidgetConfig;
 	private UiInputSourceChannel tChannel = new UiInputSourceChannel();
 
-	private OnChannelChangeListener tControlModusListener;
 	private boolean tCustomizeModusActive = false;
 	protected OnTouchListener tCustomizeModusListener;
 	private SwitchOnCheckedChangeListener tSwitchOnCheckedChangeListener = new SwitchOnCheckedChangeListener();
@@ -74,13 +73,9 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 				boolean isChecked) {
 			try{
 				if (isChecked) {
-					tControlModusListener.onChannelChange(
-							tChannel.getAssignment(),
-							tChannel.getMaxRange());
-				} else {
-					tControlModusListener.onChannelChange(
-							tChannel.getAssignment(),
-							tChannel.getMinRange());
+						tChannel.calculateChannelValue(tChannel.getMaxRange());
+					} else {
+						tChannel.calculateChannelValue(tChannel.getMinRange());
 				}
 			}catch(Exception e){}
 		}
@@ -150,11 +145,6 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 
 	public static ViewElementConfig getDefaultViewElementConfig() {
 		return DefaultViewElementConfigRepo.getDefaultConfig(SwitchWidget.class);
-	}
-
-	@Override
-	public void setControlModusListener(OnChannelChangeListener channelListener) {
-		tControlModusListener = channelListener;
 	}
 
 	@Override

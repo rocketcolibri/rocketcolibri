@@ -17,20 +17,13 @@ public interface IRCWidget {
     void create(ViewElementConfig vElementConfig);
     
     /**
-     * This Method sets the listener for the Control-Modus, this listener is not active
-     * in the Customize-Modus, the reference of it should be kept in the Class that implements
-     * this interface.
-     * */
-	void setControlModusListener(OnChannelChangeListener channelListener);
-	
-    /**
      * This Method sets the listener for the Customize-Modus, this listener is not active
      * in the Control-Modus, the reference of it should be kept in the Class that implements
      * this interface.
      * */
 	void setCustomizeModusListener(OnTouchListener customizeModusListener);
 	
-	/**
+   	/**
 	 * This Method is called from the DesktopViewManager on any change of the WidgetConfig
 	 * to keep the config synchronized with the Database.
 	 * @return

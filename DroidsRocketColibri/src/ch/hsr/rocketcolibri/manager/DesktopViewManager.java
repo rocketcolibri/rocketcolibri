@@ -33,7 +33,6 @@ import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeController;
 import ch.hsr.rocketcolibri.view.widget.IRCWidget;
-import ch.hsr.rocketcolibri.view.widget.OnChannelChangeListener;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 
 
@@ -54,9 +53,8 @@ public class DesktopViewManager implements IDesktopViewManager{
 	private IDragListener dragListener;
 	private CustomizeModusPopupMenu tCustomizeModusPopupMenu;
 	private DesktopMenu tDesktopMenu;
-	private OnChannelChangeListener tControlModusListener;
 	
-	public DesktopViewManager(Activity context, AbsoluteLayout rootView, AbsoluteLayout controlElementParentView, OnChannelChangeListener controlModusListener, ViewChangedListener vcListener){
+	public DesktopViewManager(Activity context, AbsoluteLayout rootView, AbsoluteLayout controlElementParentView,  ViewChangedListener vcListener){
 		tContext = context;
 		tRootView = rootView;
 		tControlElementParentView = controlElementParentView;
@@ -73,7 +71,6 @@ public class DesktopViewManager implements IDesktopViewManager{
 		tCustomizeModusPopupMenu = new CustomizeModusPopupMenu(this, ll);
 	    tCustomizeModusListener = new CustomizeModusListener(this);
 	    tDesktopMenu = new DesktopMenu(tContext, this);
-	    tControlModusListener = controlModusListener;
 	}
 
 	@Override
@@ -124,7 +121,6 @@ public class DesktopViewManager implements IDesktopViewManager{
 	
 	private void processRCWidget(IRCWidget widget){
 		widget.setCustomizeModusListener(tCustomizeModusListener);
-	    widget.setControlModusListener(tControlModusListener);
 	    widget.setCustomizeModus(tCustomizeModus);
 	    tControlElementParentView.addView((View)widget);
 	}

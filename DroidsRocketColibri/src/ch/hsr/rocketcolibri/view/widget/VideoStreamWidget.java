@@ -71,8 +71,6 @@ public class VideoStreamWidget extends SurfaceView implements
 
 	protected RCWidgetConfig tWidgetConfig;
 	protected OnTouchListener tCustomizeModusListener;
-	protected OnChannelChangeListener tControlModusListener;
-	
 	
 	private String tVideoUrl = new String("");
 	private MediaPlayer tMediaPlayer;
@@ -318,11 +316,6 @@ public class VideoStreamWidget extends SurfaceView implements
 	public void create(ViewElementConfig vElementConfig) {
 		tWidgetConfig = new RCWidgetConfig(vElementConfig);
 		init(getContext(), null);
-	}
-
-	@Override
-	public void setControlModusListener(OnChannelChangeListener channelListener) {
-		tControlModusListener = channelListener;
 	}
 
 	@Override
