@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
@@ -27,13 +28,19 @@ public class WifiConnection
 {
 	final static String TAG = "WifiConnection";
 	public final static String networkSSID = "\"RocketColibri\"";
-
+	private String oldSSID;
+	
 	/**
 	 * Try to establish a connection to the RocketColibri network
 	 */
 	public void connectRocketColibriSSID(Context context)
 	{
 		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+		
+		// get the currently connected Wifi 
+		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+		oldSSID = wifiInfo.getSSID();
+		
 	    wifiManager.disconnect(); 
 	    // create the network configuration for the RocketColibri network
 		WifiConfiguration conf = new WifiConfiguration();
@@ -70,10 +77,22 @@ public class WifiConnection
 		         wifiManager.disconnect();
 		         wifiManager.disableNetwork(i.networkId);
 		         wifiManager.removeNetwork(i.networkId);
-		         wifiManager.setWifiEnabled(true);
 		         Log.d(TAG, "RocketColibri network disconnected an removed");
 		         break;
 		    }           
 		}
+		
+		// reconnect to the old SSID
+		for( WifiConfiguration i : list ) 
+		{
+		    if(i.SSID != null && i.SSID.equals( oldSSID )) 
+		    {
+		         wifiManager.setWifiEnabled(true);
+			     wifiManager.enableNetwork(i.networkId, true);
+			     wifiManager.reconnect(); 
+		         break;
+		    }           
+		}
+
 	}
 }

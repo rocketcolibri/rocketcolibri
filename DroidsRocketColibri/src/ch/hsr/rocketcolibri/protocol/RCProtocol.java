@@ -9,7 +9,6 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import android.net.wifi.p2p.WifiP2pManager.Channel;
-import android.view.View;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObservable;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputData;
