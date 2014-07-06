@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.content.Context;
+import android.util.DisplayMetrics;
 import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
@@ -21,7 +22,7 @@ public class DefaultViewElementConfigRepo {
 	}
 		
 	private DefaultViewElementConfigRepo(Context context){
-		float density = context.getResources().getDisplayMetrics().density;
+		DisplayMetrics density = context.getResources().getDisplayMetrics();
 		//>>>>>>>>>>>>>>>>>>>>>>>>>>> Circle >>>>>>>>>>>>>>>>>>>>>>>>>>
 		ResizeConfig rc = new ResizeConfig();
 	    rc.keepRatio=true;
@@ -127,7 +128,7 @@ public class DefaultViewElementConfigRepo {
 		}
 	}
 	
-	private void dpToPixel(float density, ViewElementConfig vec){
+	private void dpToPixel(DisplayMetrics density, ViewElementConfig vec){
 		RocketColibriDefaults.dpToPixel(density, vec);
 	}
 

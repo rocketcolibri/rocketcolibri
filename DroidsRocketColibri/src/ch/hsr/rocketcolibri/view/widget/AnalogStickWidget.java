@@ -12,11 +12,14 @@ import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
@@ -141,7 +144,7 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 		dbgLine.setColor(Color.GREEN);
 		dbgLine.setStrokeWidth(1);
 		dbgLine.setStyle(Paint.Style.FILL_AND_STROKE);
-		dbgLine.setTextSize(40);
+		dbgLine.setTextSize(getPixels(15));
 
 		bgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		bgPaint.setColor(Color.GRAY);
@@ -166,6 +169,11 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 		setMovementConstraint(CONSTRAIN_CIRCLE);
 		initDefaultProtocolConfig();
 		initListener();
+	}
+	
+	int getPixels(float size) {
+	    DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+	    return (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size, metrics);
 	}
 
 	public void setUserCoordinateSystem(int userCoordinateSystem) {
@@ -299,10 +307,10 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 			canvas.drawLine(cX, cY, handleX, handleY, dbgLine);
 
 			canvas.drawText(String.format("%.3f, %.3f", userX, userY),
-					0, 40, dbgLine);
+					0, dbgLine.getTextSize(), dbgLine);
 			canvas.drawText(String.format("%.0f, %.1f", radial,
 									angle * 57.2957795) + (char) 0x00B0,
-					0, getHeight()-15, dbgLine);
+					0, getHeight()-dbgLine.getTextSize(), dbgLine);
 		}
 
 		// Log.d(TAG, String.format("touch(%f,%f)", touchX, touchY));

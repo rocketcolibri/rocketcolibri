@@ -97,7 +97,8 @@ public class DragView extends View
         tRegistrationY = registrationY + (DRAG_SCALE / 2);
         
         tLayoutParams = new LayoutParams(width, height, tRegistrationX, tRegistrationY);
-        tHelplineDrawer = new HelplineDrawer(context, parent, tParentLP, tLayoutParams, 50, 1, 18, Color.CYAN, Color.YELLOW);
+        setLayoutParams(tLayoutParams);
+        tHelplineDrawer = new HelplineDrawer(context, parent, this, 50, 1, 18, Color.CYAN, Color.YELLOW);
     }
 
     @Override

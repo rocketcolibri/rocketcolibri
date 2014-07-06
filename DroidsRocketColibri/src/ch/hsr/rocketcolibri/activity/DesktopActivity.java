@@ -152,8 +152,10 @@ public class DesktopActivity extends RCActivity{
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		rcService.tWifi.disconnectRocketColibriSSID(rcService);
-		rcService.tProtocol.cancelOldCommandJob();
+		if(rcService!=null){
+			rcService.tWifi.disconnectRocketColibriSSID(rcService);
+			rcService.tProtocol.cancelOldCommandJob();
+		}
 		tDesktopViewManager.release();
 		tDesktopViewManager = null;
 		unbindDrawables(findViewById(R.id.root_layer));
@@ -249,7 +251,7 @@ public class DesktopActivity extends RCActivity{
 		JsonRCModel j = new JsonRCModel();
 		j.model = tModel;
 		for(RCWidgetConfig w : tModel.getWidgetConfigs()){
-			RocketColibriDefaults.pixelToDp(this.getResources().getDisplayMetrics().density, w.viewElementConfig);
+			RocketColibriDefaults.pixelToDp(this.getResources().getDisplayMetrics(), w.viewElementConfig);
 		}
 		j.process = "insert";
 		j.timestamp = "04.07.2014 21:16:00";

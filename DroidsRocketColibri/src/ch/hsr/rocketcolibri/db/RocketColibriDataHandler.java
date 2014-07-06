@@ -15,6 +15,7 @@ import java.util.Map;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import ch.futuretek.json.JsonTransformer;
 import ch.hsr.rocketcolibri.R;
@@ -75,7 +76,7 @@ public class RocketColibriDataHandler {
 	}
 	
 	private void dpToPixel(List<RCWidgetConfig> wcs){
-		float density = tContext.getResources().getDisplayMetrics().density;
+		DisplayMetrics density = tContext.getResources().getDisplayMetrics();
 		for(RCWidgetConfig wc : wcs){
 			RocketColibriDefaults.dpToPixel(density, wc.viewElementConfig);
 		}
