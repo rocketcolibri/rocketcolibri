@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.e;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
+import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.fsm.Action;
 import android.util.Log;
 
@@ -114,7 +115,10 @@ public class RCProtocolUdp extends RCProtocol{
 
 	public void updateControl(int channel, int position)
 	{
-		this.allChannels[channel]=position;
+		if((channel < 8) && (position >= UiInputSourceChannel.MIN_VALUE) && (position <= UiInputSourceChannel.MAX_VALUE))
+			this.allChannels[channel]=position;
+		else
+			Log.d( TAG, "invalid channel number:" + channel + " or position:" + position );
 	}
 	
 	private void sendJsonMsgString(String msg)

@@ -9,7 +9,7 @@ package ch.hsr.rocketcolibri.ui_data.input;
  * Responsibilities
  * Calculates the channel value from the input value of widget control.
  */
-public class Channel
+public class UiInputSourceChannel
 {
 	public static final int MIN_VALUE = 0;
 	public static final int MAX_VALUE = 1000;
@@ -26,7 +26,7 @@ public class Channel
 	/* current value transmitted for this channel */
 	int currentChannelValue;
 	
-	public Channel()
+	public UiInputSourceChannel()
 	{
 		assignment = -1; // unassigned
 		minRange = MIN_VALUE;

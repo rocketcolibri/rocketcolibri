@@ -3,10 +3,10 @@
  */
 package ch.hsr.rocketcolibri.view.widget;
 
+import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
-import android.app.Service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,8 +25,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import ch.hsr.rocketcolibri.R;
-import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
+import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.util.DrawingTools;
@@ -231,5 +231,10 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 				return null;
 			}
 		};
+	}
+
+	@Override
+	public List<UiInputSourceChannel> getUiInputSourceList() {
+		return null;
 	}	
 }

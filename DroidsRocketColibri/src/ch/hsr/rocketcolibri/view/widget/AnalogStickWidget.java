@@ -1,10 +1,12 @@
 package ch.hsr.rocketcolibri.view.widget;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.hsr.rocketcolibri.RCConstants;
-import ch.hsr.rocketcolibri.ui_data.input.Channel;
+import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.util.DrawingTools;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
@@ -20,7 +22,7 @@ import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
+
 
 public class AnalogStickWidget extends View implements ICustomizableView, IRCWidget {
 	public static final int INVALID_POINTER_ID = -1;
@@ -96,8 +98,8 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 	private int offsetX;
 	private int offsetY;
 	
-	private Channel tChannelV = new Channel();
-	private Channel tChannelH = new Channel();
+	private UiInputSourceChannel tChannelV = new UiInputSourceChannel();
+	private UiInputSourceChannel tChannelH = new UiInputSourceChannel();
 	private OnChannelChangeListener tControlModusListener;
 	private boolean tCustomizeModusActive = false;
 	protected RCWidgetConfig tWidgetConfig;
@@ -696,6 +698,14 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 	@Override
 	public UiOutputDataType getType(){
 		return UiOutputDataType.ConnectionState;
+	}
+	
+	@Override
+	public List<UiInputSourceChannel> getUiInputSourceList() {
+		List<UiInputSourceChannel> list = new ArrayList<UiInputSourceChannel>();
+		list.add(tChannelH);
+		list.add(tChannelV);
+	    return list;
 	}
 	
 	public static ViewElementConfig getDefaultViewElementConfig() {

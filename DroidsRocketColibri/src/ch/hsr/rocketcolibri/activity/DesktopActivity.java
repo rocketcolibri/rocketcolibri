@@ -226,6 +226,7 @@ public class DesktopActivity extends RCActivity{
     		try{
     			view = (IRCWidget) tDesktopViewManager.getControlElementParentView().getChildAt(i);
     			rcService.tProtocol.registerUiOutputSinkChangeObserver(view);
+    			rcService.tProtocol.registerUiInputSource(view);
     		} catch (Exception e) {e.printStackTrace();}
     	}
 	}
@@ -238,6 +239,7 @@ public class DesktopActivity extends RCActivity{
     		try{
     			view = (IRCWidget) tDesktopViewManager.getControlElementParentView().getChildAt(i);
     			rcService.tProtocol.unregisterUiOutputSinkChangeObserver(view);
+    			rcService.tProtocol.unregisterUiInputSource(view);
     		} catch (Exception e) {e.printStackTrace();}
     	}
     	

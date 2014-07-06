@@ -9,10 +9,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
-import org.neodatis.tool.mutex.Mutex;
-
-import android.net.wifi.p2p.WifiP2pManager.Channel;
+import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObservable;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputData;
@@ -25,7 +22,8 @@ import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 
 public class RCProtocol implements IUiOutputSinkChangeObservable{
 	static final int MAX_CHANNEL = 8;
-	Channel[] tChannelArray = new Channel[MAX_CHANNEL];
+
+	private List<UiInputSourceChannel> tChannelList = new ArrayList<UiInputSourceChannel>();
 	
 	protected Lock tUiOutputSinkChangeObserverMutex;
 	private HashMap<UiOutputDataType, List<IRCWidget>> tUiOutputSinkChangeObserver;
@@ -61,14 +59,14 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 	public void startNotifiyUiOutputData() {
 		tNotificationSchedulerFuture = tNotificationScheduler.scheduleAtFixedRate(new Runnable() {
 			private void sendToAll(UiOutputData data)	{
+				tUiOutputSinkChangeObserverMutex.lock();
 				if(data.getAndResetNotifyFlag()) {
-					tUiOutputSinkChangeObserverMutex.lock();
 	            	for(IRCWidget observer : tUiOutputSinkChangeObserver.get(data.getType())) {
 	        			// select the right list and object depending on the type
 	        			observer.onNotifyUiOutputSink(data);
 	        		}
-	            	tUiOutputSinkChangeObserverMutex.unlock();
 	        	}
+            	tUiOutputSinkChangeObserverMutex.unlock();
 			}
 		
 		    @Override
@@ -80,7 +78,7 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 	        	}
 		    }
 		
-		}, 1000, 300, TimeUnit.MILLISECONDS);
+		}, 1, 1, TimeUnit.SECONDS);
 	}
 	
 	public void stopNotifiyUiOutputData() {
@@ -154,13 +152,13 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 	 * @param channelnumber
 	 * @return true if channel has been registered successfully
 	 */
-	public boolean registerUiInputSource(Channel channel , int channelNumber){
-		if(null == tChannelArray[channelNumber] || channel == tChannelArray[channelNumber]) {
-			tChannelArray[channelNumber] = channel;
-			return true;
-		} else {
-			return false;
+	public boolean registerUiInputSource(IRCWidget uiInputSource) {
+		List<UiInputSourceChannel> list = uiInputSource.getUiInputSourceList();
+		if(null != list) {
+			for(UiInputSourceChannel c : list)
+				tChannelList.add(c);
 		}
+		return true;
 	}
 
 	/**
@@ -168,8 +166,12 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 	 * @param channelnumber
 	 * @return true if channel has been unregistered successfully
 	 */
-	public boolean unregisterUiInputSource(int channelNumber){
-		tChannelArray[channelNumber] = null;
+	public boolean unregisterUiInputSource(IRCWidget uiInputSource){
+		List<UiInputSourceChannel> list = uiInputSource.getUiInputSourceList();
+		if(null != list) {
+			for(UiInputSourceChannel c : list)
+				tChannelList.remove(c);
+		}
 		return true;
 	}
 

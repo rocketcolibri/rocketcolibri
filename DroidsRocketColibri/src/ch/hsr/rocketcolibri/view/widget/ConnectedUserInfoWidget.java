@@ -6,7 +6,6 @@ package ch.hsr.rocketcolibri.view.widget;
 import java.util.List;
 import java.util.Map;
 
-import android.app.Service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,13 +14,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import ch.hsr.rocketcolibri.R;
-import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.protocol.RcOperator;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.ui_data.output.UserData;
@@ -30,7 +26,6 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 
 /**
  * @short widget to display the user data received from the ServoController 
@@ -221,6 +216,7 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 		return UiOutputDataType.ConnectedUsers;
 	}
 
+
 	@Override
 	public void setCustomizeModusListener(OnTouchListener customizeModusListener) {
 		setOnTouchListener(customizeModusListener);
@@ -250,4 +246,10 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 		tWidgetConfig.viewElementConfig.setAlpha(getAlpha());
 		return tWidgetConfig.viewElementConfig;
 	}
+
+	@Override
+	public List<ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel> getUiInputSourceList() {
+		return null;
+	}
+
 }
