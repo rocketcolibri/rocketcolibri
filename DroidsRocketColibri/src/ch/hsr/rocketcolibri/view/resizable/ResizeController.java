@@ -42,7 +42,7 @@ public class ResizeController {
 		LayoutParams parentLayoutParams = new AbsoluteLayout.LayoutParams(tTargetParent.getLayoutParams().width, tTargetParent.getLayoutParams().height, 0, 0);
 		indexOfResizeTargetOnParent = parent.indexOfChild(resizeTarget);
 		tTargetParent.removeViewAt(indexOfResizeTargetOnParent);
-		tViewResizer = new ResizableMainLayer(tContext, resizeTarget, tInternalResizeDoneListener, parentLayoutParams, rConfg);
+		tViewResizer = new ResizableMainLayer(tContext, tTargetParent, resizeTarget, tInternalResizeDoneListener, parentLayoutParams, rConfg);
 	    tTargetParent.addView(tViewResizer);//add resize view to the targets parent to make the resizer visible
 	    tIsResizing = true;
 	}

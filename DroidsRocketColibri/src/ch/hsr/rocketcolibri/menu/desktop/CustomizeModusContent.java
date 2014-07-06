@@ -32,8 +32,8 @@ public class CustomizeModusContent extends ModusContent{
 	protected void onCreate(List<WidgetEntry> widgetEntries) {
 		GridLayout gLayout = (GridLayout) findViewById(R.id.widgetEntryContent);
 		CacheUtil cacheUtil = new CacheUtil(tContext);
-		int width = RocketColibriDefaults.dpToPixel(tContext.getResources().getDisplayMetrics().density, 80);
-		int height = RocketColibriDefaults.dpToPixel(tContext.getResources().getDisplayMetrics().density, 80);
+		int width = RocketColibriDefaults.dpToPixel(tContext.getResources().getDisplayMetrics(), 80);
+		int height = RocketColibriDefaults.dpToPixel(tContext.getResources().getDisplayMetrics(), 80);
 		for(WidgetEntry wEntry : widgetEntries){
 			try {
 				ImageView iView = new ImageView(tContext);

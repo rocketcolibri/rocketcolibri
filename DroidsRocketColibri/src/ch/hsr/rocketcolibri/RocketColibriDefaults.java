@@ -6,6 +6,7 @@ package ch.hsr.rocketcolibri;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import android.annotation.TargetApi;
 import android.os.Build;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 /**
@@ -31,7 +32,7 @@ public class RocketColibriDefaults {
 //      | View.SYSTEM_UI_FLAG_IMMERSIVE);
 	}
 
-	public static void dpToPixel(float density, ViewElementConfig viewElementConfig) {
+	public static void dpToPixel(DisplayMetrics density, ViewElementConfig viewElementConfig) {
 		viewElementConfig.getLayoutParams().height = dpToPixel(density, viewElementConfig.getLayoutParams().height);
 		viewElementConfig.getLayoutParams().width = dpToPixel(density, viewElementConfig.getLayoutParams().width);
 		viewElementConfig.getLayoutParams().x = dpToPixel(density, viewElementConfig.getLayoutParams().x);
@@ -42,11 +43,7 @@ public class RocketColibriDefaults {
 		viewElementConfig.getResizeConfig().minWidth = dpToPixel(density, viewElementConfig.getResizeConfig().minWidth);
 	}
 	
-	public static int dpToPixel(float density, int pixel){
-		return (int) (pixel * density + 0.5f);
-	}
-	
-	public static void pixelToDp(float density, ViewElementConfig viewElementConfig) {
+	public static void pixelToDp(DisplayMetrics density, ViewElementConfig viewElementConfig) {
 		viewElementConfig.getLayoutParams().height = pixelToDp(density, viewElementConfig.getLayoutParams().height);
 		viewElementConfig.getLayoutParams().width = pixelToDp(density, viewElementConfig.getLayoutParams().width);
 		viewElementConfig.getLayoutParams().x = pixelToDp(density, viewElementConfig.getLayoutParams().x);
@@ -58,8 +55,14 @@ public class RocketColibriDefaults {
 	}
 
 	
-	public static int pixelToDp(float density, int dp){
-		return (int) (dp / density + 0.5f);
+	public static int pixelToDp(DisplayMetrics dMetrics, int px) {
+	    int dp = Math.round(px / (dMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+	    return dp;
+	}
+	
+	public static int dpToPixel(DisplayMetrics dMetrics, int dp) {
+	    int px = Math.round(dp * (dMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));       
+	    return px;
 	}
 	
 }

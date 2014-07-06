@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
+import ch.hsr.rocketcolibri.view.draggable.HelplineDrawer;
 import ch.hsr.rocketcolibri.view.resizable.CornerBall;
 import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
@@ -62,18 +63,21 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
     private int tCurrentX;
     private int tCurrentY;
     private double tRatio;
+//    private HelplineDrawer tHelplineDrawer;
+    private AbsoluteLayout tParent;
 
     /**
 	 * Class name for logging 
 	 */
 	final String TAG = this.getClass().getName();
 
-    public ResizeableTargetLayer(final Context context, View resizeTarget, LayoutParams layoutParams, final IResizeDoneListener listener) {
-    	this(context, resizeTarget, layoutParams, listener, new ResizeConfig());
+    public ResizeableTargetLayer(final Context context, AbsoluteLayout parent, View resizeTarget, LayoutParams layoutParams, final IResizeDoneListener listener) {
+    	this(context, parent, resizeTarget, layoutParams, listener, new ResizeConfig());
     }
     
-    public ResizeableTargetLayer(final Context context, View resizeTarget, LayoutParams layoutParams, final IResizeDoneListener listener, ResizeConfig config) {
+    public ResizeableTargetLayer(final Context context, AbsoluteLayout parent, View resizeTarget, LayoutParams layoutParams, final IResizeDoneListener listener, ResizeConfig config) {
         super(context);
+        tParent = parent;
         this.tResizeTarget = resizeTarget;
         tResizeTargetLP = (LayoutParams) resizeTarget.getLayoutParams();
         setLayoutParams(layoutParams);
@@ -87,6 +91,8 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
         if(tConfig.keepRatio){
         	tRatio = tResizeTargetLP.width / (double)tResizeTargetLP.height;
         }
+//        tHelplineDrawer = new HelplineDrawer(context, parent, resizeTarget, 50, 1, 18, Color.CYAN, Color.YELLOW);
+//        tHelplineDrawer.addLinesTo(parent);
     }
     
     private void createBalls(Context context){
@@ -97,25 +103,42 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
         tPoint0 = new Point(); //top left
         CornerBall cBall = new CornerBall(context, cornerItemResource, tPoint0, (short)0);// predefine to get the dimension of the corner item
         
-        tPoint0.x = tResizeTargetLP.x-cBall.getWidthOfBall();
-        tPoint0.y = tResizeTargetLP.y-cBall.getHeightOfBall();
+//        tPoint0.x = tResizeTargetLP.x-cBall.getWidthOfBall();
+//        tPoint0.y = tResizeTargetLP.y-cBall.getHeightOfBall();
 
         tPoint1 = new Point(); 
-        tPoint1.x = (int)tResizeTargetLP.x-cBall.getWidthOfBall(); // bottom left
-        tPoint1.y = (int)tResizeTargetLP.y+tResizeTargetLP.height;
+//        tPoint1.x = (int)tResizeTargetLP.x-cBall.getWidthOfBall(); // bottom left
+//        tPoint1.y = (int)tResizeTargetLP.y+tResizeTargetLP.height;
 
         tPoint2 = new Point();// bottom right
-        tPoint2.x = (int)tResizeTargetLP.x+tResizeTargetLP.width;
-        tPoint2.y = (int)tResizeTargetLP.y+tResizeTargetLP.height;
+//        tPoint2.x = (int)tResizeTargetLP.x+tResizeTargetLP.width;
+//        tPoint2.y = (int)tResizeTargetLP.y+tResizeTargetLP.height;
 
         tPoint3 = new Point();/// top right
-        tPoint3.x = (int) (tResizeTargetLP.x+tResizeTargetLP.width);
-        tPoint3.y = (int)tResizeTargetLP.y-cBall.getHeightOfBall();
+//        tPoint3.x = (int) (tResizeTargetLP.x+tResizeTargetLP.width);
+//        tPoint3.y = (int)tResizeTargetLP.y-cBall.getHeightOfBall();
 
         tColorballs.add(cBall);
         tColorballs.add(new CornerBall(context, cornerItemResource, tPoint1, (short)1));
         tColorballs.add(new CornerBall(context, cornerItemResource, tPoint2, (short)2));
         tColorballs.add(new CornerBall(context, cornerItemResource, tPoint3, (short)3));
+        updateBallsToTargetView(false);
+    }
+    
+    private void updateBallsToTargetView(boolean invalidate){
+    	tColorballs.get(0).setX(tResizeTargetLP.x-tColorballs.get(0).getWidthOfBall());
+    	tColorballs.get(0).setY(tResizeTargetLP.y-tColorballs.get(0).getHeightOfBall());
+    	
+    	tColorballs.get(1).setX(tResizeTargetLP.x-tColorballs.get(1).getWidthOfBall());
+    	tColorballs.get(1).setY(tResizeTargetLP.y+tResizeTargetLP.height);
+    	
+    	tColorballs.get(2).setX(tResizeTargetLP.x+tResizeTargetLP.width);
+    	tColorballs.get(2).setY(tResizeTargetLP.y+tResizeTargetLP.height);
+    	
+    	tColorballs.get(3).setX(tResizeTargetLP.x+tResizeTargetLP.width);
+    	tColorballs.get(3).setY(tResizeTargetLP.y-tColorballs.get(3).getHeightOfBall());
+    	if(invalidate)
+    		invalidate();
     }
     
     private void setBorderPaintSettings(){
@@ -188,11 +211,16 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
         case MotionEvent.ACTION_MOVE:
             // move the balls the same as the finger
             if (tBallID > -1 && tBallID<4) {
+//            	int[] xy = new int[2];
+//                xy[0] = tCurrentX; xy[1] = tCurrentY;
+//                tHelplineDrawer.drawAndFillStickyPosition(xy);
+//                tCurrentX = xy[0]; tCurrentY = xy[1];
                 if (tConfig.keepRatio) {
                 	calculationWithRatio();
                 }else{
                 	calculationWithoutRatio();
                 }
+                
                 invalidate();
             }
             break;
@@ -203,12 +231,12 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
           return true;
         }
         invalidate();
-        tResizeTarget.setLayoutParams(tResizeTargetLP);
-        this.updateViewLayout(tResizeTarget, tResizeTargetLP);
+        updateViewLayout(tResizeTarget, tResizeTargetLP);
         return true;
     }
     
 	public void stop() {
+//		tHelplineDrawer.removeFrom(tParent);
 		finish();
 		tListener.done(tResizeTarget);
 	}
@@ -414,4 +442,25 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
     public void shade_region_between_points() {
         tCanvas.drawRect(tPoint0.x, tPoint2.y, tPoint2.x, tPoint0.y, tOuterBorderPaint);
     }
+
+	public MenuListener getMenuListener() {
+		return new MenuListener() {
+			public void minimize() {
+				tResizeTargetLP.height = tConfig.minHeight;
+				tResizeTargetLP.width = tConfig.minWidth;
+				updateViewLayout(tResizeTarget, tResizeTargetLP);
+				updateBallsToTargetView(true);
+			}
+			public void maximize() {
+				tResizeTargetLP.height = tConfig.maxHeight;
+				tResizeTargetLP.width = tConfig.maxWidth;
+				if(tResizeTargetLP.height+tResizeTargetLP.y>tParent.getHeight())
+					tResizeTargetLP.y=tParent.getHeight()-tResizeTargetLP.height;
+				if(tResizeTargetLP.width+tResizeTargetLP.x>tParent.getWidth())
+					tResizeTargetLP.x=tParent.getWidth()-tResizeTargetLP.width;
+				updateViewLayout(tResizeTarget, tResizeTargetLP);
+				updateBallsToTargetView(true);
+			}
+		};
+	}
 }
