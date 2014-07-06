@@ -1,12 +1,14 @@
 package ch.hsr.rocketcolibri.view.widget;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.RocketColibriService;
-import ch.hsr.rocketcolibri.ui_data.input.Channel;
+import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.util.DrawingTools;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
@@ -45,7 +47,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	private OnChannelChangeListener tControlModusListener;
 	private MyOnTouchListener tInternalControlListener = new MyOnTouchListener();
 
-	private Channel tChannel = new Channel();
+	private UiInputSourceChannel tChannel = new UiInputSourceChannel();
 	private boolean tCustomizeModusActive = false;
 
 	private RotaryKnobListener tListener;
@@ -338,5 +340,12 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 				.setLayoutParams((LayoutParams) getLayoutParams());
 		tWidgetConfig.viewElementConfig.setAlpha(getAlpha());
 		return tWidgetConfig.viewElementConfig;
+	}
+
+	@Override
+	public List<UiInputSourceChannel> getUiInputSourceList() {
+		List<UiInputSourceChannel> list = new ArrayList<UiInputSourceChannel>();
+		list.add(tChannel);
+	    return list;
 	}
 }

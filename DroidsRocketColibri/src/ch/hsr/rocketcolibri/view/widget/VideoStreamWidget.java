@@ -1,10 +1,12 @@
 package ch.hsr.rocketcolibri.view.widget;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
+import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.ui_data.output.VideoUrl;
 import ch.hsr.rocketcolibri.util.DrawingTools;
@@ -470,5 +472,10 @@ public class VideoStreamWidget extends SurfaceView implements
 	@Override
 	public void onBufferingUpdate(MediaPlayer mp, int percent) {
 		Log.d(TAG, "onBufferingUpdate:" + percent + "%");
+	}
+
+	@Override
+	public List<UiInputSourceChannel> getUiInputSourceList() {
+		return null;
 	}
 }

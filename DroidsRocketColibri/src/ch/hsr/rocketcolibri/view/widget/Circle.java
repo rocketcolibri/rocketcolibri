@@ -3,7 +3,9 @@
  */
 package ch.hsr.rocketcolibri.view.widget;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ch.hsr.rocketcolibri.R;
@@ -12,7 +14,7 @@ import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.protocol.RCProtocolUdp;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
-import ch.hsr.rocketcolibri.ui_data.input.Channel;
+import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.util.DrawingTools;
@@ -63,8 +65,8 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	public int diameterInDP;
 	public static final int maxChannel = 1000;
 	private static final float rimSize = 0.02f;
-	private Channel tChannelV = new Channel();
-	private Channel tChannelH = new Channel();
+	private UiInputSourceChannel tChannelV = new UiInputSourceChannel();
+	private UiInputSourceChannel tChannelH = new UiInputSourceChannel();
 	private OnChannelChangeListener tControlModusListener;
 	private MyOnTouchListener tInternalControlListener = new MyOnTouchListener();
 	private boolean tCustomizeModusActive = false;
@@ -436,6 +438,14 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	}
 	
 	@Override
+	public List<UiInputSourceChannel> getUiInputSourceList() {
+		List<UiInputSourceChannel> list = new ArrayList<UiInputSourceChannel>();
+		list.add(tChannelH);
+		list.add(tChannelV);
+	    return list;
+	}
+	
+	@Override
 	public void updateProtocolMap() {
 		try{
 			tChannelH.setAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_H));
@@ -491,15 +501,19 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 		// update channel
   		try{
 			tControlModusListener.onChannelChange(tChannelH.getAssignment(), tChannelH.calculateChannelValue(widgetPoistionToChannelValue(x)));
+			Log.d("Circle", "updateChannelH " + tChannelH.getAssignment() + "=" + tChannelH.calculateChannelValue(widgetPoistionToChannelValue(x)));
 			tControlModusListener.onChannelChange(tChannelV.getAssignment(), tChannelV.calculateChannelValue(widgetPoistionToChannelValue(y)));
+			Log.d("Circle", "updateChannelV " + tChannelV.getAssignment() + "=" + tChannelV.calculateChannelValue(widgetPoistionToChannelValue(y)));
 		}catch(Exception e){
 			tChannelError = true;
 		}
 	}
 
 	private void updateWithDefaultPosition() {
-		int x = channelValueToWidgetPosition(tChannelH.calculateWidgetDefaultPosition()); 
-		int y = channelValueToWidgetPosition(tChannelV.calculateWidgetDefaultPosition());
+		
+		int x = channelValueToWidgetPosition(tChannelH.getDefaultPosition()); 
+		int y = channelValueToWidgetPosition(tChannelV.getDefaultPosition());
+		Log.d("Circle", "updateWithDefaultPosition " + x + "/" +y);
 		updateInnerCirclePosition(x,y);
 	}
 	

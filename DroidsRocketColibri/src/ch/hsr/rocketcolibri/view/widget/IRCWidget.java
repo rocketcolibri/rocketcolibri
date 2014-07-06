@@ -1,9 +1,11 @@
 package ch.hsr.rocketcolibri.view.widget;
 
+import java.util.List;
 import java.util.Map;
 
 import android.app.Service;
 import android.view.View.OnTouchListener;
+import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 
@@ -64,6 +66,12 @@ public interface IRCWidget {
 	 */
 	UiOutputDataType getType();
 
+	/**
+	 * Override this function and return all Channel objects that are assigned to this Widget
+	 * @return List<Channels>
+	 */
+	public List<UiInputSourceChannel> getUiInputSourceList();
+	
 	void setCustomizeModus(boolean tCustomizeModus);
 
 }

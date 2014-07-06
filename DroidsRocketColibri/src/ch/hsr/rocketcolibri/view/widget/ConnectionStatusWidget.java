@@ -3,10 +3,10 @@
  */
 package ch.hsr.rocketcolibri.view.widget;
 
+import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
-import android.app.Service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,8 +25,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import ch.hsr.rocketcolibri.R;
-import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
+import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.util.DrawingTools;
@@ -67,6 +67,17 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 		init(context, null);
 	}
 	
+	@Override protected void finalize() throws Throwable
+	{
+	  try {
+		  connectionIconBitmap.recycle();
+		  connectionIconBitmap = null;
+	  }
+	  finally {
+	    super.finalize();
+	  }
+	}
+	
 	private void init(Context context, AttributeSet attrs) {
 		connectionIconRect = new RectF(0.0f, 0.0f, 1.0f, 1.0f);
 		connectionIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_disconneted);
@@ -78,17 +89,6 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 		connectionIconPaint.setFilterBitmap(false);
 		connectionIconPaint.setStyle(Paint.Style.FILL);
 		connectionIconPaint.setShader(paperShader);
-	}
-	
-	@Override protected void finalize() throws Throwable
-	{
-	  try {
-		  connectionIconBitmap.recycle();
-		  connectionIconBitmap = null;
-	  }
-	  finally {
-	    super.finalize();
-	  }
 	}
 	
 	@Override
@@ -231,5 +231,10 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 				return null;
 			}
 		};
+	}
+
+	@Override
+	public List<UiInputSourceChannel> getUiInputSourceList() {
+		return null;
 	}	
 }
