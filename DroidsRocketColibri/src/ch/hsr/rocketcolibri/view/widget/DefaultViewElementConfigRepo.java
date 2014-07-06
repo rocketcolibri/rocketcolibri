@@ -78,10 +78,10 @@ public class DefaultViewElementConfigRepo {
 		//>>>>>>>>>>>>>>>>>>>>>>>>>>> RotaryKnobWidget >>>>>>>>>>>>>>>>
 		rc = new ResizeConfig();
 		rc.keepRatio = true;
-		rc.maxHeight = 300;
-		rc.minHeight = 34;
-		rc.maxWidth = 800;
-		rc.minWidth = 137;
+		rc.maxHeight = 400;
+		rc.minHeight = 60;
+		rc.maxWidth = 400;
+		rc.minWidth = 60;
 		lp = new LayoutParams(250, 250, 0, 0);
 		elementConfig = new ViewElementConfig(RotaryKnobWidget.class.getName(), lp, rc);
 		elementConfig.setAlpha(1);

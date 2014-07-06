@@ -221,7 +221,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	@Override
 	public void updateProtocolMap() {
 		try {
-			tChannel.setDefaultPosition(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT));
+			tChannel.setAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT));
 			tChannel.setInverted(getProtocolMapBoolean(RCConstants.INVERTED));
 			tChannel.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE));
 			tChannel.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE));
