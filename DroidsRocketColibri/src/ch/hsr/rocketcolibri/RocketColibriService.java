@@ -97,9 +97,14 @@ public class RocketColibriService extends Service  {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        
         // The activity is about to be destroyed.       
         tRocketColibriDB.close();
         tRocketColibriDB = null;
+        
+        tProtocol.stopNotifiyUiOutputData();
+        tProtocol.cancelOldCommandJob();
+        
         tRunning = false;
     }
 

@@ -3,6 +3,10 @@ package ch.hsr.rocketcolibri.protocol;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.view.View;
@@ -29,6 +33,9 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 	//  .. URL containing the video stream
 	public VideoUrl tVdeoUrl;
 
+	private final ScheduledExecutorService tNotificationScheduler = Executors.newScheduledThreadPool(1);
+	ScheduledFuture<?> tNotificationSchedulerFuture;
+	
 	public RCProtocol() {
 		
 		// UI sink data
@@ -40,9 +47,13 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 		tUiOutputSinkChangeObserver = new HashMap<UiOutputDataType, List<IRCWidget>>();
 		for (UiOutputDataType type : UiOutputDataType.values()) 
 			tUiOutputSinkChangeObserver.put(type, new ArrayList<IRCWidget>());
-		
-		// UiSink data notification thread
-		new Thread(new Runnable() {
+
+		startNotifiyUiOutputData();
+	
+	}
+	
+	public void startNotifiyUiOutputData() {
+		tNotificationSchedulerFuture = tNotificationScheduler.scheduleAtFixedRate(new Runnable() {
 			private void sendToAll(UiOutputData data)	{
 				if(data.getAndResetNotifyFlag()) {
 	            	for(IRCWidget observer : tUiOutputSinkChangeObserver.get(data.getType())) {
@@ -55,22 +66,21 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 		    @Override
 		    public void run() {
 	        	while(true) {
-	        		try {
-	        			sendToAll(tUsers);
-	        			Thread.sleep(100, 0);
-	        		
-	        			sendToAll(tConnState);
-	        			Thread.sleep(100, 0);
-	        		
-	        			sendToAll(tVdeoUrl);
-	        			Thread.sleep(100, 0);
-					} 
-	        		catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+	        		sendToAll(tUsers);
+					sendToAll(tConnState);
+					sendToAll(tVdeoUrl);
 	        	}
 		    }
-		}).start();
+		
+		}, 1000, 300, TimeUnit.MILLISECONDS);
+	}
+	
+	public void stopNotifiyUiOutputData() {
+		try {
+			tNotificationSchedulerFuture.cancel(true);	
+		} catch (NullPointerException e) {
+		    // do something other
+		}
 	}
 	
 	/**
