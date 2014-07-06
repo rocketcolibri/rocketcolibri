@@ -9,15 +9,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
-import ch.hsr.rocketcolibri.view.HoldButton;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
-import ch.hsr.rocketcolibri.view.HoldButton.OnHoldListener;
-import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
+import ch.hsr.rocketcolibri.view.HoldImageView.OnHoldListener;
+import ch.hsr.rocketcolibri.view.HoldImageView;
 import ch.hsr.rocketcolibri.view.popup.PopupWindow;
 import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 
@@ -29,7 +29,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 	private View tTargetView;
 	private SeekBar alphaChangeSlider;
 	private IDesktopViewManager tDesktopViewManager;
-	private Button tEditChannelBtn;
+	private ImageView tEditChannelBtn;
 	
 	public CustomizeModusPopupMenu(IDesktopViewManager desktopViewManager, View contentView){
 		super((AbsoluteLayout) desktopViewManager.getRootView(), contentView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
@@ -43,7 +43,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 	}
 	
 	private void onCreate(){
-		tEditChannelBtn = (Button) findViewById(R.id.editChannel);
+		tEditChannelBtn = (ImageView) findViewById(R.id.editChannel);
 		tEditChannelBtn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				tDesktopViewManager.startEditActivity((View) tTargetView);
@@ -51,7 +51,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		});
 		;
 
-		Button b = (Button) findViewById(R.id.resizeElementBtn);
+		ImageView b = (ImageView) findViewById(R.id.resizeElementBtn);
 		b.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				dismiss();
@@ -59,7 +59,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 			}
 		});
 
-		HoldButton holdButton = (HoldButton) findViewById(R.id.deleteElementBtn);
+		HoldImageView holdButton = (HoldImageView) findViewById(R.id.deleteElementBtn);
 		holdButton.setOnHoldListener(new OnHoldListener() {
 			AlphaAnimation deleteAnimation = new AlphaAnimation(0.75f, 0.009f);
 			public void onHoldStart(View v, int overallDuration) {
