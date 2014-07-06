@@ -3,6 +3,7 @@
  */
 package ch.hsr.rocketcolibri.protocol;
 
+import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import android.content.Context;
@@ -70,29 +71,31 @@ public class WifiConnection
 		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();
 		if(list==null)return;
-		for( WifiConfiguration i : list ) 
-		{
-		    if(i.SSID != null && i.SSID.equals( networkSSID )) 
-		    {
-		         wifiManager.disconnect();
-		         wifiManager.disableNetwork(i.networkId);
-		         wifiManager.removeNetwork(i.networkId);
-		         Log.d(TAG, "RocketColibri network disconnected an removed");
-		         break;
-		    }           
+		int disconnectId = -1;
+		int reconnectId = -1;
+		try {
+			for( WifiConfiguration i : list ) {
+				if(i.SSID != null) {
+					if(i.SSID.equals( networkSSID )) 
+						disconnectId = i.networkId;
+					else if(i.SSID.equals( oldSSID ))
+			    		reconnectId = i.networkId;
+				}
+			}
+	        wifiManager.disconnect();
+	        if(disconnectId > 0) {
+	        	wifiManager.disableNetwork(disconnectId);
+	        	wifiManager.removeNetwork(disconnectId);
+	            Log.d(TAG, "RocketColibri network disconnected an removed");
+	        }
+	        if(reconnectId > 0) {
+	        	wifiManager.setWifiEnabled(true);
+			    wifiManager.enableNetwork(reconnectId, true);
+		        Log.d(TAG, "Reconnected Wifi");
+	        }
+	        wifiManager.reconnect();
+		} catch (ConcurrentModificationException e) {
+			Log.d(TAG, "WifiManager problem occured");
 		}
-		
-		// reconnect to the old SSID
-		for( WifiConfiguration i : list ) 
-		{
-		    if(i.SSID != null && i.SSID.equals( oldSSID )) 
-		    {
-		         wifiManager.setWifiEnabled(true);
-			     wifiManager.enableNetwork(i.networkId, true);
-			     wifiManager.reconnect(); 
-		         break;
-		    }           
-		}
-
 	}
 }
