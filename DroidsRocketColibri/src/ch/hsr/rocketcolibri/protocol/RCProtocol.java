@@ -7,6 +7,10 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+import org.neodatis.tool.mutex.Mutex;
 
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
@@ -23,6 +27,7 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 	static final int MAX_CHANNEL = 8;
 	Channel[] tChannelArray = new Channel[MAX_CHANNEL];
 	
+	protected Lock tUiOutputSinkChangeObserverMutex;
 	private HashMap<UiOutputDataType, List<IRCWidget>> tUiOutputSinkChangeObserver;
 	// --- Ui Output Source data
 	//  .. data about the users connected to the servo controller
@@ -42,11 +47,13 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 		tConnState = new ConnectionState();
 		tVdeoUrl = new VideoUrl();
 		
+		tUiOutputSinkChangeObserverMutex = new ReentrantLock(true);
 		// observer map
+		tUiOutputSinkChangeObserverMutex.lock();
 		tUiOutputSinkChangeObserver = new HashMap<UiOutputDataType, List<IRCWidget>>();
 		for (UiOutputDataType type : UiOutputDataType.values()) 
 			tUiOutputSinkChangeObserver.put(type, new ArrayList<IRCWidget>());
-
+		tUiOutputSinkChangeObserverMutex.unlock();
 		startNotifiyUiOutputData();
 	
 	}
@@ -55,10 +62,12 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 		tNotificationSchedulerFuture = tNotificationScheduler.scheduleAtFixedRate(new Runnable() {
 			private void sendToAll(UiOutputData data)	{
 				if(data.getAndResetNotifyFlag()) {
+					tUiOutputSinkChangeObserverMutex.lock();
 	            	for(IRCWidget observer : tUiOutputSinkChangeObserver.get(data.getType())) {
 	        			// select the right list and object depending on the type
 	        			observer.onNotifyUiOutputSink(data);
-	        		}        		
+	        		}
+	            	tUiOutputSinkChangeObserverMutex.unlock();
 	        	}
 			}
 		
@@ -115,7 +124,9 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
     /** Register a UI output sink (RCWidget) */ 
 	@Override
 	public void registerUiOutputSinkChangeObserver(IRCWidget customizableView) {
+		tUiOutputSinkChangeObserverMutex.lock();
 		UiOutputDataType type = customizableView.getType();
+		
 		if(type != UiOutputDataType.None) {
 			tUiOutputSinkChangeObserver.get(type).add(customizableView);
 		}
@@ -123,15 +134,18 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 		if(tUsers.getType() == customizableView.getType()) tUsers.notifyThis();
 		if(tConnState.getType()== customizableView.getType()) tConnState.notifyThis();
 		if(tVdeoUrl.getType() ==  customizableView.getType()) tVdeoUrl.notifyThis();
+		tUiOutputSinkChangeObserverMutex.unlock();
 	}
 
     /** Unregister a UI output sink (RCWidget) */
 	@Override
 	public void unregisterUiOutputSinkChangeObserver(IRCWidget observer) {
+		tUiOutputSinkChangeObserverMutex.lock();
 		UiOutputDataType type = observer.getType();
 		if(type != UiOutputDataType.None) {
 			this.tUiOutputSinkChangeObserver.get(type).remove(observer);
 		}
+		tUiOutputSinkChangeObserverMutex.unlock();
 	}
 	
 	/**
