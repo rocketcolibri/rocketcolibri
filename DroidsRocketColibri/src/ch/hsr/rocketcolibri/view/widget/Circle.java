@@ -480,15 +480,19 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 		// update channel
   		try{
 			tControlModusListener.onChannelChange(tChannelH.getAssignment(), tChannelH.calculateChannelValue(widgetPoistionToChannelValue(x)));
+			Log.d("Circle", "updateChannelH " + tChannelH.getAssignment() + "=" + tChannelH.calculateChannelValue(widgetPoistionToChannelValue(x)));
 			tControlModusListener.onChannelChange(tChannelV.getAssignment(), tChannelV.calculateChannelValue(widgetPoistionToChannelValue(y)));
+			Log.d("Circle", "updateChannelV " + tChannelV.getAssignment() + "=" + tChannelV.calculateChannelValue(widgetPoistionToChannelValue(y)));
 		}catch(Exception e){
 			tChannelError = true;
 		}
 	}
 
 	private void updateWithDefaultPosition() {
-		int x = channelValueToWidgetPosition(tChannelH.calculateWidgetDefaultPosition()); 
-		int y = channelValueToWidgetPosition(tChannelV.calculateWidgetDefaultPosition());
+		
+		int x = channelValueToWidgetPosition(tChannelH.getDefaultPosition()); 
+		int y = channelValueToWidgetPosition(tChannelV.getDefaultPosition());
+		Log.d("Circle", "updateWithDefaultPosition " + x + "/" +y);
 		updateInnerCirclePosition(x,y);
 	}
 	
