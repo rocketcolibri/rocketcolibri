@@ -234,6 +234,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 		return new IDragListener() {
 			@Override
 			public void onDragStart(IDragSource source, Object info, int dragAction) {
+				tCustomizeModusPopupMenu.dismiss();
 			}
 			@Override
 			public void onDragEnd(View targetView) {

@@ -32,7 +32,9 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 	private View tTargetView;
 	private SeekBar alphaChangeSlider;
 	private IDesktopViewManager tDesktopViewManager;
-	private ImageView tEditChannelBtn;
+	private ImageView tEditIv;
+	private ImageView tMaximizeIv;
+	private ImageView tMinimizeIv;
 	
 	public CustomizeModusPopupMenu(IDesktopViewManager desktopViewManager, View contentView){
 		super((AbsoluteLayout) desktopViewManager.getRootView(), contentView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
@@ -53,8 +55,8 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 				tDesktopViewManager.resizeView((View) tTargetView);
 			}
 		});
-		b = (ImageView) findViewById(R.id.maximizeIv);
-		b.setOnClickListener(new OnClickListener() {
+		tMaximizeIv = (ImageView) findViewById(R.id.maximizeIv);
+		tMaximizeIv.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				try{
 					LayoutParams resizeTargetLP = (LayoutParams) tTargetView.getLayoutParams();
@@ -67,11 +69,12 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 					if(resizeTargetLP.width+resizeTargetLP.x>parent.getWidth())
 						resizeTargetLP.x=parent.getWidth()-resizeTargetLP.width;
 					parent.updateViewLayout(tTargetView, resizeTargetLP);
+					enableMaximizedAndMinimized(true);
 				}catch(Exception e){e.printStackTrace();}
 			}
 		});
-		b = (ImageView) findViewById(R.id.minimizeIv);
-		b.setOnClickListener(new OnClickListener() {
+		tMinimizeIv = (ImageView) findViewById(R.id.minimizeIv);
+		tMinimizeIv.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				try{
 					LayoutParams resizeTargetLP = (LayoutParams) tTargetView.getLayoutParams();
@@ -80,11 +83,12 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 					resizeTargetLP.height = config.minHeight;
 					resizeTargetLP.width = config.minWidth;
 					parent.updateViewLayout(tTargetView, resizeTargetLP);
+					enableMaximizedAndMinimized(false);
 				}catch(Exception e){e.printStackTrace();}
 			}
 		});
-		tEditChannelBtn = (ImageView) findViewById(R.id.editChannel);
-		tEditChannelBtn.setOnClickListener(new OnClickListener() {
+		tEditIv = (ImageView) findViewById(R.id.editChannel);
+		tEditIv.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				tDesktopViewManager.startEditActivity((View) tTargetView);
 			}
@@ -124,6 +128,8 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 	public void show(View cView){
 		dismissPopupIfIsShowing();
 		tTargetView = cView;
+		enableMaximized(!isMaximized());
+		enableMinimized(!isMinimized());
 		try {
 			if (((IRCWidget) cView).getProtocolMap() != null) {
 				setVisibilityOfEditChannelBtn(View.VISIBLE);
@@ -134,13 +140,44 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 	}
 	
 	private void setVisibilityOfEditChannelBtn(int visibility){
-		if(tEditChannelBtn.getVisibility()!=visibility){
-			tEditChannelBtn.setVisibility(visibility);
-			switch(tEditChannelBtn.getVisibility()){
-			case View.VISIBLE:updateLayoutHeight(getHeight()+tEditChannelBtn.getHeight());
-			case View.GONE:updateLayoutHeight(getHeight()-tEditChannelBtn.getHeight());
+		if(tEditIv.getVisibility()!=visibility){
+			tEditIv.setVisibility(visibility);
+			switch(tEditIv.getVisibility()){
+			case View.VISIBLE:updateLayoutHeight(getHeight()+tEditIv.getHeight());
+			case View.GONE:updateLayoutHeight(getHeight()-tEditIv.getHeight());
 			}
 		}
+	}
+	
+	private boolean isMaximized(){
+		LayoutParams resizeTargetLP = (LayoutParams) tTargetView.getLayoutParams();
+		ResizeConfig config = ((IRCWidget)tTargetView).getWidgetConfig().viewElementConfig.getResizeConfig();
+		if(resizeTargetLP.height==config.maxHeight && resizeTargetLP.width==config.maxWidth){
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isMinimized(){
+		LayoutParams resizeTargetLP = (LayoutParams) tTargetView.getLayoutParams();
+		ResizeConfig config = ((IRCWidget)tTargetView).getWidgetConfig().viewElementConfig.getResizeConfig();
+		if(resizeTargetLP.height==config.minHeight && resizeTargetLP.width==config.minWidth){
+			return true;
+		}
+		return false;
+	}
+	
+	private void enableMaximizedAndMinimized(boolean isMaximized){
+		enableMaximized(!isMaximized);
+		enableMinimized(isMaximized);
+	}
+	
+	private void enableMaximized(boolean enable){
+		tMaximizeIv.setAlpha(enable?1f:0.4f);
+	}
+	
+	private void enableMinimized(boolean enable){
+		tMinimizeIv.setAlpha(enable?1f:0.4f);
 	}
 	
 	private void dismissPopupIfIsShowing(){
