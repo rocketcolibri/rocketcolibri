@@ -113,6 +113,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 						tAngle = tAngleMin;
 					} else {
 						tKnobValue += tKnobRangeIncDecValue * direction;
+						tChannel.calculateChannelValue((int) tKnobValue);
 						Log.d("Testing", "tKnobValue is set: " + (int) tKnobValue);
 					}
 				} else {
@@ -120,6 +121,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 						tAngle = tAngleMax;
 					} else {
 						tKnobValue += tKnobRangeIncDecValue * direction;
+						tChannel.calculateChannelValue((int) tKnobValue);
 						Log.d("Testing", "tKnobValue is set: " + (int) tKnobValue);
 					}
 				}
