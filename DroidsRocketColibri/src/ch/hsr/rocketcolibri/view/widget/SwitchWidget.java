@@ -7,8 +7,10 @@ import java.util.Map;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.drawable.StateListDrawable;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
@@ -26,24 +28,19 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 
 	private boolean tCustomizeModusActive = false;
 	protected OnTouchListener tCustomizeModusListener;
-	private SwitchOnCheckedChangeListener tSwitchOnCheckedChangeListener = new SwitchOnCheckedChangeListener();
 
 	public SwitchWidget(Context context, ViewElementConfig elementConfig) {
 		super(context);
 		tWidgetConfig = new RCWidgetConfig(elementConfig);
-		setLayoutParams(elementConfig.getLayoutParams());
-		setAlpha(elementConfig.getAlpha());
 		initProtocolMapping();
-		init();
+		init(elementConfig);
 	}
 
 	public SwitchWidget(Context context, RCWidgetConfig widgetConfig) {
 		super(context);
 		tWidgetConfig = widgetConfig;
-		setLayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams());
-		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
 		updateProtocolMap();
-		init();
+		init(tWidgetConfig.viewElementConfig);
 	}
 
 	private boolean isChannelValid() {
@@ -67,7 +64,7 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 		}
 	};
 
-	class SwitchOnCheckedChangeListener implements OnCheckedChangeListener {
+	private OnCheckedChangeListener tSwitchOnCheckedChangeListener = new OnCheckedChangeListener() {
 		@Override
 		public void onCheckedChanged(CompoundButton buttonView,
 				boolean isChecked) {
@@ -79,7 +76,7 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 				}
 			}catch(Exception e){}
 		}
-	}
+	};
 
 	public void initProtocolMapping() {
 		// init protocol mapping
@@ -92,7 +89,9 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 		tWidgetConfig.protocolMap.put(RCConstants.TRIMM, "");
 	}
 
-	private void init() {
+	private void init(ViewElementConfig elementConfig) {
+		setLayoutParams(elementConfig.getLayoutParams());
+		setAlpha(elementConfig.getAlpha());
 		createWidget();
 	}
 
@@ -125,14 +124,21 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 	}
 
 	private void createWidget() {
-		setLayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams());
-		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
+		StateListDrawable states = new StateListDrawable();
+		states.addState(new int[] {-android.R.attr.state_pressed},
+		    getResources().getDrawable(R.drawable.apptheme_switch_thumb_pressed_holo_light));
+		states.addState(new int[] {-android.R.attr.state_focused},
+		    getResources().getDrawable(R.drawable.apptheme_switch_thumb_activated_holo_light));
+		states.addState(new int[] { },
+		    getResources().getDrawable(R.drawable.apptheme_switch_thumb_disabled_holo_light));
+		setThumbDrawable(states);
+		refreshDrawableState();
 
 		if (isChannelValid()) {
 			setOnCheckedChangeListener(tSwitchOnCheckedChangeListener);
 			setClickable(true);
 
-			if (tChannel.getAssignment() > 0) {
+			if (tChannel.getDefaultPosition() > 0) {
 				setChecked(true);
 			} else {
 				setChecked(false);
@@ -150,19 +156,15 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 	@Override
 	public void create(RCWidgetConfig rcWidgetConfig) {
 		tWidgetConfig = rcWidgetConfig;
-		setLayoutParams(tWidgetConfig.viewElementConfig.getLayoutParams());
-		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
-		init();
 		updateProtocolMap();
+		init(tWidgetConfig.viewElementConfig);
 	}
 
 	@Override
 	public void create(ViewElementConfig vElementConfig) {
 		tWidgetConfig = new RCWidgetConfig(vElementConfig);
-		setLayoutParams(vElementConfig.getLayoutParams());
-		setAlpha(vElementConfig.getAlpha());
-		init();
 		initProtocolMapping();
+		init(vElementConfig);
 	}
 
 	@Override
