@@ -37,26 +37,26 @@ public class UiInputSourceChannel
 	}
 	
 	/** setter */
-	public void setAssignment(int a) { assignment = a; }
-	public void setMinRange(int r)	{ minRange = r;	}
-	public void setMaxRange(int r)	{ maxRange = r;	}
-	public void setTrimm(int t)	{ if(t>-1)trimm = t;	}
-	public void setInverted(boolean i)	{ inverted = i;	}
-	public void setDefaultPosition(int d)	{ defaultPosition = d;	}
-	public void setSticky(boolean d)	{ sticky = d;	}
+	public synchronized void setAssignment(int a) { assignment = a; }
+	public synchronized void setMinRange(int r)	{ minRange = r;	}
+	public synchronized void setMaxRange(int r)	{ maxRange = r;	}
+	public synchronized void setTrimm(int t)	{ if(t>-1)trimm = t;	}
+	public synchronized void setInverted(boolean i)	{ inverted = i;	}
+	public synchronized void setDefaultPosition(int d)	{ defaultPosition = d;	}
+	public synchronized void setSticky(boolean d)	{ sticky = d;	}
 	/** getter */
-	public int getAssignment() { return assignment; }
-	public int getMinRange()	{ return minRange;	}
-	public int getMaxRange()	{ return maxRange;	}
-	public int getTrimm()	{ return trimm;	}
-	public boolean getInverted()	{ return inverted;	}
-	public int getDefaultPosition() { return defaultPosition;	}
-	public boolean getSticky() { return sticky;	}
+	public synchronized int getAssignment() { return assignment; }
+	public synchronized int getMinRange()	{ return minRange;	}
+	public synchronized int getMaxRange()	{ return maxRange;	}
+	public synchronized int getTrimm()	{ return trimm;	}
+	public synchronized boolean getInverted()	{ return inverted;	}
+	public synchronized int getDefaultPosition() { return defaultPosition;	}
+	public synchronized boolean getSticky() { return sticky;	}
 	
 	/**
 	 * set the value from the control widget
 	 */
-	public int calculateChannelValue(int inputFromWidget) {
+	public synchronized int calculateChannelValue(int inputFromWidget) {
 		inputFromWidget = inputFromWidget + trimm;
 		if(inputFromWidget <  MIN_VALUE)
 			inputFromWidget = MIN_VALUE;
@@ -76,7 +76,7 @@ public class UiInputSourceChannel
 	/**
 	 * set the value to the default
 	 */
-	public int setToDefaultPosition() {
+	public synchronized int setToDefaultPosition() {
 		return currentChannelValue = defaultPosition;
 	}
 	
@@ -84,7 +84,7 @@ public class UiInputSourceChannel
 	 * get the value to be transimte in the cdc message
 	 * @return channel value
 	 */
-	public int getChannelValue()
+	public synchronized int getChannelValue()
 	{
 		return currentChannelValue;
 	}

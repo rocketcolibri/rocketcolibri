@@ -18,7 +18,7 @@ public class VideoUrl extends UiOutputData
 		videoUrl = new String("");
 	}
 	
-	public boolean setVideoUrl(String videoUrl)
+	public  synchronized boolean setVideoUrl(String videoUrl)
 	{
 		if (!videoUrl.equals(this.videoUrl))
 		{
@@ -30,7 +30,7 @@ public class VideoUrl extends UiOutputData
 			return false;
 	}
 	
-	public String getVideoUrl()
+	public synchronized  String getVideoUrl()
 	{
 		return this.videoUrl;
 	}

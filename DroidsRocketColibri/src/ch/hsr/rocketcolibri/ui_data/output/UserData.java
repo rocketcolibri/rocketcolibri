@@ -22,7 +22,7 @@ public class UserData extends UiOutputData
 		type = UiOutputDataType.ConnectedUsers;
 	}
 
-	public boolean setConnectedUsers(RcOperator activeUser, List<RcOperator>passivUser)
+	public  synchronized boolean setConnectedUsers(RcOperator activeUser, List<RcOperator>passivUser)
 	{
 		boolean doNotify = false;
 		if(null != activeUser) {
@@ -50,7 +50,7 @@ public class UserData extends UiOutputData
 		return doNotify;
 	}
 	
-	public boolean setActiveUser(RcOperator activeUser)
+	public  synchronized boolean setActiveUser(RcOperator activeUser)
 	{
 		if(!activeUser.equals(this.activeUser))
 		{
@@ -62,7 +62,7 @@ public class UserData extends UiOutputData
 			return false;
 	}
 	
-	public void removeAllUsers()
+	public  synchronized void removeAllUsers()
 	{
 		this.activeUser = null;
 		this.passivUser.clear();
@@ -74,7 +74,7 @@ public class UserData extends UiOutputData
 		return this.activeUser;
 	}
 	
-	public List<RcOperator> getPassivUsers()
+	public  synchronized List<RcOperator> getPassivUsers()
 	{
 		return this.passivUser;
 	}

@@ -18,7 +18,7 @@ public class ConnectionState extends UiOutputData {
 		type = UiOutputDataType.ConnectionState;
 	}
 
-	public boolean setState(s newstate)
+	public synchronized boolean setState(s newstate)
 	{
 		if (newstate != this.state)
 		{
@@ -30,7 +30,7 @@ public class ConnectionState extends UiOutputData {
 			return false;
 	}
 	
-	public s getState()
+	public synchronized  s getState()
 	{
 		return this.state;
 	}

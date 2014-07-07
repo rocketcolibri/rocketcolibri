@@ -46,7 +46,6 @@ public class RCProtocolUdp extends RCProtocol{
 	
 	DatagramSocket channelDataSocket;
 	private int sequenceNumber;
-	private int[] allChannels = new int[NOF_CHANNELS];
 	private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 	private Future<?> executorFuture=null;
 	
@@ -143,12 +142,12 @@ public class RCProtocolUdp extends RCProtocol{
 					cdcMsg.put("sequence", sequenceNumber++);
 					cdcMsg.put("user", tUsername);
 					
-					
-					for(int i=0; i < NOF_CHANNELS; i++)
-						allChannels[i] = 0;
-					
+					int[] allChannels = {0, 0, 0, 0, 0, 0, 0, 0};
 					for(UiInputSourceChannel c :tChannelList) {
-						if(c.getAssignment() < NOF_CHANNELS)
+						if(c.getAssignment() < NOF_CHANNELS && 
+						   c.getAssignment() >= 0 && 
+						   c.getChannelValue() >= MIN_CHANNEL_VALUE &&
+						   c.getChannelValue() <= MAX_CHANNEL_VALUE) 
 							allChannels[c.getAssignment()] = c.getChannelValue();
 					}
 					

@@ -16,17 +16,17 @@ public class UiOutputData
 	protected boolean doNotify;
 	protected UiOutputDataType type = UiOutputDataType.None;
 		
-	public void notifyThis()
+	public  synchronized void notifyThis()
 	{
 		doNotify = true;
 	}
 	
-	public UiOutputDataType getType()
+	public  synchronized  UiOutputDataType getType()
 	{
 		return this.type;
 	}
 	
-	public boolean getAndResetNotifyFlag()
+	public synchronized boolean getAndResetNotifyFlag()
 	{
 		boolean retval = doNotify; 
 		doNotify = false;
