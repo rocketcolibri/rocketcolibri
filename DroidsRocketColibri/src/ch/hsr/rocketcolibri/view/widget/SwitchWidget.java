@@ -82,11 +82,9 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 		// init protocol mapping
 		tWidgetConfig.protocolMap = new HashMap<String, String>();
 		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_ASSIGNMENT, "");
-		tWidgetConfig.protocolMap.put(RCConstants.INVERTED, "");
 		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE, "");
 		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE, "");
 		tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION, "");
-		tWidgetConfig.protocolMap.put(RCConstants.TRIMM, "");
 	}
 
 	private void init(ViewElementConfig elementConfig) {
@@ -108,12 +106,9 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 		try {
 			tChannel
 					.setAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT));
-			tChannel
-					.setInverted(getProtocolMapBoolean(RCConstants.INVERTED));
 			tChannel.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE));
 			tChannel.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE));
-			tChannel.setTrimm(getProtocolMapInt(RCConstants.TRIMM));
-			tChannel.setDefaultPosition(getProtocolMapInt(RCConstants.TRIMM));
+			tChannel.setDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
