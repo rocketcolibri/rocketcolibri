@@ -23,6 +23,9 @@ import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 public class SwitchWidget extends Switch implements ICustomizableView,
 		IRCWidget {
 
+	private static final int tSwitchMax = 999;
+	private static final int tSwitchMin = 0;
+	
 	protected RCWidgetConfig tWidgetConfig;
 	private UiInputSourceChannel tChannel = new UiInputSourceChannel();
 
@@ -70,9 +73,9 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 				boolean isChecked) {
 			try{
 				if (isChecked) {
-						tChannel.calculateChannelValue(tChannel.getMaxRange());
+						tChannel.setWidgetPosition(tSwitchMax);
 					} else {
-						tChannel.calculateChannelValue(tChannel.getMinRange());
+						tChannel.setWidgetPosition(tSwitchMin);
 				}
 			}catch(Exception e){}
 		}
@@ -90,6 +93,7 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 	private void init(ViewElementConfig elementConfig) {
 		setLayoutParams(elementConfig.getLayoutParams());
 		setAlpha(elementConfig.getAlpha());
+		tChannel.setWidgetRange(tSwitchMin,tSwitchMax);
 		createWidget();
 	}
 

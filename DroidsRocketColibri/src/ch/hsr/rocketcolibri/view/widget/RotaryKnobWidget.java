@@ -39,8 +39,8 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	private float tKnobRangeResolution;
 	private float tKnobRangeIncDecValue;
 	private float tKnobValue;
-	private int tKnobValueMin;
-	private int tKnobValueMax;
+	private static final int tKnobValueMin = 0;
+	private static final int tKnobValueMax = 999;
 	private int tKnobIncDecValue = 2;
 
 	protected OnTouchListener tCustomizeModusListener;
@@ -113,7 +113,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 						tAngle = tAngleMin;
 					} else {
 						tKnobValue += tKnobRangeIncDecValue * direction;
-						tChannel.calculateChannelValue((int) tKnobValue);
+						tChannel.setWidgetPosition((int)tKnobValue);
 						Log.d("Testing", "tKnobValue is set: " + (int) tKnobValue);
 					}
 				} else {
@@ -121,7 +121,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 						tAngle = tAngleMax;
 					} else {
 						tKnobValue += tKnobRangeIncDecValue * direction;
-						tChannel.calculateChannelValue((int) tKnobValue);
+						tChannel.setWidgetPosition((int)tKnobValue);
 						Log.d("Testing", "tKnobValue is set: " + (int) tKnobValue);
 					}
 				}
@@ -160,12 +160,12 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	}
 
 	public void initialize() {
+
 		tRotaryKnobResource = R.drawable.rotoroff;
 		tRimImageResource = R.drawable.stator;
 
 		this.setBackgroundResource(tRimImageResource);
 		this.setImageResource(tRotaryKnobResource);
-
 		calculateKnobValues();
 
 		this.setKnobListener(new RotaryKnobWidget.RotaryKnobListener() {
@@ -182,10 +182,8 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 
 	private void calculateKnobValues() {
 		tAngle = tAngleMin;
-
-		tKnobValueMin = tChannel.getMinRange();
-		tKnobValueMax = tChannel.getMaxRange();;
-		tKnobValue = tKnobValueMin;
+		tChannel.setWidgetRange(tKnobValueMin, tKnobValueMax);	
+		tKnobValue = tChannel.setWidgetToDefault();
 
 		tKnobRangeResolution = (int) tResolution / tKnobIncDecValue;
 		tKnobRange = tKnobValueMax - tKnobValueMin;

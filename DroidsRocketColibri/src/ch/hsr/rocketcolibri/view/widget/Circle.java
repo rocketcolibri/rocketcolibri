@@ -87,6 +87,8 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 		positionInPercentY = 100;
 		orientationSide = "left";
 		diameterInDP = rcWidgetConfig.viewElementConfig.getLayoutParams().width;
+		tChannelV.setWidgetRange(0, diameterInDP);
+		tChannelH.setWidgetRange(0, diameterInDP);
 		init(context, null);
 		updateProtocolMap();
 	}
@@ -481,17 +483,16 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	private void updateChannel(int x, int y) {
 		// update channel
   		try{
-			tChannelH.calculateChannelValue(widgetPoistionToChannelValue(x));
-			tChannelV.calculateChannelValue(widgetPoistionToChannelValue(y));
+  			tChannelH.setWidgetPosition(x);
+  			tChannelV.setWidgetPosition(y);
 		}catch(Exception e){
 			tChannelError = true;
 		}
 	}
 
 	private void updateWithDefaultPosition() {
-		
-		int x = channelValueToWidgetPosition(tChannelH.getDefaultPosition()); 
-		int y = channelValueToWidgetPosition(tChannelV.getDefaultPosition());
+		int x = tChannelH.setWidgetToDefault(); 
+		int y = tChannelV.setWidgetToDefault();
 		Log.d("Circle", "updateWithDefaultPosition " + x + "/" +y);
 		updateInnerCirclePosition(x,y);
 	}
