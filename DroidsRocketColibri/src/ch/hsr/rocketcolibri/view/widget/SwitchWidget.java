@@ -47,7 +47,7 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 	}
 
 	private boolean isChannelValid() {
-		return tChannel.getAssignment() > -1;
+		return tChannel.getChannelAssignment() > -1;
 	}
 
 	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
@@ -109,10 +109,10 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 	public void updateProtocolMap() {
 		try {
 			tChannel
-					.setAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT));
-			tChannel.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE));
-			tChannel.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE));
-			tChannel.setDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION));
+					.setChannelAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT));
+			tChannel.setChannelMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE));
+			tChannel.setChannelMinRange(getProtocolMapInt(RCConstants.MIN_RANGE));
+			tChannel.setChannelDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -137,7 +137,7 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 			setOnCheckedChangeListener(tSwitchOnCheckedChangeListener);
 			setClickable(true);
 
-			if (tChannel.getDefaultPosition() > 0) {
+			if (tChannel.getChannelDefaultPosition() > 0) {
 				setChecked(true);
 			} else {
 				setChecked(false);

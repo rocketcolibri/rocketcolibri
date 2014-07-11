@@ -144,11 +144,11 @@ public class RCProtocolUdp extends RCProtocol{
 					
 					int[] allChannels = {0, 0, 0, 0, 0, 0, 0, 0};
 					for(UiInputSourceChannel c :tChannelList) {
-						if(c.getAssignment() < NOF_CHANNELS && 
-						   c.getAssignment() >= 0 && 
+						if(c.getChannelAssignment() < NOF_CHANNELS && 
+						   c.getChannelAssignment() >= 0 && 
 						   c.getChannelValue() >= MIN_CHANNEL_VALUE &&
 						   c.getChannelValue() <= MAX_CHANNEL_VALUE) 
-							allChannels[c.getAssignment()] = c.getChannelValue();
+							allChannels[c.getChannelAssignment()] = c.getChannelValue();
 					}
 					
 					

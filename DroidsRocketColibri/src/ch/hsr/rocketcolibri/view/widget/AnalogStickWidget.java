@@ -456,36 +456,36 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 
 	private void calcUserCoordinates() {
 		// First convert to cartesian coordinates
-		cartX = (touchX / movementRadius * tChannelH.getMaxRange());
-		cartY = (touchY / movementRadius * tChannelV.getMaxRange());
+		cartX = (touchX / movementRadius * tChannelH.getChannelMaxRange());
+		cartY = (touchY / movementRadius * tChannelV.getChannelMaxRange());
 
 		radial = Math.sqrt((cartX * cartX) + (cartY * cartY));
 		angle = Math.atan2(cartY, cartX);
 
 		// Invert Y axis if requested
-		if (!tChannelV.getInverted())
+		if (!tChannelV.getChannelInverted())
 			cartY *= -1;
 
 		if (userCoordinateSystem == COORDINATE_CARTESIAN) {
 //			userX = cartX;
 //			userY = cartY;
-			if (cartX >= tChannelH.getMinRange() && cartX <= tChannelH.getMaxRange())
+			if (cartX >= tChannelH.getChannelMinRange() && cartX <= tChannelH.getChannelMaxRange())
 				userX = cartX;
-			if (cartY >= tChannelV.getMinRange() && cartY <= tChannelV.getMaxRange())
+			if (cartY >= tChannelV.getChannelMinRange() && cartY <= tChannelV.getChannelMaxRange())
 				userY = cartY;
 		} else if (userCoordinateSystem == COORDINATE_DIFFERENTIAL) {
 			userX = (cartY + cartX / 4);
 			userY = (cartY - cartX / 4);
 
-			if (userX < tChannelH.getMinRange())
-				userX = tChannelH.getMinRange();
-			if (userX > tChannelH.getMaxRange())
-				userX = tChannelH.getMaxRange();
+			if (userX < tChannelH.getChannelMinRange())
+				userX = tChannelH.getChannelMinRange();
+			if (userX > tChannelH.getChannelMaxRange())
+				userX = tChannelH.getChannelMaxRange();
 
-			if (userY < tChannelV.getMinRange())
-				userY = tChannelV.getMinRange();
-			if (userY > tChannelV.getMaxRange())
-				userY = tChannelV.getMaxRange();
+			if (userY < tChannelV.getChannelMinRange())
+				userY = tChannelV.getChannelMinRange();
+			if (userY > tChannelV.getChannelMaxRange())
+				userY = tChannelV.getChannelMaxRange();
 		}
 
 	}
@@ -510,7 +510,7 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 	}
 
 	private void returnHandleToCenter() {
-		if (!tChannelH.getSticky()) {
+		if (!tChannelH.getWidgetSticky()) {
 			final int numberOfFrames = 5;
 			final double intervalsX = (0 - touchX) / numberOfFrames;
 			final double intervalsY = (0 - touchY) / numberOfFrames;
@@ -575,18 +575,18 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 	@Override
 	public void updateProtocolMap() {
 		try{
-			tChannelH.setAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_H));
-			tChannelH.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_H));
-			tChannelH.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_H));
-			tChannelH.setTrimm(getProtocolMapInt(RCConstants.TRIMM_H));
-			tChannelH.setSticky(getProtocolMapBoolean(RCConstants.STICKY));
+			tChannelH.setChannelAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_H));
+			tChannelH.setChannelMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_H));
+			tChannelH.setChannelMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_H));
+			tChannelH.setChannelTrimm(getProtocolMapInt(RCConstants.TRIMM_H));
+			tChannelH.setWidgetSticky(getProtocolMapBoolean(RCConstants.STICKY));
 			
-			tChannelV.setAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_V));
-			tChannelV.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_V));
-			tChannelV.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_V));
-			tChannelV.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_V));
-			tChannelV.setTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
-			tChannelV.setSticky(getProtocolMapBoolean(RCConstants.STICKY));
+			tChannelV.setChannelAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_V));
+			tChannelV.setChannelInverted(getProtocolMapBoolean(RCConstants.INVERTED_V));
+			tChannelV.setChannelMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_V));
+			tChannelV.setChannelMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_V));
+			tChannelV.setChannelTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
+			tChannelV.setWidgetSticky(getProtocolMapBoolean(RCConstants.STICKY));
 			tDebug = getProtocolMapBoolean(RCConstants.DEBUG);
 			returnHandleToCenter();
 		}catch(Exception e){
@@ -607,7 +607,7 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 	}
 	
 	private boolean areChannelsValid(){
-		return tChannelH.getAssignment()>-1 || tChannelV.getAssignment()>-1;
+		return tChannelH.getChannelAssignment()>-1 || tChannelV.getChannelAssignment()>-1;
 	}
 	
 	@Override

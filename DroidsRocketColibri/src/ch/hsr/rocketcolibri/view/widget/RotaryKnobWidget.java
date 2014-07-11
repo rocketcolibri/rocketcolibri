@@ -7,7 +7,6 @@ import java.util.Map;
 
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
-import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.util.DrawingTools;
@@ -15,8 +14,6 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
-import android.app.Service;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.Log;
@@ -78,7 +75,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	}
 
 	private boolean isChannelValid() {
-		if (tChannel.getAssignment() > -1) {
+		if (tChannel.getChannelAssignment() > -1) {
 			tRotaryKnobResource = R.drawable.rotoron;
 			this.setImageResource(tRotaryKnobResource);
 			return true;
@@ -221,12 +218,12 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	@Override
 	public void updateProtocolMap() {
 		try {
-			tChannel.setAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT));
-			tChannel.setInverted(getProtocolMapBoolean(RCConstants.INVERTED));
-			tChannel.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE));
-			tChannel.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE));
-			tChannel.setDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION));
-			tChannel.setTrimm(getProtocolMapInt(RCConstants.TRIMM));
+			tChannel.setChannelAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT));
+			tChannel.setChannelInverted(getProtocolMapBoolean(RCConstants.INVERTED));
+			tChannel.setChannelMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE));
+			tChannel.setChannelMinRange(getProtocolMapInt(RCConstants.MIN_RANGE));
+			tChannel.setChannelDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION));
+			tChannel.setChannelTrimm(getProtocolMapInt(RCConstants.TRIMM));
 
 			// Protocol values has changed recalculate the values
 			calculateKnobValues();

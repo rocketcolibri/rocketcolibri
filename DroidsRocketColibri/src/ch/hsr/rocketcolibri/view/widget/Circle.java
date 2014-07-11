@@ -103,6 +103,8 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 		positionInPercentY = 100;
 		orientationSide = "left";
 		diameterInDP = elementConfig.getLayoutParams().width;
+		tChannelV.setWidgetRange(0, diameterInDP);
+		tChannelH.setWidgetRange(0, diameterInDP);
 		init(context, null);
 		initDefaultProtocolConfig();
 	}
@@ -432,22 +434,22 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	@Override
 	public void updateProtocolMap() {
 		try{
-			tChannelH.setAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_H));
-			tChannelH.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_H));
-			tChannelH.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_H));
-			tChannelH.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_H));
-			tChannelH.setDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION_H));
-			tChannelH.setTrimm(getProtocolMapInt(RCConstants.TRIMM_H));
-			tChannelH.setSticky(getProtocolMapBoolean(RCConstants.STICKY_H));
+			tChannelH.setChannelAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_H));
+			tChannelH.setChannelInverted(getProtocolMapBoolean(RCConstants.INVERTED_H));
+			tChannelH.setChannelMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_H));
+			tChannelH.setChannelMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_H));
+			tChannelH.setChannelDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION_H));
+			tChannelH.setChannelTrimm(getProtocolMapInt(RCConstants.TRIMM_H));
+			tChannelH.setWidgetSticky(getProtocolMapBoolean(RCConstants.STICKY_H));
 			
 			
-			tChannelV.setAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_V));
-			tChannelV.setInverted(getProtocolMapBoolean(RCConstants.INVERTED_V));
-			tChannelV.setMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_V));
-			tChannelV.setMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_V));
-			tChannelV.setDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION_V));
-			tChannelV.setTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
-			tChannelV.setSticky(getProtocolMapBoolean(RCConstants.STICKY_V));
+			tChannelV.setChannelAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_V));
+			tChannelV.setChannelInverted(getProtocolMapBoolean(RCConstants.INVERTED_V));
+			tChannelV.setChannelMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_V));
+			tChannelV.setChannelMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_V));
+			tChannelV.setChannelDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION_V));
+			tChannelV.setChannelTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
+			tChannelV.setWidgetSticky(getProtocolMapBoolean(RCConstants.STICKY_V));
 			
 			updateInnerCircleAndCheckSticky(-1,-1);
 		}catch(Exception e){
@@ -456,7 +458,7 @@ public final class Circle extends View implements ICustomizableView, IRCWidget  
 	}
 	
 	private void updateInnerCircleAndCheckSticky(int x, int y){
-		if(tChannelH.getSticky())
+		if(tChannelH.getWidgetSticky())
   	  		updateInnerCirclePosition(x, y);
 		else
 			updateWithDefaultPosition();
