@@ -108,7 +108,7 @@ public class UiInputSourceChannel
 	 */
 	public synchronized int setWidgetToDefault() {
 		// adapt widget ranges to channel range
-		tWidgetPosition = (defaultPosition - minRange) * (maxRange - minRange) / (tWidgetMaxPosition - tWidgetMinPosition) + tWidgetMinPosition; 
+		tWidgetPosition = (defaultPosition - minRange) * (tWidgetMaxPosition - tWidgetMinPosition)  / (maxRange - minRange) + tWidgetMinPosition; 
 		updateChannelValue();
 		return tWidgetPosition;
 	}
