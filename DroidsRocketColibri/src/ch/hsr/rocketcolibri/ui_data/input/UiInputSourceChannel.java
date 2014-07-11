@@ -56,16 +56,20 @@ public class UiInputSourceChannel
 	/** setter */
 	public synchronized void setChannelAssignment(int a) { assignment = a; }
 	public synchronized void setChannelMinRange(int r)	{
-		if (r <=  MIN_CHANNEL_VALUE && r >= MIN_CHANNEL_VALUE ) 
+		if (r <=  MAX_CHANNEL_VALUE && r >= MIN_CHANNEL_VALUE ) {
 			minRange = r;
+			updateChannelValue();
+		}
 	}
 	public synchronized void setChannelMaxRange(int r)	{
-		if (r <=  MIN_CHANNEL_VALUE && r >= MIN_CHANNEL_VALUE )  
-		maxRange = r;	
+		if (r <=  MAX_CHANNEL_VALUE && r >= MIN_CHANNEL_VALUE )  {
+			maxRange = r;
+			updateChannelValue();
+		}
 	}
 	
 	public synchronized void setChannelTrimm(int t){ 
-		if(t>-1)trimm = t;
+		trimm = t;
 		updateChannelValue();
 	}
 	
@@ -103,7 +107,8 @@ public class UiInputSourceChannel
 	 * @return the widget position between tWidgetMinPosition an tWidgetMaxPosition
 	 */
 	public synchronized int setWidgetToDefault() {
-		tWidgetPosition = (defaultPosition - minRange) * (tWidgetMaxPosition - tWidgetMinPosition) / (maxRange - minRange); 
+		// adapt widget ranges to channel range
+		tWidgetPosition = (defaultPosition - minRange) * (maxRange - minRange) / (tWidgetMaxPosition - tWidgetMinPosition) + tWidgetMinPosition; 
 		updateChannelValue();
 		return tWidgetPosition;
 	}
@@ -133,23 +138,19 @@ public class UiInputSourceChannel
 	 */
 	private void updateChannelValue() {
 		if(assignment != CHANNEL_UNASSIGNED) {
-			int channel = tWidgetPosition;
+			
 			// adjust to range
-			if(channel < tWidgetMinPosition)
-				channel = tWidgetMinPosition;
+			if(tWidgetPosition < tWidgetMinPosition)
+				tWidgetPosition = tWidgetMinPosition;
 			
-			if(channel > tWidgetMaxPosition)
-				channel = tWidgetMaxPosition;
+			if(tWidgetPosition > tWidgetMaxPosition)
+				tWidgetPosition = tWidgetMaxPosition;
 			
-			// move to 0
-			channel -= tWidgetMinPosition;
-			
-			// calculate range
-			int range = tWidgetMaxPosition - tWidgetMinPosition;
-			
-			channel = Math.round(MAX_WIDGET_VALUE * (float)channel / (float)range);
+			// adapt widget ranges to channel range
+			int channel = (tWidgetPosition - tWidgetMinPosition) * (maxRange-minRange) / (tWidgetMaxPosition - tWidgetMinPosition)  + minRange;
 			
 			channel = channel + trimm;
+						
 			if(channel <  MIN_CHANNEL_VALUE)
 				channel = MIN_CHANNEL_VALUE;
 			
