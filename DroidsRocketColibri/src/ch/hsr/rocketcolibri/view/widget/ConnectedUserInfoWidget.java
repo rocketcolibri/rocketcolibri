@@ -11,10 +11,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
+import android.graphics.Shader;
+import android.graphics.Shader.TileMode;
 import android.util.AttributeSet;
 import android.view.View;
 import ch.hsr.rocketcolibri.R;
@@ -38,7 +41,8 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 	private Bitmap tControlBitmap;
 	private Bitmap tUsersBitmap;
 	private Paint tTextPaint;
-	static final int tFontSize = 20;
+	
+	static final int tFontSize = 24;
 	static final int tLineSpace = 4;
 	static final int tBorderSize = 10;
     private Paint tRectPaint;
@@ -83,8 +87,8 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 	
 	private void init(Context context, AttributeSet attrs) {
 		tRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		tRectPaint.setColor(Color.WHITE);
-		tRectPaint.setAlpha(100);
+		tRectPaint.setColor(Color.DKGRAY);
+		tRectPaint.setAlpha(200);
 		tRectRectF  = new RectF();
 		
 		tTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -112,6 +116,9 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 	protected void onMeasure(int wMeasureSpec, int hMeasureSpec)	{
 		int measuredHeight = measureHeight(hMeasureSpec);
 		int measuredWidth  = measureWitdth(wMeasureSpec);
+		
+		tRectPaint.setShader(new LinearGradient(0,0,measuredWidth, measuredHeight,Color.WHITE, Color.LTGRAY, TileMode.CLAMP));
+		
 		setMeasuredDimension(measuredWidth, measuredHeight);
 	}
 	
