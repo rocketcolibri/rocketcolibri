@@ -175,6 +175,10 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 //					; // rotate left
 			}
 		});
+
+		if (isChannelValid()) {
+			setOnTouchListener(tInternalControlListener);
+		}
 	}
 
 	private void calculateKnobValues() {
