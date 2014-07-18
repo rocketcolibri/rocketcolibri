@@ -27,9 +27,9 @@ public class DefaultViewElementConfigRepo {
 		ResizeConfig rc = new ResizeConfig();
 	    rc.keepRatio=true;
 	    rc.maxHeight=200;
-	    rc.minHeight=40;
+	    rc.minHeight=50;
 	    rc.maxWidth=200;
-	    rc.minWidth=40;
+	    rc.minWidth=50;
 	    LayoutParams lp = new LayoutParams(180, 180 , 100, 300);
 	    ViewElementConfig elementConfig = new ViewElementConfig(Circle.class.getName(), lp, rc);
 	    dpToPixel(density, elementConfig);
@@ -40,9 +40,9 @@ public class DefaultViewElementConfigRepo {
 		rc = new ResizeConfig();
 	    rc.keepRatio=true;
 	    rc.maxHeight=200;
-	    rc.minHeight=40;
+	    rc.minHeight=50;
 	    rc.maxWidth=200;
-	    rc.minWidth=40;
+	    rc.minWidth=50;
 	    lp = new LayoutParams(180, 180 , 100, 300);
 	    elementConfig = new ViewElementConfig(AnalogStickWidget.class.getName(), lp, rc);
 	    dpToPixel(density, elementConfig);
@@ -54,7 +54,7 @@ public class DefaultViewElementConfigRepo {
 	    rc.maxHeight=300;
 	    rc.minHeight=50;
 	    rc.maxWidth=800;
-	    rc.minWidth=100;
+	    rc.minWidth=500;
 	    lp = new LayoutParams(600, 100 , 100, 0);
 	    elementConfig = new ViewElementConfig(ConnectedUserInfoWidget.class.getName(), lp, rc);
 	    elementConfig.setAlpha(0.5f);
@@ -64,11 +64,12 @@ public class DefaultViewElementConfigRepo {
 	    
 		//>>>>>>>>>>>>>>>>>>>>>>>>>>> ConnectionStatusWidget >>>>>>>>>>
 		rc = new ResizeConfig();
-	    rc.maxHeight=150;
+		rc.keepRatio = true;
+	    rc.maxHeight=100;
 	    rc.minHeight=50;
-	    rc.maxWidth=150;
+	    rc.maxWidth=100;
 	    rc.minWidth=50;
-	    lp = new LayoutParams(100, 100 , 0, 0);
+	    lp = new LayoutParams(80, 80 , 0, 0);
 	    elementConfig = new ViewElementConfig(ConnectionStatusWidget.class.getName(), lp, rc);
 	    elementConfig.setAlpha(1);
 	    dpToPixel(density, elementConfig);
@@ -78,11 +79,11 @@ public class DefaultViewElementConfigRepo {
 		//>>>>>>>>>>>>>>>>>>>>>>>>>>> RotaryKnobWidget >>>>>>>>>>>>>>>>
 		rc = new ResizeConfig();
 		rc.keepRatio = true;
-		rc.maxHeight = 400;
-		rc.minHeight = 60;
-		rc.maxWidth = 400;
-		rc.minWidth = 60;
-		lp = new LayoutParams(250, 250, 0, 0);
+		rc.maxHeight = 200;
+		rc.minHeight = 80;
+		rc.maxWidth = 200;
+		rc.minWidth = 80;
+		lp = new LayoutParams(120, 120, 0, 0);
 		elementConfig = new ViewElementConfig(RotaryKnobWidget.class.getName(), lp, rc);
 		elementConfig.setAlpha(1);
 		dpToPixel(density, elementConfig);
@@ -92,11 +93,11 @@ public class DefaultViewElementConfigRepo {
 		//>>>>>>>>>>>>>>>>>>>>>>>>>>> SwitchWidget >>>>>>>>>>>>>>>>>>>>
 		rc = new ResizeConfig();
 		rc.keepRatio = true;
-		rc.maxHeight = 300;
-		rc.minHeight = 34;
-		rc.maxWidth = 800;
-		rc.minWidth = 137;
-		lp = new LayoutParams(137, 34, 0, 0);
+		rc.minHeight = 40;
+		rc.maxHeight = 40;
+		rc.minWidth = 120;
+		rc.maxWidth = 120;
+		lp = new LayoutParams(120, 40, 0, 0);
 		elementConfig = new ViewElementConfig(SwitchWidget.class.getName(), lp, rc);
 		elementConfig.setAlpha(1);
 		dpToPixel(density, elementConfig);
