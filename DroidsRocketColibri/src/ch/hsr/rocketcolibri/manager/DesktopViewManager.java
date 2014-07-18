@@ -8,10 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 import android.app.Activity;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +48,6 @@ public class DesktopViewManager implements IDesktopViewManager{
 	private boolean tCustomizeModus;
 	private CustomizeModusListener tCustomizeModusListener;
 	private ViewChangedListener tViewChangeListener;
-	private IDragListener dragListener;
 	private CustomizeModusPopupMenu tCustomizeModusPopupMenu;
 	private DesktopMenu tDesktopMenu;
 	
@@ -155,6 +152,8 @@ public class DesktopViewManager implements IDesktopViewManager{
 		tCustomizeModus = !tCustomizeModus;
 		updateModusOfCustomizableViews();
 		updateBackground();
+		if(!tCustomizeModus)
+			closeSpecialThings();
 	}
 
 	private void updateBackground(){
