@@ -143,12 +143,12 @@ public class VideoStreamWidget extends SurfaceView implements
 		setModusChangeListener(new ModusChangeListener() {
 			@Override
 			public void customizeModeDeactivated() {
-
+				playVideo();
 			}
 
 			@Override
 			public void customizeModeActivated() {
-
+				releaseMediaPlayer();
 			}
 		});
 		
@@ -159,15 +159,7 @@ public class VideoStreamWidget extends SurfaceView implements
 		postInvalidate();
 	}
 
-	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
-		@Override
-		public void customizeModeDeactivated() {
-		}
-
-		@Override
-		public void customizeModeActivated() {
-		}
-	};
+	private ModusChangeListener tModusChangeListener;
 
 	private void startDotProgress() {
 		tIsPrepared = false;
