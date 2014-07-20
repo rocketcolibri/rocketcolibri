@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -20,7 +19,6 @@ import android.widget.Toast;
 import ch.futuretek.json.JsonTransformer;
 import ch.futuretek.json.exception.TransformException;
 import ch.hsr.rocketcolibri.R;
-import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.db.model.JsonRCModel;
 import ch.hsr.rocketcolibri.db.model.RCModel;
@@ -28,22 +26,18 @@ import ch.hsr.rocketcolibri.manager.DesktopViewManager;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
 import ch.hsr.rocketcolibri.menu.desktop.DesktopMenu;
+import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
+import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
+import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObserver;
+import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
-import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
-import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
-import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
-import ch.hsr.rocketcolibri.view.widget.Circle;
-import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
 import ch.hsr.rocketcolibri.view.widget.IRCWidget;
-import ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
-import ch.hsr.rocketcolibri.view.widget.VideoStreamWidget;
 
 /**
  * @author Artan Veliju
  */
-public class DesktopActivity extends RCActivity{
+public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeObserver{
 	private static final String TAG = "DesktopActivity";
 	private RCModel tModel;
 	private SurfaceView surface_view;
@@ -54,40 +48,8 @@ public class DesktopActivity extends RCActivity{
 	private IDesktopViewManager tDesktopViewManager;
 	
 	public static final boolean Debugging = false;
+	private boolean tIsControlling = false;
 	private DesktopMenu tDesktopMenu;
-
-
-//  TODO add video stream display here
-//	SurfaceHolder.Callback my_callback() {
-//		SurfaceHolder.Callback ob1 = new SurfaceHolder.Callback() {
-//
-//			@Override
-//			public void surfaceDestroyed(SurfaceHolder holder) {
-//				mCamera.stopPreview();
-//				mCamera.release();
-//				mCamera = null;
-//			}
-//
-//			@Override
-//			public void surfaceCreated(SurfaceHolder holder) {
-//				mCamera = Camera.open();
-//
-//				try {
-//					mCamera.setPreviewDisplay(holder);
-//				} catch (IOException exception) {
-//					mCamera.release();
-//					mCamera = null;
-//				}
-//			}
-//
-//			@Override
-//			public void surfaceChanged(SurfaceHolder holder, int format,
-//					int width, int height) {
-//				mCamera.startPreview();
-//			}
-//		};
-//		return ob1;
-//	}
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -125,10 +87,6 @@ public class DesktopActivity extends RCActivity{
 		//this line is needed because of the SwipeInMenu,
 		//there is a bug if no color is set on the surface view
 		surface_view.setBackgroundColor(Color.TRANSPARENT);
-//		TODO
-//		sh_callback = my_callback();
-//		surface_holder.addCallback(sh_callback);
-		
 	}
 	
 	private void unbindDrawables(View view) {
@@ -221,10 +179,12 @@ public class DesktopActivity extends RCActivity{
     	for(int i = 0; i < size; ++i){
     		try{
     			view = (IRCWidget) tDesktopViewManager.getControlElementParentView().getChildAt(i);
-    			rcService.tProtocol.registerUiOutputSinkChangeObserver(view);
+    			if (view instanceof IUiOutputSinkChangeObserver)
+    				rcService.tProtocol.registerUiOutputSinkChangeObserver((IUiOutputSinkChangeObserver)view);
     			rcService.tProtocol.registerUiInputSource(view);
     		} catch (Exception e) {e.printStackTrace();}
     	}
+    	rcService.tProtocol.registerUiOutputSinkChangeObserver(this);
 	}
 
 	@Override
@@ -234,12 +194,13 @@ public class DesktopActivity extends RCActivity{
     	for(int i = 0; i < size; ++i){
     		try{
     			view = (IRCWidget) tDesktopViewManager.getControlElementParentView().getChildAt(i);
-    			rcService.tProtocol.unregisterUiOutputSinkChangeObserver(view);
+    			if (view instanceof IUiOutputSinkChangeObserver)
+    				rcService.tProtocol.unregisterUiOutputSinkChangeObserver((IUiOutputSinkChangeObserver)view);
     			rcService.tProtocol.unregisterUiInputSource(view);
     		} catch (Exception e) {e.printStackTrace();}
     	}
-    	
-	  super.onPause();
+    	rcService.tProtocol.unregisterUiOutputSinkChangeObserver(this);
+    	super.onPause();
 	}
 	
 	private void printOutJson(){
@@ -262,5 +223,22 @@ public class DesktopActivity extends RCActivity{
 	@Override
 	protected String getClassName() {
 		return DesktopActivity.class.getSimpleName();
+	}
+	
+	@Override
+	public void onBackPressed() {
+		if(!tIsControlling)
+			super.onBackPressed();
+	}
+
+	@Override
+	public void onNotifyUiOutputSink(Object p) {
+		ConnectionState data = (ConnectionState)p;
+		tIsControlling = ((s.TRY_CONN == data.getState()) || (s.CONN_CONTROL == data.getState()));
+	}
+
+	@Override
+	public UiOutputDataType getType(){
+		return UiOutputDataType.ConnectionState;
 	}
 }

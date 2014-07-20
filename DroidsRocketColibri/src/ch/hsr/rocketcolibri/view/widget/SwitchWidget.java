@@ -13,7 +13,6 @@ import android.widget.Switch;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
-import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.util.DrawingTools;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
@@ -170,15 +169,6 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 	public void setProtocolMap(Map<String, String> protocolMap) {
 		tWidgetConfig.protocolMap = protocolMap;
 		updateProtocolMap();
-	}
-
-	@Override
-	public void onNotifyUiOutputSink(Object data) {
-	}
-
-	@Override
-	public UiOutputDataType getType() {
-		return UiOutputDataType.None;
 	}
 
 	protected int getProtocolMapInt(String key) {

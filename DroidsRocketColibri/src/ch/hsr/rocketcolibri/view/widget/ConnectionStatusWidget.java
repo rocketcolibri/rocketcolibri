@@ -28,6 +28,7 @@ import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
+import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObserver;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.util.DrawingTools;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
@@ -40,7 +41,7 @@ import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
  * 
  *  The status of the connection is indicated with a icon according to the Systemschnittstellen document 
  */
-public class ConnectionStatusWidget extends View implements ICustomizableView, IRCWidget {
+public class ConnectionStatusWidget extends View implements ICustomizableView, IRCWidget, IUiOutputSinkChangeObserver {
 
 	protected ViewElementConfig tViewElementConfig;
 	protected RCWidgetConfig tWidgetConfig;

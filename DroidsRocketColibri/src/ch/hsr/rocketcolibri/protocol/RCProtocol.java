@@ -9,9 +9,11 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObservable;
+import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObserver;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputData;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.ui_data.output.UserData;
@@ -26,7 +28,7 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 	protected List<UiInputSourceChannel> tChannelList = new ArrayList<UiInputSourceChannel>();
 	
 	protected Lock tUiOutputSinkChangeObserverMutex;
-	private HashMap<UiOutputDataType, List<IRCWidget>> tUiOutputSinkChangeObserver;
+	private HashMap<UiOutputDataType, List<IUiOutputSinkChangeObserver>> tUiOutputSinkChangeObserver;
 	// --- Ui Output Source data
 	//  .. data about the users connected to the servo controller
 	public UserData tUsers;
@@ -48,9 +50,9 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 		tUiOutputSinkChangeObserverMutex = new ReentrantLock(true);
 		// observer map
 		tUiOutputSinkChangeObserverMutex.lock();
-		tUiOutputSinkChangeObserver = new HashMap<UiOutputDataType, List<IRCWidget>>();
+		tUiOutputSinkChangeObserver = new HashMap<UiOutputDataType, List<IUiOutputSinkChangeObserver>>();
 		for (UiOutputDataType type : UiOutputDataType.values()) 
-			tUiOutputSinkChangeObserver.put(type, new ArrayList<IRCWidget>());
+			tUiOutputSinkChangeObserver.put(type, new ArrayList<IUiOutputSinkChangeObserver>());
 		tUiOutputSinkChangeObserverMutex.unlock();
 		startNotifiyUiOutputData();
 	
@@ -61,7 +63,7 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 			private void sendToAll(UiOutputData data)	{
 				tUiOutputSinkChangeObserverMutex.lock();
 				if(data.getAndResetNotifyFlag()) {
-	            	for(IRCWidget observer : tUiOutputSinkChangeObserver.get(data.getType())) {
+	            	for(IUiOutputSinkChangeObserver observer : tUiOutputSinkChangeObserver.get(data.getType())) {
 	        			// select the right list and object depending on the type
 	        			observer.onNotifyUiOutputSink(data);
 	        		}
@@ -121,7 +123,7 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 
     /** Register a UI output sink (RCWidget) */ 
 	@Override
-	public void registerUiOutputSinkChangeObserver(IRCWidget customizableView) {
+	public void registerUiOutputSinkChangeObserver(IUiOutputSinkChangeObserver customizableView) {
 		tUiOutputSinkChangeObserverMutex.lock();
 		UiOutputDataType type = customizableView.getType();
 		
@@ -137,7 +139,7 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 
     /** Unregister a UI output sink (RCWidget) */
 	@Override
-	public void unregisterUiOutputSinkChangeObserver(IRCWidget observer) {
+	public void unregisterUiOutputSinkChangeObserver(IUiOutputSinkChangeObserver observer) {
 		tUiOutputSinkChangeObserverMutex.lock();
 		UiOutputDataType type = observer.getType();
 		if(type != UiOutputDataType.None) {

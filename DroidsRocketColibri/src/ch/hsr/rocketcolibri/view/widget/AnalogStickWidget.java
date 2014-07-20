@@ -7,6 +7,7 @@ import java.util.Map;
 
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
+import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObserver;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.util.DrawingTools;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
@@ -27,7 +28,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 
-public class AnalogStickWidget extends View implements ICustomizableView, IRCWidget {
+public class AnalogStickWidget extends View implements ICustomizableView, IRCWidget, IUiOutputSinkChangeObserver {
 	public static final int INVALID_POINTER_ID = -1;
 	private boolean tDebug;
 

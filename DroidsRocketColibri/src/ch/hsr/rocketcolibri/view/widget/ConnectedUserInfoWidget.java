@@ -22,6 +22,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RcOperator;
+import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObserver;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.ui_data.output.UserData;
 import ch.hsr.rocketcolibri.util.DrawingTools;
@@ -33,7 +34,7 @@ import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 /**
  * @short widget to display the user data received from the ServoController 
  */
-public class ConnectedUserInfoWidget extends View implements ICustomizableView, IRCWidget {
+public class ConnectedUserInfoWidget extends View implements ICustomizableView, IRCWidget, IUiOutputSinkChangeObserver {
 	
 	protected RCWidgetConfig tWidgetConfig;
 	private Paint tUserBitmapPaint;

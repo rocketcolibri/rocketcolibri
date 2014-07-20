@@ -7,6 +7,7 @@ import java.util.Map;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
+import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObserver;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.ui_data.output.VideoUrl;
 import ch.hsr.rocketcolibri.util.DrawingTools;
@@ -52,7 +53,7 @@ import android.view.ViewGroup;
  *
  */
 public class VideoStreamWidget extends SurfaceView implements
-		ICustomizableView, IRCWidget, SurfaceHolder.Callback, OnPreparedListener, OnErrorListener, OnBufferingUpdateListener{
+		ICustomizableView, IRCWidget, IUiOutputSinkChangeObserver, SurfaceHolder.Callback, OnPreparedListener, OnErrorListener, OnBufferingUpdateListener{
 
 	static final String TAG = "VideoStreamWidget";
 	private Bitmap tVideoBitmap;

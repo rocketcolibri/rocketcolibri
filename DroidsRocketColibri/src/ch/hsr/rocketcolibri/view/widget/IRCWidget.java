@@ -3,10 +3,8 @@ package ch.hsr.rocketcolibri.view.widget;
 import java.util.List;
 import java.util.Map;
 
-import android.app.Service;
 import android.view.View.OnTouchListener;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
-import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 
 public interface IRCWidget {
@@ -45,19 +43,7 @@ public interface IRCWidget {
 	 * This Method is for implementing the update process after the ProtocolMap is changed.
 	 */
 	void updateProtocolMap();
-	
-	/**
-	 * RocketColibriService sends UiSink change notification with this methods
-	 * The Object class depends on the return value of getType
-	 * @param data
-	 */
-	void onNotifyUiOutputSink(Object data);
-	
-	/**
-	 * Override this function with the Ui Output data type the widget wants to receive with the onNotifyUiOutputSink method. 
-	 * @return type
-	 */
-	UiOutputDataType getType();
+
 
 	/**
 	 * Override this function and return all Channel objects that are assigned to this Widget

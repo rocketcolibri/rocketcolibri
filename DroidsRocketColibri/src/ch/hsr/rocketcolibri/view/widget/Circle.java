@@ -14,6 +14,7 @@ import ch.hsr.rocketcolibri.protocol.RCProtocolUdp;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
+import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObserver;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.util.DrawingTools;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
@@ -45,7 +46,7 @@ import android.content.res.TypedArray;
 /**
  * @author Artan Veliju
  */
-public final class Circle extends View implements ICustomizableView, IRCWidget  {
+public final class Circle extends View implements ICustomizableView, IRCWidget, IUiOutputSinkChangeObserver  {
 //	private static final String TAG = Circle.class.getSimpleName();
 	private RectF rimRect;
 	private Paint rimPaint;
