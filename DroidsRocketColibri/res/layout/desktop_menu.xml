@@ -44,7 +44,7 @@
                     android:button="@drawable/selector_main_menu_settings"
                     android:checked="false"
                     android:contentDescription="@string/menu_action_main_settings"
-                    android:textOff="Operate"
+                    android:textOff="Control Mode"
                     android:textOn="Config Mode" >
                 </ToggleButton>
 
