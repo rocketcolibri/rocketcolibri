@@ -1,6 +1,8 @@
 package ch.hsr.rocketcolibri.util;
 
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -94,5 +96,34 @@ public class DrawingTools {
 				canvas.translate(-scrollX, -scrollY);
 			}
 		}
+	}
+
+	public static LayoutParams checkMaxSize(LayoutParams lParam, AbsoluteLayout parent) {
+		LayoutParams maxSizeLP = lParam;
+
+		if(maxSizeLP.height + maxSizeLP.y > parent.getHeight()) {
+			maxSizeLP.y = parent.getHeight() - maxSizeLP.height;
+		}
+
+		if(lParam.width + lParam.x > parent.getWidth()) {
+			maxSizeLP.x = parent.getWidth() - maxSizeLP.width;
+		}
+		
+		if (maxSizeLP.y < 0) {
+			maxSizeLP.y = 0;
+		}
+
+		if (maxSizeLP.x < 0) {
+			maxSizeLP.x = 0;
+		}
+
+		if (maxSizeLP.height > parent.getHeight()) {
+			maxSizeLP.height = parent.getHeight();
+		}
+
+		if (maxSizeLP.width > parent.getWidth()) {
+			maxSizeLP.width = parent.getWidth();
+		}
+		return maxSizeLP;
 	}
 }

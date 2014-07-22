@@ -6,6 +6,7 @@ package ch.hsr.rocketcolibri.view.resizable.layer;
 import java.util.ArrayList;
 
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.util.DrawingTools;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.draggable.HelplineDrawer;
@@ -456,6 +457,8 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
 			public void maximize() {
 				tResizeTargetLP.height = tConfig.maxHeight;
 				tResizeTargetLP.width = tConfig.maxWidth;
+				tResizeTargetLP = DrawingTools.checkMaxSize(tResizeTargetLP, (AbsoluteLayout) tResizeTarget.getParent());
+
 				if(tResizeTargetLP.height+tResizeTargetLP.y>tParent.getHeight())
 					tResizeTargetLP.y=tParent.getHeight()-tResizeTargetLP.height;
 				if(tResizeTargetLP.width+tResizeTargetLP.x>tParent.getWidth())

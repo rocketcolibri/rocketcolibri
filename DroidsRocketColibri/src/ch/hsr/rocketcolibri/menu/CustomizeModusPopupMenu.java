@@ -16,6 +16,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
+import ch.hsr.rocketcolibri.util.DrawingTools;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.HoldImageView.OnHoldListener;
@@ -64,10 +65,8 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 					AbsoluteLayout parent = (AbsoluteLayout) tTargetView.getParent();
 					resizeTargetLP.height = config.maxHeight;
 					resizeTargetLP.width = config.maxWidth;
-					if(resizeTargetLP.height+resizeTargetLP.y>parent.getHeight())
-						resizeTargetLP.y=parent.getHeight()-resizeTargetLP.height;
-					if(resizeTargetLP.width+resizeTargetLP.x>parent.getWidth())
-						resizeTargetLP.x=parent.getWidth()-resizeTargetLP.width;
+					resizeTargetLP = DrawingTools.checkMaxSize(resizeTargetLP, parent);
+
 					parent.updateViewLayout(tTargetView, resizeTargetLP);
 					enableMaximizedAndMinimized(true);
 				}catch(Exception e){e.printStackTrace();}
@@ -124,7 +123,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 			}
 		});
 	}
-	
+
 	public void show(View cView){
 		dismissPopupIfIsShowing();
 		tTargetView = cView;
