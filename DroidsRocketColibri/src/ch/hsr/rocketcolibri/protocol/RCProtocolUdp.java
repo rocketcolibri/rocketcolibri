@@ -258,6 +258,7 @@ public class RCProtocolUdp extends RCProtocol{
 	public void eventConnectionEstablished() {
 		tFsm.queue(e.E1_CONN_SSID);
 		tFsm.processOutstandingEvents();
+		super.eventConnectionEstablished();
 	}
 	
 	/**
@@ -268,6 +269,7 @@ public class RCProtocolUdp extends RCProtocol{
 		cancelOldCommandJob();
 		tFsm.queue(e.E2_DISC_SSID);
 		tFsm.processOutstandingEvents();
+		super.eventConnectionInterrupted();
 	}
 	
 	/**

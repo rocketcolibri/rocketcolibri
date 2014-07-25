@@ -54,11 +54,10 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 		for (UiOutputDataType type : UiOutputDataType.values()) 
 			tUiOutputSinkChangeObserver.put(type, new ArrayList<IUiOutputSinkChangeObserver>());
 		tUiOutputSinkChangeObserverMutex.unlock();
-		startNotifiyUiOutputData();
-	
 	}
 	
 	public void startNotifiyUiOutputData() {
+		stopNotifiyUiOutputData();
 		tNotificationSchedulerFuture = tNotificationScheduler.scheduleAtFixedRate(new Runnable() {
 			private void sendToAll(UiOutputData data)	{
 				tUiOutputSinkChangeObserverMutex.lock();
@@ -95,14 +94,14 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 	 * physical connection established (e.g. Wifi connected)
 	 */
 	public void eventConnectionEstablished() {
-		
+		startNotifiyUiOutputData();	
 	}
 	
 	/**
 	 * physical connection interrupted
 	 */
 	public void eventConnectionInterrupted() {
-		
+		stopNotifiyUiOutputData();
 	}
 	
 	/**
