@@ -134,7 +134,7 @@ public abstract class RCActivity extends Activity {
 	}
 	
 	protected void toast(String msg) {
-		Toast t3 = Toast.makeText(this, msg, Toast.LENGTH_LONG);
+		Toast t3 = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
 		t3.show();
 	}
 	

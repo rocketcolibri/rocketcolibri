@@ -18,11 +18,14 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.WindowManager.LayoutParams;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.db.RocketColibriDB;
+import ch.hsr.rocketcolibri.db.model.Defaults;
 import ch.hsr.rocketcolibri.db.model.RCModel;
 import ch.hsr.rocketcolibri.util.CacheUtil;
 
@@ -33,13 +36,13 @@ public class ModelListActivity extends RCActivity {
 
     private PackageAdapter adapter;
     private List<ModelRow> data;
-
     private SwipeListView swipeListView;
-
     private ModelRow selected;
     private boolean loadOnce = true;
     private RocketColibriDB db;
     private CacheUtil tCacheUtil;
+    private boolean firstTime = true;
+    private OID selectedOnDesktop;
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
@@ -47,8 +50,8 @@ public class ModelListActivity extends RCActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.model_list);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-//        WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+        getWindow().setFlags(LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
         data = new ArrayList<ModelRow>();
         tCacheUtil = new CacheUtil(ModelListActivity.this);
         swipeListView = (SwipeListView) findViewById(R.id.listView);
@@ -59,45 +62,63 @@ public class ModelListActivity extends RCActivity {
 				createItem();
 			}
 		});
-//        if (Build.VERSION.SDK_INT >= 11) {
-//            swipeListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-//        }
 
         swipeListView.setSwipeListViewListener(new BaseSwipeListViewListener() {
-            public void onOpened(int position, boolean toRight) {
-            }
-            public void onClosed(int position, boolean fromRight) {
-            }
-            public void onListChanged() {
-            }
-            public void onMove(int position, float x) {
-            }
-            public void onStartOpen(int position, int action, boolean right) {
-            }
-            public void onStartClose(int position, boolean right) {
-            }
+            public void onOpened(int position, boolean toRight) {}
+            public void onClosed(int position, boolean fromRight) {}
+            public void onListChanged() {}
+            public void onMove(int position, float x) {}
+            public void onStartOpen(int position, int action, boolean right) {}
+            public void onStartClose(int position, boolean right) {}
             public void onClickFrontView(int position) {
 				Intent i = new Intent(getIntent().getAction());
 				i.putExtra(RCConstants.FLAG_ACTIVITY_RC_MODEL, adapter.getItem(position).getName());
             	setResult(RCConstants.RC_MODEL_RESULT_CODE, i);
             	finish();
             }
-            public void onClickBackView(int position) {
-            }
+            public void onClickBackView(int position) {}
 
         });
-
         swipeListView.setAdapter(adapter);
-
-//        reload();
-
         showLoading(getString(R.string.loading));
-
     }
+    
+    public boolean onTouchEvent(MotionEvent event)  {
+           if(event.getAction() == MotionEvent.ACTION_OUTSIDE){
+        	   if(firstTime){
+        		   uitoast("you need to select a model before you leave!");
+        		   return true;
+        	   }else{
+        		   finish();
+        		   return true;
+        	   }
+           }
+           return false;  
+    }  
 
 	@Override
 	protected void onServiceReady() {
 		db = rcService.getRocketColibriDB();
+        try{
+        	if(getIntent()!=null && getIntent().hasExtra(RCConstants.FLAG_ACTIVITY_RC_MODEL)){
+        		String modelName = getIntent().getStringExtra(RCConstants.FLAG_ACTIVITY_RC_MODEL);
+        		if(modelName!=null){
+        			RCModel m = db.fetchRCModelByName(modelName);
+        			if(m!=null){
+        				selectedOnDesktop = db.getOdb().getObjectId(m);
+        				firstTime = false;
+        			}else{
+        				firstTime = true;
+        			}
+        		}else{
+        			firstTime = true;
+        		}
+        	}else{
+        		firstTime = true;
+        	}
+        }catch(Exception e){
+        	firstTime = true;
+        }
 		if(loadOnce){
 			loadOnce = false;
 			new ListAppTask().execute();
@@ -227,8 +248,16 @@ public class ModelListActivity extends RCActivity {
 	
 	public void deleteItem(int position){
 		ModelRow pi = adapter.getItem(position);
+		if(pi.getId().equals(selectedOnDesktop)){
+			try{
+				Defaults def = (Defaults) db.fetch(Defaults.class).getFirst();
+				db.delete(def);
+				firstTime = true;
+			}catch(Exception e){}
+		}
 		data.remove(pi);
 		db.getOdb().deleteObjectWithId(pi.getId());
+		db.getOdb().commit();
 		adapter.notifyDataSetChanged();
 	}
 

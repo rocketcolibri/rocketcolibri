@@ -133,8 +133,7 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 				if(defaultModelName!=null){
 					tModel = tDB.fetchRCModelByName(defaultModelName);
 				}else{
-					Intent i = new Intent(this, ModelListActivity.class);
-					startActivityForResult(i, RCConstants.RC_MODEL_RESULT_CODE);
+					openModelListActivity();
 					return;
 				}
 			}
@@ -186,6 +185,13 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 	    if (!Debugging) return;
 	    Log.d ("DesktopActivity", msg);
 	    toast (msg);
+	}
+	
+	public void openModelListActivity(){
+		Intent i = new Intent(this, ModelListActivity.class);
+		i.putExtra(RCConstants.FLAG_ACTIVITY_RC_MODEL, getDefaultModelName());
+		startActivityForResult(i, RCConstants.RC_MODEL_RESULT_CODE);
+
 	}
 	
 	@Override
