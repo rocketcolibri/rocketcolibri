@@ -209,7 +209,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	
 	@Override
 	public void editActivityResult(int viewIndex, Intent editChannelIntent){
-		Log.d(""+viewIndex, "editActivityResult");
+		Log.d(""+viewIndex, "editActivityResult "+tControlElementParentView.getChildCount());
 		IRCWidget rcw = (IRCWidget)tControlElementParentView.getChildAt(viewIndex);
 		Set<String> keySet = rcw.getProtocolMap().keySet();
 		for(String key : keySet){

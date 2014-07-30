@@ -202,6 +202,7 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 				showLoading(getString(R.string.loading));
 				setDefaultModelName(modelName);
 				releaseDesktop();
+				tDesktopViewManager.getControlElementParentView().removeAllViews();
 				tModel = tDB.fetchRCModelByName(modelName);
 				setupViewsOnce = true;
 				setupDesktop();
@@ -240,7 +241,6 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
     			rcService.tProtocol.unregisterUiInputSource(view);
     		} catch (Exception e) {e.printStackTrace();}
     	}
-    	tDesktopViewManager.getControlElementParentView().removeAllViews();
     	rcService.tProtocol.unregisterUiOutputSinkChangeObserver(this);
 	}
 	

@@ -3,14 +3,11 @@
  */
 package ch.hsr.rocketcolibri.menu;
 
-import org.neodatis.odb.core.transaction.IWriteAction;
-
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.AlphaAnimation;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
