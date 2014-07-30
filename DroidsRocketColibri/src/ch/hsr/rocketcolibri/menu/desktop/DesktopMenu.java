@@ -59,6 +59,10 @@ public class DesktopMenu {
 		tSwipeInMenu.animateToggle();
 	}
 	
+	public void animateClose(){
+		tSwipeInMenu.animateClose();
+	}
+	
 	public void setService(RocketColibriService rcService) {
 		tService = rcService;
 		if(initOnce){
@@ -86,24 +90,27 @@ public class DesktopMenu {
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
 	    		// TODO not set to null from here!
 	    		// tRcService.users.setActiveUser(null);
-	    		if (isChecked) 
+	    		if (isChecked) { 
 	    			tService.tWifi.connectRocketColibriSSID(tService);
-		        else
+		        	findViewById(R.id.menu_action_main_mode).setVisibility(View.VISIBLE);
+	    		} else {
 		        	tService.tWifi.disconnectRocketColibriSSID(tService);
+		        	findViewById(R.id.menu_action_main_mode).setVisibility(View.GONE);
+		        }
 		    }
 		});
 		
-
 		b = (ToggleButton)findViewById(R.id.menu_action_main_mode);
 		b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-	    		if (isChecked){
-					tService.tProtocol.eventUserStartControl();
-	    		}else{
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
+                if (isChecked){
+                    tService.tProtocol.eventUserStartControl();
+                }else{
 	    			tService.tProtocol.eventUserStopControl();
 		        }
 		    }
 		});
+		b.setVisibility(View.GONE);	     // No Wifi connection on start, therefore view won't be visible
 		setServiceDependentButtonsEnabled(false);
 	}
 	

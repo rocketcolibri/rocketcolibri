@@ -11,6 +11,7 @@ import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
  * @author Artan Veliju
  */
 public class RCModel {
+//	private String iconPath;
 	private String name;
 	private List<RCWidgetConfig> widgetConfigs;
 	
@@ -32,17 +33,25 @@ public class RCModel {
 	
 	@Override
 	public boolean equals(Object theModel) {
-		if (this.getName().equals(((RCModel)theModel).getName())) {
-			for (int i = 0; i < widgetConfigs.size(); i++) {
-				if (!widgetConfigs.get(i).equals(((RCModel)theModel).getWidgetConfigs().get(i))) {
-					return false;
+		try{
+			if (this.getName().equals(((RCModel)theModel).getName())) {
+				if(widgetConfigs==null){
+					if(((RCModel)theModel).getWidgetConfigs()!=null)
+						return false;
+					return true;
+				}
+				for (int i = 0; i < widgetConfigs.size(); i++) {
+					if (!widgetConfigs.get(i).equals(((RCModel)theModel).getWidgetConfigs().get(i))) {
+						return false;
+					}
 				}
 			}
-		}
-		else {
+			else {
+				return false;
+			}
+		}catch(Exception e){
 			return false;
 		}
-
 		return true;
 	}
 }

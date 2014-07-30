@@ -35,6 +35,12 @@
             android:textOff="Observe"
             android:textOn="Operate" >
         </ToggleButton>
+        <Button
+            android:id="@+id/modelListBtn"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:text="Model" >
+        </Button>
     </GridLayout>
 
 </ch.hsr.rocketcolibri.menu.desktop.ControlModusContent>

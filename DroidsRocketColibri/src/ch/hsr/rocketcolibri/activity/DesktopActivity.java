@@ -6,6 +6,7 @@ package ch.hsr.rocketcolibri.activity;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -19,7 +20,10 @@ import android.widget.Toast;
 import ch.futuretek.json.JsonTransformer;
 import ch.futuretek.json.exception.TransformException;
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.RocketColibriDefaults;
+import ch.hsr.rocketcolibri.db.RocketColibriDB;
+import ch.hsr.rocketcolibri.db.model.Defaults;
 import ch.hsr.rocketcolibri.db.model.JsonRCModel;
 import ch.hsr.rocketcolibri.db.model.RCModel;
 import ch.hsr.rocketcolibri.manager.DesktopViewManager;
@@ -41,11 +45,12 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 	private static final String TAG = "DesktopActivity";
 	private RCModel tModel;
 	private SurfaceView surface_view;
+	private RocketColibriDB tDB;
 	// private Camera mCamera;
 	SurfaceHolder.Callback sh_ob = null;
 	SurfaceHolder surface_holder = null;
 	SurfaceHolder.Callback sh_callback = null;
-	private IDesktopViewManager tDesktopViewManager;
+	private DesktopViewManager tDesktopViewManager;
 	
 	public static final boolean Debugging = false;
 	private boolean tIsControlling = false;
@@ -66,6 +71,8 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 
 			@Override
 			public void onViewAdd(RCWidgetConfig widgetConfig) {
+				if(tModel.getWidgetConfigs()==null)
+					tModel.setWidgetConfigs(new ArrayList<RCWidgetConfig>(1));
 				tModel.getWidgetConfigs().add(widgetConfig);
 				rcService.getRocketColibriDB().store(tModel);
 			}
@@ -119,11 +126,19 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 	/**
 	 * Finds all the views we need and configure them to send click events to the activity.
 	 */
-	private void setupViews() {
+	private void setupDesktop() {
 		if (setupViewsOnce) {
-			tModel = rcService.getRocketColibriDB().fetchRCModelByName(
-					"Test Model");
-			if (tModel != null)
+			if(tModel==null){
+				String defaultModelName = getDefaultModelName();
+				if(defaultModelName!=null){
+					tModel = tDB.fetchRCModelByName(defaultModelName);
+				}else{
+					Intent i = new Intent(this, ModelListActivity.class);
+					startActivityForResult(i, RCConstants.RC_MODEL_RESULT_CODE);
+					return;
+				}
+			}
+			if (tModel != null && tModel.getWidgetConfigs()!=null)
 				for (RCWidgetConfig vec : tModel.getWidgetConfigs()) {
 					try {
 						Log.d(getClassName(), "initCreateAndAddView: "+vec.viewElementConfig.getClassPath());
@@ -136,6 +151,17 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 //			printOutJson();
 			setupViewsOnce = false;
 		}
+		int size = tDesktopViewManager.getControlElementParentView().getChildCount();
+    	IRCWidget view = null;
+    	for(int i = 0; i < size; ++i){
+    		try{
+    			view = (IRCWidget) tDesktopViewManager.getControlElementParentView().getChildAt(i);
+    			if (view instanceof IUiOutputSinkChangeObserver)
+    				rcService.tProtocol.registerUiOutputSinkChangeObserver((IUiOutputSinkChangeObserver)view);
+    			rcService.tProtocol.registerUiInputSource(view);
+    		} catch (Exception e) {e.printStackTrace();}
+    	}
+    	rcService.tProtocol.registerUiOutputSinkChangeObserver(this);
 	}
 	
 	public IDesktopViewManager getDesktopViewManager(){
@@ -163,32 +189,41 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 	}
 	
 	@Override
-	protected void onActivityResult(int viewIndex, int resultCode, Intent editChannelIntent) {
-		Log.d("", "viewIndex:"+viewIndex+" resultCode: "+resultCode);
-        if (resultCode == RESULT_OK) {
-            tDesktopViewManager.editActivityResult(viewIndex, editChannelIntent);
-        }
+	protected void onActivityResult(int requestCode, int resultCode, Intent editChannelIntent) {
+		if (requestCode == RCConstants.RC_MODEL_RESULT_CODE && editChannelIntent!=null) {
+			String modelName = editChannelIntent.getStringExtra(RCConstants.FLAG_ACTIVITY_RC_MODEL);
+			if(modelName!=null){
+				showLoading(getString(R.string.loading));
+				setDefaultModelName(modelName);
+				releaseDesktop();
+				tModel = tDB.fetchRCModelByName(modelName);
+				setupViewsOnce = true;
+				setupDesktop();
+				tDesktopMenu.animateClose();
+				hideLoading();
+			}
+		}else{
+			Log.d("", "viewIndex:"+requestCode+" resultCode: "+resultCode);
+	        if (resultCode == RESULT_OK) {
+	            tDesktopViewManager.editActivityResult(requestCode, editChannelIntent);
+	        }
+		}
 	}
 
 	@Override
 	protected void onServiceReady() {
-		setupViews();
+		tDB = rcService.getRocketColibriDB();
 		tDesktopMenu.setService(rcService) ;
-		int size = tDesktopViewManager.getControlElementParentView().getChildCount();
-    	IRCWidget view = null;
-    	for(int i = 0; i < size; ++i){
-    		try{
-    			view = (IRCWidget) tDesktopViewManager.getControlElementParentView().getChildAt(i);
-    			if (view instanceof IUiOutputSinkChangeObserver)
-    				rcService.tProtocol.registerUiOutputSinkChangeObserver((IUiOutputSinkChangeObserver)view);
-    			rcService.tProtocol.registerUiInputSource(view);
-    		} catch (Exception e) {e.printStackTrace();}
-    	}
-    	rcService.tProtocol.registerUiOutputSinkChangeObserver(this);
+		setupDesktop();
 	}
 
 	@Override
 	protected void onPause(){
+		releaseDesktop();
+    	super.onPause();
+	}
+	
+	private void releaseDesktop(){
 		int size = tDesktopViewManager.getControlElementParentView().getChildCount();
     	IRCWidget view = null;
     	for(int i = 0; i < size; ++i){
@@ -199,8 +234,8 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
     			rcService.tProtocol.unregisterUiInputSource(view);
     		} catch (Exception e) {e.printStackTrace();}
     	}
+    	tDesktopViewManager.getControlElementParentView().removeAllViews();
     	rcService.tProtocol.unregisterUiOutputSinkChangeObserver(this);
-    	super.onPause();
 	}
 	
 	private void printOutJson(){
@@ -240,5 +275,21 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 	@Override
 	public UiOutputDataType getType(){
 		return UiOutputDataType.ConnectionState;
+	}
+	
+	public void setDefaultModelName(String name){
+		Defaults def = null;
+		try{def = (Defaults) tDB.fetch(Defaults.class).getFirst();}catch(Exception e){}
+		if(def==null)def = new Defaults();
+		def.modelName = name;
+		tDB.store(def);
+		uitoast(name);
+	}
+	
+	public String getDefaultModelName(){
+		Defaults def = null;
+		try{def = (Defaults) tDB.fetch(Defaults.class).getFirst();}catch(Exception e){}
+		if(def!=null)return def.modelName;
+		return null;
 	}
 }

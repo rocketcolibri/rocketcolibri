@@ -7,6 +7,7 @@ import java.io.File;
 
 import org.neodatis.odb.ODB;
 import org.neodatis.odb.ODBFactory;
+import org.neodatis.odb.OID;
 import org.neodatis.odb.Objects;
 import org.neodatis.odb.OdbConfiguration;
 import org.neodatis.odb.core.query.IQuery;
@@ -33,7 +34,7 @@ public class RocketColibriDB {
 		return tOdb.getObjects(clazz);
 	}
 	
-	public Objects fetchAllRCModels(){
+	public Objects<RCModel> fetchAllRCModels(){
 		return tOdb.getObjects(RCModel.class);
 	}
 	
@@ -61,9 +62,14 @@ public class RocketColibriDB {
 		tOdb.commit();
 	}
 	
-	public void store(Object obj){
-		tOdb.store(obj);
+	public ODB getOdb(){
+		return tOdb;
+	}
+	
+	public OID store(Object obj){
+		OID oid = tOdb.store(obj);
 		tOdb.commit();
+		return oid;
 	}
 	
 	public void close(){

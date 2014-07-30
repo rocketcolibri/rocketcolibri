@@ -1,6 +1,9 @@
 package ch.hsr.rocketcolibri;
 
 public class RCConstants {
+	public static final int CAPTURE_RESULT_CODE = 1999;
+	public static final int RC_MODEL_RESULT_CODE = 1777;
+	public static final String FLAG_ACTIVITY_RC_MODEL = "fa_rc_model";
 	public static final String PREFIX = "rc_";
 	
 	private static final String _CHANNEL_ASSIGNMENT = "channel_assignment";
