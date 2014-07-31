@@ -58,6 +58,7 @@ public class ModelListAdapter extends BaseAdapter {
             LayoutInflater li = (LayoutInflater) tContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = li.inflate(R.layout.model_row, parent, false);
             holder = new ViewHolder();
+            holder.front = convertView.findViewById(R.id.front);
             holder.icon = (ImageView) convertView.findViewById(R.id.model_row_icon);
             holder.title = (EditText) convertView.findViewById(R.id.model_row_title);
             holder.description = (TextView) convertView.findViewById(R.id.model_row_description);
@@ -127,12 +128,14 @@ public class ModelListAdapter extends BaseAdapter {
     		holder.title.setFocusable(enable);
     	holder.title.setLongClickable(enable);
     	holder.title.setClickable(enable);
+    	holder.front.setEnabled(!enable);
     	holder.title.setInputType(enable?InputType.TYPE_CLASS_TEXT:InputType.TYPE_NULL);
     	holder.acceptEditBtn.setVisibility(visibility);
     	holder.cancelEditBtn.setVisibility(visibility);
     }
 
     static class ViewHolder {
+    	View front;
         ImageView icon;
         EditText title;
         TextView description;
