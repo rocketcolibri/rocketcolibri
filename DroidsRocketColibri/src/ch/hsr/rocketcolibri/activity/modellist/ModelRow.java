@@ -1,4 +1,4 @@
-package ch.hsr.rocketcolibri.activity;
+package ch.hsr.rocketcolibri.activity.modellist;
 import org.neodatis.odb.OID;
 
 import android.graphics.drawable.Drawable;

@@ -25,6 +25,9 @@ import android.view.View;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.RocketColibriDefaults;
+import ch.hsr.rocketcolibri.activity.modellist.ModelListAdapter;
+import ch.hsr.rocketcolibri.activity.modellist.ModelRow;
+import ch.hsr.rocketcolibri.activity.modellist.ModelRowActionListener;
 import ch.hsr.rocketcolibri.db.RocketColibriDB;
 import ch.hsr.rocketcolibri.db.model.Defaults;
 import ch.hsr.rocketcolibri.db.model.RCModel;
@@ -52,15 +55,12 @@ public class ModelListActivity extends RCActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.model_list);
         tDeviceIconWith = RocketColibriDefaults.dpToPixel(getResources().getDisplayMetrics(), (int)getResources().getDimension(R.dimen.size_list_image));
-//        getWindow().setFlags(LayoutParams.FLAG_NOT_TOUCH_MODAL, LayoutParams.FLAG_NOT_TOUCH_MODAL);
-//        getWindow().setFlags(LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
         tData = new ArrayList<ModelRow>();
         tCacheUtil = new CacheUtil(ModelListActivity.this);
         tSwipeListView = (SwipeListView) findViewById(R.id.listView);
-        tAdapter = new ModelListAdapter(this, tData, tSwipeListView);
+        tAdapter = new ModelListAdapter(this, tData, createRowActionListener());
 
         findViewById(R.id.newBtn).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -201,9 +201,7 @@ public class ModelListActivity extends RCActivity {
     
     private ModelRow createModelRow(RCModel model, OID oid){
 		ModelRow item = new ModelRow();
-		if(oid==null){
-			oid = db.getOdb().getObjectId(model);
-		}
+		if(oid==null){oid = db.getOdb().getObjectId(model);}
 		item.setId(oid);
         item.setName(model.getName());
         try {
@@ -228,31 +226,62 @@ public class ModelListActivity extends RCActivity {
 	protected String getClassName() {
 		return null;
 	}
-
     
-    public void setSelectedItem(int position){
-    	tSelectedRow = tAdapter.getItem(position);
-    }
-    
-	public boolean saveItem(int position, String newName) {
-		ModelRow pi = tAdapter.getItem(position);
-		if(newName.equals(pi.getName()))return true;
-		RCModel m = (RCModel) db.getOdb().getObjectFromId(pi.getId());
-		if(m!=null){
-			RCModel nameExistsModel = db.fetchRCModelByName(newName);
-			if(nameExistsModel!=null){
-				if(!pi.getId().equals(db.getOdb().getObjectId(nameExistsModel))){
-					uitoast(getString(R.string.model_list_name_already_exists));
-					return false;
-				}
+    private ModelRowActionListener createRowActionListener(){
+    	return new ModelRowActionListener() {
+			public void icon(int position){
+				tSelectedRow = tAdapter.getItem(position);
+				Intent cameraIntent = new Intent(
+						android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+				startActivityForResult(cameraIntent, RCConstants.CAPTURE_RESULT_CODE);
 			}
-			m.setName(newName);
-			db.store(m);
-			pi.setName(newName);
-		}
-		tAdapter.notifyDataSetChanged();
-		return true;
-	}
+
+			public boolean saveItem(int position, String newName) {
+				ModelRow pi = tAdapter.getItem(position);
+				if(newName.equals(pi.getName()))return true;
+				RCModel m = (RCModel) db.getOdb().getObjectFromId(pi.getId());
+				if(m!=null){
+					RCModel nameExistsModel = db.fetchRCModelByName(newName);
+					if(nameExistsModel!=null){
+						if(!pi.getId().equals(db.getOdb().getObjectId(nameExistsModel))){
+							uitoast(getString(R.string.model_list_name_already_exists));
+							return false;
+						}
+					}
+					m.setName(newName);
+					db.store(m);
+					pi.setName(newName);
+				}
+				tAdapter.notifyDataSetChanged();
+				return true;
+			}
+			
+			public void edit(int position) {
+				tSwipeListView.closeAnimate(position);
+			}
+			
+			public boolean deleteItem(int position) {
+				tSwipeListView.dismiss(position);
+				ModelRow pi = tAdapter.getItem(position);
+				if(pi.getId().equals(tSelectedOnDesktop)){
+					try{
+						Defaults def = (Defaults) db.fetch(Defaults.class).getFirst();
+						db.delete(def);
+						tFirstTime = true;
+					}catch(Exception e){}
+				}
+				tData.remove(pi);
+				db.getOdb().deleteObjectWithId(pi.getId());
+				db.getOdb().commit();
+				tAdapter.notifyDataSetChanged();
+				return true;
+			}
+			
+			public void cancelItem(int position) {
+				tAdapter.notifyDataSetChanged();
+			}
+		};
+    }
 	
 	public void createItem(){
 		RCModel m = new RCModel();
@@ -263,25 +292,6 @@ public class ModelListActivity extends RCActivity {
 		tData.add(createModelRow(m, oid));
 		tAdapter.notifyDataSetChanged();
 		tSwipeListView.setSelection(tAdapter.getCount()-1);
-	}
-
-	public void cancelItem(int position) {
-		tAdapter.notifyDataSetChanged();
-	}
-	
-	public void deleteItem(int position){
-		ModelRow pi = tAdapter.getItem(position);
-		if(pi.getId().equals(tSelectedOnDesktop)){
-			try{
-				Defaults def = (Defaults) db.fetch(Defaults.class).getFirst();
-				db.delete(def);
-				tFirstTime = true;
-			}catch(Exception e){}
-		}
-		tData.remove(pi);
-		db.getOdb().deleteObjectWithId(pi.getId());
-		db.getOdb().commit();
-		tAdapter.notifyDataSetChanged();
 	}
 
 }

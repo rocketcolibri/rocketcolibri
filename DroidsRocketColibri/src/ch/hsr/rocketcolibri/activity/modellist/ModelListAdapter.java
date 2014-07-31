@@ -1,4 +1,4 @@
-package ch.hsr.rocketcolibri.activity;
+package ch.hsr.rocketcolibri.activity.modellist;
 import android.content.Context;
 import android.content.Intent;
 import android.text.InputType;
@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 
@@ -16,14 +15,14 @@ import java.util.List;
 
 public class ModelListAdapter extends BaseAdapter {
 
+	private Context tContext;
     private List<ModelRow> tData;
-    private ModelListActivity tContext;
-    private SwipeListView tSwipeListView;
+    private ModelRowActionListener actionListener;
 
-    public ModelListAdapter(ModelListActivity context, List<ModelRow> data, SwipeListView swipeListView) {
-        this.tContext = context;
-        this.tData = data;
-        this.tSwipeListView = swipeListView;
+    public ModelListAdapter(Context context, List<ModelRow> data, ModelRowActionListener mral) {
+    	tContext = context;
+        tData = data;
+        actionListener = mral;
     }
 
     @Override
@@ -79,24 +78,20 @@ public class ModelListAdapter extends BaseAdapter {
         
         holder.icon.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				tContext.setSelectedItem(position);
-				Intent cameraIntent = new Intent(
-						android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-				tContext.startActivityForResult(cameraIntent, RCConstants.CAPTURE_RESULT_CODE);
+				actionListener.icon(position);
 			} 
 		});
 
         holder.editBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             	enableEditModeButtons(holder, true);
-            	tSwipeListView.closeAnimate(position);
+            	actionListener.edit(position);
             }
         });
 
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	tSwipeListView.dismiss(position);
-            	tContext.deleteItem(position);
+            	actionListener.deleteItem(position);
             }
         });
         holder.acceptEditBtn.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +100,7 @@ public class ModelListAdapter extends BaseAdapter {
             	try{
             		name = holder.title.getText().toString();
             	}catch(Exception e){e.printStackTrace();}
-            	if(tContext.saveItem(position, name)){
+            	if(actionListener.saveItem(position, name)){
             		enableEditModeButtons(holder, false);
             	}else{
             		holder.title.setText(tData.get(position).getName());
@@ -114,7 +109,7 @@ public class ModelListAdapter extends BaseAdapter {
 		});
         holder.cancelEditBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				tContext.cancelItem(position);
+				actionListener.cancelItem(position);
 	        	enableEditModeButtons(holder, false);
 			}
 		});
