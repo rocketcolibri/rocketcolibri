@@ -12,6 +12,7 @@ import org.neodatis.odb.Objects;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -20,7 +21,6 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
@@ -50,7 +50,7 @@ public class ModelListActivity extends RCActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.model_list);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+//        getWindow().setFlags(LayoutParams.FLAG_NOT_TOUCH_MODAL, LayoutParams.FLAG_NOT_TOUCH_MODAL);
         getWindow().setFlags(LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
         data = new ArrayList<ModelRow>();
         tCacheUtil = new CacheUtil(ModelListActivity.this);
@@ -83,18 +83,20 @@ public class ModelListActivity extends RCActivity {
         showLoading(getString(R.string.loading));
     }
     
-    public boolean onTouchEvent(MotionEvent event)  {
-           if(event.getAction() == MotionEvent.ACTION_OUTSIDE){
-        	   if(firstTime){
-        		   uitoast("you need to select a model before you leave!");
-        		   return true;
-        	   }else{
-        		   finish();
-        		   return true;
-        	   }
-           }
-           return false;  
-    }  
+    public boolean dispatchTouchEvent(MotionEvent ev){
+    	Rect dialogRect = new Rect();
+    	getWindow().getDecorView().getHitRect(dialogRect);
+    	if(!dialogRect.contains((int)ev.getX(), (int)ev.getY())){
+     	   if(firstTime){
+    		   uitoast("you need to select a model before you leave!");
+    		   return true;
+    	   }else{
+    		   finish();
+    		   return true;
+    	   }
+    	}
+    	return super.dispatchTouchEvent(ev);
+    }
 
 	@Override
 	protected void onServiceReady() {

@@ -241,7 +241,9 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
     			rcService.tProtocol.unregisterUiInputSource(view);
     		} catch (Exception e) {e.printStackTrace();}
     	}
-    	rcService.tProtocol.unregisterUiOutputSinkChangeObserver(this);
+    	try{
+    		rcService.tProtocol.unregisterUiOutputSinkChangeObserver(this);
+    	}catch(Exception e){}
 	}
 	
 	private void printOutJson(){
