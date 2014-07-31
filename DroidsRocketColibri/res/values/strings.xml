@@ -38,6 +38,11 @@
     <string name="rc_trimm">Trimm</string>
     <string name="rc_sticky">Sticky</string>
     <string name="rc_debug">Debug</string>
+    
     <string name="loading">Loading</string>
     <string name="create_new">New</string>
+    <string name="model_list_leave">"you need to select a model before you leave!"</string>
+    <string name="model_list_row_description">has {0} Control Elements</string>
+    <string name="model_list_name_already_exists">name already exists</string>
+    <string name="model_list_new_model_name">New Model ({0})</string>
 </resources>

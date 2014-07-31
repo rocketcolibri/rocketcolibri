@@ -2,6 +2,7 @@ package ch.hsr.rocketcolibri.activity;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +22,6 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager.LayoutParams;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.RocketColibriDefaults;
@@ -45,6 +45,8 @@ public class ModelListActivity extends RCActivity {
     private boolean tFirstTime = true;
     private OID tSelectedOnDesktop;
     private int tDeviceIconWith;
+    private long tLoastLeaveToast;
+    private long tOutsideDown;
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
@@ -54,7 +56,7 @@ public class ModelListActivity extends RCActivity {
         setContentView(R.layout.model_list);
         tDeviceIconWith = RocketColibriDefaults.dpToPixel(getResources().getDisplayMetrics(), (int)getResources().getDimension(R.dimen.size_list_image));
 //        getWindow().setFlags(LayoutParams.FLAG_NOT_TOUCH_MODAL, LayoutParams.FLAG_NOT_TOUCH_MODAL);
-        getWindow().setFlags(LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
+//        getWindow().setFlags(LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
         tData = new ArrayList<ModelRow>();
         tCacheUtil = new CacheUtil(ModelListActivity.this);
         tSwipeListView = (SwipeListView) findViewById(R.id.listView);
@@ -86,20 +88,34 @@ public class ModelListActivity extends RCActivity {
         showLoading(getString(R.string.loading));
     }
     
-    public boolean dispatchTouchEvent(MotionEvent ev){
-    	Rect dialogRect = new Rect();
-    	getWindow().getDecorView().getHitRect(dialogRect);
-    	if(!dialogRect.contains((int)ev.getX(), (int)ev.getY())){
-     	   if(tFirstTime){
-    		   uitoast("you need to select a model before you leave!");
-    		   return true;
-    	   }else{
-    		   finish();
-    		   return true;
-    	   }
-    	}
-    	return super.dispatchTouchEvent(ev);
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+    	return true;
     }
+    
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		boolean result = super.dispatchTouchEvent(ev);
+		Rect dialogRect = new Rect();
+		getWindow().getDecorView().getHitRect(dialogRect);
+		if (!dialogRect.contains((int) ev.getX(), (int) ev.getY())) {
+			if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+				tOutsideDown = System.currentTimeMillis();
+			}else if (ev.getAction() == MotionEvent.ACTION_UP) {
+				if (System.currentTimeMillis() - tOutsideDown < 2000) {
+					if (tFirstTime) {
+						if (System.currentTimeMillis() - tLoastLeaveToast > 8000) {
+							tLoastLeaveToast = System.currentTimeMillis();
+							uitoast(getString(R.string.model_list_leave));
+						}
+					} else {
+						finish();
+					}
+					return true;
+				}
+			}
+		}
+		return result;
+	}
 
 	@Override
 	protected void onServiceReady() {
@@ -195,7 +211,7 @@ public class ModelListActivity extends RCActivity {
 		} catch (FileNotFoundException e) {
 			item.setIcon(getNoPicDrawable());
 		}
-        item.setDescription(new StringBuffer("has ").append(model.getWidgetConfigs()==null?0:model.getWidgetConfigs().size()).append(" View Elements").toString());
+        item.setDescription(MessageFormat.format(getString(R.string.model_list_row_description), model.getWidgetConfigs()==null?0:model.getWidgetConfigs().size()));
         return item;
     }
     
@@ -226,7 +242,7 @@ public class ModelListActivity extends RCActivity {
 			RCModel nameExistsModel = db.fetchRCModelByName(newName);
 			if(nameExistsModel!=null){
 				if(!pi.getId().equals(db.getOdb().getObjectId(nameExistsModel))){
-					uitoast("name already exists");
+					uitoast(getString(R.string.model_list_name_already_exists));
 					return false;
 				}
 			}
@@ -242,7 +258,7 @@ public class ModelListActivity extends RCActivity {
 		RCModel m = new RCModel();
 		m.setName("");
 		OID oid = db.store(m);
-		m.setName("New Model ("+oid.getObjectId()+")");
+		m.setName(MessageFormat.format(getString(R.string.model_list_new_model_name), oid.getObjectId()));
 		oid = db.store(m);
 		tData.add(createModelRow(m, oid));
 		tAdapter.notifyDataSetChanged();
