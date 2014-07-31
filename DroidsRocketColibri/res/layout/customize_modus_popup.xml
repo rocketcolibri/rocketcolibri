@@ -58,6 +58,15 @@
             android:scaleType="fitStart"
             android:src="@drawable/edit" />
 
+        <ImageView
+            android:id="@+id/duplicateBtn"
+            android:layout_width="96px"
+            android:layout_height="96px"
+            android:layout_margin="8dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitStart"
+            android:src="@drawable/duplicate" />
+
         <ch.hsr.rocketcolibri.view.HoldImageView
             android:id="@+id/deleteElementBtn"
             android:layout_width="96px"

@@ -19,6 +19,7 @@ import android.view.View;
 public interface IDesktopViewManager {
 	void resizeView(View resizeTarget);
 	boolean dragView(View dagTarget);
+	IRCWidget createAndAddView(RCWidgetConfig vElementConfig) throws Exception;
 	IRCWidget createAndAddView(ViewElementConfig vElementConfig) throws Exception;
 	IRCWidget initCreateAndAddView(RCWidgetConfig widgetConfig) throws Exception;
 	IRCWidget createView(ViewElementConfig vElementConfig) throws Exception;

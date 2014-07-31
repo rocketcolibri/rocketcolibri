@@ -18,9 +18,12 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.HoldImageView.OnHoldListener;
 import ch.hsr.rocketcolibri.view.HoldImageView;
+import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
+import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.popup.PopupWindow;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.widget.IRCWidget;
+import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 
 /**
  * @author Artan Veliju
@@ -89,10 +92,25 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 				tDesktopViewManager.startEditActivity((View) tTargetView);
 			}
 		});
-		;
-
-		HoldImageView holdButton = (HoldImageView) findViewById(R.id.deleteElementBtn);
-		holdButton.setOnHoldListener(new OnHoldListener() {
+		
+		findViewById(R.id.duplicateBtn).setOnClickListener(new View.OnClickListener(){
+			public void onClick(View v) {
+				try{ 
+					RCWidgetConfig rcwc = ((IRCWidget)tTargetView).getWidgetConfig().copy();
+					AbsoluteLayout.LayoutParams lp = rcwc.viewElementConfig.getLayoutParams();
+					AbsoluteLayout rootView = tDesktopViewManager.getRootView();
+					lp.x = (int) (rootView.getWidth()/2)-lp.width/2;
+					lp.y = (int) (rootView.getHeight()/2)-lp.height/2;
+					ICustomizableView v1 = (ICustomizableView) tDesktopViewManager.createAndAddView(rcwc);
+					v1.setCustomizeModus(true);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		HoldImageView deleteElementBtn = (HoldImageView) findViewById(R.id.deleteElementBtn);
+		deleteElementBtn.setOnHoldListener(new OnHoldListener() {
 			AlphaAnimation deleteAnimation = new AlphaAnimation(0.75f, 0.009f);
 			public void onHoldStart(View v, int overallDuration) {
 				deleteAnimation.setDuration(overallDuration);

@@ -34,7 +34,7 @@ import com.fortysevendeg.swipelistview.SwipeListView;
 
 public class ModelListActivity extends RCActivity {
 
-    private PackageAdapter adapter;
+    private ModelListAdapter adapter;
     private List<ModelRow> data;
     private SwipeListView swipeListView;
     private ModelRow selected;
@@ -55,7 +55,7 @@ public class ModelListActivity extends RCActivity {
         data = new ArrayList<ModelRow>();
         tCacheUtil = new CacheUtil(ModelListActivity.this);
         swipeListView = (SwipeListView) findViewById(R.id.listView);
-        adapter = new PackageAdapter(this, data, swipeListView);
+        adapter = new ModelListAdapter(this, data, swipeListView);
 
         findViewById(R.id.newBtn).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {

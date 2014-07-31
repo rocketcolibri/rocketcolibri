@@ -40,6 +40,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/model_row_icon"
+            android:longClickable="false"
+            android:clickable="false"
+            android:enabled="false"
             android:editable="false" />
 
         <TextView

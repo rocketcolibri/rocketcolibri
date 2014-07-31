@@ -1,16 +1,6 @@
 <resources>
 
-    <!--
-        Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
-    -->
-    <style name="AppBaseTheme" parent="android:Theme.Light">
-        <!--
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        -->
-    </style>
+    <style name="AppBaseTheme" parent="android:Theme.Light"></style>
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
@@ -119,6 +109,15 @@
         <item name="android:text">@string/create_new</item>
         <item name="android:background">@drawable/background_new_tag</item>
         <item name="android:padding">@dimen/padding_new_tag</item>
+    </style>
+
+    <style name="Dialog.NoActionBar" parent="@android:Theme.DeviceDefault.Light.Dialog.NoActionBar">
+<!--         <item name="android:windowAnimationStyle">@style/Dialog_Slide_Animation</item> -->
+    </style>
+
+    <style name="Dialog_Slide_Animation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_down</item>
     </style>
 
 </resources>

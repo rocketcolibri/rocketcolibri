@@ -1,13 +1,7 @@
 package ch.hsr.rocketcolibri.activity;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
-import android.os.SystemClock;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +14,13 @@ import com.fortysevendeg.swipelistview.SwipeListView;
 
 import java.util.List;
 
-public class PackageAdapter extends BaseAdapter {
+public class ModelListAdapter extends BaseAdapter {
 
     private List<ModelRow> data;
     private ModelListActivity context;
     private SwipeListView swipeListView;
 
-    public PackageAdapter(ModelListActivity context, List<ModelRow> data, SwipeListView swipeListView) {
+    public ModelListAdapter(ModelListActivity context, List<ModelRow> data, SwipeListView swipeListView) {
         this.context = context;
         this.data = data;
         this.swipeListView = swipeListView;
@@ -127,8 +121,10 @@ public class PackageAdapter extends BaseAdapter {
     private void enableEditModeButtons(ViewHolder holder, final boolean enable){
     	int visibility = enable?View.VISIBLE:View.INVISIBLE;
     	holder.title.setEnabled(enable);
-    	if(enable)
+    	if(enable) 
     		holder.title.setFocusable(enable);
+    	holder.title.setLongClickable(enable);
+    	holder.title.setClickable(enable);
     	holder.title.setInputType(enable?InputType.TYPE_CLASS_TEXT:InputType.TYPE_NULL);
     	holder.acceptEditBtn.setVisibility(visibility);
     	holder.cancelEditBtn.setVisibility(visibility);

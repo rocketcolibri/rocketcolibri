@@ -102,6 +102,14 @@ public class DesktopViewManager implements IDesktopViewManager{
 	}
 	
 	@Override
+	public IRCWidget createAndAddView(RCWidgetConfig vElementConfig) throws Exception{
+		IRCWidget widget = createView(vElementConfig);
+		processRCWidget(widget);
+	    tViewChangeListener.onViewAdd(widget.getWidgetConfig());
+	    return widget;
+	}
+	
+	@Override
 	public IRCWidget createAndAddView(ViewElementConfig vElementConfig) throws Exception{
 		IRCWidget widget = createView(vElementConfig);
 		processRCWidget(widget);
