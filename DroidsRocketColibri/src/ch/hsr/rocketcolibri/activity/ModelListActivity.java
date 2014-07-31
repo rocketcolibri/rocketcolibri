@@ -218,17 +218,16 @@ public class ModelListActivity extends RCActivity {
     	tSelectedRow = tAdapter.getItem(position);
     }
     
-	public void saveItem(int position, String newName) {
+	public boolean saveItem(int position, String newName) {
 		ModelRow pi = tAdapter.getItem(position);
-		if(newName.equals(pi.getName()))return;
+		if(newName.equals(pi.getName()))return true;
 		RCModel m = (RCModel) db.getOdb().getObjectFromId(pi.getId());
 		if(m!=null){
 			RCModel nameExistsModel = db.fetchRCModelByName(newName);
 			if(nameExistsModel!=null){
 				if(!pi.getId().equals(db.getOdb().getObjectId(nameExistsModel))){
 					uitoast("name already exists");
-					tAdapter.notifyDataSetChanged();
-					return;
+					return false;
 				}
 			}
 			m.setName(newName);
@@ -236,6 +235,7 @@ public class ModelListActivity extends RCActivity {
 			pi.setName(newName);
 		}
 		tAdapter.notifyDataSetChanged();
+		return true;
 	}
 	
 	public void createItem(){

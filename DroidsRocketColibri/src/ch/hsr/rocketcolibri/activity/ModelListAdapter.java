@@ -16,24 +16,24 @@ import java.util.List;
 
 public class ModelListAdapter extends BaseAdapter {
 
-    private List<ModelRow> data;
-    private ModelListActivity context;
-    private SwipeListView swipeListView;
+    private List<ModelRow> tData;
+    private ModelListActivity tContext;
+    private SwipeListView tSwipeListView;
 
     public ModelListAdapter(ModelListActivity context, List<ModelRow> data, SwipeListView swipeListView) {
-        this.context = context;
-        this.data = data;
-        this.swipeListView = swipeListView;
+        this.tContext = context;
+        this.tData = data;
+        this.tSwipeListView = swipeListView;
     }
 
     @Override
     public int getCount() {
-        return data.size();
+        return tData.size();
     }
 
     @Override
     public ModelRow getItem(int position) {
-        return data.get(position);
+        return tData.get(position);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ModelListAdapter extends BaseAdapter {
         final ModelRow item = getItem(position);
         final ViewHolder holder;
         if (convertView == null) {
-            LayoutInflater li = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater li = (LayoutInflater) tContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = li.inflate(R.layout.model_row, parent, false);
             holder = new ViewHolder();
             holder.icon = (ImageView) convertView.findViewById(R.id.model_row_icon);
@@ -78,40 +78,42 @@ public class ModelListAdapter extends BaseAdapter {
         
         holder.icon.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				context.setSelectedItem(position);
+				tContext.setSelectedItem(position);
 				Intent cameraIntent = new Intent(
 						android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-				context.startActivityForResult(cameraIntent, RCConstants.CAPTURE_RESULT_CODE);
+				tContext.startActivityForResult(cameraIntent, RCConstants.CAPTURE_RESULT_CODE);
 			} 
 		});
 
         holder.editBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
             	enableEditModeButtons(holder, true);
-            	swipeListView.closeAnimate(position);
+            	tSwipeListView.closeAnimate(position);
             }
         });
 
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	swipeListView.dismiss(position);
-            	context.deleteItem(position);
+            	tSwipeListView.dismiss(position);
+            	tContext.deleteItem(position);
             }
         });
         holder.acceptEditBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	ViewGroup vg = (ViewGroup) v.getParent().getParent();
             	String name = "nothing";
             	try{
-            		name = ((EditText)vg.findViewById(R.id.model_row_title)).getText().toString();
+            		name = holder.title.getText().toString();
             	}catch(Exception e){e.printStackTrace();}
-            	context.saveItem(position, name);
-            	enableEditModeButtons(holder, false);
+            	if(tContext.saveItem(position, name)){
+            		enableEditModeButtons(holder, false);
+            	}else{
+            		holder.title.setText(tData.get(position).getName());
+            	}
             }
 		});
         holder.cancelEditBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				context.cancelItem(position);
+				tContext.cancelItem(position);
 	        	enableEditModeButtons(holder, false);
 			}
 		});
