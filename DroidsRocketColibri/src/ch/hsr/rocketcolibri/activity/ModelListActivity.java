@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.WindowManager.LayoutParams;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
+import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.db.RocketColibriDB;
 import ch.hsr.rocketcolibri.db.model.Defaults;
 import ch.hsr.rocketcolibri.db.model.RCModel;
@@ -34,15 +35,16 @@ import com.fortysevendeg.swipelistview.SwipeListView;
 
 public class ModelListActivity extends RCActivity {
 
-    private ModelListAdapter adapter;
-    private List<ModelRow> data;
-    private SwipeListView swipeListView;
-    private ModelRow selected;
+    private ModelListAdapter tAdapter;
+    private List<ModelRow> tData;
+    private SwipeListView tSwipeListView;
+    private ModelRow tSelectedRow;
     private boolean loadOnce = true;
     private RocketColibriDB db;
     private CacheUtil tCacheUtil;
-    private boolean firstTime = true;
-    private OID selectedOnDesktop;
+    private boolean tFirstTime = true;
+    private OID tSelectedOnDesktop;
+    private int tDeviceIconWith;
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
@@ -50,12 +52,13 @@ public class ModelListActivity extends RCActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.model_list);
+        tDeviceIconWith = RocketColibriDefaults.dpToPixel(getResources().getDisplayMetrics(), (int)getResources().getDimension(R.dimen.size_list_image));
 //        getWindow().setFlags(LayoutParams.FLAG_NOT_TOUCH_MODAL, LayoutParams.FLAG_NOT_TOUCH_MODAL);
         getWindow().setFlags(LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
-        data = new ArrayList<ModelRow>();
+        tData = new ArrayList<ModelRow>();
         tCacheUtil = new CacheUtil(ModelListActivity.this);
-        swipeListView = (SwipeListView) findViewById(R.id.listView);
-        adapter = new ModelListAdapter(this, data, swipeListView);
+        tSwipeListView = (SwipeListView) findViewById(R.id.listView);
+        tAdapter = new ModelListAdapter(this, tData, tSwipeListView);
 
         findViewById(R.id.newBtn).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
@@ -63,7 +66,7 @@ public class ModelListActivity extends RCActivity {
 			}
 		});
 
-        swipeListView.setSwipeListViewListener(new BaseSwipeListViewListener() {
+        tSwipeListView.setSwipeListViewListener(new BaseSwipeListViewListener() {
             public void onOpened(int position, boolean toRight) {}
             public void onClosed(int position, boolean fromRight) {}
             public void onListChanged() {}
@@ -72,14 +75,14 @@ public class ModelListActivity extends RCActivity {
             public void onStartClose(int position, boolean right) {}
             public void onClickFrontView(int position) {
 				Intent i = new Intent(getIntent().getAction());
-				i.putExtra(RCConstants.FLAG_ACTIVITY_RC_MODEL, adapter.getItem(position).getName());
+				i.putExtra(RCConstants.FLAG_ACTIVITY_RC_MODEL, tAdapter.getItem(position).getName());
             	setResult(RCConstants.RC_MODEL_RESULT_CODE, i);
             	finish();
             }
             public void onClickBackView(int position) {}
 
         });
-        swipeListView.setAdapter(adapter);
+        tSwipeListView.setAdapter(tAdapter);
         showLoading(getString(R.string.loading));
     }
     
@@ -87,7 +90,7 @@ public class ModelListActivity extends RCActivity {
     	Rect dialogRect = new Rect();
     	getWindow().getDecorView().getHitRect(dialogRect);
     	if(!dialogRect.contains((int)ev.getX(), (int)ev.getY())){
-     	   if(firstTime){
+     	   if(tFirstTime){
     		   uitoast("you need to select a model before you leave!");
     		   return true;
     	   }else{
@@ -107,19 +110,19 @@ public class ModelListActivity extends RCActivity {
         		if(modelName!=null){
         			RCModel m = db.fetchRCModelByName(modelName);
         			if(m!=null){
-        				selectedOnDesktop = db.getOdb().getObjectId(m);
-        				firstTime = false;
+        				tSelectedOnDesktop = db.getOdb().getObjectId(m);
+        				tFirstTime = false;
         			}else{
-        				firstTime = true;
+        				tFirstTime = true;
         			}
         		}else{
-        			firstTime = true;
+        			tFirstTime = true;
         		}
         	}else{
-        		firstTime = true;
+        		tFirstTime = true;
         	}
         }catch(Exception e){
-        	firstTime = true;
+        	tFirstTime = true;
         }
 		if(loadOnce){
 			loadOnce = false;
@@ -141,14 +144,16 @@ public class ModelListActivity extends RCActivity {
 			Bitmap photo = null;
 			try{
 				photo = (Bitmap) data.getExtras().get("data");
+				photo = tCacheUtil.centerCropBitmap(photo);
+				photo = Bitmap.createScaledBitmap(photo, tDeviceIconWith, tDeviceIconWith, true);
 			}catch(Exception e){
 				//canceled
 				return;
 			}
         	try {
-				tCacheUtil.storeBitmap(photo, getIconNameFromModelOID(selected.getId()), 50);
-				selected.setIcon(new BitmapDrawable(getResources(), photo));
-				adapter.notifyDataSetChanged();
+				tCacheUtil.storeBitmap(photo, getIconNameFromModelOID(tSelectedRow.getId()), 50);
+				tSelectedRow.setIcon(new BitmapDrawable(getResources(), photo));
+				tAdapter.notifyDataSetChanged();
 			} catch (IOException e) {
 				//something goes wrong on storing
 				e.printStackTrace();
@@ -171,9 +176,9 @@ public class ModelListActivity extends RCActivity {
         }
 
         protected void onPostExecute(List<ModelRow> result) {
-            data.clear();
-            data.addAll(result);
-            adapter.notifyDataSetChanged();
+            tData.clear();
+            tData.addAll(result);
+            tAdapter.notifyDataSetChanged();
             hideLoading();
         }
     }
@@ -210,11 +215,11 @@ public class ModelListActivity extends RCActivity {
 
     
     public void setSelectedItem(int position){
-    	selected = adapter.getItem(position);
+    	tSelectedRow = tAdapter.getItem(position);
     }
     
 	public void saveItem(int position, String newName) {
-		ModelRow pi = adapter.getItem(position);
+		ModelRow pi = tAdapter.getItem(position);
 		if(newName.equals(pi.getName()))return;
 		RCModel m = (RCModel) db.getOdb().getObjectFromId(pi.getId());
 		if(m!=null){
@@ -222,7 +227,7 @@ public class ModelListActivity extends RCActivity {
 			if(nameExistsModel!=null){
 				if(!pi.getId().equals(db.getOdb().getObjectId(nameExistsModel))){
 					uitoast("name already exists");
-					adapter.notifyDataSetChanged();
+					tAdapter.notifyDataSetChanged();
 					return;
 				}
 			}
@@ -230,7 +235,7 @@ public class ModelListActivity extends RCActivity {
 			db.store(m);
 			pi.setName(newName);
 		}
-		adapter.notifyDataSetChanged();
+		tAdapter.notifyDataSetChanged();
 	}
 	
 	public void createItem(){
@@ -239,28 +244,28 @@ public class ModelListActivity extends RCActivity {
 		OID oid = db.store(m);
 		m.setName("New Model ("+oid.getObjectId()+")");
 		oid = db.store(m);
-		data.add(createModelRow(m, oid));
-		adapter.notifyDataSetChanged();
-		swipeListView.setSelection(adapter.getCount()-1);
+		tData.add(createModelRow(m, oid));
+		tAdapter.notifyDataSetChanged();
+		tSwipeListView.setSelection(tAdapter.getCount()-1);
 	}
 
 	public void cancelItem(int position) {
-		adapter.notifyDataSetChanged();
+		tAdapter.notifyDataSetChanged();
 	}
 	
 	public void deleteItem(int position){
-		ModelRow pi = adapter.getItem(position);
-		if(pi.getId().equals(selectedOnDesktop)){
+		ModelRow pi = tAdapter.getItem(position);
+		if(pi.getId().equals(tSelectedOnDesktop)){
 			try{
 				Defaults def = (Defaults) db.fetch(Defaults.class).getFirst();
 				db.delete(def);
-				firstTime = true;
+				tFirstTime = true;
 			}catch(Exception e){}
 		}
-		data.remove(pi);
+		tData.remove(pi);
 		db.getOdb().deleteObjectWithId(pi.getId());
 		db.getOdb().commit();
-		adapter.notifyDataSetChanged();
+		tAdapter.notifyDataSetChanged();
 	}
 
 }
