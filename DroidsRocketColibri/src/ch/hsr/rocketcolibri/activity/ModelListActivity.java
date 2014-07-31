@@ -260,20 +260,22 @@ public class ModelListActivity extends RCActivity {
 				tSwipeListView.closeAnimate(position);
 			}
 			
-			public boolean deleteItem(int position) {
-				tSwipeListView.dismiss(position);
-				ModelRow pi = tAdapter.getItem(position);
-				if(pi.getId().equals(tSelectedOnDesktop)){
-					try{
-						Defaults def = (Defaults) db.fetch(Defaults.class).getFirst();
-						db.delete(def);
-						tFirstTime = true;
-					}catch(Exception e){}
-				}
-				tData.remove(pi);
-				db.getOdb().deleteObjectWithId(pi.getId());
-				db.getOdb().commit();
-				tAdapter.notifyDataSetChanged();
+			public boolean deleteItem(final int position) {
+				runOnUiThread(new Runnable() {public void run() {
+					tSwipeListView.dismiss(position);
+					ModelRow pi = tAdapter.getItem(position);
+					if(pi.getId().equals(tSelectedOnDesktop)){
+						try{
+							Defaults def = (Defaults) db.fetch(Defaults.class).getFirst();
+							db.delete(def);
+							tFirstTime = true;
+						}catch(Exception e){}
+					}
+					tData.remove(pi);
+					db.getOdb().deleteObjectWithId(pi.getId());
+					db.getOdb().commit();
+					tAdapter.notifyDataSetChanged();
+				}});
 				return true;
 			}
 			

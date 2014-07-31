@@ -1,13 +1,11 @@
 package ch.hsr.rocketcolibri.activity.modellist;
 import android.content.Context;
-import android.content.Intent;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import ch.hsr.rocketcolibri.R;
-import ch.hsr.rocketcolibri.RCConstants;
 
 import com.fortysevendeg.swipelistview.SwipeListView;
 
@@ -18,11 +16,17 @@ public class ModelListAdapter extends BaseAdapter {
 	private Context tContext;
     private List<ModelRow> tData;
     private ModelRowActionListener actionListener;
-
+    private DeleteRowCache deleteRowCache;
+    
     public ModelListAdapter(Context context, List<ModelRow> data, ModelRowActionListener mral) {
     	tContext = context;
         tData = data;
         actionListener = mral;
+//        deleteRowCache = new DeleteRowCache(new DeleteCountDownListener() {
+//			public void delete(int position) {
+//				actionListener.deleteItem(position);
+//			}
+//		});
     }
 
     @Override
@@ -91,6 +95,22 @@ public class ModelListAdapter extends BaseAdapter {
 
         holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+//            	LayoutInflater li = (LayoutInflater) tContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//            	final ViewGroup parent = (ViewGroup) v.getParent();
+//            	View deleteView = li.inflate(R.layout.model_deleted_row, (ViewGroup) v.getParent(), false);
+//            	deleteView.findViewById(R.id.model_deleted_row_cancelBtn).setOnClickListener(new View.OnClickListener() {
+//					public void onClick(View v) {
+//						deleteRowCache.deleteCanceled(position);
+//						parent.removeViewAt(parent.getChildCount()-1);
+//					}
+//				});
+//            	deleteView.findViewById(R.id.model_deleted_row_deleteBtn).setOnClickListener(new View.OnClickListener() {
+//					public void onClick(View v) {
+//						deleteRowCache.deleteRowDefinitely(position);
+//					}
+//				});
+//            	parent.addView(deleteView);
+//            	deleteRowCache.deleteRow(position);
             	actionListener.deleteItem(position);
             }
         });
