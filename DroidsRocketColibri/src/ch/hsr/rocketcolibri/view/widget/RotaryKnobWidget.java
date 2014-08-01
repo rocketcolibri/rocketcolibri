@@ -147,12 +147,15 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	public void initProtocolMapping() {
 		// init protocol mapping
 		tWidgetConfig.protocolMap = new HashMap<String, String>();
-		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_ASSIGNMENT, "");
-		tWidgetConfig.protocolMap.put(RCConstants.INVERTED, "");
-		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE, "");
-		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE, "");
-		tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION, "");
-		tWidgetConfig.protocolMap.put(RCConstants.TRIMM, "");
+		if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannel.getChannelAssignment() )
+			tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_ASSIGNMENT, "");
+		else
+			tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_ASSIGNMENT, Integer.valueOf(tChannel.getChannelAssignment()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.INVERTED, Boolean.valueOf(tChannel.getChannelInverted()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE, Integer.valueOf(tChannel.getChannelMaxRange()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE, Integer.valueOf(tChannel.getChannelMinRange()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION, Integer.valueOf(tChannel.getChannelDefaultPosition()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.TRIMM, Integer.valueOf(tChannel.getChannelTrimm()).toString());
 	}
 
 	public void initialize() {

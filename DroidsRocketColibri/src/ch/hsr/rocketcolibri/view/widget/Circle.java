@@ -122,23 +122,28 @@ public final class Circle extends View implements ICustomizableView, IRCWidget, 
 	}
 	
 	private void initDefaultProtocolConfig(){
-		//init protocol mapping
 		tWidgetConfig.protocolMap = new HashMap<String, String>();
-		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_ASSIGNMENT_H, "");
-		tWidgetConfig.protocolMap.put(RCConstants.INVERTED_H, "");
-		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE_H, "");
-		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE_H, "");
-		tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION_H, "");
-		tWidgetConfig.protocolMap.put(RCConstants.TRIMM_H, "");
-		tWidgetConfig.protocolMap.put(RCConstants.STICKY_H, "");
+		if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelH.getChannelAssignment() )
+			tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_ASSIGNMENT_H, "");
+		else
+			tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_ASSIGNMENT_H, Integer.valueOf(tChannelH.getChannelAssignment()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.INVERTED_H, Boolean.valueOf(tChannelH.getChannelInverted()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE_H, Integer.valueOf(tChannelH.getChannelMaxRange()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE_H, Integer.valueOf(tChannelH.getChannelMinRange()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION_H, Integer.valueOf(tChannelH.getChannelDefaultPosition()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.TRIMM_H, Integer.valueOf(tChannelH.getChannelTrimm()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.STICKY_H, Boolean.valueOf(tChannelH.getWidgetSticky()).toString());
 		
-		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_ASSIGNMENT_V, "");
-		tWidgetConfig.protocolMap.put(RCConstants.INVERTED_V, "");
-		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE_V, "");
-		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE_V, "");
-		tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION_V, "");
-		tWidgetConfig.protocolMap.put(RCConstants.TRIMM_V, "");
-		tWidgetConfig.protocolMap.put(RCConstants.STICKY_V, "");
+		if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelV.getChannelAssignment() )
+			tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_ASSIGNMENT_V, "");
+		else
+			tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_ASSIGNMENT_V, Integer.valueOf(tChannelV.getChannelAssignment()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.INVERTED_V, Boolean.valueOf(tChannelV.getChannelInverted()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE_V, Integer.valueOf(tChannelV.getChannelMaxRange()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE_V, Integer.valueOf(tChannelV.getChannelMinRange()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION_V, Integer.valueOf(tChannelV.getChannelDefaultPosition()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.TRIMM_V, Integer.valueOf(tChannelV.getChannelTrimm()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.STICKY_V, Boolean.valueOf(tChannelV.getWidgetSticky()).toString());
 	}
 	
 	/**

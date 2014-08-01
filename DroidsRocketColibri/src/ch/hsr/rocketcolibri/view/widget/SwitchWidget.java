@@ -83,10 +83,14 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 	public void initProtocolMapping() {
 		// init protocol mapping
 		tWidgetConfig.protocolMap = new HashMap<String, String>();
-		tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_ASSIGNMENT, "");
-		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE, "");
-		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE, "");
-		tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION, "");
+		if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannel.getChannelAssignment() )
+			tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_ASSIGNMENT, "");
+		else
+			tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_ASSIGNMENT, Integer.valueOf(tChannel.getChannelAssignment()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.INVERTED, Boolean.valueOf(tChannel.getChannelInverted()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE, Integer.valueOf(tChannel.getChannelMaxRange()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE, Integer.valueOf(tChannel.getChannelMinRange()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION, Integer.valueOf(tChannel.getChannelDefaultPosition()).toString());
 	}
 
 	private void init(ViewElementConfig elementConfig) {
@@ -112,6 +116,7 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 			tChannel.setChannelMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE));
 			tChannel.setChannelMinRange(getProtocolMapInt(RCConstants.MIN_RANGE));
 			tChannel.setChannelDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION));
+			tChannel.setChannelInverted(getProtocolMapBoolean(RCConstants.INVERTED));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
