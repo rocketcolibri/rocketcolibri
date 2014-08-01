@@ -3,11 +3,17 @@ package ch.hsr.rocketcolibri.view.widget;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.StateListDrawable;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import ch.hsr.rocketcolibri.R;
@@ -21,6 +27,8 @@ import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 
 public class SwitchWidget extends Switch implements ICustomizableView,
 		IRCWidget {
+	private boolean tDebug;
+	private Paint dbgLine;
 
 	private static final int tSwitchMax = 999;
 	private static final int tSwitchMin = 0;
@@ -52,12 +60,8 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
 		@Override
 		public void customizeModeDeactivated() {
-			if (isChannelValid()) {
-				setClickable(true);
-				setOnCheckedChangeListener(tSwitchOnCheckedChangeListener);
-			} else {
-				setClickable(false);
-			}
+			setClickable(true);
+			setOnCheckedChangeListener(tSwitchOnCheckedChangeListener);
 		}
 
 		@Override
@@ -91,6 +95,7 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE, Integer.valueOf(tChannel.getChannelMaxRange()).toString());
 		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE, Integer.valueOf(tChannel.getChannelMinRange()).toString());
 		tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION, Integer.valueOf(tChannel.getChannelDefaultPosition()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.DEBUG, Boolean.valueOf(false).toString());
 	}
 
 	private void init(ViewElementConfig elementConfig) {
@@ -98,25 +103,48 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 		setAlpha(elementConfig.getAlpha());
 		tChannel.setWidgetRange(tSwitchMin,tSwitchMax);
 		createWidget();
-	}
 
+		dbgLine = new Paint(Paint.ANTI_ALIAS_FLAG);
+		dbgLine.setStrokeWidth(1);
+		dbgLine.setStyle(Paint.Style.FILL_AND_STROKE);
+		dbgLine.setTextSize(getPixels(15));
+	}
+	
+	private int getPixels(float size) {
+	    DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+	    return (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size, metrics);
+	}
+	
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
 		if (tCustomizeModusActive)
 			DrawingTools.drawCustomizableForground(this, canvas);
+		
+		if (tDebug) {
+			String dbgString;
+			if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannel.getChannelAssignment() ){
+				dbgString = String.format(Locale.getDefault(),"unassigned", tChannel.getChannelValue());
+				dbgLine.setColor(Color.RED);
+			}
+			else{
+				dbgString = String.format(Locale.getDefault(), "C[%d]:%d", tChannel.getChannelAssignment(), tChannel.getChannelValue());
+				dbgLine.setColor(Color.GREEN);
+			}
+			canvas.drawText(dbgString,0, getHeight()/2, dbgLine);
+		}
 	}
 
 	@Override
 	public void updateProtocolMap() {
 		try {
-			tChannel
-					.setChannelAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT));
+			tChannel.setChannelAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT));
 			tChannel.setChannelMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE));
 			tChannel.setChannelMinRange(getProtocolMapInt(RCConstants.MIN_RANGE));
 			tChannel.setChannelDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION));
 			tChannel.setChannelInverted(getProtocolMapBoolean(RCConstants.INVERTED));
+			tDebug = getProtocolMapBoolean(RCConstants.DEBUG);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -136,20 +164,9 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 		    getResources().getDrawable(R.drawable.apptheme_switch_thumb_disabled_holo_light));
 		setThumbDrawable(states);
 		refreshDrawableState();
-
-		if (isChannelValid()) {
-			setOnCheckedChangeListener(tSwitchOnCheckedChangeListener);
-			setClickable(true);
-
-			if (tChannel.getChannelDefaultPosition() > 0) {
-				setChecked(true);
-			} else {
-				setChecked(false);
-			}
-		} else {
-			setChecked(false);
-			setClickable(false);
-		}
+		setOnCheckedChangeListener(tSwitchOnCheckedChangeListener);
+		setClickable(true);
+		setChecked(tChannel.getChannelDefaultPosition() > 0);
 	}
 
 	public static ViewElementConfig getDefaultViewElementConfig() {

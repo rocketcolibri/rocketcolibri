@@ -53,10 +53,7 @@ import android.content.res.TypedArray;
 public final class Circle extends View implements ICustomizableView, IRCWidget, IUiOutputSinkChangeObserver  {
 //	private static final String TAG = Circle.class.getSimpleName();
 	private boolean tDebug;
-	private Paint dbgPaint1;
 	private Paint dbgLine;
-
-	
 	private RectF rimRect;
 	private Paint rimPaint;
 	private Paint rimCirclePaint;
@@ -267,7 +264,6 @@ public final class Circle extends View implements ICustomizableView, IRCWidget, 
 	private float percentInDP(float displayDP, int percent){
 		return displayDP/100*percent;
 	}
-	
 
 	@Override
 	protected void onFinishInflate() {
@@ -345,13 +341,7 @@ public final class Circle extends View implements ICustomizableView, IRCWidget, 
 		
 		initInnerStickyCircle();
 		
-		dbgPaint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
-		dbgPaint1.setColor(Color.RED);
-		dbgPaint1.setStrokeWidth(1);
-		dbgPaint1.setStyle(Paint.Style.STROKE);
-
 		dbgLine = new Paint(Paint.ANTI_ALIAS_FLAG);
-		dbgLine.setColor(Color.GREEN);
 		dbgLine.setStrokeWidth(1);
 		dbgLine.setStyle(Paint.Style.FILL_AND_STROKE);
 		dbgLine.setTextSize(getPixels(15));
@@ -395,19 +385,6 @@ public final class Circle extends View implements ICustomizableView, IRCWidget, 
 		}
 	}
 	
-	private int chooseDimension(int mode, int size) {
-		if (mode == MeasureSpec.AT_MOST || mode == MeasureSpec.EXACTLY) {
-			return size;
-		} else { // (mode == MeasureSpec.UNSPECIFIED)
-			return getPreferredSize();
-		} 
-	}
-	
-	// in case there is no size specified
-	private int getPreferredSize() {
-		return 150;
-	}
-	
 	private void drawRim(Canvas canvas) {
 		// first, draw the metallic body
 		canvas.drawOval(rimRect, rimPaint);
@@ -444,16 +421,23 @@ public final class Circle extends View implements ICustomizableView, IRCWidget, 
 		
 		if (tDebug) {
 			String dbgString;
-			if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelH.getChannelAssignment() )
-				dbgString = String.format(Locale.getDefault(),"H[-]:%d", tChannelH.getChannelValue());
-			else
+			if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelH.getChannelAssignment() ){
+				dbgString = String.format(Locale.getDefault(),"H:unassigned");
+				dbgLine.setColor(Color.RED);
+			}
+			else {
 				dbgString = String.format(Locale.getDefault(), "H[%d]:%d", tChannelH.getChannelAssignment(), tChannelH.getChannelValue());
+				dbgLine.setColor(Color.GREEN);
+			}
 			canvas.drawText(dbgString,0, getHeight()/2, dbgLine);
-			
-			if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelV.getChannelAssignment() )
-				dbgString = String.format(Locale.getDefault(), "V[-]:%d", tChannelV.getChannelValue());
-			else
+			if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelV.getChannelAssignment() ){
+				dbgString = String.format(Locale.getDefault(), "V:unassigned");
+				dbgLine.setColor(Color.RED);
+			}
+			else{
 				dbgString = String.format(Locale.getDefault(), "V[%d]:%d", tChannelV.getChannelAssignment(), tChannelV.getChannelValue());
+				dbgLine.setColor(Color.GREEN);
+			}
 			canvas.drawText(dbgString,getWidth()/2, dbgLine.getTextSize(), dbgLine);
 		}
 	}

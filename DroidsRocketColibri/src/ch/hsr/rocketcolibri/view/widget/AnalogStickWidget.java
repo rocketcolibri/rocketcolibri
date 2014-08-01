@@ -3,6 +3,7 @@ package ch.hsr.rocketcolibri.view.widget;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import ch.hsr.rocketcolibri.RCConstants;
@@ -309,12 +310,35 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 			canvas.drawLine(cX, cY, handleX, handleY, dbgLine);
 
 			canvas.drawText(String.format("%.3f, %.3f", userX, userY),
-					0, dbgLine.getTextSize(), dbgLine);
+					0, 3*dbgLine.getTextSize(), dbgLine);
 			canvas.drawText(String.format("%.0f, %.1f", radial,
 									angle * 57.2957795) + (char) 0x00B0,
 					0, getHeight()-dbgLine.getTextSize(), dbgLine);
 		}
 
+		if (tDebug) {
+			String dbgString;
+			if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelH.getChannelAssignment() ){
+				dbgString = String.format(Locale.getDefault(),"H:unassigned");
+				dbgLine.setColor(Color.RED);
+			}
+			else {
+				dbgString = String.format(Locale.getDefault(), "H[%d]:%d", tChannelH.getChannelAssignment(), tChannelH.getChannelValue());
+				dbgLine.setColor(Color.GREEN);
+			}
+			canvas.drawText(dbgString,0, getHeight()/2, dbgLine);
+			if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelV.getChannelAssignment() ){
+				dbgString = String.format(Locale.getDefault(), "V:unassigned");
+				dbgLine.setColor(Color.RED);
+			}
+			else{
+				dbgString = String.format(Locale.getDefault(), "V[%d]:%d", tChannelV.getChannelAssignment(), tChannelV.getChannelValue());
+				dbgLine.setColor(Color.GREEN);
+			}
+			canvas.drawText(dbgString,getWidth()/2, dbgLine.getTextSize(), dbgLine);
+			dbgLine.setColor(Color.GREEN);
+		}
+		
 		// Log.d(TAG, String.format("touch(%f,%f)", touchX, touchY));
 		// Log.d(TAG, String.format("onDraw(%.1f,%.1f)\n\n", handleX, handleY));
 		canvas.restore();

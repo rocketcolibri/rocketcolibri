@@ -3,6 +3,7 @@ package ch.hsr.rocketcolibri.view.widget;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import ch.hsr.rocketcolibri.R;
@@ -14,15 +15,22 @@ import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
 public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 		IRCWidget {
-
+	private boolean tDebug;
+	private Paint dbgLine;
+	
 	private int tRotaryKnobResource;
 	private int tRimImageResource;
 	protected RCWidgetConfig tWidgetConfig;
@@ -71,18 +79,6 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 
 	public void setKnobListener(RotaryKnobListener listener) {
 		tListener = listener;
-	}
-
-	private boolean isChannelValid() {
-		if (tChannel.getChannelAssignment() > -1) {
-			tRotaryKnobResource = R.drawable.rotoron;
-			this.setImageResource(tRotaryKnobResource);
-			return true;
-		} else {
-			tRotaryKnobResource = R.drawable.rotoroff;
-			this.setImageResource(tRotaryKnobResource);
-			return false;
-		}
 	}
 
 	class MyOnTouchListener implements OnTouchListener {
@@ -156,15 +152,20 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE, Integer.valueOf(tChannel.getChannelMinRange()).toString());
 		tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION, Integer.valueOf(tChannel.getChannelDefaultPosition()).toString());
 		tWidgetConfig.protocolMap.put(RCConstants.TRIMM, Integer.valueOf(tChannel.getChannelTrimm()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.DEBUG, Boolean.valueOf(false).toString());
 	}
 
 	public void initialize() {
-
-		tRotaryKnobResource = R.drawable.rotoroff;
 		tRimImageResource = R.drawable.stator;
 
+		dbgLine = new Paint(Paint.ANTI_ALIAS_FLAG);
+		dbgLine.setStrokeWidth(1);
+		dbgLine.setStyle(Paint.Style.FILL_AND_STROKE);
+		dbgLine.setTextSize(getPixels(15));
+		
 		this.setBackgroundResource(tRimImageResource);
-		this.setImageResource(tRotaryKnobResource);
+		setRotrayKonbResource();
+
 		calculateKnobValues();
 
 		this.setKnobListener(new RotaryKnobWidget.RotaryKnobListener() {
@@ -177,12 +178,22 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 //					; // rotate left
 			}
 		});
-
-		if (isChannelValid()) {
-			setOnTouchListener(tInternalControlListener);
-		}
+		setOnTouchListener(tInternalControlListener);
+		//setOnTouchListener(tCustomizeModusListener);
 	}
 
+	private void setRotrayKonbResource() {
+		if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannel.getChannelAssignment() )
+			tRotaryKnobResource = R.drawable.rotoroff;
+		else
+			tRotaryKnobResource = R.drawable.rotoron;
+		this.setImageResource(tRotaryKnobResource);
+	}
+	
+	private int getPixels(float size) {
+	    DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+	    return (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size, metrics);
+	}
 	private void calculateKnobValues() {
 		tAngle = tAngleMin;
 		tChannel.setWidgetRange(tKnobValueMin, tKnobValueMax);	
@@ -202,9 +213,8 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
 		@Override
 		public void customizeModeDeactivated() {
-			if (isChannelValid()) {
-				setOnTouchListener(tInternalControlListener);
-			}
+			setRotrayKonbResource();
+			setOnTouchListener(tInternalControlListener);
 		}
 
 		@Override
@@ -214,11 +224,26 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	};
 
 	protected void onDraw(Canvas canvas) {
+
 		canvas.rotate(tAngle, getWidth() / 2, getHeight() / 2);
 		super.onDraw(canvas);
-
+		canvas.rotate(-tAngle, getWidth() / 2, getHeight() / 2);
 		if (tCustomizeModusActive)
 			DrawingTools.drawCustomizableForground(this, canvas);
+		
+		if (tDebug) {
+			String dbgString;
+			if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannel.getChannelAssignment() ){
+				dbgString = String.format(Locale.getDefault(),"unassigned", tChannel.getChannelValue());
+				dbgLine.setColor(Color.RED);
+			}
+			else{
+				dbgString = String.format(Locale.getDefault(), "C[%d]:%d", tChannel.getChannelAssignment(), tChannel.getChannelValue());
+				dbgLine.setColor(Color.GREEN);
+			}
+			canvas.drawText(dbgString,0, getHeight()/2, dbgLine);
+		}
+		
 	}
 
 	@Override
@@ -230,7 +255,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 			tChannel.setChannelMinRange(getProtocolMapInt(RCConstants.MIN_RANGE));
 			tChannel.setChannelDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION));
 			tChannel.setChannelTrimm(getProtocolMapInt(RCConstants.TRIMM));
-
+			tDebug = getProtocolMapBoolean(RCConstants.DEBUG);
 			// Protocol values has changed recalculate the values
 			calculateKnobValues();
 		} catch (Exception e) {
@@ -263,7 +288,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	@Override
 	public void setCustomizeModusListener(OnTouchListener customizeModusListener) {
 		tCustomizeModusListener = customizeModusListener;
-		setOnTouchListener(tCustomizeModusListener);
+		//setOnTouchListener(tCustomizeModusListener);
 	}
 
 	@Override
