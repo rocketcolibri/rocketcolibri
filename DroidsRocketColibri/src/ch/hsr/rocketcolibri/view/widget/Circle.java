@@ -6,6 +6,7 @@ package ch.hsr.rocketcolibri.view.widget;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import ch.hsr.rocketcolibri.R;
@@ -36,11 +37,14 @@ import android.graphics.Shader;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.Toast;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 
 /**
@@ -48,6 +52,11 @@ import android.content.res.TypedArray;
  */
 public final class Circle extends View implements ICustomizableView, IRCWidget, IUiOutputSinkChangeObserver  {
 //	private static final String TAG = Circle.class.getSimpleName();
+	private boolean tDebug;
+	private Paint dbgPaint1;
+	private Paint dbgLine;
+
+	
 	private RectF rimRect;
 	private Paint rimPaint;
 	private Paint rimCirclePaint;
@@ -144,6 +153,8 @@ public final class Circle extends View implements ICustomizableView, IRCWidget, 
 		tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION_V, Integer.valueOf(tChannelV.getChannelDefaultPosition()).toString());
 		tWidgetConfig.protocolMap.put(RCConstants.TRIMM_V, Integer.valueOf(tChannelV.getChannelTrimm()).toString());
 		tWidgetConfig.protocolMap.put(RCConstants.STICKY_V, Boolean.valueOf(tChannelV.getWidgetSticky()).toString());
+		
+		tWidgetConfig.protocolMap.put(RCConstants.DEBUG, Boolean.valueOf(false).toString());		
 	}
 	
 	/**
@@ -333,7 +344,22 @@ public final class Circle extends View implements ICustomizableView, IRCWidget, 
 		facePaint.setShader(paperShader);
 		
 		initInnerStickyCircle();
+		
+		dbgPaint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
+		dbgPaint1.setColor(Color.RED);
+		dbgPaint1.setStrokeWidth(1);
+		dbgPaint1.setStyle(Paint.Style.STROKE);
 
+		dbgLine = new Paint(Paint.ANTI_ALIAS_FLAG);
+		dbgLine.setColor(Color.GREEN);
+		dbgLine.setStrokeWidth(1);
+		dbgLine.setStyle(Paint.Style.FILL_AND_STROKE);
+		dbgLine.setTextSize(getPixels(15));
+	}
+
+	int getPixels(float size) {
+	    DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+	    return (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size, metrics);
 	}
 	
 	private void initInnerStickyCircle(){
@@ -415,6 +441,21 @@ public final class Circle extends View implements ICustomizableView, IRCWidget, 
 		
 		if (tCustomizeModusActive) 
 			DrawingTools.drawCustomizableForground(this, canvas);
+		
+		if (tDebug) {
+			String dbgString;
+			if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelH.getChannelAssignment() )
+				dbgString = String.format(Locale.getDefault(),"H[-]:%d", tChannelH.getChannelValue());
+			else
+				dbgString = String.format(Locale.getDefault(), "H[%d]:%d", tChannelH.getChannelAssignment(), tChannelH.getChannelValue());
+			canvas.drawText(dbgString,0, getHeight()/2, dbgLine);
+			
+			if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelV.getChannelAssignment() )
+				dbgString = String.format(Locale.getDefault(), "V[-]:%d", tChannelV.getChannelValue());
+			else
+				dbgString = String.format(Locale.getDefault(), "V[%d]:%d", tChannelV.getChannelAssignment(), tChannelV.getChannelValue());
+			canvas.drawText(dbgString,getWidth()/2, dbgLine.getTextSize(), dbgLine);
+		}
 	}
 
 	@Override
@@ -456,7 +497,7 @@ public final class Circle extends View implements ICustomizableView, IRCWidget, 
 			tChannelV.setChannelDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION_V));
 			tChannelV.setChannelTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
 			tChannelV.setWidgetSticky(getProtocolMapBoolean(RCConstants.STICKY_V));
-			
+			tDebug = getProtocolMapBoolean(RCConstants.DEBUG);	
 			updateInnerCircleAndCheckSticky(-1,-1);
 		}catch(Exception e){
 			e.printStackTrace();
