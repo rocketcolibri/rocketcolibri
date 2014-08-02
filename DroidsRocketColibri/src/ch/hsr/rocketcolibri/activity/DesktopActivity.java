@@ -231,18 +231,8 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 	}
 	
 	private void releaseDesktop(){
-		int size = tDesktopViewManager.getControlElementParentView().getChildCount();
-    	IRCWidget view = null;
-    	for(int i = 0; i < size; ++i){
-    		try{
-    			view = (IRCWidget) tDesktopViewManager.getControlElementParentView().getChildAt(i);
-    			if (view instanceof IUiOutputSinkChangeObserver)
-    				rcService.tProtocol.unregisterUiOutputSinkChangeObserver((IUiOutputSinkChangeObserver)view);
-    			rcService.tProtocol.unregisterUiInputSource(view);
-    		} catch (Exception e) {e.printStackTrace();}
-    	}
     	try{
-    		rcService.tProtocol.unregisterUiOutputSinkChangeObserver(this);
+    		rcService.tProtocol.release();
     	}catch(Exception e){}
 	}
 	

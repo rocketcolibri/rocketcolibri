@@ -51,11 +51,10 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 		// observer map
 		tUiOutputSinkChangeObserverMutex.lock();
 		tUiOutputSinkChangeObserver = new HashMap<UiOutputDataType, List<IUiOutputSinkChangeObserver>>();
-		for (UiOutputDataType type : UiOutputDataType.values()) 
-			tUiOutputSinkChangeObserver.put(type, new ArrayList<IUiOutputSinkChangeObserver>());
+		initUiOutputChildList();
 		tUiOutputSinkChangeObserverMutex.unlock();
 	}
-	
+
 	public void startNotifiyUiOutputData() {
 		stopNotifiyUiOutputData();
 		tNotificationSchedulerFuture = tNotificationScheduler.scheduleAtFixedRate(new Runnable() {
@@ -179,6 +178,19 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 	public void cancelOldCommandJob() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public void release(){
+		tUiOutputSinkChangeObserverMutex.lock();
+		tUiOutputSinkChangeObserver.clear();
+		initUiOutputChildList();
+		tUiOutputSinkChangeObserverMutex.unlock();
+		tChannelList.clear();
+	}
+	
+	private void initUiOutputChildList(){
+		for (UiOutputDataType type : UiOutputDataType.values()) 
+			tUiOutputSinkChangeObserver.put(type, new ArrayList<IUiOutputSinkChangeObserver>());
 	}
 
 }
