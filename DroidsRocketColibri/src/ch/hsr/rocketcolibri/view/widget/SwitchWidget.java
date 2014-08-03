@@ -53,10 +53,6 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 		init(tWidgetConfig.viewElementConfig);
 	}
 
-	private boolean isChannelValid() {
-		return tChannel.getChannelAssignment() > -1;
-	}
-
 	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
 		@Override
 		public void customizeModeDeactivated() {
@@ -223,7 +219,6 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 	@Override
 	public void setCustomizeModusListener(OnTouchListener customizeModusListener) {
 		tCustomizeModusListener = customizeModusListener;
-		setOnTouchListener(customizeModusListener);
 	}
 
 	@Override
@@ -237,11 +232,6 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 			invalidate();
 			tCustomizeModusActive = enabled;
 		}
-	}
-
-	@Override
-	public void setModusChangeListener(ModusChangeListener mcl) {
-		tModusChangeListener = mcl;
 	}
 
 	@Override

@@ -16,6 +16,6 @@ public interface ICustomizableView {
 	 * @param enabled
 	 */
 	void setCustomizeModus(boolean enabled);
-	void setModusChangeListener(ModusChangeListener mcl);
+
 	ViewElementConfig getViewElementConfig();
 }

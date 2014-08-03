@@ -28,8 +28,7 @@ import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
 
-
-public class AnalogStickWidget extends View implements ICustomizableView, IRCWidget, IUiOutputSinkChangeObserver {
+public class AnalogStickWidget extends View implements ICustomizableView, IRCWidget {
 	public static final int INVALID_POINTER_ID = -1;
 	private boolean tDebug;
 
@@ -88,15 +87,8 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 	// Size of the view in view coordinates
 	private int dimX, dimY;
 
-	// Cartesian coordinates of last touch point - joystick center is (0,0)
-	private float cartX, cartY;
-
-	// Polar coordinates of the touch point from joystick center
-	private double radial;
-	private double angle;
-
 	// User coordinates of last touch point
-	private float userX, userY;
+//	private float userX, userY;
 
 	// Offset co-ordinates (used when touch events are received from parent's
 	// coordinate origin)
@@ -137,7 +129,6 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 
 	private void initJoystickView() {
 		setFocusable(true);
-
 		dbgPaint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
 		dbgPaint1.setColor(Color.RED);
 		dbgPaint1.setStrokeWidth(1);
@@ -263,6 +254,8 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 		handleStick.setStrokeWidth((float) (handleRadius * 0.75));
 		handleInnerBoundaries = handleRadius;
 		movementRadius = Math.min(cX, cY) - handleInnerBoundaries;
+		tChannelV.setWidgetRange(-movementRadius, movementRadius);
+		tChannelH.setWidgetRange(-movementRadius, movementRadius);
 	}
 
 	private int measure(int measureSpec) {
@@ -308,12 +301,6 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 
 			// Origin to touch point
 			canvas.drawLine(cX, cY, handleX, handleY, dbgLine);
-
-			canvas.drawText(String.format("%.3f, %.3f", userX, userY),
-					0, 3*dbgLine.getTextSize(), dbgLine);
-			canvas.drawText(String.format("%.0f, %.1f", radial,
-									angle * 57.2957795) + (char) 0x00B0,
-					0, getHeight()-dbgLine.getTextSize(), dbgLine);
 	
 			String dbgString;
 			if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelH.getChannelAssignment() ){
@@ -337,8 +324,6 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 			dbgLine.setColor(Color.GREEN);
 		}
 		
-		// Log.d(TAG, String.format("touch(%f,%f)", touchX, touchY));
-		// Log.d(TAG, String.format("onDraw(%.1f,%.1f)\n\n", handleX, handleY));
 		canvas.restore();
 		if (tCustomizeModusActive) 
 			DrawingTools.drawCustomizableForground(this, canvas);
@@ -469,48 +454,16 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 			if (rx || ry) {
 				this.reportX = touchX;
 				this.reportY = touchY;
-
-				 Log.d(AnalogStickWidget.class.getSimpleName(), String.format("moveListener.OnMoved(%d,%d)",
-				 (int)userX, (int)userY));
-				moveListener.OnMoved(userX, userY);
+				moveListener.OnMoved(touchX, touchY);
 			}
 		}
 	}
 
 	private void calcUserCoordinates() {
 		// First convert to cartesian coordinates
-		cartX = (touchX / movementRadius * tChannelH.getChannelMaxRange());
-		cartY = (touchY / movementRadius * tChannelV.getChannelMaxRange());
 
-		radial = Math.sqrt((cartX * cartX) + (cartY * cartY));
-		angle = Math.atan2(cartY, cartX);
-
-		// Invert Y axis if requested
-		if (!tChannelV.getChannelInverted())
-			cartY *= -1;
-
-		if (userCoordinateSystem == COORDINATE_CARTESIAN) {
-//			userX = cartX;
-//			userY = cartY;
-			if (cartX >= tChannelH.getChannelMinRange() && cartX <= tChannelH.getChannelMaxRange())
-				userX = cartX;
-			if (cartY >= tChannelV.getChannelMinRange() && cartY <= tChannelV.getChannelMaxRange())
-				userY = cartY;
-		} else if (userCoordinateSystem == COORDINATE_DIFFERENTIAL) {
-			userX = (cartY + cartX / 4);
-			userY = (cartY - cartX / 4);
-
-			if (userX < tChannelH.getChannelMinRange())
-				userX = tChannelH.getChannelMinRange();
-			if (userX > tChannelH.getChannelMaxRange())
-				userX = tChannelH.getChannelMaxRange();
-
-			if (userY < tChannelV.getChannelMinRange())
-				userY = tChannelV.getChannelMinRange();
-			if (userY > tChannelV.getChannelMaxRange())
-				userY = tChannelV.getChannelMaxRange();
-		}
-
+		tChannelH.setWidgetPosition((int)touchX);
+		tChannelV.setWidgetPosition((int)touchY);
 	}
 
 	// Simple pressure click
@@ -533,27 +486,33 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 	}
 
 	private void returnHandleToCenter() {
-		if (!tChannelH.getWidgetSticky()) {
-			final int numberOfFrames = 5;
-			final double intervalsX = (0 - touchX) / numberOfFrames;
-			final double intervalsY = (0 - touchY) / numberOfFrames;
-			for (int i = 0; i < numberOfFrames; i++) {
-				final int j = i;
-				postDelayed(new Runnable() {public void run() {
-					touchX += intervalsX;
-					touchY += intervalsY;
-					reportOnMoved();
-					invalidate();
-					if (moveListener != null && j == numberOfFrames - 1) {
-						moveListener.OnReturnedToCenter();
-					}
-				}}, i * 40);
-			}
-
-			if (moveListener != null) {
-				moveListener.OnReleased();
-			}
+		
+		final int numberOfFrames = 5;
+		int widgetDefX = tChannelH.setWidgetToDefault();
+		int widgetDefY = tChannelV.setWidgetToDefault();
+		final double intervalsX = tChannelH.getWidgetSticky() ? 0 :
+			(widgetDefX - touchX) / numberOfFrames;
+		
+		final double intervalsY = tChannelV.getWidgetSticky() ? 0 :
+			(widgetDefY - touchY) / numberOfFrames;
+					
+		for (int i = 0; i < numberOfFrames; i++) {
+			final int j = i;
+			postDelayed(new Runnable() {public void run() {
+				touchX += intervalsX;
+				touchY += intervalsY;
+				reportOnMoved();
+				invalidate();
+				if (moveListener != null && j == numberOfFrames - 1) {
+					moveListener.OnReturnedToCenter();
+				}
+			}}, i * 40);
 		}
+
+		if (moveListener != null) {
+			moveListener.OnReleased();
+		}
+	
 	}
 
 	public void setTouchOffset(int x, int y) {
@@ -609,17 +568,20 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 	public void updateProtocolMap() {
 		try{
 			tChannelH.setChannelAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_H));
+			tChannelH.setChannelInverted(getProtocolMapBoolean(RCConstants.INVERTED_H));
 			tChannelH.setChannelMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_H));
 			tChannelH.setChannelMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_H));
+			tChannelH.setChannelDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION_H));
 			tChannelH.setChannelTrimm(getProtocolMapInt(RCConstants.TRIMM_H));
-			tChannelH.setWidgetSticky(getProtocolMapBoolean(RCConstants.STICKY));
+			tChannelH.setWidgetSticky(getProtocolMapBoolean(RCConstants.STICKY_H));
 			
 			tChannelV.setChannelAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_V));
 			tChannelV.setChannelInverted(getProtocolMapBoolean(RCConstants.INVERTED_V));
 			tChannelV.setChannelMaxRange(getProtocolMapInt(RCConstants.MAX_RANGE_V));
 			tChannelV.setChannelMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_V));
+			tChannelV.setChannelDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION_V));
 			tChannelV.setChannelTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
-			tChannelV.setWidgetSticky(getProtocolMapBoolean(RCConstants.STICKY));
+			tChannelV.setWidgetSticky(getProtocolMapBoolean(RCConstants.STICKY_V));
 			tDebug = getProtocolMapBoolean(RCConstants.DEBUG);
 			returnHandleToCenter();
 		}catch(Exception e){
@@ -628,20 +590,18 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 	}
 	
 	private void initListener(){
-		setModusChangeListener(new ModusChangeListener() {
+		setOnTouchListener(tInternalControlListener);
+		
+		tModusChangeListener = new ModusChangeListener() {
 			public void customizeModeDeactivated() {
-				if(areChannelsValid())
-					setOnTouchListener(tInternalControlListener); 
+				setOnTouchListener(tInternalControlListener); 
 			}
 			public void customizeModeActivated() {
 				setOnTouchListener(tCustomizeModusListener);
 			}
-		});
+		};
 	}
 	
-	private boolean areChannelsValid(){
-		return tChannelH.getChannelAssignment()>-1 || tChannelV.getChannelAssignment()>-1;
-	}
 	
 	@Override
 	public void create(RCWidgetConfig rcWidgetConfig) {
@@ -696,11 +656,6 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 	}
 
 	@Override
-	public void setModusChangeListener(ModusChangeListener mcl) {
-		tModusChangeListener = mcl;
-	}
-
-	@Override
 	public ViewElementConfig getViewElementConfig() {
 		tWidgetConfig.viewElementConfig.setLayoutParams((LayoutParams) getLayoutParams());
 		tWidgetConfig.viewElementConfig.setAlpha(getAlpha());
@@ -710,7 +665,6 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 	@Override
 	public void setCustomizeModusListener(OnTouchListener customizeModusListener){
 		tCustomizeModusListener = customizeModusListener;
-		setOnTouchListener(tCustomizeModusListener);
 	}
 
 	@Override
@@ -719,16 +673,6 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 		updateProtocolMap();
 	}
 
-	@Override
-	public void onNotifyUiOutputSink(Object data) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public UiOutputDataType getType(){
-		return UiOutputDataType.ConnectionState;
-	}
-	
 	@Override
 	public List<UiInputSourceChannel> getUiInputSourceList() {
 		List<UiInputSourceChannel> list = new ArrayList<UiInputSourceChannel>();

@@ -198,17 +198,18 @@ public final class Circle extends View implements ICustomizableView, IRCWidget, 
 	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
 		@Override
 		public void customizeModeDeactivated() {
+			setOnTouchListener(tInternalControlListener);
 		}
 
 		@Override
 		public void customizeModeActivated() {
+			setOnTouchListener(tCustomizeModusListener);
 		}
 	};
 
 	@Override
 	public void setCustomizeModusListener(OnTouchListener customizeModusListener){
 		tCustomizeModusListener = customizeModusListener;
-		setOnTouchListener(tCustomizeModusListener);
 	}
 	
 	/**
@@ -286,14 +287,14 @@ public final class Circle extends View implements ICustomizableView, IRCWidget, 
 	}
 	
 	private void initListener(){
-		setModusChangeListener(new ModusChangeListener() {
+		tModusChangeListener = new ModusChangeListener() {
 			public void customizeModeDeactivated() {
 				setOnTouchListener(tInternalControlListener); 
 			}
 			public void customizeModeActivated() {
 				setOnTouchListener(tCustomizeModusListener);
 			}
-		});
+		};
 	}
 
 	private void initDrawingTools() {
@@ -594,11 +595,6 @@ public final class Circle extends View implements ICustomizableView, IRCWidget, 
 			invalidate();
 			tCustomizeModusActive = enabled;
 		}
-	}
-
-	@Override
-	public void setModusChangeListener(ModusChangeListener mcl) {
-		tModusChangeListener = mcl;
 	}
 
 	@Override

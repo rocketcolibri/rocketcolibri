@@ -240,7 +240,6 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 		}
 	}
 
-	@Override
 	public void setModusChangeListener(ModusChangeListener mcl) {
 		tModusChangeListener = mcl;
 	}

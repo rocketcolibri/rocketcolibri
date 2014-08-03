@@ -288,7 +288,6 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	@Override
 	public void setCustomizeModusListener(OnTouchListener customizeModusListener) {
 		tCustomizeModusListener = customizeModusListener;
-		//setOnTouchListener(tCustomizeModusListener);
 	}
 
 	@Override
@@ -337,7 +336,6 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 		}
 	}
 
-	@Override
 	public void setModusChangeListener(ModusChangeListener mcl) {
 		tModusChangeListener = mcl;
 	}

@@ -207,11 +207,6 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 	}
 
 	@Override
-	public void setModusChangeListener(ModusChangeListener mcl) {
-		tModusChangeListener = mcl;
-	}
-
-	@Override
 	public ViewElementConfig getViewElementConfig() {
 		tWidgetConfig.viewElementConfig.setLayoutParams((LayoutParams) getLayoutParams());
 		tWidgetConfig.viewElementConfig.setAlpha(getAlpha());

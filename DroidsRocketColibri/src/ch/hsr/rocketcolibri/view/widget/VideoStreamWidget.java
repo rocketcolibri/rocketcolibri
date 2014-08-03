@@ -140,7 +140,7 @@ public class VideoStreamWidget extends SurfaceView implements
 		tDotCount = 3;
 		
 		
-		setModusChangeListener(new ModusChangeListener() {
+		tModusChangeListener = new ModusChangeListener() {
 			@Override
 			public void customizeModeDeactivated() {
 				playVideo();
@@ -150,8 +150,7 @@ public class VideoStreamWidget extends SurfaceView implements
 			public void customizeModeActivated() {
 				releaseMediaPlayer();
 			}
-		});
-		
+		};
 		tHolder = getHolder();
   	  	tHolder.addCallback(this);
 
@@ -343,11 +342,6 @@ public class VideoStreamWidget extends SurfaceView implements
 			invalidate();
 			tCustomizeModusActive = enabled;
 		}
-	}
-
-	@Override
-	public void setModusChangeListener(ModusChangeListener mcl) {
-		tModusChangeListener = mcl;
 	}
 
 	@Override

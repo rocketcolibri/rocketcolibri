@@ -126,8 +126,8 @@ public class DesktopViewManager implements IDesktopViewManager{
 	
 	private void processRCWidget(IRCWidget widget){
 		widget.setCustomizeModusListener(tCustomizeModusListener);
-	    widget.setCustomizeModus(tCustomizeModus);
-	    tControlElementParentView.addView((View)widget);
+		widget.setCustomizeModus(tCustomizeModus);
+		tControlElementParentView.addView((View)widget);
 	}
 	
 	@Override
