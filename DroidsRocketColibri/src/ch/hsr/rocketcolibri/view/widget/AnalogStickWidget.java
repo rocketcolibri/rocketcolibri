@@ -162,7 +162,7 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 		setMoveResolution(1.0f);
 		setClickThreshold(0.4f);
 		setUserCoordinateSystem(COORDINATE_CARTESIAN);
-		setMovementConstraint(CONSTRAIN_CIRCLE);
+		setMovementConstraint(CONSTRAIN_BOX);
 		initDefaultProtocolConfig();
 		initListener();
 	}
@@ -258,6 +258,8 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 		movementRadius = Math.min(cX, cY) - handleInnerBoundaries;
 		tChannelV.setWidgetRange(-movementRadius, movementRadius);
 		tChannelH.setWidgetRange(-movementRadius, movementRadius);
+		touchX = tChannelH.setWidgetToDefault();
+		touchY = tChannelV.setWidgetToDefault();
 	}
 
 	private int measure(int measureSpec) {
@@ -372,7 +374,7 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 			case MotionEvent.ACTION_UP: {
 				if (pointerId != INVALID_POINTER_ID) {
 					// Log.d(AnalogStickWidget.class.getSimpleName(), "ACTION_UP");
-					returnHandleToCenter();
+					returnHandleToInitialPosition();
 					setPointerId(INVALID_POINTER_ID);
 				}
 				break;
@@ -383,7 +385,7 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 					final int pId = ev.getPointerId(pointerIndex);
 					if (pId == pointerId) {
 						// Log.d(AnalogStickWidget.class.getSimpleName(), "ACTION_POINTER_UP: " + pointerId);
-						returnHandleToCenter();
+						returnHandleToInitialPosition();
 						setPointerId(INVALID_POINTER_ID);
 						return true;
 					}
@@ -428,10 +430,6 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 			touchX = x - cX - offsetX;
 			float y = ev.getY(pointerIndex);
 			touchY = y - cY - offsetY;
-
-//			 Log.d(AnalogStickWidget.class.getSimpleName(),
-//			 String.format("ACTION_MOVE: (%03.0f, %03.0f) => (%03.0f, %03.0f)",
-//			 x, y, touchX, touchY));
 
 			reportOnMoved();
 			invalidate();
@@ -489,7 +487,7 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 		}
 	}
 
-	private void returnHandleToCenter() {
+	private void returnHandleToInitialPosition() {
 		
 		final int numberOfFrames = 5;
 		int widgetDefX = tChannelH.setWidgetToDefault();
@@ -587,7 +585,6 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 			tChannelV.setChannelTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
 			tChannelV.setWidgetSticky(getProtocolMapBoolean(RCConstants.STICKY_V));
 			tDebug = getProtocolMapBoolean(RCConstants.DEBUG);
-			returnHandleToCenter();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
