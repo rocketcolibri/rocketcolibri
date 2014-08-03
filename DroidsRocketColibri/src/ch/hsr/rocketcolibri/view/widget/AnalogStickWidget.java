@@ -7,7 +7,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import ch.hsr.rocketcolibri.RCConstants;
+import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
+import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObserver;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.util.DrawingTools;
@@ -28,9 +30,10 @@ import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class AnalogStickWidget extends View implements ICustomizableView, IRCWidget {
+public class AnalogStickWidget extends View implements ICustomizableView, IRCWidget, IUiOutputSinkChangeObserver {
 	public static final int INVALID_POINTER_ID = -1;
 	private boolean tDebug;
+	private boolean tIsControlling = false;
 
 	private Paint dbgPaint1;
 	private Paint dbgLine;
@@ -146,7 +149,6 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 		bgPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 		
 		handleStick = new Paint(Paint.ANTI_ALIAS_FLAG);
-		handleStick.setColor(Color.DKGRAY);
 		handleStick.setStrokeWidth(20);
 		handleStick.setStyle(Paint.Style.FILL_AND_STROKE);
 
@@ -249,8 +251,8 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 		cY = d / 2;
 
 		bgRadius = dimX / 2-innerPadding;
-		stickRadius = (int) (bgRadius-bgRadius*0.2);
-		handleRadius = (int) (d * 0.2);
+		stickRadius = (int) (bgRadius-bgRadius*0.1);
+		handleRadius = (int) (d * 0.15);
 		handleStick.setStrokeWidth((float) (handleRadius * 0.75));
 		handleInnerBoundaries = handleRadius;
 		movementRadius = Math.min(cX, cY) - handleInnerBoundaries;
@@ -283,8 +285,10 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 		// Draw the handle
 		handleX = touchX + cX;
 		handleY = touchY + cY;
+		
 		canvas.drawCircle(cX, cY, (handleStick.getStrokeWidth()/10), handleStick);
 		canvas.drawLine(cX, cY, handleX, handleY, handleStick);
+		handlePaint.setColor(tIsControlling ? Color.BLUE : Color.DKGRAY);
 		canvas.drawCircle(handleX, handleY, handleRadius, handlePaint);
 
 		if (tDebug) {
@@ -683,5 +687,17 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 	
 	public static ViewElementConfig getDefaultViewElementConfig() {
 		return DefaultViewElementConfigRepo.getDefaultConfig(AnalogStickWidget.class);
+	}
+
+	@Override
+	public void onNotifyUiOutputSink(Object p) {
+		ConnectionState data = (ConnectionState)p;
+		tIsControlling = ((s.TRY_CONN == data.getState()) || (s.CONN_CONTROL == data.getState()));
+		postInvalidate();
+	}
+
+	@Override
+	public UiOutputDataType getType(){
+		return UiOutputDataType.ConnectionState;
 	}
 }

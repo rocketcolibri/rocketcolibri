@@ -229,19 +229,13 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 
 	@Override
 	public void setCustomizeModus(boolean enabled) {
-		if (tCustomizeModusActive != enabled) {
-			if (enabled) {
-				tModusChangeListener.customizeModeActivated();
-			} else {
-				tModusChangeListener.customizeModeDeactivated();
-			}
-			invalidate();
-			tCustomizeModusActive = enabled;
+		tCustomizeModusActive = enabled;
+		if (enabled) {
+			tModusChangeListener.customizeModeActivated();
+		} else {
+			tModusChangeListener.customizeModeDeactivated();
 		}
-	}
-
-	public void setModusChangeListener(ModusChangeListener mcl) {
-		tModusChangeListener = mcl;
+		invalidate();
 	}
 
 	@Override
