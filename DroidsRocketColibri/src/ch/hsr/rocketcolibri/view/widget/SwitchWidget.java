@@ -11,12 +11,10 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.StateListDrawable;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.widget.CompoundButton;
 import android.widget.Switch;
-import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.util.DrawingTools;
@@ -151,15 +149,15 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 	}
 
 	private void createWidget() {
-		StateListDrawable states = new StateListDrawable();
-		states.addState(new int[] {-android.R.attr.state_pressed},
-		    getResources().getDrawable(R.drawable.apptheme_switch_thumb_pressed_holo_light));
-		states.addState(new int[] {-android.R.attr.state_focused},
-		    getResources().getDrawable(R.drawable.apptheme_switch_thumb_activated_holo_light));
-		states.addState(new int[] { },
-		    getResources().getDrawable(R.drawable.apptheme_switch_thumb_disabled_holo_light));
-		setThumbDrawable(states);
-		refreshDrawableState();
+//		StateListDrawable states = new StateListDrawable();
+//		states.addState(new int[] {-android.R.attr.state_pressed},
+//		    getResources().getDrawable(R.drawable.apptheme_switch_thumb_pressed_holo_light));
+//		states.addState(new int[] {-android.R.attr.state_focused},
+//		    getResources().getDrawable(R.drawable.apptheme_switch_thumb_activated_holo_light));
+//		states.addState(new int[] { },
+//		    getResources().getDrawable(R.drawable.apptheme_switch_thumb_disabled_holo_light));
+//		setThumbDrawable(states);
+//		refreshDrawableState();
 		setOnCheckedChangeListener(tSwitchOnCheckedChangeListener);
 		setClickable(true);
 		setChecked(tChannel.getChannelDefaultPosition() > 0);

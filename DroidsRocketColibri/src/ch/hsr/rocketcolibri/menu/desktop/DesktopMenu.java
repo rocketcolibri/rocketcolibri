@@ -8,10 +8,12 @@ import android.app.Activity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
+import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.view.widget.SwipeInMenu;
 import ch.hsr.rocketcolibri.view.widget.SwipeInMenu.OnDrawerOpenListener;
 
@@ -25,7 +27,7 @@ public class DesktopMenu {
 	private Context tContext;
 	private IDesktopViewManager tDesktopViewManager;
 	private RocketColibriService tService;
-	private int[] tServiceDependentItemIds = {R.id.menu_action_main_settings,R.id.menu_action_main_wifi, R.id.menu_action_main_mode};
+	private int[] tServiceDependentItemIds = {R.id.menu_action_main_settings,R.id.menu_action_main_wifi, R.id.menu_action_observe_mode, R.id.menu_action_operate_mode};
 	private View[] tServiceDependentItems;
 	private ControlModusContent tControlModusContent;
 	private CustomizeModusContent tCustomizeModusContent;
@@ -88,29 +90,73 @@ public class DesktopMenu {
 		b = (ToggleButton)findViewById(R.id.menu_action_main_wifi);
 		b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-	    		// TODO not set to null from here!
-	    		// tRcService.users.setActiveUser(null);
 	    		if (isChecked) { 
 	    			tService.tWifi.connectRocketColibriSSID(tService);
-		        	findViewById(R.id.menu_action_main_mode).setVisibility(View.VISIBLE);
+
+	    			// If WiFi is enabled, we are in observer mode by default
+	    			// setting observer button active and disabling click because
+	    			// in this case only operate button can be clicked
+		        	((ToggleButton)findViewById(R.id.menu_action_observe_mode)).setChecked(true);
+		        	((ToggleButton)findViewById(R.id.menu_action_observe_mode)).setClickable(false);
+
+		        	((ToggleButton)findViewById(R.id.menu_action_operate_mode)).setClickable(true);
 	    		} else {
 		        	tService.tWifi.disconnectRocketColibriSSID(tService);
-		        	findViewById(R.id.menu_action_main_mode).setVisibility(View.GONE);
+
+		        	// If WiFi is disabled, none of the modes
+		        	// can be active, disabling both buttons
+		        	((ToggleButton)findViewById(R.id.menu_action_observe_mode)).setChecked(false);
+		        	((ToggleButton)findViewById(R.id.menu_action_operate_mode)).setChecked(false);
+		        	((ToggleButton)findViewById(R.id.menu_action_observe_mode)).setClickable(false);
+		        	((ToggleButton)findViewById(R.id.menu_action_operate_mode)).setClickable(false);
 		        }
 		    }
 		});
 		
-		b = (ToggleButton)findViewById(R.id.menu_action_main_mode);
+		b = (ToggleButton)findViewById(R.id.menu_action_observe_mode);
 		b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 if (isChecked){
-                    tService.tProtocol.eventUserStartControl();
-                }else{
-	    			tService.tProtocol.eventUserStopControl();
+                    tService.tProtocol.eventUserStopControl();
+
+                    // Observe mode is activated deactivate operate button.
+                    // Click will be enabled for starting operate mode
+                    ((ToggleButton)findViewById(R.id.menu_action_operate_mode)).setChecked(false);
+		        	((ToggleButton)findViewById(R.id.menu_action_operate_mode)).setClickable(true);
+		        	((ToggleButton)findViewById(R.id.menu_action_observe_mode)).setClickable(false);
 		        }
 		    }
 		});
-		b.setVisibility(View.GONE);	     // No Wifi connection on start, therefore view won't be visible
+		b.setClickable(false);
+		b.setChecked(false);
+
+		b = (ToggleButton)findViewById(R.id.menu_action_operate_mode);
+		b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
+                if (isChecked){
+                    if (tService.tProtocol.tConnState.getState() == s.CONN_LCK_OUT) {
+                    	Toast.makeText(tContext, "Operate mode locked by another user!", Toast.LENGTH_SHORT).show();
+
+                    	// We have to stay in observer mode and click must be active for operate button only
+                    	((ToggleButton)findViewById(R.id.menu_action_observe_mode)).setChecked(true);
+			        	((ToggleButton)findViewById(R.id.menu_action_observe_mode)).setClickable(false);
+                    	((ToggleButton)findViewById(R.id.menu_action_operate_mode)).setChecked(false);
+			        	((ToggleButton)findViewById(R.id.menu_action_operate_mode)).setClickable(true);
+                    } else {
+	                	tService.tProtocol.eventUserStartControl();
+
+	                	// Operate mode is activated deactivate observe button.
+	                    // Click will be enabled for starting observe mode
+			        	((ToggleButton)findViewById(R.id.menu_action_observe_mode)).setChecked(false);
+			        	((ToggleButton)findViewById(R.id.menu_action_observe_mode)).setClickable(true);
+			        	((ToggleButton)findViewById(R.id.menu_action_operate_mode)).setClickable(false);
+                    }
+		        }
+		    }
+		});
+		b.setClickable(false);
+		b.setChecked(false);
+
 		setServiceDependentButtonsEnabled(false);
 	}
 	
@@ -140,5 +186,4 @@ public class DesktopMenu {
 	private View findViewById(int id){
 		return tSwipeInMenu.findViewById(id);
 	}
-
 }

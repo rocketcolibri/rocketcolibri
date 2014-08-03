@@ -17,7 +17,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@null"
-            android:button="@drawable/selector_main_menu_wifi"
+            android:button="@drawable/selector_main_menu_network"
             android:checked="false"
             android:contentDescription="@string/menu_action_main_wifi"
             android:textOff="Wifi Off"
@@ -25,22 +25,39 @@
         </ToggleButton>
 
         <ToggleButton
-            android:id="@+id/menu_action_main_mode"
+            android:id="@+id/menu_action_observe_mode"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@null"
-            android:button="@drawable/selector_main_menu_mode"
+            android:button="@drawable/selector_main_menu_observe_mode"
             android:checked="false"
-            android:contentDescription="@string/menu_action_main_mode"
+            android:contentDescription="@string/menu_action_observe_mode"
             android:textOff="Observe"
-            android:textOn="Operate" >
+            android:textOn="Observe" >
         </ToggleButton>
-        <Button
-            android:id="@+id/modelListBtn"
+
+        <ToggleButton
+            android:id="@+id/menu_action_operate_mode"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:text="Model" >
-        </Button>
+            android:background="@null"
+            android:button="@drawable/selector_main_menu_operate_mode"
+            android:checked="false"
+            android:contentDescription="@string/menu_action_operate_mode"
+            android:textOff="Operate"
+            android:textOn="Operate" >
+        </ToggleButton>
     </GridLayout>
 
+    <ToggleButton
+        android:id="@+id/modelListBtn"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:button="@drawable/ic_action_model"
+        android:background="@null"
+        android:checked="false"
+        android:textOn="Model"
+        android:textOff="Model">
+    </ToggleButton>
+    
 </ch.hsr.rocketcolibri.menu.desktop.ControlModusContent>
