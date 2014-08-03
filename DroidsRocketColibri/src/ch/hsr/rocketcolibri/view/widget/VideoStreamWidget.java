@@ -103,14 +103,13 @@ public class VideoStreamWidget extends SurfaceView implements
 	  try {
 		  tVideoBitmap.recycle();
 		  tVideoBitmap = null;
-	  }
+	  } catch (Exception e) {}
 	  finally {
 	    super.finalize();
 	  }
 	}
 	
 	private void init(Context context, AttributeSet attrs) {
-		//tRectRectF = new RectF(0.0f, 0.0f, 1.0f, 1.0f);
 		tVideoBitmap =
 				DrawingTools.getRoundedCornerBitmap(
 				BitmapFactory.decodeResource(getContext().getResources(), R.drawable.video_camera),

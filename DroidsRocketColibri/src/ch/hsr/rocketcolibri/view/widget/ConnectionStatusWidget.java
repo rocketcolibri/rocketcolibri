@@ -73,7 +73,7 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 	  try {
 		  connectionIconBitmap.recycle();
 		  connectionIconBitmap = null;
-	  }
+	  } catch (Exception e) {}
 	  finally {
 	    super.finalize();
 	  }

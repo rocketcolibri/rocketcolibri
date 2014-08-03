@@ -121,7 +121,7 @@ public final class Circle extends View implements ICustomizableView, IRCWidget, 
 	  try {
 		  faceTexture.recycle();
 		  faceTexture = null;
-	  }
+	  } catch (Exception e) {}
 	  finally {
 	    super.finalize();
 	  }

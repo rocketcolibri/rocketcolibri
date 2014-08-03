@@ -80,7 +80,7 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 		  tControlBitmap = null;
 		  tUsersBitmap.recycle();
 		  tUsersBitmap = null;
-	  }
+	  } catch (Exception e) {}
 	  finally {
 	    super.finalize();
 	  }

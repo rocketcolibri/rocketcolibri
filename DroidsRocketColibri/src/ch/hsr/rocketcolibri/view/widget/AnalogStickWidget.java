@@ -314,9 +314,7 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 			canvas.drawText(String.format("%.0f, %.1f", radial,
 									angle * 57.2957795) + (char) 0x00B0,
 					0, getHeight()-dbgLine.getTextSize(), dbgLine);
-		}
-
-		if (tDebug) {
+	
 			String dbgString;
 			if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelH.getChannelAssignment() ){
 				dbgString = String.format(Locale.getDefault(),"H:unassigned");
