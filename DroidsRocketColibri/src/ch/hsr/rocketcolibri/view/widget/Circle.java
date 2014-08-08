@@ -116,17 +116,6 @@ public final class Circle extends View implements ICustomizableView, IRCWidget, 
 		initDefaultProtocolConfig();
 	}
 	
-	@Override protected void finalize() throws Throwable
-	{
-	  try {
-		  faceTexture.recycle();
-		  faceTexture = null;
-	  } catch (Exception e) {}
-	  finally {
-	    super.finalize();
-	  }
-	}
-	
 	private void initDefaultProtocolConfig(){
 		tWidgetConfig.protocolMap = new HashMap<String, String>();
 		if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelH.getChannelAssignment() )

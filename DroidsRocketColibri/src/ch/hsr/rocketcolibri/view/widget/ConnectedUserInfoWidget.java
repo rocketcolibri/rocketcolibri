@@ -70,22 +70,7 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 		tContext = context;
 		init(context, null);
 	}
-	
-	@Override protected void finalize() throws Throwable
-	{
-	  try {
-		  tObserverBitmap.recycle();
-		  tObserverBitmap = null;
-		  tControlBitmap.recycle();
-		  tControlBitmap = null;
-		  tUsersBitmap.recycle();
-		  tUsersBitmap = null;
-	  } catch (Exception e) {}
-	  finally {
-	    super.finalize();
-	  }
-	}
-	
+
 	private void init(Context context, AttributeSet attrs) {
 		tRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		tRectPaint.setColor(Color.DKGRAY);

@@ -68,17 +68,6 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 		init(context, null);
 	}
 	
-	@Override protected void finalize() throws Throwable
-	{
-	  try {
-		  connectionIconBitmap.recycle();
-		  connectionIconBitmap = null;
-	  } catch (Exception e) {}
-	  finally {
-	    super.finalize();
-	  }
-	}
-	
 	private void init(Context context, AttributeSet attrs) {
 		connectionIconRect = new RectF(0.0f, 0.0f, 1.0f, 1.0f);
 		connectionIconBitmap = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.connection_status_disconneted);

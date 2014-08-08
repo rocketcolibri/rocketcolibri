@@ -97,17 +97,6 @@ public class VideoStreamWidget extends SurfaceView implements
 		setAlpha(tWidgetConfig.viewElementConfig.getAlpha());
 		init(context, null);
 	}
-
-	@Override protected void finalize() throws Throwable
-	{
-	  try {
-		  tVideoBitmap.recycle();
-		  tVideoBitmap = null;
-	  } catch (Exception e) {}
-	  finally {
-	    super.finalize();
-	  }
-	}
 	
 	private void init(Context context, AttributeSet attrs) {
 		tVideoBitmap =
