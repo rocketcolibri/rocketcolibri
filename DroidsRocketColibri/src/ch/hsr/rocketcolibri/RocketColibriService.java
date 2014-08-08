@@ -77,7 +77,7 @@ public class RocketColibriService extends Service  {
 		tProtocol = new RCProtocolUdp(getUserName()) ;
 		// list all available Widgets here: 
 		this.tWidgetDirectory.add(new WidgetEntry("Analog Stick", AnalogStickWidget.class.getName(), AnalogStickWidget.getDefaultViewElementConfig()));
-		this.tWidgetDirectory.add(new WidgetEntry("Cross Control", Circle.class.getName(), Circle.getDefaultViewElementConfig()));
+		//this.tWidgetDirectory.add(new WidgetEntry("Cross Control", Circle.class.getName(), Circle.getDefaultViewElementConfig()));
 		this.tWidgetDirectory.add(new WidgetEntry("Connection Status", ConnectionStatusWidget.class.getName(), ConnectionStatusWidget.getDefaultViewElementConfig()));
 		this.tWidgetDirectory.add(new WidgetEntry("User Info", ConnectedUserInfoWidget.class.getName(), ConnectedUserInfoWidget.getDefaultViewElementConfig()));
 		this.tWidgetDirectory.add(new WidgetEntry("Video Stream", VideoStreamWidget.class.getName(), VideoStreamWidget.getDefaultViewElementConfig()));

@@ -489,7 +489,7 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 
 	private void returnHandleToInitialPosition() {
 		
-		final int numberOfFrames = 5;
+		final int numberOfFrames = 2;
 		int widgetDefX = tChannelH.setWidgetToDefault();
 		int widgetDefY = tChannelV.setWidgetToDefault();
 		final double intervalsX = tChannelH.getWidgetSticky() ? 0 :
