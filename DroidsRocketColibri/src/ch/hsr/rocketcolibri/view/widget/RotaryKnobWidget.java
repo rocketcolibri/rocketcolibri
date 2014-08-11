@@ -164,7 +164,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 		dbgLine.setTextSize(getPixels(15));
 		
 		this.setBackgroundResource(tRimImageResource);
-		setRotrayKonbResource();
+		setRotaryKnobResource();
 
 		calculateKnobValues();
 
@@ -178,11 +178,12 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 //					; // rotate left
 			}
 		});
-		setOnTouchListener(tInternalControlListener);
-		//setOnTouchListener(tCustomizeModusListener);
+
+		if (UiInputSourceChannel.CHANNEL_UNASSIGNED != tChannel.getChannelAssignment() )
+			setOnTouchListener(tInternalControlListener);
 	}
 
-	private void setRotrayKonbResource() {
+	private void setRotaryKnobResource() {
 		if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannel.getChannelAssignment() )
 			tRotaryKnobResource = R.drawable.rotoroff;
 		else
@@ -213,7 +214,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 	private ModusChangeListener tModusChangeListener = new ModusChangeListener() {
 		@Override
 		public void customizeModeDeactivated() {
-			setRotrayKonbResource();
+			setRotaryKnobResource();
 			setOnTouchListener(tInternalControlListener);
 		}
 
