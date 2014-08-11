@@ -65,9 +65,9 @@ public class DefaultViewElementConfigRepo {
 		//>>>>>>>>>>>>>>>>>>>>>>>>>>> ConnectionStatusWidget >>>>>>>>>>
 		rc = new ResizeConfig();
 		rc.keepRatio = true;
-	    rc.maxHeight=100;
+	    rc.maxHeight=120;
 	    rc.minHeight=50;
-	    rc.maxWidth=100;
+	    rc.maxWidth=120;
 	    rc.minWidth=50;
 	    lp = new LayoutParams(80, 80 , 0, 0);
 	    elementConfig = new ViewElementConfig(ConnectionStatusWidget.class.getName(), lp, rc);
