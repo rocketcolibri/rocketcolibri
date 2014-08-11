@@ -179,7 +179,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 			}
 		});
 
-		if (UiInputSourceChannel.CHANNEL_UNASSIGNED != tChannel.getChannelAssignment() )
+		if (UiInputSourceChannel.CHANNEL_UNASSIGNED != tChannel.getChannelAssignment())
 			setOnTouchListener(tInternalControlListener);
 	}
 
@@ -215,7 +215,9 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView,
 		@Override
 		public void customizeModeDeactivated() {
 			setRotaryKnobResource();
-			setOnTouchListener(tInternalControlListener);
+
+			if (UiInputSourceChannel.CHANNEL_UNASSIGNED != tChannel.getChannelAssignment())
+				setOnTouchListener(tInternalControlListener);
 		}
 
 		@Override
