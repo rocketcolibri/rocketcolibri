@@ -73,14 +73,14 @@ public class HelplineDrawer{
          		if(tParentLP.height/2>distanceTmp.intValue()){
          			topDistances.add(distanceTmp);
          		}else{bottomDistances.add(distanceTmp);}
-
         	}
         	tYPositions[i+1] = childViewLp.y+childViewLp.height;
-        	if(tYPositions[i+1]<tParentLP.height-offset)
+        	if(tYPositions[i+1]<tParentLP.height-offset){
          		distanceTmp = Integer.valueOf(tParentLP.height-tYPositions[i+1]);
          		if(tParentLP.height/2>distanceTmp.intValue()){
          			topDistances.add(distanceTmp);
          		}else{bottomDistances.add(distanceTmp);}
+        	}
         }
         tLeftDistances = listToArray(leftDistances);
         tRightDistances = listToArray(rightDistances);
