@@ -12,6 +12,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
+import ch.hsr.rocketcolibri.manager.DesktopViewManager;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.view.widget.SwipeInMenu;
@@ -25,14 +26,14 @@ import ch.hsr.rocketcolibri.view.widget.SwipeInMenu.OnDrawerOpenListener;
 public class DesktopMenu {
 	private SwipeInMenu tSwipeInMenu;
 	private Context tContext;
-	private IDesktopViewManager tDesktopViewManager;
+	private DesktopViewManager tDesktopViewManager;
 	private RocketColibriService tService;
 	private int[] tServiceDependentItemIds = {R.id.menu_action_main_settings,R.id.menu_action_main_wifi, R.id.menu_action_observe_mode, R.id.menu_action_operate_mode};
 	private View[] tServiceDependentItems;
 	private ControlModusContent tControlModusContent;
 	private CustomizeModusContent tCustomizeModusContent;
 	private boolean initOnce = true;
-	public DesktopMenu(Context context, IDesktopViewManager desktopViewManager) {
+	public DesktopMenu(Context context, DesktopViewManager desktopViewManager) {
 		tContext = context;
 		tSwipeInMenu = (SwipeInMenu) ((Activity)tContext).findViewById(R.id.swipeInMenu);
 		tDesktopViewManager = desktopViewManager;
@@ -48,8 +49,8 @@ public class DesktopMenu {
 	private void initContents(){
 		tControlModusContent = (ControlModusContent)tSwipeInMenu.findViewById(R.id.controlModusContent);
 		tCustomizeModusContent = (CustomizeModusContent)tSwipeInMenu.findViewById(R.id.customizeModusContent);
-		tControlModusContent.create(null, tDesktopViewManager);
-		tCustomizeModusContent.create(tService.getWidgetEntries(), tDesktopViewManager);
+		tControlModusContent.create(null, this);
+		tCustomizeModusContent.create(tService.getWidgetEntries(), this);
 		switchModusContent();
 	}
 	
@@ -63,6 +64,14 @@ public class DesktopMenu {
 	
 	public void animateClose(){
 		tSwipeInMenu.animateClose();
+	}
+	
+	public RocketColibriService getService(){
+		return tService;
+	}
+	
+	public DesktopViewManager getDesktopViewManager(){
+		return tDesktopViewManager;
 	}
 	
 	public void setService(RocketColibriService rcService) {

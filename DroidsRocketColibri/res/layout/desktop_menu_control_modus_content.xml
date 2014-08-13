@@ -47,17 +47,28 @@
             android:textOff="Operate"
             android:textOn="Operate" >
         </ToggleButton>
+
+        <ToggleButton
+            android:id="@+id/modelListBtn"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@null"
+            android:button="@drawable/ic_action_model"
+            android:checked="false"
+            android:textOff="Model"
+            android:textOn="Model" >
+        </ToggleButton>
+
+        <ToggleButton
+            android:id="@+id/shareModelsBtn"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@null"
+            android:button="@drawable/ic_menu_share_holo_dark"
+            android:checked="false"
+            android:textOff="Share"
+            android:textOn="Share" >
+        </ToggleButton>
     </GridLayout>
 
-    <ToggleButton
-        android:id="@+id/modelListBtn"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:button="@drawable/ic_action_model"
-        android:background="@null"
-        android:checked="false"
-        android:textOn="Model"
-        android:textOff="Model">
-    </ToggleButton>
-    
 </ch.hsr.rocketcolibri.menu.desktop.ControlModusContent>

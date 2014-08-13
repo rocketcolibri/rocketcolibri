@@ -46,4 +46,5 @@
     <string name="model_list_row_description">has {0} Control Elements</string>
     <string name="model_list_name_already_exists">name already exists</string>
     <string name="model_list_new_model_name">New Model ({0})</string>
+    <string name="export_models">Export Models</string>
 </resources>

@@ -9,8 +9,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,9 +20,7 @@ import org.neodatis.odb.Objects;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import ch.futuretek.json.JsonTransformer;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
@@ -84,14 +83,14 @@ public class RocketColibriDataHandler {
 		}
 	}
 	
-	public void importData(){
+	public void importDataFromFile(){
 		
 	}
 	
 	/**
 	 * @return stored cache file with the json models
 	 */
-	public File exportData(){
+	public File exportDataToFile(){
 		//create wrapper list
 		List<JsonRCModel> jsons = new ArrayList<JsonRCModel>();
 		Objects<RCModel> rcModels = tRocketColibriDB.fetchAllRCModels();
@@ -108,21 +107,23 @@ public class RocketColibriDataHandler {
 		//create file and store data to it
 		File file = null;
 		try {
-			String fileName = "models.rocketcolibri";
-			file = File.createTempFile(fileName, "", tContext.getCacheDir());
-			storeToFile(json, fileName);
+			file = storeToFile(json, "models.rocketcolibri");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return file;
 	}
 	
-	public void storeToFile(String data, String fileName) throws IOException {
-		FileOutputStream out = null;
-		out = tContext.openFileOutput(fileName, Context.MODE_PRIVATE);
-		out.write(data.getBytes());
-		out.flush();
-		out.close();
+	public File storeToFile(String data, String fileName) throws IOException {
+		File cacheFile = new File(tContext.getCacheDir(),fileName);
+		cacheFile.createNewFile();
+		FileOutputStream fos = new FileOutputStream(cacheFile);
+		OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF8");
+		PrintWriter pw = new PrintWriter(osw);
+		pw.print(data);
+		pw.flush();
+		pw.close();
+		return cacheFile;
 	}
 	
 	private void dpToPixel(List<RCWidgetConfig> wcs){

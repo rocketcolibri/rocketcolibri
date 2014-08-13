@@ -7,7 +7,6 @@ package ch.hsr.rocketcolibri.menu.desktop;
 
 import java.util.List;
 
-import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.widgetdirectory.WidgetEntry;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -15,7 +14,7 @@ import android.widget.LinearLayout;
 
 public abstract class ModusContent extends LinearLayout {
 	protected Context tContext;
-	protected IDesktopViewManager tDesktopViewManager;
+	protected DesktopMenu tDesktopMenu;
 
 	public ModusContent(Context context) {
 		super(context);
@@ -32,8 +31,8 @@ public abstract class ModusContent extends LinearLayout {
 		tContext = context;
 	}
 	
-	public void create(List<WidgetEntry> widgetEntries, IDesktopViewManager desktopViewManager){
-		tDesktopViewManager = desktopViewManager;
+	public void create(List<WidgetEntry> widgetEntries, DesktopMenu desktopMenu){
+		tDesktopMenu = desktopMenu;
 		onCreate(widgetEntries);
 	}
 	

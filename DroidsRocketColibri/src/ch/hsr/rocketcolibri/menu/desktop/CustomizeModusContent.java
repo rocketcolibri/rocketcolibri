@@ -69,7 +69,7 @@ public class CustomizeModusContent extends ModusContent{
 		public boolean onTouch(View v, MotionEvent event) {
 			switch(event.getAction()){
 			case MotionEvent.ACTION_UP:
-				tDesktopViewManager.getDesktopMenu().animateToggle();
+				tDesktopMenu.animateToggle();
 				try {
 					setupView(tWidgetEntry, event);
 					Toast.makeText(tContext, tWidgetEntry.getLabelText(), Toast.LENGTH_SHORT).show();
@@ -93,16 +93,16 @@ public class CustomizeModusContent extends ModusContent{
 	private IRCWidget createIconView(WidgetEntry wEntry, int width, int height) throws Exception{
 		ViewElementConfig vec = wEntry.getDefaultViewElementConfig();
 		vec.setLayoutParams(new AbsoluteLayout.LayoutParams(width, height, 0, 0));
-		return tDesktopViewManager.createView(vec);
+		return tDesktopMenu.getDesktopViewManager().createView(vec);
 	}
 	
 	private ICustomizableView setupView(WidgetEntry we, MotionEvent e) throws Exception{
 		ViewElementConfig vec = we.getDefaultViewElementConfig();
 		AbsoluteLayout.LayoutParams lp = vec.getLayoutParams();
-		AbsoluteLayout rootView = tDesktopViewManager.getRootView();
+		AbsoluteLayout rootView = tDesktopMenu.getDesktopViewManager().getRootView();
 		lp.x = (int) (rootView.getWidth()/2)-lp.width/2;
 		lp.y = (int) (rootView.getHeight()/2)-lp.height/2;
-		ICustomizableView v1 = (ICustomizableView) tDesktopViewManager.createAndAddView(vec);
+		ICustomizableView v1 = (ICustomizableView) tDesktopMenu.getDesktopViewManager().createAndAddView(vec);
 		v1.setCustomizeModus(true);
 		return v1;
 	}
