@@ -4,6 +4,8 @@
 package ch.hsr.rocketcolibri.db;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,8 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.neodatis.odb.Objects;
+
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import ch.futuretek.json.JsonTransformer;
@@ -38,14 +43,18 @@ public class RocketColibriDataHandler {
 	private RocketColibriDB tRocketColibriDB;
 
 	public RocketColibriDataHandler(Context context, RocketColibriDB db) throws Exception {
+		this(context, db, true);
+	}
+	
+	public RocketColibriDataHandler(Context context, RocketColibriDB db, boolean checkIfItsFirstTime) throws Exception{
 		tContext = context;
 		tRocketColibriDB = db;
-//		makeJsonTestPrintOut();
-		process();
+		if(checkIfItsFirstTime){
+			process(readJsonData());
+		}
 	}
-
-	private void process() throws Exception{
-		List<JsonRCModel> models = readJsonData();
+	
+	private void process(List<JsonRCModel> models) throws Exception{
 		LastUpdateFromFile luff = fetchLastUpdateFromFile();
 		boolean updated = false;
 		for(JsonRCModel m : models){
@@ -73,6 +82,47 @@ public class RocketColibriDataHandler {
 			luff.timestamp = System.currentTimeMillis();
 			tRocketColibriDB.store(luff);
 		}
+	}
+	
+	public void importData(){
+		
+	}
+	
+	/**
+	 * @return stored cache file with the json models
+	 */
+	public File exportData(){
+		//create wrapper list
+		List<JsonRCModel> jsons = new ArrayList<JsonRCModel>();
+		Objects<RCModel> rcModels = tRocketColibriDB.fetchAllRCModels();
+		if(rcModels!=null && rcModels.size()>0){
+			for(RCModel m : rcModels){
+				JsonRCModel j = new JsonRCModel();
+				j.model = m;
+				j.process = "insert";
+				j.timestampToNow();
+				jsons.add(j);
+			}
+		}
+		String json = new JsonTransformer().unsafeTransform(jsons);
+		//create file and store data to it
+		File file = null;
+		try {
+			String fileName = "models.rocketcolibri";
+			file = File.createTempFile(fileName, "", tContext.getCacheDir());
+			storeToFile(json, fileName);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return file;
+	}
+	
+	public void storeToFile(String data, String fileName) throws IOException {
+		FileOutputStream out = null;
+		out = tContext.openFileOutput(fileName, Context.MODE_PRIVATE);
+		out.write(data.getBytes());
+		out.flush();
+		out.close();
 	}
 	
 	private void dpToPixel(List<RCWidgetConfig> wcs){
@@ -120,60 +170,57 @@ public class RocketColibriDataHandler {
 	}
 
 	/**
-	 * This method is just for create a Json output from the Class Model
+	 * This method is just to create a Json output from the Class Model
 	 * IT IS NOT USED ON RUNTIME OR PRODUCTION !
 	 */
-//	private void makeJsonTestPrintOut(){
-//		RCModel model = new RCModel();
-//		model.setName("Test Model");
-//		List<RCWidgetConfig> widgetConfigs = new ArrayList<RCWidgetConfig>();
-//		Map<String, String> tProtocolMap = new HashMap<String, String>();
-//		tProtocolMap.put(RCConstants.CHANNEL_ASSIGNMENT_H, "2");
-//		tProtocolMap.put(RCConstants.INVERTED_H, "1");
-//		tProtocolMap.put(RCConstants.MAX_RANGE_H, "");
-//		tProtocolMap.put(RCConstants.MIN_RANGE_H, "");
-//		tProtocolMap.put(RCConstants.DEFAULT_POSITION_H, "");
-//		tProtocolMap.put(RCConstants.TRIMM_H, "");
-//<<<<<<< HEAD
-//		tProtocolMap.put(RCConstants.CHANNEL_ASSIGNMENT_V, "");
-//=======
-//		tProtocolMap.put(RCConstants.CHANNEL_ASSIGNMENT_H, "");
-//>>>>>>> branch 'master' of https://artvel@bitbucket.org/artvel/rocketcolibri.git
-//		tProtocolMap.put(RCConstants.INVERTED_V, "");
-//		tProtocolMap.put(RCConstants.MAX_RANGE_V, "2");
-//		tProtocolMap.put(RCConstants.MIN_RANGE_V, "1");
-//		tProtocolMap.put(RCConstants.DEFAULT_POSITION_V, "");
-//		tProtocolMap.put(RCConstants.TRIMM_V, "");
-//		widgetConfigs.add(new RCWidgetConfig(tProtocolMap, Circle.getDefaultViewElementConfig()));
-//		widgetConfigs.add(new RCWidgetConfig(ConnectionStatusWidget.getDefaultViewElementConfig()));
-//		widgetConfigs.add(new RCWidgetConfig(ConnectedUserInfoWidget.getDefaultViewElementConfig()));
-//		model.setWidgetConfigs(widgetConfigs);
-//		
-//		List<JsonRCModel> jsons = new ArrayList<JsonRCModel>();
-//		JsonRCModel j = new JsonRCModel();
-//		j.model = model;
-//		j.process = "insert";
-//		jsons.add(j);
-//		
-//		model = new RCModel();
-//		model.setName("Test Model 2");
-//		widgetConfigs = new ArrayList<RCWidgetConfig>();
-//		tProtocolMap = new HashMap<String, String>();
-//		tProtocolMap.put(RCConstants.CHANNEL_ASSIGNMENT, "2");
-//		tProtocolMap.put(RCConstants.INVERTED, "1");
-//		tProtocolMap.put(RCConstants.MAX_RANGE, "");
-//		tProtocolMap.put(RCConstants.MIN_RANGE, "");
-//		tProtocolMap.put(RCConstants.DEFAULT_POSITION, "");
-//		tProtocolMap.put(RCConstants.TRIMM, "");
-//		widgetConfigs.add(new RCWidgetConfig(tProtocolMap, Circle.getDefaultViewElementConfig()));
-//		widgetConfigs.add(new RCWidgetConfig(ConnectionStatusWidget.getDefaultViewElementConfig()));
-//		model.setWidgetConfigs(widgetConfigs);
-//		
-//		j = new JsonRCModel();
-//		j.model = model;
-//		j.process = "insert";
-//		jsons.add(j);
-//		System.out.println(new JsonTransformer().unsafeTransform(jsons));
-//	}
-//	
+	private void makeJsonTestPrintOut(){
+		RCModel model = new RCModel();
+		model.setName("Test Model");
+		List<RCWidgetConfig> widgetConfigs = new ArrayList<RCWidgetConfig>();
+		Map<String, String> tProtocolMap = new HashMap<String, String>();
+		tProtocolMap.put(RCConstants.CHANNEL_ASSIGNMENT_H, "2");
+		tProtocolMap.put(RCConstants.INVERTED_H, "1");
+		tProtocolMap.put(RCConstants.MAX_RANGE_H, "");
+		tProtocolMap.put(RCConstants.MIN_RANGE_H, "");
+		tProtocolMap.put(RCConstants.DEFAULT_POSITION_H, "");
+		tProtocolMap.put(RCConstants.TRIMM_H, "");
+		tProtocolMap.put(RCConstants.CHANNEL_ASSIGNMENT_V, "");
+		tProtocolMap.put(RCConstants.CHANNEL_ASSIGNMENT_H, "");
+		tProtocolMap.put(RCConstants.INVERTED_V, "");
+		tProtocolMap.put(RCConstants.MAX_RANGE_V, "2");
+		tProtocolMap.put(RCConstants.MIN_RANGE_V, "1");
+		tProtocolMap.put(RCConstants.DEFAULT_POSITION_V, "");
+		tProtocolMap.put(RCConstants.TRIMM_V, "");
+		widgetConfigs.add(new RCWidgetConfig(tProtocolMap, Circle.getDefaultViewElementConfig()));
+		widgetConfigs.add(new RCWidgetConfig(ConnectionStatusWidget.getDefaultViewElementConfig()));
+		widgetConfigs.add(new RCWidgetConfig(ConnectedUserInfoWidget.getDefaultViewElementConfig()));
+		model.setWidgetConfigs(widgetConfigs);
+		
+		List<JsonRCModel> jsons = new ArrayList<JsonRCModel>();
+		JsonRCModel j = new JsonRCModel();
+		j.model = model;
+		j.process = "insert";
+		jsons.add(j);
+		
+		model = new RCModel();
+		model.setName("Test Model 2");
+		widgetConfigs = new ArrayList<RCWidgetConfig>();
+		tProtocolMap = new HashMap<String, String>();
+		tProtocolMap.put(RCConstants.CHANNEL_ASSIGNMENT, "2");
+		tProtocolMap.put(RCConstants.INVERTED, "1");
+		tProtocolMap.put(RCConstants.MAX_RANGE, "");
+		tProtocolMap.put(RCConstants.MIN_RANGE, "");
+		tProtocolMap.put(RCConstants.DEFAULT_POSITION, "");
+		tProtocolMap.put(RCConstants.TRIMM, "");
+		widgetConfigs.add(new RCWidgetConfig(tProtocolMap, Circle.getDefaultViewElementConfig()));
+		widgetConfigs.add(new RCWidgetConfig(ConnectionStatusWidget.getDefaultViewElementConfig()));
+		model.setWidgetConfigs(widgetConfigs);
+		
+		j = new JsonRCModel();
+		j.model = model;
+		j.process = "insert";
+		jsons.add(j);
+		System.out.println(new JsonTransformer().unsafeTransform(jsons));
+	}
+	
 }
