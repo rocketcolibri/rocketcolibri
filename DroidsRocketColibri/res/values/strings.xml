@@ -42,9 +42,12 @@
     
     <string name="loading">Loading</string>
     <string name="create_new">New</string>
-    <string name="model_list_leave">"you need to select a model before you leave!"</string>
+    <string name="model_list_leave_toast">"you need to select a model before you leave!"</string>
     <string name="model_list_row_description">has {0} Control Elements</string>
     <string name="model_list_name_already_exists">name already exists</string>
     <string name="model_list_new_model_name">New Model ({0})</string>
     <string name="export_models">Export Models</string>
+    <string name="export_file_name">models.rocketcolibri</string>
+    <string name="import_success_toast">import success</string>
+    <string name="import_failed_toast">import failed</string>
 </resources>

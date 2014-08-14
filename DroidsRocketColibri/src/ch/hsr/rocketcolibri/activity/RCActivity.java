@@ -10,15 +10,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Resources;
+import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import java.lang.reflect.Method;
 import java.util.Locale;
 
 
@@ -26,6 +30,9 @@ import java.util.Locale;
 
 
 
+
+
+import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.RocketColibriService;
 
@@ -93,7 +100,6 @@ public abstract class RCActivity extends Activity {
 		RocketColibriDefaults.setDefaultViewSettings(getWindow().getDecorView().getRootView());
 		getWindow().getDecorView()
         .setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-
             @Override
             public void onSystemUiVisibilityChange(int visibility) {
                 if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
@@ -112,16 +118,26 @@ public abstract class RCActivity extends Activity {
 	    }
 	}
 	
-	protected void showLoading(String message){
+	protected void showLoading(boolean showOnUiThread){
+		showLoading(getString(R.string.loading), showOnUiThread);
+	}
+	
+	protected void showLoading(){
+		showLoading(getString(R.string.loading), true);
+	}
+	
+	protected void showLoading(String message, boolean showOnUiThread){
 		if(mDialog!=null && mDialog.isShowing())return;
 		mDialog = new ProgressDialog(this);
         mDialog.setMessage(message);
         mDialog.setCancelable(false);
-		runOnUiThread(new Runnable(){
-			public void run(){
-	            mDialog.show();
-			}
-		});
+        if(showOnUiThread){
+			runOnUiThread(new Runnable(){public void run(){
+				mDialog.show();
+			}});
+        }else{
+        	mDialog.show();
+        }
 	}
 	
 	protected void hideLoading(){

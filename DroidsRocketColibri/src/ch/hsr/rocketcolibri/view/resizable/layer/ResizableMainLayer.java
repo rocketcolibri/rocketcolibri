@@ -33,7 +33,7 @@ public class ResizableMainLayer extends AbsoluteLayout{
         addView(bgLayer);
         tTargetLayer = new ResizeableTargetLayer(context, parent, resizeTarget, lp, mainListener, config);
         addView(tTargetLayer);
-        tMenu = new ResizeMenu(context, parent, resizeTarget, tTargetLayer.getMenuListener());
+        tMenu = new ResizeMenu(context, parent, resizeTarget, tTargetLayer);
         addView(tMenu);
 	}
 	

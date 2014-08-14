@@ -9,8 +9,6 @@ import org.neodatis.odb.ODB;
 import org.neodatis.odb.ODBFactory;
 import org.neodatis.odb.OID;
 import org.neodatis.odb.Objects;
-import org.neodatis.odb.OdbConfiguration;
-import org.neodatis.odb.core.query.IQuery;
 import org.neodatis.odb.core.query.criteria.Where;
 import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
 
@@ -54,6 +52,10 @@ public class RocketColibriDB {
 		}catch(Exception e){
 			return null;
 		}
+	}
+	
+	public boolean rcModelExists(String name){
+		return fetchRCModelByName(name)!=null;
 	}
 	
 	public void delete(Object obj){

@@ -56,7 +56,7 @@ public class ModelListActivity extends RCActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.model_list);
-        tDeviceIconWith = RocketColibriDefaults.dpToPixel(getResources().getDisplayMetrics(), (int)getResources().getDimension(R.dimen.size_list_image));
+        tDeviceIconWith = RocketColibriDefaults.dpToPixelX(getResources().getDisplayMetrics(), (int)getResources().getDimension(R.dimen.size_list_image));
         tData = new ArrayList<ModelRow>();
         tCacheUtil = new CacheUtil(ModelListActivity.this);
         tSwipeListView = (SwipeListView) findViewById(R.id.listView);
@@ -85,7 +85,7 @@ public class ModelListActivity extends RCActivity {
 
         });
         tSwipeListView.setAdapter(tAdapter);
-        showLoading(getString(R.string.loading));
+        showLoading();
     }
     
     @Override
@@ -105,7 +105,7 @@ public class ModelListActivity extends RCActivity {
 					if (tFirstTime) {
 						if (System.currentTimeMillis() - tLoastLeaveToast > 8000) {
 							tLoastLeaveToast = System.currentTimeMillis();
-							uitoast(getString(R.string.model_list_leave));
+							uitoast(getString(R.string.model_list_leave_toast));
 						}
 					} else {
 						finish();

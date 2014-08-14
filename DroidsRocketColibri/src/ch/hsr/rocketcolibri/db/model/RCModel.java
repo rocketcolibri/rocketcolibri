@@ -3,6 +3,7 @@
  */
 package ch.hsr.rocketcolibri.db.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
@@ -29,6 +30,21 @@ public class RCModel {
 
 	public void setWidgetConfigs(List<RCWidgetConfig> viewElementConfigs) {
 		this.widgetConfigs = viewElementConfigs;
+	}
+	
+	public RCModel copy(){
+		RCModel copy = new RCModel();
+		copy.setName(name);
+		if(widgetConfigs!=null && widgetConfigs.size()>0){
+			List<RCWidgetConfig> configCopyList = new ArrayList<RCWidgetConfig>(widgetConfigs.size());
+			for(RCWidgetConfig config : widgetConfigs){
+				configCopyList.add(config.copy());
+			}
+			copy.setWidgetConfigs(configCopyList);
+		}else{
+			copy.setWidgetConfigs(new ArrayList<RCWidgetConfig>(0));
+		}
+		return copy;
 	}
 	
 	@Override

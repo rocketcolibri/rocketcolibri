@@ -22,6 +22,6 @@ public class RCWidgetConfig {
 	}
 	
 	public RCWidgetConfig copy(){
-		return new RCWidgetConfig(new HashMap<String, String>(protocolMap), viewElementConfig.copy());
+		return new RCWidgetConfig(protocolMap==null?null:new HashMap<String, String>(protocolMap), viewElementConfig.copy());
 	}
 }

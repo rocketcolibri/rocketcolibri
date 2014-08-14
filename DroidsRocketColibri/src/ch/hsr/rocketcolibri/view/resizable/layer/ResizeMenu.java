@@ -8,30 +8,28 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
-import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
-import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 
 public class ResizeMenu extends LinearLayout{
 
-	private MenuListener tMListener;
+	private ResizeableTargetLayer tRTargetLayer;
 	private ImageView tMaximizedIv;
 	private ImageView tMinimizedIv;
 	
-	public ResizeMenu(Context context, AbsoluteLayout parent, View target, MenuListener mListener){
+	public ResizeMenu(Context context, AbsoluteLayout parent, View target, ResizeableTargetLayer mListener){
 		this(context, parent, target, new AbsoluteLayout.LayoutParams(AbsoluteLayout.LayoutParams.WRAP_CONTENT,  AbsoluteLayout.LayoutParams.WRAP_CONTENT, 0, 0), mListener);
 	}
 	
-	public ResizeMenu(Context context, AbsoluteLayout parent, View target, AbsoluteLayout.LayoutParams lp, MenuListener mListener){
+	public ResizeMenu(Context context, AbsoluteLayout parent, View target, AbsoluteLayout.LayoutParams lp, ResizeableTargetLayer mListener){
 		super(context);
 		setOrientation(LinearLayout.HORIZONTAL);
-		tMListener = mListener;
+		tRTargetLayer = mListener;
 		float density = getContext().getResources().getDisplayMetrics().density;
 		tMaximizedIv = new ImageView(getContext());
 		settings(density, tMaximizedIv);
 		tMaximizedIv.setImageResource(R.drawable.maximize);
 		addView(tMaximizedIv);
 		tMaximizedIv.setOnClickListener(new OnClickListener(){public void onClick(View v){
-			tMListener.maximize();
+			tRTargetLayer.maximize();
 			enableMaximizedAndMinimized(true);
 		}});
 		tMinimizedIv = new ImageView(getContext());
@@ -39,15 +37,11 @@ public class ResizeMenu extends LinearLayout{
 		tMinimizedIv.setImageResource(R.drawable.minimize);
 		addView(tMinimizedIv);
 		tMinimizedIv.setOnClickListener(new OnClickListener(){public void onClick(View v){
-			tMListener.minimize();
+			tRTargetLayer.minimize();
 			enableMaximizedAndMinimized(false);
 		}});
-		AbsoluteLayout.LayoutParams tResizeTargetLP = (ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams) target.getLayoutParams();
-		try{
-			ResizeConfig tConfig = ((IRCWidget)target).getWidgetConfig().viewElementConfig.getResizeConfig();
-			enableMaximized(!(tResizeTargetLP.height==tConfig.maxHeight && tResizeTargetLP.width==tConfig.maxWidth));
-			enableMinimized(!(tResizeTargetLP.height==tConfig.minHeight && tResizeTargetLP.width==tConfig.minWidth));
-		}catch(Exception e){}
+		enableMaximized(!tRTargetLayer.isMaximized());
+		enableMinimized(!tRTargetLayer.isMinimized());
 	}
 	
 	private void settings(float density, ImageView iv){
@@ -79,10 +73,10 @@ public class ResizeMenu extends LinearLayout{
 	}
 	
 	private void enableMaximized(boolean enable){
-		tMaximizedIv.setAlpha(enable?1f:0.4f);
+		tRTargetLayer.getViewCustomizer().enableView(tMaximizedIv, enable);
 	}
 	
 	private void enableMinimized(boolean enable){
-		tMinimizedIv.setAlpha(enable?1f:0.4f);
+		tRTargetLayer.getViewCustomizer().enableView(tMinimizedIv, enable);
 	}
 }

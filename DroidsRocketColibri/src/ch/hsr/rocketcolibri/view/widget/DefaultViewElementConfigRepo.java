@@ -106,9 +106,9 @@ public class DefaultViewElementConfigRepo {
 	    
 		//>>>>>>>>>>>>>>>>>>>>>>>>>>> VideoStreamWidget >>>>>>>>>>>>>>>
 		rc = new ResizeConfig();
-		rc.maxHeight = 1080;
+		rc.maxHeight = 9000;
 		rc.minHeight = 100;
-		rc.maxWidth = 1920;
+		rc.maxWidth = 9000;
 		rc.minWidth = 180;
 		lp = new LayoutParams(400, 300, 100, 100);
 		elementConfig = new ViewElementConfig(VideoStreamWidget.class.getName(), lp, rc);

@@ -6,6 +6,10 @@ package ch.hsr.rocketcolibri.view.resizable;
 public class ResizeConfig {
 	public boolean keepRatio;
 	public int minWidth;
+	/**
+	 * If max is greater than the view size, the view size will be taken.
+	 * That means max with a large value like 9999999 would be something like a fullscreen size
+	 */
 	public int maxWidth;
 	public int minHeight;
 	public int maxHeight;

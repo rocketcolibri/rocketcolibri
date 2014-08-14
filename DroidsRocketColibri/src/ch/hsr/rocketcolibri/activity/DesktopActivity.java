@@ -3,6 +3,7 @@
  */
 package ch.hsr.rocketcolibri.activity;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +11,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.graphics.Point;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -34,6 +40,7 @@ import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObserver;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
+import ch.hsr.rocketcolibri.util.AndroidUtil;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
@@ -199,7 +206,7 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 		if (requestCode == RCConstants.RC_MODEL_RESULT_CODE && editChannelIntent!=null) {
 			String modelName = editChannelIntent.getStringExtra(RCConstants.FLAG_ACTIVITY_RC_MODEL);
 			if(modelName!=null){
-				showLoading(getString(R.string.loading));
+//				showLoading();
 				setDefaultModelName(modelName);
 				releaseDesktop();
 				tDesktopViewManager.getControlElementParentView().removeAllViews();
@@ -207,7 +214,7 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 				setupViewsOnce = true;
 				setupDesktop();
 				tDesktopMenu.animateClose();
-				hideLoading();
+//				hideLoading();
 			}
 		}else{
 			Log.d("", "viewIndex:"+requestCode+" resultCode: "+resultCode);
@@ -223,7 +230,7 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 		tDesktopMenu.setService(rcService) ;
 		setupDesktop();
 	}
-
+    
 	@Override
 	protected void onPause(){
 		releaseDesktop();
@@ -234,23 +241,6 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
     	try{
     		rcService.tProtocol.release();
     	}catch(Exception e){}
-	}
-	
-	private void printOutJson(){
-		List<JsonRCModel> jsons = new ArrayList<JsonRCModel>();
-		JsonRCModel j = new JsonRCModel();
-		j.model = tModel;
-		for(RCWidgetConfig w : tModel.getWidgetConfigs()){
-			RocketColibriDefaults.pixelToDp(this.getResources().getDisplayMetrics(), w.viewElementConfig);
-		}
-		j.process = "insert";
-		j.timestamp = "04.07.2014 21:16:00";
-		jsons.add(j);
-		try {
-			Log.d("", new JsonTransformer().transform(jsons));
-		} catch (TransformException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override

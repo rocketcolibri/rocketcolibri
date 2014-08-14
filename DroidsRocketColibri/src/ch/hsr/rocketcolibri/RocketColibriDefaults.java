@@ -3,8 +3,12 @@
  */
 package ch.hsr.rocketcolibri;
 
+import ch.hsr.rocketcolibri.db.model.JsonRCModelFuture;
+import ch.hsr.rocketcolibri.db.model.RCModel;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
+import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 import android.annotation.TargetApi;
+import android.graphics.Point;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -33,35 +37,50 @@ public class RocketColibriDefaults {
 	}
 
 	public static void dpToPixel(DisplayMetrics density, ViewElementConfig viewElementConfig) {
-		viewElementConfig.getLayoutParams().height = dpToPixel(density, viewElementConfig.getLayoutParams().height);
-		viewElementConfig.getLayoutParams().width = dpToPixel(density, viewElementConfig.getLayoutParams().width);
-		viewElementConfig.getLayoutParams().x = dpToPixel(density, viewElementConfig.getLayoutParams().x);
-		viewElementConfig.getLayoutParams().y = dpToPixel(density, viewElementConfig.getLayoutParams().y);
-		viewElementConfig.getResizeConfig().maxHeight = dpToPixel(density, viewElementConfig.getResizeConfig().maxHeight);
-		viewElementConfig.getResizeConfig().minHeight = dpToPixel(density, viewElementConfig.getResizeConfig().minHeight);
-		viewElementConfig.getResizeConfig().maxWidth = dpToPixel(density, viewElementConfig.getResizeConfig().maxWidth);
-		viewElementConfig.getResizeConfig().minWidth = dpToPixel(density, viewElementConfig.getResizeConfig().minWidth);
+		viewElementConfig.getLayoutParams().height = dpToPixelY(density, viewElementConfig.getLayoutParams().height);
+		viewElementConfig.getLayoutParams().width = dpToPixelX(density, viewElementConfig.getLayoutParams().width);
+		viewElementConfig.getLayoutParams().x = dpToPixelX(density, viewElementConfig.getLayoutParams().x);
+		viewElementConfig.getLayoutParams().y = dpToPixelY(density, viewElementConfig.getLayoutParams().y);
+		viewElementConfig.getResizeConfig().maxHeight = dpToPixelY(density, viewElementConfig.getResizeConfig().maxHeight);
+		viewElementConfig.getResizeConfig().minHeight = dpToPixelY(density, viewElementConfig.getResizeConfig().minHeight);
+		viewElementConfig.getResizeConfig().maxWidth = dpToPixelX(density, viewElementConfig.getResizeConfig().maxWidth);
+		viewElementConfig.getResizeConfig().minWidth = dpToPixelX(density, viewElementConfig.getResizeConfig().minWidth);
 	}
 	
 	public static void pixelToDp(DisplayMetrics density, ViewElementConfig viewElementConfig) {
-		viewElementConfig.getLayoutParams().height = pixelToDp(density, viewElementConfig.getLayoutParams().height);
-		viewElementConfig.getLayoutParams().width = pixelToDp(density, viewElementConfig.getLayoutParams().width);
-		viewElementConfig.getLayoutParams().x = pixelToDp(density, viewElementConfig.getLayoutParams().x);
-		viewElementConfig.getLayoutParams().y = pixelToDp(density, viewElementConfig.getLayoutParams().y);
-		viewElementConfig.getResizeConfig().maxHeight = pixelToDp(density, viewElementConfig.getResizeConfig().maxHeight);
-		viewElementConfig.getResizeConfig().minHeight = pixelToDp(density, viewElementConfig.getResizeConfig().minHeight);
-		viewElementConfig.getResizeConfig().maxWidth = pixelToDp(density, viewElementConfig.getResizeConfig().maxWidth);
-		viewElementConfig.getResizeConfig().minWidth = pixelToDp(density, viewElementConfig.getResizeConfig().minWidth);
+		viewElementConfig.getLayoutParams().height = pixelToDpY(density, viewElementConfig.getLayoutParams().height);
+		viewElementConfig.getLayoutParams().width = pixelToDpX(density, viewElementConfig.getLayoutParams().width);
+		viewElementConfig.getLayoutParams().x = pixelToDpX(density, viewElementConfig.getLayoutParams().x);
+		viewElementConfig.getLayoutParams().y = pixelToDpY(density, viewElementConfig.getLayoutParams().y);
+		viewElementConfig.getResizeConfig().maxHeight = pixelToDpY(density, viewElementConfig.getResizeConfig().maxHeight);
+		viewElementConfig.getResizeConfig().minHeight = pixelToDpY(density, viewElementConfig.getResizeConfig().minHeight);
+		viewElementConfig.getResizeConfig().maxWidth = pixelToDpX(density, viewElementConfig.getResizeConfig().maxWidth);
+		viewElementConfig.getResizeConfig().minWidth = pixelToDpX(density, viewElementConfig.getResizeConfig().minWidth);
 	}
-
 	
-	public static int pixelToDp(DisplayMetrics dMetrics, int px) {
+	private static int calcCompatiblePosition(int target, int origin, int current){
+		double or = origin;double tar = target;double cur = current;
+		System.out.println("target "+target+" /"+ " orgigin: "+origin+" current: "+current);
+		return (int) (tar/or*cur);
+	}
+	
+	public static int pixelToDpX(DisplayMetrics dMetrics, int px) {
 	    int dp = Math.round(px / (dMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
 	    return dp;
 	}
 	
-	public static int dpToPixel(DisplayMetrics dMetrics, int dp) {
+	public static int pixelToDpY(DisplayMetrics dMetrics, int px) {
+	    int dp = Math.round(px / (dMetrics.ydpi / DisplayMetrics.DENSITY_DEFAULT));
+	    return dp;
+	}
+	
+	public static int dpToPixelX(DisplayMetrics dMetrics, int dp) {
 	    int px = Math.round(dp * (dMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));       
+	    return px;
+	}
+	
+	public static int dpToPixelY(DisplayMetrics dMetrics, int dp) {
+	    int px = Math.round(dp * (dMetrics.ydpi / DisplayMetrics.DENSITY_DEFAULT));       
 	    return px;
 	}
 	

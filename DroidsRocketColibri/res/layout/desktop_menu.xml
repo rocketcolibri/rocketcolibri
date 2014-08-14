@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     rc:content="@+id/menu_content"
     rc:handle="@+id/drag_handle"
-    rc:orientation="bottom"
+    rc:orientation="top"
     rc:topOffset="80dp" >
 
     <!-- drag area of the swipe in menu -->

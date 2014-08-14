@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.InputType;
-import android.text.method.DigitsKeyListener;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,7 +28,7 @@ public class EditChannelActivity extends RCActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		showLoading("Loading...");
+		showLoading();
 		setContentView(R.layout.edit_channel);
 		initFooterButtons();
 		readWidgetSettings();

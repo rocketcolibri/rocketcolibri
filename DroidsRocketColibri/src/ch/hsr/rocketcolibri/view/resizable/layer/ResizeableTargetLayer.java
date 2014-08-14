@@ -13,6 +13,7 @@ import ch.hsr.rocketcolibri.view.draggable.HelplineDrawer;
 import ch.hsr.rocketcolibri.view.resizable.CornerBall;
 import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
+import ch.hsr.rocketcolibri.view.resizable.ViewElementCustomizer;
 import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -68,6 +69,7 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
     private double tRatio;
 //    private HelplineDrawer tHelplineDrawer;
     private AbsoluteLayout tParent;
+    private ViewElementCustomizer tViewCustomizer = new ViewElementCustomizer();
 
     /**
 	 * Class name for logging 
@@ -96,6 +98,7 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
         }
 //        tHelplineDrawer = new HelplineDrawer(context, parent, resizeTarget, 50, 1, 18, Color.CYAN, Color.YELLOW);
 //        tHelplineDrawer.addLinesTo(parent);
+        tViewCustomizer.setTargetView(tResizeTarget);
     }
     
     private void createBalls(Context context){
@@ -445,28 +448,27 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
     public void shade_region_between_points() {
         tCanvas.drawRect(tPoint0.x, tPoint2.y, tPoint2.x, tPoint0.y, tOuterBorderPaint);
     }
-
-	public MenuListener getMenuListener() {
-		return new MenuListener() {
-			public void minimize() {
-				tResizeTargetLP.height = tConfig.minHeight;
-				tResizeTargetLP.width = tConfig.minWidth;
-				updateViewLayout(tResizeTarget, tResizeTargetLP);
-				updateBallsToTargetView(true);
-			}
-			public void maximize() {
-				tResizeTargetLP.height = tConfig.maxHeight;
-				tResizeTargetLP.width = tConfig.maxWidth;
-				tResizeTargetLP = DrawingTools.checkMaxSize(tResizeTargetLP, (AbsoluteLayout) tResizeTarget.getParent());
-
-				if(tResizeTargetLP.height+tResizeTargetLP.y>tParent.getHeight())
-					tResizeTargetLP.y=tParent.getHeight()-tResizeTargetLP.height;
-				if(tResizeTargetLP.width+tResizeTargetLP.x>tParent.getWidth())
-					tResizeTargetLP.x=tParent.getWidth()-tResizeTargetLP.width;
-				updateViewLayout(tResizeTarget, tResizeTargetLP);
-				updateBallsToTargetView(true);
-			}
-		};
+	
+	public void maximize(){
+		tViewCustomizer.maximize();
+		updateBallsToTargetView(true);
+	}
+	
+	public void minimize() {
+		tViewCustomizer.minimize();
+		updateBallsToTargetView(true);
+	}
+	
+	public boolean isMinimized(){
+		return tViewCustomizer.isMinimized();
+	}
+	
+	public boolean isMaximized(){
+		return tViewCustomizer.isMaximized();
+	}
+	
+	public ViewElementCustomizer getViewCustomizer(){
+		return tViewCustomizer;
 	}
 
 }

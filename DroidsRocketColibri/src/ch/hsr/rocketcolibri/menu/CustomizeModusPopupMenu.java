@@ -13,15 +13,13 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
-import ch.hsr.rocketcolibri.util.DrawingTools;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.HoldImageView.OnHoldListener;
 import ch.hsr.rocketcolibri.view.HoldImageView;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
-import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.popup.PopupWindow;
-import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
+import ch.hsr.rocketcolibri.view.resizable.ViewElementCustomizer;
 import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 
@@ -36,6 +34,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 	private ImageView tEditIv;
 	private ImageView tMaximizeIv;
 	private ImageView tMinimizeIv;
+	private ViewElementCustomizer viewCustomizer = new ViewElementCustomizer();
 	
 	public CustomizeModusPopupMenu(IDesktopViewManager desktopViewManager, View contentView){
 		super((AbsoluteLayout) desktopViewManager.getRootView(), contentView, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
@@ -60,14 +59,8 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		tMaximizeIv.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				try{
-					LayoutParams resizeTargetLP = (LayoutParams) tTargetView.getLayoutParams();
-					ResizeConfig config = ((IRCWidget)tTargetView).getWidgetConfig().viewElementConfig.getResizeConfig();
-					AbsoluteLayout parent = (AbsoluteLayout) tTargetView.getParent();
-					resizeTargetLP.height = config.maxHeight;
-					resizeTargetLP.width = config.maxWidth;
-					resizeTargetLP = DrawingTools.checkMaxSize(resizeTargetLP, parent);
-
-					parent.updateViewLayout(tTargetView, resizeTargetLP);
+					viewCustomizer.setTargetView(tTargetView);
+					viewCustomizer.maximize();
 					enableMaximizedAndMinimized(true);
 				}catch(Exception e){e.printStackTrace();}
 			}
@@ -76,12 +69,8 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		tMinimizeIv.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				try{
-					LayoutParams resizeTargetLP = (LayoutParams) tTargetView.getLayoutParams();
-					ResizeConfig config = ((IRCWidget)tTargetView).getWidgetConfig().viewElementConfig.getResizeConfig();
-					AbsoluteLayout parent = (AbsoluteLayout) tTargetView.getParent();
-					resizeTargetLP.height = config.minHeight;
-					resizeTargetLP.width = config.minWidth;
-					parent.updateViewLayout(tTargetView, resizeTargetLP);
+					viewCustomizer.setTargetView(tTargetView);
+					viewCustomizer.minimize();
 					enableMaximizedAndMinimized(false);
 				}catch(Exception e){e.printStackTrace();}
 			}
@@ -142,8 +131,9 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 	public void show(View cView){
 		dismissPopupIfIsShowing();
 		tTargetView = cView;
-		enableMaximized(!isMaximized());
-		enableMinimized(!isMinimized());
+		viewCustomizer.setTargetView(tTargetView);
+		viewCustomizer.enableView(tMaximizeIv, !viewCustomizer.isMaximized());
+		viewCustomizer.enableView(tMinimizeIv, !viewCustomizer.isMinimized());
 		try {
 			if (((IRCWidget) cView).getProtocolMap() != null) {
 				setVisibilityOfEditChannelBtn(View.VISIBLE);
@@ -163,35 +153,9 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		}
 	}
 	
-	private boolean isMaximized(){
-		LayoutParams resizeTargetLP = (LayoutParams) tTargetView.getLayoutParams();
-		ResizeConfig config = ((IRCWidget)tTargetView).getWidgetConfig().viewElementConfig.getResizeConfig();
-		if(resizeTargetLP.height==config.maxHeight && resizeTargetLP.width==config.maxWidth){
-			return true;
-		}
-		return false;
-	}
-	
-	private boolean isMinimized(){
-		LayoutParams resizeTargetLP = (LayoutParams) tTargetView.getLayoutParams();
-		ResizeConfig config = ((IRCWidget)tTargetView).getWidgetConfig().viewElementConfig.getResizeConfig();
-		if(resizeTargetLP.height==config.minHeight && resizeTargetLP.width==config.minWidth){
-			return true;
-		}
-		return false;
-	}
-	
 	private void enableMaximizedAndMinimized(boolean isMaximized){
-		enableMaximized(!isMaximized);
-		enableMinimized(isMaximized);
-	}
-	
-	private void enableMaximized(boolean enable){
-		tMaximizeIv.setAlpha(enable?1f:0.4f);
-	}
-	
-	private void enableMinimized(boolean enable){
-		tMinimizeIv.setAlpha(enable?1f:0.4f);
+		viewCustomizer.enableView(tMaximizeIv, !isMaximized);
+		viewCustomizer.enableView(tMinimizeIv, isMaximized);
 	}
 	
 	private void dismissPopupIfIsShowing(){
