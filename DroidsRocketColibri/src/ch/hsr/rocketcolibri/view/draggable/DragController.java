@@ -24,7 +24,6 @@ package ch.hsr.rocketcolibri.view.draggable;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.os.IBinder;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
@@ -34,8 +33,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-
-import java.util.ArrayList;
 
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 

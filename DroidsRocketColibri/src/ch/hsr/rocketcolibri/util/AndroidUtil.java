@@ -2,6 +2,7 @@ package ch.hsr.rocketcolibri.util;
 
 import java.lang.reflect.Method;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
@@ -17,6 +18,8 @@ public class AndroidUtil {
 		tContext = context;
 	}
 
+	@SuppressWarnings("deprecation")
+	@SuppressLint("NewApi")
 	public Point getRealSize() {
 		Display display = ((WindowManager) tContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();//getWindowManager().getDefaultDisplay();
 		int realWidth;

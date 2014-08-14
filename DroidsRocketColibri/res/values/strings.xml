@@ -10,7 +10,8 @@
     <string name="menu_action_main_settings">Switch GUI between Configure and Fix</string>
     <string name="menu_action_observe_mode">Turn observe mode on and operate mode off</string>
     <string name="menu_action_operate_mode">Turn operate mode on and observe mode off</string>
-    
+    <string name="desktop_menu_control_mode">Control Mode</string>
+    <string name="desktop_menu_customize_mode">Customize Mode</string>
     <!-- Popup menu entries -->
     <string name="popup_menu_edit_channel_btn">Edit channel</string>
     <string name="popup_menu_resize_element_btn">Resize Element</string>

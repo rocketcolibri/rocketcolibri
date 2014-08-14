@@ -6,18 +6,21 @@ package ch.hsr.rocketcolibri.db.model;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+import android.annotation.SuppressLint;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * @author Artan Veliju
  */
+@SuppressLint("SimpleDateFormat")
 public class JsonRCModel {
 	@JsonIgnore
 	private final String DATE_FORMAT = "dd.MM.yyyy HH:mm:ss";
 	public String process;
 	public String timestamp;
 	public RCModel model;
+	public int pixelWidth;
+	public int pixelHeight;
 	
 	public void timestampToNow(){
 		timestamp = new SimpleDateFormat(DATE_FORMAT).format(new Date());

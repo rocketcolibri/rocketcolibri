@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     rc:content="@+id/menu_content"
     rc:handle="@+id/drag_handle"
-    rc:orientation="top"
+    rc:orientation="bottom"
     rc:topOffset="80dp" >
 
     <!-- drag area of the swipe in menu -->
@@ -22,37 +22,36 @@
         android:id="@+id/menu_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#3D3D3D">
+        android:background="#E6000000" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:orientation="vertical" >
 
-            <GridLayout
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnCount="5"
-                android:orientation="horizontal"
-                android:rowCount="2" >
+                android:layout_marginBottom="25dp"
+                android:gravity="center_horizontal" >
 
-                <ToggleButton
+                <Switch
                     android:id="@+id/menu_action_main_settings"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:background="@null"
-                    android:button="@drawable/selector_main_menu_settings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:switchTextAppearance="@style/DesktopMenuSwitchText"
                     android:checked="false"
-                    android:contentDescription="@string/menu_action_main_settings"
-                    android:textOff="Control Mode"
-                    android:textOn="Config Mode" >
-                </ToggleButton>
-
-            </GridLayout>
+                    android:textOff="@string/desktop_menu_control_mode"
+                    android:textOn="@string/desktop_menu_customize_mode"
+                    android:thumb="@drawable/apptheme_switch_inner_holo_light"
+                    android:track="@drawable/apptheme_switch_track_holo_light" />
+            </RelativeLayout>
 
             <include layout="@layout/desktop_menu_control_modus_content" />
+
             <include layout="@layout/desktop_menu_customize_modus_content" />
         </LinearLayout>
-    </ScrollView>
+    </ScrollView> 
 
 </ch.hsr.rocketcolibri.view.widget.SwipeInMenu>

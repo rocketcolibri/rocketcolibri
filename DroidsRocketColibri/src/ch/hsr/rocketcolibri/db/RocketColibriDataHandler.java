@@ -22,7 +22,7 @@ import ch.futuretek.json.JsonTransformer;
 import ch.futuretek.json.exception.TransformException;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriDefaults;
-import ch.hsr.rocketcolibri.db.model.JsonRCModelFuture;
+import ch.hsr.rocketcolibri.db.model.JsonRCModel;
 import ch.hsr.rocketcolibri.db.model.RCModel;
 import ch.hsr.rocketcolibri.util.AndroidUtil;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
@@ -65,11 +65,11 @@ public class RocketColibriDataHandler {
 	 */
 	public File exportDataToFile(){
 		//create wrapper list
-		List<JsonRCModelFuture> jsons = new ArrayList<JsonRCModelFuture>();
+		List<JsonRCModel> jsons = new ArrayList<JsonRCModel>();
 		Objects<RCModel> rcModels = tRocketColibriDB.fetchAllRCModels();
 		if(rcModels!=null && rcModels.size()>0){
 			for(RCModel m : rcModels){
-				JsonRCModelFuture j = new JsonRCModelFuture();
+				JsonRCModel j = new JsonRCModel();
 				j.pixelHeight = tRealSize.y;
 				j.pixelWidth = tRealSize.x;
 				//exportCopy is needed otherwise we override the RCWidgetConfigs by calculating from pixel to dp
@@ -108,8 +108,8 @@ public class RocketColibriDataHandler {
 		}
 	}
 
-	private List<JsonRCModelFuture> inputStreamToJsonRCModel(InputStream is) throws TransformException, IOException{
-		List<JsonRCModelFuture> result = new JsonTransformer().transformList(JsonRCModelFuture.class, streamToString(is));
+	private List<JsonRCModel> inputStreamToJsonRCModel(InputStream is) throws TransformException, IOException{
+		List<JsonRCModel> result = new JsonTransformer().transformList(JsonRCModel.class, streamToString(is));
 		is.close();
 		return result;
 	}

@@ -3,34 +3,21 @@
  */
 package ch.hsr.rocketcolibri.activity;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.List;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
-import android.graphics.Point;
-import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import ch.futuretek.json.JsonTransformer;
-import ch.futuretek.json.exception.TransformException;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
-import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.db.RocketColibriDB;
 import ch.hsr.rocketcolibri.db.model.Defaults;
-import ch.hsr.rocketcolibri.db.model.JsonRCModel;
 import ch.hsr.rocketcolibri.db.model.RCModel;
 import ch.hsr.rocketcolibri.manager.DesktopViewManager;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
@@ -40,7 +27,6 @@ import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObserver;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
-import ch.hsr.rocketcolibri.util.AndroidUtil;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
@@ -49,7 +35,6 @@ import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
  * @author Artan Veliju
  */
 public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeObserver{
-	private static final String TAG = "DesktopActivity";
 	private RCModel tModel;
 	private SurfaceView surface_view;
 	private RocketColibriDB tDB;
@@ -206,7 +191,6 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 		if (requestCode == RCConstants.RC_MODEL_RESULT_CODE && editChannelIntent!=null) {
 			String modelName = editChannelIntent.getStringExtra(RCConstants.FLAG_ACTIVITY_RC_MODEL);
 			if(modelName!=null){
-//				showLoading();
 				setDefaultModelName(modelName);
 				releaseDesktop();
 				tDesktopViewManager.getControlElementParentView().removeAllViews();
@@ -214,7 +198,6 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 				setupViewsOnce = true;
 				setupDesktop();
 				tDesktopMenu.animateClose();
-//				hideLoading();
 			}
 		}else{
 			Log.d("", "viewIndex:"+requestCode+" resultCode: "+resultCode);

@@ -3,9 +3,6 @@
  */
 package ch.hsr.rocketcolibri.view.custimizable;
 
-import android.app.Service;
-
-
 /**
  * @author Artan Veliju
  */

@@ -5,70 +5,83 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <GridLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:columnCount="5"
-        android:orientation="horizontal"
-        android:rowCount="5" >
+        android:orientation="vertical" >
 
-        <ToggleButton
-            android:id="@+id/menu_action_main_wifi"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@null"
-            android:button="@drawable/selector_main_menu_network"
-            android:checked="false"
-            android:contentDescription="@string/menu_action_main_wifi"
-            android:textOff="Wifi Off"
-            android:textOn="Wifi On" >
-        </ToggleButton>
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:columnCount="5"
+            android:orientation="horizontal"
+            android:rowCount="5" >
 
-        <ToggleButton
-            android:id="@+id/menu_action_observe_mode"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@null"
-            android:button="@drawable/selector_main_menu_observe_mode"
-            android:checked="false"
-            android:contentDescription="@string/menu_action_observe_mode"
-            android:textOff="Observe"
-            android:textOn="Observe" >
-        </ToggleButton>
+            <ToggleButton
+                android:id="@+id/menu_action_main_wifi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:button="@drawable/selector_main_menu_network"
+                android:checked="false"
+                android:contentDescription="@string/menu_action_main_wifi"
+                android:textOff="Wifi Off"
+                android:textOn="Wifi On" >
+            </ToggleButton>
 
-        <ToggleButton
-            android:id="@+id/menu_action_operate_mode"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@null"
-            android:button="@drawable/selector_main_menu_operate_mode"
-            android:checked="false"
-            android:contentDescription="@string/menu_action_operate_mode"
-            android:textOff="Operate"
-            android:textOn="Operate" >
-        </ToggleButton>
+            <ToggleButton
+                android:id="@+id/menu_action_observe_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:button="@drawable/selector_main_menu_observe_mode"
+                android:checked="false"
+                android:contentDescription="@string/menu_action_observe_mode"
+                android:textOff="Observe"
+                android:textOn="Observe" >
+            </ToggleButton>
 
-        <ToggleButton
-            android:id="@+id/modelListBtn"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@null"
-            android:button="@drawable/ic_action_model"
-            android:checked="false"
-            android:textOff="Model"
-            android:textOn="Model" >
-        </ToggleButton>
+            <ToggleButton
+                android:id="@+id/menu_action_operate_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:button="@drawable/selector_main_menu_operate_mode"
+                android:checked="false"
+                android:contentDescription="@string/menu_action_operate_mode"
+                android:textOff="Operate"
+                android:textOn="Operate" >
+            </ToggleButton>
+        </GridLayout>
 
-        <ToggleButton
-            android:id="@+id/shareModelsBtn"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:background="@null"
-            android:button="@drawable/ic_menu_share_holo_dark"
-            android:checked="false"
-            android:textOff="Share"
-            android:textOn="Share" >
-        </ToggleButton>
-    </GridLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal" >
+
+            <ToggleButton
+                android:id="@+id/modelListBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:button="@drawable/ic_action_model"
+                android:checked="false"
+                android:textOff="Model"
+                android:textOn="Model" >
+            </ToggleButton>
+
+            <ToggleButton
+                android:id="@+id/shareModelsBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:button="@drawable/ic_menu_share_holo_dark"
+                android:checked="false"
+                android:textOff="Share"
+                android:textOn="Share" >
+            </ToggleButton>
+        </LinearLayout>
+    </LinearLayout>
 
 </ch.hsr.rocketcolibri.menu.desktop.ControlModusContent>

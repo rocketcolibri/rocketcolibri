@@ -9,7 +9,6 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.db.model.JsonRCModel;
-import ch.hsr.rocketcolibri.db.model.JsonRCModelFuture;
 import ch.hsr.rocketcolibri.db.model.LastUpdateFromFile;
 import ch.hsr.rocketcolibri.db.model.RCModel;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
@@ -33,10 +32,10 @@ public class RCDBProcessor {
 		tCheckTimestamp = checkTimestamp;
 	}
 	
-	public void process(List<JsonRCModelFuture> models) throws Exception{
+	public void process(List<JsonRCModel> models) throws Exception{
 		tLastUpdateFromFile = fetchLastUpdateFromFile();
 		boolean updated = false;
-		for(JsonRCModelFuture m : models){
+		for(JsonRCModel m : models){
 			if(shouldInsert(m)){
 				insert(m);
 				updated = true;
@@ -54,25 +53,25 @@ public class RCDBProcessor {
 		}
 	}
 	
-	private boolean shouldInsert(JsonRCModelFuture m){
+	private boolean shouldInsert(JsonRCModel m){
 		return m.process.equals(INSERT) && tCheckTimestamp?needToUpdate(m.getTimestampAsDate().getTime()):true;
 	}
 	
-	private boolean shouldUpdate(JsonRCModelFuture m){
+	private boolean shouldUpdate(JsonRCModel m){
 		return m.process.equals(UPDATE) && tCheckTimestamp?needToUpdate(m.getTimestampAsDate().getTime()):true;
 	}
 	
-	private boolean shouldDelete(JsonRCModelFuture m){
+	private boolean shouldDelete(JsonRCModel m){
 		return m.process.equals(DELETE) && tCheckTimestamp?needToUpdate(m.getTimestampAsDate().getTime()):true;
 	}
 	
-	private void insert(JsonRCModelFuture m){
+	private void insert(JsonRCModel m){
 		dpToPixel(m);
 		makeSureNameIsUnique(m);
 		tRocketColibriDB.store(m.model);
 	}
 	
-	private void update(JsonRCModelFuture m){
+	private void update(JsonRCModel m){
 		RCModel dbModel = tRocketColibriDB.fetchRCModelByName(m.model.getName());
 		dpToPixel(m);
 		if (dbModel == null) {
@@ -84,7 +83,7 @@ public class RCDBProcessor {
 		}
 	}
 	
-	private void delete(JsonRCModelFuture m){
+	private void delete(JsonRCModel m){
 		tRocketColibriDB.delete(tRocketColibriDB.fetchRCModelByName(m.model.getName()));
 	}
 	
@@ -122,7 +121,7 @@ public class RCDBProcessor {
 		}
 	}
 	
-	private void dpToPixel(JsonRCModelFuture future){
+	private void dpToPixel(JsonRCModel future){
 		DisplayMetrics dm = tContext.getResources().getDisplayMetrics();
 		for(RCWidgetConfig wc : future.model.getWidgetConfigs()){
 			RocketColibriDefaults.dpToPixel(dm, wc.viewElementConfig);

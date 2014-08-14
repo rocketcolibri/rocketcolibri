@@ -17,7 +17,6 @@ import android.view.View;
  * @author Artan Veliju
  */
 public class OpenWithFileActivity extends RCActivity{
-	private final String TAG = "OpenWithFileActivity";
 	private Semaphore waitForServiceSem = new Semaphore(0);
 	
 	@Override

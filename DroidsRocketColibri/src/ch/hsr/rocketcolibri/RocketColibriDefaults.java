@@ -3,12 +3,8 @@
  */
 package ch.hsr.rocketcolibri;
 
-import ch.hsr.rocketcolibri.db.model.JsonRCModelFuture;
-import ch.hsr.rocketcolibri.db.model.RCModel;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 import android.annotation.TargetApi;
-import android.graphics.Point;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.View;

@@ -9,7 +9,6 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
-import android.app.Service;
 import android.content.Intent;
 import android.view.View;
 
@@ -27,7 +26,7 @@ public interface IDesktopViewManager {
 	void viewChanged(View view);
 	void deleteView(View view);
 	boolean isInCustomizeModus();
-	void switchCustomieModus();
+	void enableCustomizeModus(boolean enabled);
 	AbsoluteLayout getRootView();
 	AbsoluteLayout getControlElementParentView();
 	CustomizeModusPopupMenu getCustomizeModusPopupMenu();

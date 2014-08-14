@@ -8,12 +8,13 @@ import android.app.Activity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Switch;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.manager.DesktopViewManager;
-import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.view.widget.SwipeInMenu;
 import ch.hsr.rocketcolibri.view.widget.SwipeInMenu.OnDrawerOpenListener;
@@ -86,17 +87,15 @@ public class DesktopMenu {
 	
 	private void onCreate(){
 		initServiceDependentItems();
-		ToggleButton b = (ToggleButton)findViewById(R.id.menu_action_main_settings);
-		b.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				tDesktopViewManager.switchCustomieModus();
+		Switch swit = (Switch)findViewById(R.id.menu_action_main_settings);
+		swit.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				tDesktopViewManager.enableCustomizeModus(isChecked);
 				switchModusContent();
 			}
-
 		});
 
-		b = (ToggleButton)findViewById(R.id.menu_action_main_wifi);
+		ToggleButton b = (ToggleButton)findViewById(R.id.menu_action_main_wifi);
 		b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
 	    		if (isChecked) { 

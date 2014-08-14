@@ -156,8 +156,8 @@ public class DesktopViewManager implements IDesktopViewManager{
 	}
 
 	@Override
-	public void switchCustomieModus() {
-		tCustomizeModus = !tCustomizeModus;
+	public void enableCustomizeModus(boolean enabled) {
+		tCustomizeModus = enabled;
 		updateModusOfCustomizableViews();
 		updateBackground();
 		if(!tCustomizeModus)
