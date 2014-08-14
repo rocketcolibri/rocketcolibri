@@ -33,12 +33,12 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="25dp"
+                android:layout_marginBottom="15dp"
                 android:gravity="center_horizontal" >
 
                 <Switch
                     android:id="@+id/menu_action_main_settings"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:switchTextAppearance="@style/DesktopMenuSwitchText"
                     android:checked="false"

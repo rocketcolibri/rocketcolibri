@@ -82,6 +82,8 @@ public class DesktopMenu {
 			initContents();
 		}
 		setServiceDependentButtonsEnabled(true);
+		Switch swit = (Switch)findViewById(R.id.menu_action_main_settings);
+		swit.setSwitchMinWidth(((View)swit.getParent()).getWidth());
 	}
 	
 	
@@ -94,7 +96,6 @@ public class DesktopMenu {
 				switchModusContent();
 			}
 		});
-
 		ToggleButton b = (ToggleButton)findViewById(R.id.menu_action_main_wifi);
 		b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){

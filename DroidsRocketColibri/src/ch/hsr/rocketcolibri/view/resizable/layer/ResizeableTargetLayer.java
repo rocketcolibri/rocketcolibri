@@ -69,6 +69,10 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
     private double tRatio;
 //    private HelplineDrawer tHelplineDrawer;
     private AbsoluteLayout tParent;
+    private IResizeStatusListener tStatusListener = new IResizeStatusListener() {
+		public void resizeStopped() {}
+		public void resizeStarted() {}
+	};
     private ViewElementCustomizer tViewCustomizer = new ViewElementCustomizer();
 
     /**
@@ -99,6 +103,10 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
 //        tHelplineDrawer = new HelplineDrawer(context, parent, resizeTarget, 50, 1, 18, Color.CYAN, Color.YELLOW);
 //        tHelplineDrawer.addLinesTo(parent);
         tViewCustomizer.setTargetView(tResizeTarget);
+    }
+    
+    public void setStatusListener(IResizeStatusListener statusListener){
+    	tStatusListener = statusListener;
     }
     
     private void createBalls(Context context){
@@ -162,7 +170,6 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
         tInnerBorderPaint.setStrokeWidth(2);
         tInnerBorderPaint.setColor(Color.GREEN);
     }
-
     
     // the method that draws the balls
     @Override
@@ -199,6 +206,7 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
                 // calculate the radius from the touch to the center of the ball
                 tRadCircle = Math.sqrt((double) (((tCenterX - tCurrentX) * (tCenterX - tCurrentX)) + (tCenterY - tCurrentY) * (tCenterY - tCurrentY)));
                 if (tRadCircle < ball.getWidthOfBall()) {
+                	tStatusListener.resizeStarted();
                     tBallID = ball.getID();
                     if (tBallID == 1 || tBallID == 3) {
                         tGroupId = 2;
@@ -233,6 +241,11 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
         case MotionEvent.ACTION_UP:
           if(tGroupId==-1){
         	  stop();
+          }else{
+        	  updateBallsToTargetView(false);
+              invalidate();
+              updateViewLayout(tResizeTarget, tResizeTargetLP);
+        	  tStatusListener.resizeStopped();
           }
           return true;
         }
@@ -257,21 +270,24 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
                	tTopLeftOrRightX = tColorballs.get(0).getX()+tColorballs.get(0).getWidthOfBall();
         	}
         	tWidth = tBottomLeftOrRightX-tTopLeftOrRightX;
-        	tHeight = calculateHeightWithRatio();
+        	tHeight = calculateSizeWithRatio();
 
+        	checkDirtyMinMax();
+        	
         	// break if min or max size for width or height is reached
-        	if (!isWidthInPermittedRange() || !isHeightInPermittedRange()) return;
+        	if (isHeightInPermittedRange()){
 
-        	setXAndYToTheTargetPoint();
-        	setWidthToTargetViewAndCalculateRatio();
-        	tResizeTargetLP.x = tTopLeftOrRightX;
-        	if(tBallID==0){
-        		tColorballs.get(0).setY(tColorballs.get(2).getY()-tResizeTargetLP.height-tColorballs.get(2).getHeightOfBall());
-        	}else{
-        		tColorballs.get(2).setY(tResizeTargetLP.height+tColorballs.get(0).getY()+tColorballs.get(0).getHeightOfBall());
+	        	setXAndYToTheTargetPoint();
+	        	setWidthToTargetViewAndCalculateRatio();
+	        	tResizeTargetLP.x = tTopLeftOrRightX;
+	        	if(tBallID==0){
+	        		tColorballs.get(0).setY(tColorballs.get(2).getY()-tResizeTargetLP.height-tColorballs.get(2).getHeightOfBall());
+	        	}else{
+	        		tColorballs.get(2).setY(tResizeTargetLP.height+tColorballs.get(0).getY()+tColorballs.get(0).getHeightOfBall());
+	        	}
+	        	tResizeTargetLP.y = tColorballs.get(0).getY()+tColorballs.get(0).getHeightOfBall();
+	        	changePointsOnBottomLeftAndTopRightAndDraw();
         	}
-        	tResizeTargetLP.y = tColorballs.get(0).getY()+tColorballs.get(0).getHeightOfBall();
-        	changePointsOnBottomLeftAndTopRightAndDraw();
         } else {
         	if(tBallID==1){
             	tTopLeftOrRightX = tColorballs.get(3).getX();
@@ -281,30 +297,59 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
             	tBottomLeftOrRightX = tColorballs.get(1).getX()+tColorballs.get(1).getHeightOfBall();
         	}
         	tWidth = tTopLeftOrRightX-tBottomLeftOrRightX;
-        	tHeight = calculateHeightWithRatio();
+        	tHeight = calculateSizeWithRatio();
 
+        	
+        	checkDirtyMinMax();
+        	
         	// break if min or max size for width or height is reached
-        	if (!isWidthInPermittedRange() || !isHeightInPermittedRange()) return;
+        	if (isHeightInPermittedRange()){
 
-        	setXAndYToTheTargetPoint();
-        	setWidthToTargetViewAndCalculateRatio();
-        	if(tBallID==1){
-        		tColorballs.get(1).setY(tColorballs.get(3).getHeightOfBall()+tResizeTargetLP.height+tColorballs.get(3).getY());
-        	}else{
-        		tColorballs.get(3).setY(tColorballs.get(1).getY()-tResizeTargetLP.height-tColorballs.get(3).getHeightOfBall());
+        		setXAndYToTheTargetPoint();
+	        	setWidthToTargetViewAndCalculateRatio();
+	        	if(tBallID==1){
+	        		tColorballs.get(1).setY(tColorballs.get(3).getHeightOfBall()+tResizeTargetLP.height+tColorballs.get(3).getY());
+	        	}else{
+	        		tColorballs.get(3).setY(tColorballs.get(1).getY()-tResizeTargetLP.height-tColorballs.get(3).getHeightOfBall());
+	        	}
+	        	tResizeTargetLP.x = tTopLeftOrRightX-tResizeTargetLP.width;
+	        	tResizeTargetLP.y = tColorballs.get(3).getY()+tColorballs.get(3).getHeightOfBall();
+	        	changePointsOnTopLeftAndBottomRightAndDraw();
         	}
-        	tResizeTargetLP.x = tTopLeftOrRightX-tResizeTargetLP.width;
-        	tResizeTargetLP.y = tColorballs.get(3).getY()+tColorballs.get(3).getHeightOfBall();
-        	changePointsOnTopLeftAndBottomRightAndDraw();
         }
+    }
+    
+    final int r = 6;
+    
+    private void checkDirtyMinMax(){
+    	int h = tConfig.maxHeight-tHeight;
+    	if(h<r && h>-r){
+    		tHeight = tConfig.maxHeight;
+    	}else {
+        	h = tConfig.minHeight-tHeight;
+        	if(h<r && h>-r){
+        		tHeight = tConfig.minHeight;
+        	}
+    	}
+
+    	int w = tConfig.maxWidth-tWidth;
+    	if(w<r && w>-r){
+    		tWidth = tConfig.maxWidth;
+    	}else{
+	    	w = tConfig.minWidth-tWidth;
+	    	if(w<r && w>-r){
+	    		tWidth = tConfig.minWidth;
+	    	}
+    	}
+    	
     }
     
     private void setWidthToTargetViewAndCalculateRatio(){
     	tResizeTargetLP.width = tWidth;
-    	tResizeTargetLP.height = calculateHeightWithRatio(); //(int) (tResizeTargetLP.width/tRatio);
+    	tResizeTargetLP.height = tHeight;//calculateHeightWithRatio(); //(int) (tResizeTargetLP.width/tRatio);
     }
     
-    private int calculateHeightWithRatio(){
+    private int calculateSizeWithRatio(){
     	return (int) (tWidth/tRatio);
     }
 
@@ -322,17 +367,18 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
             	tBottomLeftOrRightY = tCurrentY;
         	}
          	tWidth = tBottomLeftOrRightX-tTopLeftOrRightX;
+         	
+         	tHeight = tBottomLeftOrRightY-tTopLeftOrRightY;
+         	
+         	checkDirtyMinMax();
+         	
          	if(isWidthInPermittedRange()){
          		tColorballs.get(tBallID).setX(tCurrentX);
             	changePointsOnBottomLeftAndTopRight_X_AndDraw();
             	tResizeTargetLP.width = tWidth;
             	tResizeTargetLP.x = tTopLeftOrRightX;
          	}
-//         	if(ratio){
-//         		tHeight = (int) (tWidth*tRatio);
-//         	}else{
-         		tHeight = tBottomLeftOrRightY-tTopLeftOrRightY;
-//         	}
+
          	if(isHeightInPermittedRange()){
          		tColorballs.get(tBallID).setY(tCurrentY);
             	changePointsOnBottomLeftAndTopRight_Y_AndDraw();
@@ -353,6 +399,11 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
             	tBottomLeftOrRightY = tCurrentY+tColorballs.get(3).getHeightOfBall();
         	}
          	tWidth = tBottomLeftOrRightX-tTopLeftOrRightX;
+         	
+         	tHeight = tTopLeftOrRightY-tBottomLeftOrRightY;
+         	
+         	checkDirtyMinMax();
+         	
          	if(isWidthInPermittedRange()){
          		tColorballs.get(tBallID).setX(tCurrentX);
          		changePointsOnTopLeftAndBottomRight_X_AndDraw();
@@ -360,11 +411,6 @@ public class ResizeableTargetLayer extends AbsoluteLayout {
          		tResizeTargetLP.x = tTopLeftOrRightX;
          	}
          	
-//         	if(ratio){
-//         		tHeight = (int) (tWidth*tRatio);
-//         	}else{
-            	tHeight = tTopLeftOrRightY-tBottomLeftOrRightY;
-//         	}
           	if(isHeightInPermittedRange()){
          		tColorballs.get(tBallID).setY(tCurrentY);
          		changePointsOnTopLeftAndBottomRight_Y_AndDraw();

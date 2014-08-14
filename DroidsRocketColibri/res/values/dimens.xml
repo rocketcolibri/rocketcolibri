@@ -20,5 +20,7 @@
     <dimen name="font_size_new_tag">11sp</dimen>
     <dimen name="padding_new_tag">3dp</dimen>
     <dimen name="list_row_edit_mode_icon">32dp</dimen>
-
+    
+    <dimen name="desktop_menu_customize_mode_widget_size">80dp</dimen>
+    
 </resources>

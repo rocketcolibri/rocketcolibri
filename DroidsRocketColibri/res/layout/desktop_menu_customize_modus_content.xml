@@ -2,14 +2,24 @@
 <ch.hsr.rocketcolibri.menu.desktop.CustomizeModusContent xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/customizeModusContent"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <GridLayout
+    <GridView
         android:id="@+id/widgetEntryContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:columnCount="6"
-        android:orientation="horizontal" >
-    </GridLayout>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alwaysDrawnWithCache="true"
+        android:clipChildren="true"
+        android:columnWidth="@dimen/desktop_menu_customize_mode_widget_size"
+        android:gravity="center_horizontal"
+        android:horizontalSpacing="10dp"
+        android:numColumns="auto_fit"
+        android:padding="0dp"
+        android:scrollingCache="true"
+        android:smoothScrollbar="true"
+        android:stretchMode="none"
+        android:verticalSpacing="10dp" >
+    </GridView>
+
 </ch.hsr.rocketcolibri.menu.desktop.CustomizeModusContent>

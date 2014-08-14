@@ -42,6 +42,14 @@ public class ResizeMenu extends LinearLayout{
 		}});
 		enableMaximized(!tRTargetLayer.isMaximized());
 		enableMinimized(!tRTargetLayer.isMinimized());
+		tRTargetLayer.setStatusListener(new IResizeStatusListener() {
+			public void resizeStopped() {
+				System.out.println("resizeStopped");
+				enableMaximized(!tRTargetLayer.isMaximized());
+				enableMinimized(!tRTargetLayer.isMinimized());
+			}
+			public void resizeStarted() {System.out.println("resizeStarted");}
+		});
 	}
 	
 	private void settings(float density, ImageView iv){
