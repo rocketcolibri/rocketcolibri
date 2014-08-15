@@ -8,6 +8,8 @@ import android.app.Activity;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -96,6 +98,18 @@ public class DesktopMenu {
 	
 	public void setTextOnBottom(String text){
 		tDesktopMenuBottomTv.setText(text);
+	}
+	
+	public void onModelListOpen(){
+		RelativeLayout.LayoutParams lp = (LayoutParams) tDesktopMenuBottomTv.getLayoutParams();
+		lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 1);
+		tDesktopMenuBottomTv.requestLayout();
+	}
+	
+	public void onResume(){
+		RelativeLayout.LayoutParams lp = (LayoutParams) tDesktopMenuBottomTv.getLayoutParams();
+		lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
+		tDesktopMenuBottomTv.requestLayout();
 	}
 	
 	private void onCreate(){
