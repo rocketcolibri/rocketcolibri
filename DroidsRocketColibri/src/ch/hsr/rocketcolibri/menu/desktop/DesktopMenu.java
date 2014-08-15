@@ -6,7 +6,6 @@ package ch.hsr.rocketcolibri.menu.desktop;
 import android.content.Context;
 import android.app.Activity;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Switch;
@@ -33,6 +32,10 @@ public class DesktopMenu {
 	private View[] tServiceDependentItems;
 	private ControlModusContent tControlModusContent;
 	private CustomizeModusContent tCustomizeModusContent;
+	private Switch tModeSwitcher;
+	private ToggleButton tWifi;
+	private ToggleButton tObserveMode;
+	private ToggleButton tOperateMode;
 	private boolean initOnce = true;
 	public DesktopMenu(Context context, DesktopViewManager desktopViewManager) {
 		tContext = context;
@@ -80,24 +83,28 @@ public class DesktopMenu {
 		if(initOnce){
 			initOnce = false;
 			initContents();
+			
+			//There is no way to set something like match_parent on the default Android Switch
+			//and no way to get the size of the screen in xml for setting switchMinWidth
+			//Therefore we set the switchMinWidth programmatically to stretch the Switch on a
+			// time after layouting. This is a good place to do it!
+			tModeSwitcher.setSwitchMinWidth(((View)tModeSwitcher.getParent()).getWidth());
 		}
 		setServiceDependentButtonsEnabled(true);
-		Switch swit = (Switch)findViewById(R.id.menu_action_main_settings);
-		swit.setSwitchMinWidth(((View)swit.getParent()).getWidth());
 	}
 	
 	
 	private void onCreate(){
 		initServiceDependentItems();
-		Switch swit = (Switch)findViewById(R.id.menu_action_main_settings);
-		swit.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		tModeSwitcher = (Switch)findViewById(R.id.menu_action_main_settings);
+		tModeSwitcher.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				tDesktopViewManager.enableCustomizeModus(isChecked);
 				switchModusContent();
 			}
 		});
-		ToggleButton b = (ToggleButton)findViewById(R.id.menu_action_main_wifi);
-		b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+		tWifi = (ToggleButton)findViewById(R.id.menu_action_main_wifi);
+		tWifi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
 	    		if (isChecked) { 
 	    			tService.tWifi.connectRocketColibriSSID(tService);
@@ -105,77 +112,77 @@ public class DesktopMenu {
 	    			// If WiFi is enabled, we are in observer mode by default
 	    			// setting observer button active and disabling click because
 	    			// in this case only operate button can be clicked
-		        	((ToggleButton)findViewById(R.id.menu_action_observe_mode)).setChecked(true);
-		        	((ToggleButton)findViewById(R.id.menu_action_observe_mode)).setClickable(false);
+		        	tObserveMode.setChecked(true);
+		        	tObserveMode.setClickable(false);
 
-		        	((ToggleButton)findViewById(R.id.menu_action_operate_mode)).setClickable(true);
+		        	tOperateMode.setClickable(true);
 	    		} else {
 		        	tService.tWifi.disconnectRocketColibriSSID(tService);
 
 		        	// If WiFi is disabled, none of the modes
 		        	// can be active, disabling both buttons
-		        	((ToggleButton)findViewById(R.id.menu_action_observe_mode)).setChecked(false);
-		        	((ToggleButton)findViewById(R.id.menu_action_operate_mode)).setChecked(false);
-		        	((ToggleButton)findViewById(R.id.menu_action_observe_mode)).setClickable(false);
-		        	((ToggleButton)findViewById(R.id.menu_action_operate_mode)).setClickable(false);
+		        	tObserveMode.setChecked(false);
+		        	tOperateMode.setChecked(false);
+		        	tObserveMode.setClickable(false);
+		        	tOperateMode.setClickable(false);
 		        }
 		    }
 		});
 		
-		b = (ToggleButton)findViewById(R.id.menu_action_observe_mode);
-		b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+		tObserveMode = (ToggleButton)findViewById(R.id.menu_action_observe_mode);
+		tObserveMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 if (isChecked){
                     tService.tProtocol.eventUserStopControl();
 
                     // Observe mode is activated deactivate operate button.
                     // Click will be enabled for starting operate mode
-                    ((ToggleButton)findViewById(R.id.menu_action_operate_mode)).setChecked(false);
-		        	((ToggleButton)findViewById(R.id.menu_action_operate_mode)).setClickable(true);
-		        	((ToggleButton)findViewById(R.id.menu_action_observe_mode)).setClickable(false);
+                    tOperateMode.setChecked(false);
+		        	tOperateMode.setClickable(true);
+		        	tObserveMode.setClickable(false);
 		        }
 		    }
 		});
-		b.setClickable(false);
-		b.setChecked(false);
+		tObserveMode.setClickable(false);
+		tObserveMode.setChecked(false);
 
-		b = (ToggleButton)findViewById(R.id.menu_action_operate_mode);
-		b.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+		tOperateMode = (ToggleButton)findViewById(R.id.menu_action_operate_mode);
+		tOperateMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
                 if (isChecked){
                     if (tService.tProtocol.tConnState.getState() == s.CONN_LCK_OUT) {
                     	Toast.makeText(tContext, "Operate mode locked by another user!", Toast.LENGTH_SHORT).show();
 
                     	// We have to stay in observer mode and click must be active for operate button only
-                    	((ToggleButton)findViewById(R.id.menu_action_observe_mode)).setChecked(true);
-			        	((ToggleButton)findViewById(R.id.menu_action_observe_mode)).setClickable(false);
-                    	((ToggleButton)findViewById(R.id.menu_action_operate_mode)).setChecked(false);
-			        	((ToggleButton)findViewById(R.id.menu_action_operate_mode)).setClickable(true);
+                    	tObserveMode.setChecked(true);
+			        	tObserveMode.setClickable(false);
+                    	tOperateMode.setChecked(false);
+			        	tOperateMode.setClickable(true);
                     } else {
 	                	tService.tProtocol.eventUserStartControl();
 
 	                	// Operate mode is activated deactivate observe button.
 	                    // Click will be enabled for starting observe mode
-			        	((ToggleButton)findViewById(R.id.menu_action_observe_mode)).setChecked(false);
-			        	((ToggleButton)findViewById(R.id.menu_action_observe_mode)).setClickable(true);
-			        	((ToggleButton)findViewById(R.id.menu_action_operate_mode)).setClickable(false);
+			        	tObserveMode.setChecked(false);
+			        	tObserveMode.setClickable(true);
+			        	tOperateMode.setClickable(false);
                     }
 		        }
 		    }
 		});
-		b.setClickable(false);
-		b.setChecked(false);
+		tOperateMode.setClickable(false);
+		tOperateMode.setChecked(false);
 
 		setServiceDependentButtonsEnabled(false);
 	}
 	
 	private void switchModusContent() {
 		if(tDesktopViewManager.isInCustomizeModus()){
-			tCustomizeModusContent.setVisibility(View.VISIBLE);
 			tControlModusContent.setVisibility(View.GONE);
+			tCustomizeModusContent.setVisibility(View.VISIBLE);
 		}else{
-			tControlModusContent.setVisibility(View.VISIBLE);
 			tCustomizeModusContent.setVisibility(View.GONE);
+			tControlModusContent.setVisibility(View.VISIBLE);
 		}
 	}
 	
