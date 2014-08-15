@@ -6,11 +6,17 @@ package ch.hsr.rocketcolibri.db;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.util.DisplayMetrics;
 import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.db.model.JsonRCModel;
 import ch.hsr.rocketcolibri.db.model.LastUpdateFromFile;
 import ch.hsr.rocketcolibri.db.model.RCModel;
+import ch.hsr.rocketcolibri.util.AndroidUtil;
+import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
+import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
+import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
+import ch.hsr.rocketcolibri.view.widget.DefaultViewElementConfigRepo;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 
 /**
@@ -25,11 +31,13 @@ public class RCDBProcessor {
 	private static final String PLACEHOLDER = "{% INDEX %}";
 	private LastUpdateFromFile tLastUpdateFromFile;
 	private boolean tCheckTimestamp;
+	private Point tRealScreenSize;
 	
 	public RCDBProcessor(Context context, RocketColibriDB rocketColibriDB, boolean checkTimestamp){
 		tContext = context;
 		tRocketColibriDB = rocketColibriDB;
 		tCheckTimestamp = checkTimestamp;
+		tRealScreenSize = new AndroidUtil(tContext).getRealSize();
 	}
 	
 	public void process(List<JsonRCModel> models) throws Exception{
@@ -125,6 +133,45 @@ public class RCDBProcessor {
 		DisplayMetrics dm = tContext.getResources().getDisplayMetrics();
 		for(RCWidgetConfig wc : future.model.getWidgetConfigs()){
 			RocketColibriDefaults.dpToPixel(dm, wc.viewElementConfig);
+			checkCompatibility(wc.viewElementConfig);
 		}
+	}
+	
+	private void checkCompatibility(ViewElementConfig vec){
+		try{
+			ViewElementConfig defaultVec = DefaultViewElementConfigRepo.getDefaultConfig(Class.forName(vec.getClassPath()));
+			overrideResizeConfig(vec.getResizeConfig(), defaultVec.getResizeConfig());
+			checkPositionAndSize(vec);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	private void overrideResizeConfig(ResizeConfig targetConfig, ResizeConfig defaultConfig){
+		targetConfig.keepRatio = defaultConfig.keepRatio;
+		targetConfig.maxHeight = defaultConfig.maxHeight;
+		targetConfig.maxWidth = defaultConfig.maxWidth;
+		targetConfig.minHeight = defaultConfig.minHeight;
+		targetConfig.minWidth = defaultConfig.minWidth;
+	}
+	
+	private void checkPositionAndSize(ViewElementConfig vec){
+		LayoutParams lp = vec.getLayoutParams();
+		if (vec.getResizeConfig().maxHeight > tRealScreenSize.y) {
+			lp.height = tRealScreenSize.y;
+		}else{
+			lp.height = vec.getResizeConfig().maxHeight;
+		}
+		if (vec.getResizeConfig().maxWidth > tRealScreenSize.x) {
+			lp.width = tRealScreenSize.x;
+		}else{
+			lp.width = vec.getResizeConfig().maxWidth;
+		}
+		if(lp.height+lp.y>tRealScreenSize.y)
+			lp.y=tRealScreenSize.y-lp.height;
+		if(lp.width+lp.x>tRealScreenSize.x)
+			lp.x=tRealScreenSize.x-lp.width;
+		if (lp.y < 0) {lp.y = 0;}
+		if (lp.x < 0) {lp.x = 0;}
 	}
 }
