@@ -1,211 +1,192 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="12.2">
-  <zoom_level>9</zoom_level>
+  <zoom_level>10</zoom_level>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>540</x>
-      <y>207</y>
-      <w>279</w>
-      <h>99</h>
+      <x>110</x>
+      <y>80</y>
+      <w>270</w>
+      <h>70</h>
     </coordinates>
-    <panel_attributes>CustomizableView
+    <panel_attributes>Activity
 --
-+ setCustomizeModus(boolean enabled)
-+ setResizeConfig(ResizeConfig resizeConfig)
-+ setOnTouchListener(Activity)</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>540</x>
-      <y>108</y>
-      <w>279</w>
-      <h>27</h>
-    </coordinates>
-    <panel_attributes>/ICustomizableView/
-</panel_attributes>
+Android Activity</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>603</x>
-      <y>108</y>
-      <w>153</w>
-      <h>116</h>
+      <x>210</x>
+      <y>120</y>
+      <w>50</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;30;90</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>110</x>
+      <y>210</y>
+      <w>270</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>DesktopActivity
+--
+RocketColibri main Activity</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>350</x>
+      <y>210</y>
+      <w>150</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;130;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>480</x>
+      <y>210</y>
+      <w>270</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>DesktopViewManager
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>110</x>
+      <y>1020</y>
+      <w>270</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>View
+--
+_Responsibilities_
+Eine Android View (beliebigen Typs)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>100</x>
+      <y>1190</y>
+      <w>1160</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>RocketColibriWidget
+--
+_Responsibilities_
+Implementiert das UI Element.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>400</x>
+      <y>1020</y>
+      <w>270</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>ICustomizableView
+--
+_Responsibilities_
+Interface zum Einbinden ins GUI
+Framework</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>700</x>
+      <y>1020</y>
+      <w>270</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>IUiInputSource
+--
+_Responsibilities_
+Definiert Schnittstelle
+zum RocketColibriService.
+
+Muss implementiert werden falls das
+Widget Quelle für Benutzereingaben
+ist.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>990</x>
+      <y>1020</y>
+      <w>270</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>IUiOutputSinkChangeObserver
+--
+Definiert Schnittstelle
+zum RocketColibriService.
+
+Muss implementiert werden falls das
+Widget Senke für Benutzerausgaben
+ist.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>200</x>
+      <y>1100</y>
+      <w>50</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;30;90</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>420</x>
+      <y>1100</y>
+      <w>186</w>
+      <h>110</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.
 &lt;&lt;implements&gt;&gt;</panel_attributes>
-    <additional_attributes>81;27;81;99</additional_attributes>
+    <additional_attributes>100;30;100;90</additional_attributes>
   </element>
   <element>
-    <type>com.umlet.element.Class</type>
+    <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>243</x>
-      <y>441</y>
-      <w>279</w>
-      <h>27</h>
-    </coordinates>
-    <panel_attributes>Circle</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>540</x>
-      <y>441</y>
-      <w>279</w>
+      <x>720</x>
+      <y>1120</y>
+      <w>186</w>
       <h>90</h>
     </coordinates>
-    <panel_attributes>ConnectionStatusWidget
---
-+ setConnectionState(s)</panel_attributes>
-    <additional_attributes/>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>100;30;100;70</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>351</x>
-      <y>279</y>
-      <w>242</w>
-      <h>179</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>225;27;27;162</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>648</x>
-      <y>279</y>
-      <w>44</w>
-      <h>179</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>27;27;27;162</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>909</x>
-      <y>216</y>
-      <w>207</w>
-      <h>81</h>
-    </coordinates>
-    <panel_attributes>ResizeConfig
---
-Responsibilities
-min/max size of the view</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>792</x>
-      <y>243</y>
-      <w>134</w>
-      <h>44</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-
-m1=0..1</panel_attributes>
-    <additional_attributes>117;27;27;27</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>0</x>
-      <y>0</y>
-      <w>297</w>
-      <h>144</h>
-    </coordinates>
-    <panel_attributes>DragController
---
-+addView(CustomizableView)
-+addDropTarget(DropTaget)
- 
-Responsibilities
-- Handles Drag&amp;Drop of view to a DragLayer
-  (may be the same)
-</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>270</x>
-      <y>225</y>
-      <w>287</w>
-      <h>44</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-
-m1=0..n</panel_attributes>
-    <additional_attributes>270;27;27;27</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>0</x>
-      <y>216</y>
-      <w>297</w>
-      <h>99</h>
-    </coordinates>
-    <panel_attributes>DragLayer
---
-+addView(CustomizableView)
-+setDragController(DropTaget)
- 
-Responsibilites
-Holds a list of view.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>18</x>
-      <y>117</y>
-      <w>44</w>
-      <h>116</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>27;27;27;99</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>162</x>
-      <y>117</y>
-      <w>118</w>
-      <h>116</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;-
-m1=0..1
-dragTarget</panel_attributes>
-    <additional_attributes>63;99;63;27</additional_attributes>
-  </element>
-  <element>
-    <type>com.umlet.element.Class</type>
-    <coordinates>
-      <x>837</x>
-      <y>441</y>
-      <w>279</w>
+      <x>1010</x>
+      <y>1120</y>
+      <w>186</w>
       <h>90</h>
     </coordinates>
-    <panel_attributes>TelemetryWidget
---
-+ setTelemetryData(String data)</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <type>com.umlet.element.Relation</type>
-    <coordinates>
-      <x>774</x>
-      <y>279</y>
-      <w>206</w>
-      <h>179</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>27;27;189;162</additional_attributes>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>100;30;100;70</additional_attributes>
   </element>
 </diagram>
