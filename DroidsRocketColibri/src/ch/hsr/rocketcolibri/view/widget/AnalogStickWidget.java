@@ -8,6 +8,7 @@ import java.util.Map;
 
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
+import ch.hsr.rocketcolibri.ui_data.input.IUiInputSource;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObserver;
@@ -30,7 +31,7 @@ import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class AnalogStickWidget extends View implements ICustomizableView, IRCWidget, IUiOutputSinkChangeObserver {
+public class AnalogStickWidget extends View implements ICustomizableView, IUiInputSource, IUiOutputSinkChangeObserver {
 	public static final int INVALID_POINTER_ID = -1;
 	private boolean tDebug;
 	private boolean tIsControlling = false;
@@ -585,6 +586,8 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 			tChannelV.setChannelTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
 			tChannelV.setWidgetSticky(getProtocolMapBoolean(RCConstants.STICKY_V));
 			tDebug = getProtocolMapBoolean(RCConstants.DEBUG);
+			returnHandleToInitialPosition();
+			postInvalidate();
 		}catch(Exception e){
 			e.printStackTrace();
 		}

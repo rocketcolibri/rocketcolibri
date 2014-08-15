@@ -20,7 +20,6 @@ import ch.hsr.rocketcolibri.view.HoldImageView;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.popup.PopupWindow;
 import ch.hsr.rocketcolibri.view.resizable.ViewElementCustomizer;
-import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 
 /**
@@ -85,7 +84,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		findViewById(R.id.duplicateBtn).setOnClickListener(new View.OnClickListener(){
 			public void onClick(View v) {
 				try{ 
-					RCWidgetConfig rcwc = ((IRCWidget)tTargetView).getWidgetConfig().copy();
+					RCWidgetConfig rcwc = ((ICustomizableView)tTargetView).getWidgetConfig().copy();
 					AbsoluteLayout.LayoutParams lp = rcwc.viewElementConfig.getLayoutParams();
 					AbsoluteLayout rootView = tDesktopViewManager.getRootView();
 					lp.x = (int) (rootView.getWidth()/2)-lp.width/2;
@@ -135,7 +134,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		viewCustomizer.enableView(tMaximizeIv, !viewCustomizer.isMaximized());
 		viewCustomizer.enableView(tMinimizeIv, !viewCustomizer.isMinimized());
 		try {
-			if (((IRCWidget) cView).getProtocolMap() != null) {
+			if (((ICustomizableView) cView).getProtocolMap() != null) {
 				setVisibilityOfEditChannelBtn(View.VISIBLE);
 			} else {setVisibilityOfEditChannelBtn(View.GONE);}
 		} catch (Exception e) {setVisibilityOfEditChannelBtn(View.GONE);}

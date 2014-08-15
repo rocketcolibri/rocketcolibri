@@ -34,7 +34,7 @@ import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 /**
  * @short widget to display the user data received from the ServoController 
  */
-public class ConnectedUserInfoWidget extends View implements ICustomizableView, IRCWidget, IUiOutputSinkChangeObserver {
+public class ConnectedUserInfoWidget extends View implements ICustomizableView, IUiOutputSinkChangeObserver {
 	
 	protected RCWidgetConfig tWidgetConfig;
 	private Paint tUserBitmapPaint;
@@ -229,10 +229,4 @@ public class ConnectedUserInfoWidget extends View implements ICustomizableView, 
 		tWidgetConfig.viewElementConfig.setAlpha(getAlpha());
 		return tWidgetConfig.viewElementConfig;
 	}
-
-	@Override
-	public List<ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel> getUiInputSourceList() {
-		return null;
-	}
-
 }

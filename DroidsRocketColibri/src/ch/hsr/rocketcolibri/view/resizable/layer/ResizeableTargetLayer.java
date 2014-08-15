@@ -6,15 +6,11 @@ package ch.hsr.rocketcolibri.view.resizable.layer;
 import java.util.ArrayList;
 
 import ch.hsr.rocketcolibri.R;
-import ch.hsr.rocketcolibri.util.DrawingTools;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
-import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
-import ch.hsr.rocketcolibri.view.draggable.HelplineDrawer;
 import ch.hsr.rocketcolibri.view.resizable.CornerBall;
 import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.resizable.ViewElementCustomizer;
-import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;

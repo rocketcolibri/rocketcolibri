@@ -24,11 +24,12 @@ import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
 import ch.hsr.rocketcolibri.menu.desktop.DesktopMenu;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
+import ch.hsr.rocketcolibri.ui_data.input.IUiInputSource;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObserver;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
-import ch.hsr.rocketcolibri.view.widget.IRCWidget;
+import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 
 /**
@@ -143,13 +144,14 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 			setupViewsOnce = false;
 		}
 		int size = tDesktopViewManager.getControlElementParentView().getChildCount();
-    	IRCWidget view = null;
+    	ICustomizableView view = null;
     	for(int i = 0; i < size; ++i){
     		try{
-    			view = (IRCWidget) tDesktopViewManager.getControlElementParentView().getChildAt(i);
+    			view = (ICustomizableView) tDesktopViewManager.getControlElementParentView().getChildAt(i);
     			if (view instanceof IUiOutputSinkChangeObserver)
     				rcService.tProtocol.registerUiOutputSinkChangeObserver((IUiOutputSinkChangeObserver)view);
-    			rcService.tProtocol.registerUiInputSource(view);
+    			if (view instanceof IUiInputSource)
+    				rcService.tProtocol.registerUiInputSource((IUiInputSource)view);
     		} catch (Exception e) {e.printStackTrace();}
     	}
     	rcService.tProtocol.registerUiOutputSinkChangeObserver(this);

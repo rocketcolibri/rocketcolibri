@@ -10,7 +10,6 @@ import ch.hsr.rocketcolibri.util.CacheUtil;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 import ch.hsr.rocketcolibri.widgetdirectory.WidgetEntry;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -25,8 +24,8 @@ import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 import android.widget.Toast;
 
-public class CustomizeModusContent extends ModusContent {
-
+public class CustomizeModusContent extends ModusContent{
+	
 	public CustomizeModusContent(Context context, AttributeSet attrs) {
 		super(context, attrs);
 	}
@@ -102,12 +101,12 @@ public class CustomizeModusContent extends ModusContent {
 	}
 
 	/**
-	 * @return View This View is meant for showing how the Widget will look like
-	 *         not for interaction with the View itself.
-	 * @throws Exception
+	 * @return View
+	 * This View is meant for showing how the Widget will look like
+	 * not for interaction with the View itself.
+	 * @throws Exception 
 	 */
-	private IRCWidget createIconView(WidgetEntry wEntry, int width, int height)
-			throws Exception {
+	private ICustomizableView createIconView(WidgetEntry wEntry, int width, int height) throws Exception{
 		ViewElementConfig vec = wEntry.getDefaultViewElementConfig();
 		vec.setLayoutParams(new AbsoluteLayout.LayoutParams(width, height, 0, 0));
 		return tDesktopMenu.getDesktopViewManager().createView(vec);

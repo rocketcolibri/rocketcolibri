@@ -13,6 +13,7 @@ import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.protocol.RCProtocolUdp;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
+import ch.hsr.rocketcolibri.ui_data.input.IUiInputSource;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObserver;
@@ -50,7 +51,7 @@ import android.content.res.TypedArray;
 /**
  * @author Artan Veliju
  */
-public final class Circle extends View implements ICustomizableView, IRCWidget, IUiOutputSinkChangeObserver  {
+public final class Circle extends View implements ICustomizableView, IUiInputSource, IUiOutputSinkChangeObserver  {
 //	private static final String TAG = Circle.class.getSimpleName();
 	private boolean tDebug;
 	private Paint dbgLine;
@@ -473,6 +474,7 @@ public final class Circle extends View implements ICustomizableView, IRCWidget, 
 			tChannelV.setWidgetSticky(getProtocolMapBoolean(RCConstants.STICKY_V));
 			tDebug = getProtocolMapBoolean(RCConstants.DEBUG);	
 			updateInnerCircleAndCheckSticky(-1,-1);
+			postInvalidate();
 		}catch(Exception e){
 			e.printStackTrace();
 		}
