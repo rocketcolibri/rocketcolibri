@@ -89,18 +89,6 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 		surface_view.setBackgroundColor(Color.TRANSPARENT);
 	}
 	
-	private void unbindDrawables(View view) {
-	       if (view.getBackground() != null) {
-	       view.getBackground().setCallback(null);
-	       }
-	       if (view instanceof ViewGroup) {
-	           for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
-	           unbindDrawables(((ViewGroup) view).getChildAt(i));
-	           }
-	       ((ViewGroup) view).removeAllViews();
-	       }
-	}
-	 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -110,7 +98,6 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 		}
 		tDesktopViewManager.release();
 		tDesktopViewManager = null;
-		unbindDrawables(findViewById(R.id.root_layer));
 	    System.gc();
 	}
 	
@@ -125,12 +112,14 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 				String defaultModelName = getDefaultModelName();
 				if(defaultModelName!=null){
 					tModel = tDB.fetchRCModelByName(defaultModelName);
+					displayModelNameOnDesktopMenu(tModel.getName());
 				}else{
 					openModelListActivity();
 					return;
 				}
 			}
-			if (tModel != null && tModel.getWidgetConfigs()!=null)
+			if (tModel != null && tModel.getWidgetConfigs()!=null){
+				displayModelNameOnDesktopMenu(tModel.getName());
 				for (RCWidgetConfig vec : tModel.getWidgetConfigs()) {
 					try {
 						Log.d(getClassName(), "initCreateAndAddView: "+vec.viewElementConfig.getClassPath());
@@ -139,8 +128,8 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				} 
-//			printOutJson();
+				}
+			}
 			setupViewsOnce = false;
 		}
 		int size = tDesktopViewManager.getControlElementParentView().getChildCount();
@@ -200,6 +189,7 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 				setupViewsOnce = true;
 				setupDesktop();
 				tDesktopMenu.animateClose();
+				System.gc();
 			}
 		}else{
 			Log.d("", "viewIndex:"+requestCode+" resultCode: "+resultCode);
@@ -265,4 +255,11 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 		if(def!=null)return def.modelName;
 		return null;
 	}
+	
+	private void displayModelNameOnDesktopMenu(final String text){
+		runOnUiThread(new Runnable() {public void run() {
+			tDesktopMenu.setTextOnBottom(text);	
+		}});
+	}
+	
 }

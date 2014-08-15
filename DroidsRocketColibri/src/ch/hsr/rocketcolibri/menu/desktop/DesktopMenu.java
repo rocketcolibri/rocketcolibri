@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import ch.hsr.rocketcolibri.R;
@@ -19,8 +20,7 @@ import ch.hsr.rocketcolibri.view.widget.SwipeInMenu;
 import ch.hsr.rocketcolibri.view.widget.SwipeInMenu.OnDrawerOpenListener;
 
 /**
- * This Class is for the Instantiations of the Children's of the Menu
- * and the Listener of them
+ * This Class represents the DesktopMenu
  * @author Artan Veliju
  */
 public class DesktopMenu {
@@ -36,6 +36,7 @@ public class DesktopMenu {
 	private ToggleButton tWifi;
 	private ToggleButton tObserveMode;
 	private ToggleButton tOperateMode;
+	private TextView tDesktopMenuBottomTv;
 	private boolean initOnce = true;
 	public DesktopMenu(Context context, DesktopViewManager desktopViewManager) {
 		tContext = context;
@@ -93,6 +94,9 @@ public class DesktopMenu {
 		setServiceDependentButtonsEnabled(true);
 	}
 	
+	public void setTextOnBottom(String text){
+		tDesktopMenuBottomTv.setText(text);
+	}
 	
 	private void onCreate(){
 		initServiceDependentItems();
@@ -172,7 +176,8 @@ public class DesktopMenu {
 		});
 		tOperateMode.setClickable(false);
 		tOperateMode.setChecked(false);
-
+		
+		tDesktopMenuBottomTv = (TextView)findViewById(R.id.desktopMenuBottomTv);
 		setServiceDependentButtonsEnabled(false);
 	}
 	

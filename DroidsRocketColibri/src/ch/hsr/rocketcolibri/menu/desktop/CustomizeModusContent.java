@@ -36,14 +36,6 @@ public class CustomizeModusContent extends ModusContent{
 		CacheUtil cacheUtil = new CacheUtil(tContext);
 		int size = (int) tContext.getResources().getDimension(
 				R.dimen.desktop_menu_customize_mode_widget_size);
-		for (int i = 0; i < 10; i++)
-			System.out.println("size: " + size);
-		// int width =
-		// RocketColibriDefaults.dpToPixelX(tContext.getResources().getDisplayMetrics(),
-		// size);
-		// int height =
-		// RocketColibriDefaults.dpToPixelY(tContext.getResources().getDisplayMetrics(),
-		// size);
 		List<ImageView> widgetList = new ArrayList<ImageView>(
 				widgetEntries.size());
 		for (WidgetEntry wEntry : widgetEntries) {

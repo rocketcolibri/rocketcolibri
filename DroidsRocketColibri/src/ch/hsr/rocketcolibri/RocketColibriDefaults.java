@@ -7,6 +7,7 @@ import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 
 /**

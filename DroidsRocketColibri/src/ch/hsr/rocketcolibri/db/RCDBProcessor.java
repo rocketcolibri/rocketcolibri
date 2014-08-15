@@ -157,20 +157,14 @@ public class RCDBProcessor {
 	
 	private void checkPositionAndSize(ViewElementConfig vec){
 		LayoutParams lp = vec.getLayoutParams();
-		if (vec.getResizeConfig().maxHeight > tRealScreenSize.y) {
-			lp.height = tRealScreenSize.y;
-		}else{
-			lp.height = vec.getResizeConfig().maxHeight;
-		}
-		if (vec.getResizeConfig().maxWidth > tRealScreenSize.x) {
-			lp.width = tRealScreenSize.x;
-		}else{
-			lp.width = vec.getResizeConfig().maxWidth;
-		}
-		if(lp.height+lp.y>tRealScreenSize.y)
-			lp.y=tRealScreenSize.y-lp.height;
-		if(lp.width+lp.x>tRealScreenSize.x)
-			lp.x=tRealScreenSize.x-lp.width;
+		if (lp.height > tRealScreenSize.y) {lp.height = tRealScreenSize.y;}
+		else if(lp.height < vec.getResizeConfig().minHeight){lp.height = vec.getResizeConfig().minHeight;}
+		
+		if (lp.width > tRealScreenSize.x) {lp.width = tRealScreenSize.x;}
+		else if(lp.width < vec.getResizeConfig().minWidth ){lp.width = vec.getResizeConfig().minWidth;}
+		
+		if(lp.height+lp.y>tRealScreenSize.y){lp.y=tRealScreenSize.y-lp.height;}
+		if(lp.width+lp.x>tRealScreenSize.x){lp.x=tRealScreenSize.x-lp.width;}
 		if (lp.y < 0) {lp.y = 0;}
 		if (lp.x < 0) {lp.x = 0;}
 	}

@@ -36,12 +36,10 @@ public class OpenWithFileActivity extends RCActivity{
 	private void checkIfOpenedWithFile(Intent intent){
 		try{
 			final Uri uri = intent.getData();
-			System.out.println(uri);
 			new Thread(){public void run(){
 				try {
 					waitForServiceSem.tryAcquire(6, TimeUnit.SECONDS);
 					if(rcService!=null){
-						System.out.println("got service: "+rcService);
 						RocketColibriDataHandler rcDataHandler;
 						rcDataHandler = new RocketColibriDataHandler(OpenWithFileActivity.this, rcService.getRocketColibriDB(), false);
 						if(rcDataHandler.importData(getContentResolver().openInputStream(uri))){
