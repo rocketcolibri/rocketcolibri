@@ -9,7 +9,6 @@ import ch.hsr.rocketcolibri.util.CacheUtil;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 import ch.hsr.rocketcolibri.widgetdirectory.WidgetEntry;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -90,7 +89,7 @@ public class CustomizeModusContent extends ModusContent{
 	 * not for interaction with the View itself.
 	 * @throws Exception 
 	 */
-	private IRCWidget createIconView(WidgetEntry wEntry, int width, int height) throws Exception{
+	private ICustomizableView createIconView(WidgetEntry wEntry, int width, int height) throws Exception{
 		ViewElementConfig vec = wEntry.getDefaultViewElementConfig();
 		vec.setLayoutParams(new AbsoluteLayout.LayoutParams(width, height, 0, 0));
 		return tDesktopMenu.getDesktopViewManager().createView(vec);

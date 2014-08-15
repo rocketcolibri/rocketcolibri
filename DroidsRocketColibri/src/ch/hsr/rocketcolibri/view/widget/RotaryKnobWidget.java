@@ -8,6 +8,7 @@ import java.util.Map;
 
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
+import ch.hsr.rocketcolibri.ui_data.input.IUiInputSource;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.util.DrawingTools;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
@@ -25,8 +26,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
-public class RotaryKnobWidget extends ImageView implements ICustomizableView,
-		IRCWidget {
+public class RotaryKnobWidget extends ImageView implements ICustomizableView, IUiInputSource {
 	private boolean tDebug;
 	private Paint dbgLine;
 	

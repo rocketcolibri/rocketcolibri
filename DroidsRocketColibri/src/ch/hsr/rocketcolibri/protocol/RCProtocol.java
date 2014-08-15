@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import ch.hsr.rocketcolibri.ui_data.input.IUiInputSource;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObservable;
@@ -18,7 +19,7 @@ import ch.hsr.rocketcolibri.ui_data.output.UiOutputData;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.ui_data.output.UserData;
 import ch.hsr.rocketcolibri.ui_data.output.VideoUrl;
-import ch.hsr.rocketcolibri.view.widget.IRCWidget;
+import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 
 
 
@@ -152,7 +153,7 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 	 * @param channelnumber
 	 * @return true if channel has been registered successfully
 	 */
-	public boolean registerUiInputSource(IRCWidget uiInputSource) {
+	public boolean registerUiInputSource(IUiInputSource uiInputSource) {
 		List<UiInputSourceChannel> list = uiInputSource.getUiInputSourceList();
 		if(null != list) {
 			for(UiInputSourceChannel c : list)
@@ -166,7 +167,7 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 	 * @param channelnumber
 	 * @return true if channel has been unregistered successfully
 	 */
-	public boolean unregisterUiInputSource(IRCWidget uiInputSource){
+	public boolean unregisterUiInputSource(IUiInputSource uiInputSource){
 		List<UiInputSourceChannel> list = uiInputSource.getUiInputSourceList();
 		if(null != list) {
 			for(UiInputSourceChannel c : list)

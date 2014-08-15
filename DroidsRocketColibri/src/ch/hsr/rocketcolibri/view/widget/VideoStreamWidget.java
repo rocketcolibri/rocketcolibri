@@ -53,7 +53,7 @@ import android.view.ViewGroup;
  *
  */
 public class VideoStreamWidget extends SurfaceView implements
-		ICustomizableView, IRCWidget, IUiOutputSinkChangeObserver, SurfaceHolder.Callback, OnPreparedListener, OnErrorListener, OnBufferingUpdateListener{
+		ICustomizableView, IUiOutputSinkChangeObserver, SurfaceHolder.Callback, OnPreparedListener, OnErrorListener, OnBufferingUpdateListener{
 
 	static final String TAG = "VideoStreamWidget";
 	private Bitmap tVideoBitmap;
@@ -440,10 +440,5 @@ public class VideoStreamWidget extends SurfaceView implements
 	@Override
 	public void onBufferingUpdate(MediaPlayer mp, int percent) {
 		Log.d(TAG, "onBufferingUpdate:" + percent + "%");
-	}
-
-	@Override
-	public List<UiInputSourceChannel> getUiInputSourceList() {
-		return null;
 	}
 }

@@ -22,7 +22,6 @@ import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.popup.PopupWindow;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
-import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 
 /**
@@ -61,7 +60,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 			public void onClick(View v) {
 				try{
 					LayoutParams resizeTargetLP = (LayoutParams) tTargetView.getLayoutParams();
-					ResizeConfig config = ((IRCWidget)tTargetView).getWidgetConfig().viewElementConfig.getResizeConfig();
+					ResizeConfig config = ((ICustomizableView)tTargetView).getWidgetConfig().viewElementConfig.getResizeConfig();
 					AbsoluteLayout parent = (AbsoluteLayout) tTargetView.getParent();
 					resizeTargetLP.height = config.maxHeight;
 					resizeTargetLP.width = config.maxWidth;
@@ -77,7 +76,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 			public void onClick(View v) {
 				try{
 					LayoutParams resizeTargetLP = (LayoutParams) tTargetView.getLayoutParams();
-					ResizeConfig config = ((IRCWidget)tTargetView).getWidgetConfig().viewElementConfig.getResizeConfig();
+					ResizeConfig config = ((ICustomizableView)tTargetView).getWidgetConfig().viewElementConfig.getResizeConfig();
 					AbsoluteLayout parent = (AbsoluteLayout) tTargetView.getParent();
 					resizeTargetLP.height = config.minHeight;
 					resizeTargetLP.width = config.minWidth;
@@ -96,7 +95,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		findViewById(R.id.duplicateBtn).setOnClickListener(new View.OnClickListener(){
 			public void onClick(View v) {
 				try{ 
-					RCWidgetConfig rcwc = ((IRCWidget)tTargetView).getWidgetConfig().copy();
+					RCWidgetConfig rcwc = ((ICustomizableView)tTargetView).getWidgetConfig().copy();
 					AbsoluteLayout.LayoutParams lp = rcwc.viewElementConfig.getLayoutParams();
 					AbsoluteLayout rootView = tDesktopViewManager.getRootView();
 					lp.x = (int) (rootView.getWidth()/2)-lp.width/2;
@@ -145,7 +144,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 		enableMaximized(!isMaximized());
 		enableMinimized(!isMinimized());
 		try {
-			if (((IRCWidget) cView).getProtocolMap() != null) {
+			if (((ICustomizableView) cView).getProtocolMap() != null) {
 				setVisibilityOfEditChannelBtn(View.VISIBLE);
 			} else {setVisibilityOfEditChannelBtn(View.GONE);}
 		} catch (Exception e) {setVisibilityOfEditChannelBtn(View.GONE);}
@@ -165,7 +164,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 	
 	private boolean isMaximized(){
 		LayoutParams resizeTargetLP = (LayoutParams) tTargetView.getLayoutParams();
-		ResizeConfig config = ((IRCWidget)tTargetView).getWidgetConfig().viewElementConfig.getResizeConfig();
+		ResizeConfig config = ((ICustomizableView)tTargetView).getWidgetConfig().viewElementConfig.getResizeConfig();
 		if(resizeTargetLP.height==config.maxHeight && resizeTargetLP.width==config.maxWidth){
 			return true;
 		}
@@ -174,7 +173,7 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 	
 	private boolean isMinimized(){
 		LayoutParams resizeTargetLP = (LayoutParams) tTargetView.getLayoutParams();
-		ResizeConfig config = ((IRCWidget)tTargetView).getWidgetConfig().viewElementConfig.getResizeConfig();
+		ResizeConfig config = ((ICustomizableView)tTargetView).getWidgetConfig().viewElementConfig.getResizeConfig();
 		if(resizeTargetLP.height==config.minHeight && resizeTargetLP.width==config.minWidth){
 			return true;
 		}

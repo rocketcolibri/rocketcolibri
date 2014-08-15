@@ -41,7 +41,7 @@ import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
  * 
  *  The status of the connection is indicated with a icon according to the Systemschnittstellen document 
  */
-public class ConnectionStatusWidget extends View implements ICustomizableView, IRCWidget, IUiOutputSinkChangeObserver {
+public class ConnectionStatusWidget extends View implements ICustomizableView, IUiOutputSinkChangeObserver {
 
 	protected ViewElementConfig tViewElementConfig;
 	protected RCWidgetConfig tWidgetConfig;
@@ -214,9 +214,4 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 			}
 		};
 	}
-
-	@Override
-	public List<UiInputSourceChannel> getUiInputSourceList() {
-		return null;
-	}	
 }

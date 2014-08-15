@@ -8,8 +8,8 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout;
+import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
-import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 
 public class ResizeMenu extends LinearLayout{
 
@@ -44,7 +44,7 @@ public class ResizeMenu extends LinearLayout{
 		}});
 		AbsoluteLayout.LayoutParams tResizeTargetLP = (ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams) target.getLayoutParams();
 		try{
-			ResizeConfig tConfig = ((IRCWidget)target).getWidgetConfig().viewElementConfig.getResizeConfig();
+			ResizeConfig tConfig = ((ICustomizableView)target).getWidgetConfig().viewElementConfig.getResizeConfig();
 			enableMaximized(!(tResizeTargetLP.height==tConfig.maxHeight && tResizeTargetLP.width==tConfig.maxWidth));
 			enableMinimized(!(tResizeTargetLP.height==tConfig.minHeight && tResizeTargetLP.width==tConfig.minWidth));
 		}catch(Exception e){}

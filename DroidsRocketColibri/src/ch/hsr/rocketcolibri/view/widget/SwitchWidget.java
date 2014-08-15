@@ -16,6 +16,7 @@ import android.util.TypedValue;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import ch.hsr.rocketcolibri.RCConstants;
+import ch.hsr.rocketcolibri.ui_data.input.IUiInputSource;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.util.DrawingTools;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
@@ -23,8 +24,7 @@ import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 
-public class SwitchWidget extends Switch implements ICustomizableView,
-		IRCWidget {
+public class SwitchWidget extends Switch implements ICustomizableView, IUiInputSource {
 	private boolean tDebug;
 	private Paint dbgLine;
 

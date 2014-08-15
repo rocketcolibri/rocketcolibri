@@ -30,7 +30,6 @@ import ch.hsr.rocketcolibri.view.draggable.IDragSource;
 import ch.hsr.rocketcolibri.view.resizable.IResizeDoneListener;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.resizable.ResizeController;
-import ch.hsr.rocketcolibri.view.widget.IRCWidget;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 
 
@@ -102,51 +101,51 @@ public class DesktopViewManager implements IDesktopViewManager{
 	}
 	
 	@Override
-	public IRCWidget createAndAddView(RCWidgetConfig vElementConfig) throws Exception{
-		IRCWidget widget = createView(vElementConfig);
+	public ICustomizableView createAndAddView(RCWidgetConfig vElementConfig) throws Exception{
+		ICustomizableView widget = createView(vElementConfig);
 		processRCWidget(widget);
 	    tViewChangeListener.onViewAdd(widget.getWidgetConfig());
 	    return widget;
 	}
 	
 	@Override
-	public IRCWidget createAndAddView(ViewElementConfig vElementConfig) throws Exception{
-		IRCWidget widget = createView(vElementConfig);
+	public ICustomizableView createAndAddView(ViewElementConfig vElementConfig) throws Exception{
+		ICustomizableView widget = createView(vElementConfig);
 		processRCWidget(widget);
 	    tViewChangeListener.onViewAdd(widget.getWidgetConfig());
 	    return widget;
 	}
 	
 	@Override
-	public IRCWidget initCreateAndAddView(RCWidgetConfig widgetConfig) throws Exception{
-		IRCWidget widget = createView(widgetConfig);
+	public ICustomizableView initCreateAndAddView(RCWidgetConfig widgetConfig) throws Exception{
+		ICustomizableView widget = createView(widgetConfig);
 		processRCWidget(widget);
 	    return widget;
 	}
 	
-	private void processRCWidget(IRCWidget widget){
+	private void processRCWidget(ICustomizableView widget){
 		widget.setCustomizeModusListener(tCustomizeModusListener);
 		widget.setCustomizeModus(tCustomizeModus);
 		tControlElementParentView.addView((View)widget);
 	}
 	
 	@Override
-	public IRCWidget createView(ViewElementConfig vElementConfig) throws Exception{
+	public ICustomizableView createView(ViewElementConfig vElementConfig) throws Exception{
 	    Class<?> c = Class.forName(vElementConfig.getClassPath());
 	    Constructor<?> cons = c.getConstructor(Context.class, ViewElementConfig.class);
-	    return (IRCWidget)cons.newInstance(tContext, vElementConfig);
+	    return (ICustomizableView)cons.newInstance(tContext, vElementConfig);
 	}
 	
 	@Override
-	public IRCWidget createView(RCWidgetConfig vElementConfig) throws Exception{
+	public ICustomizableView createView(RCWidgetConfig vElementConfig) throws Exception{
 	    Class<?> c = Class.forName(vElementConfig.viewElementConfig.getClassPath());
 	    Constructor<?> cons = c.getConstructor(Context.class, RCWidgetConfig.class);
-	    return (IRCWidget)cons.newInstance(tContext, vElementConfig);
+	    return (ICustomizableView)cons.newInstance(tContext, vElementConfig);
 	}
 	
 	@Override
 	public void deleteView(View view){
-		tViewChangeListener.onViewDelete(((IRCWidget)view).getWidgetConfig());
+		tViewChangeListener.onViewDelete(((ICustomizableView)view).getWidgetConfig());
 		tControlElementParentView.removeView(view);
 	}
 
@@ -207,7 +206,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	}
 	
 	private void putProtocolExtras(Intent intent, View targetView){
-		IRCWidget rcWidget = (IRCWidget)targetView;
+		ICustomizableView rcWidget = (ICustomizableView)targetView;
 		Map<String, String> pm = rcWidget.getProtocolMap();
 		Set<String> keySet = pm.keySet();
 		for(String key : keySet){
@@ -218,7 +217,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	@Override
 	public void editActivityResult(int viewIndex, Intent editChannelIntent){
 		Log.d(""+viewIndex, "editActivityResult "+tControlElementParentView.getChildCount());
-		IRCWidget rcw = (IRCWidget)tControlElementParentView.getChildAt(viewIndex);
+		ICustomizableView rcw = (ICustomizableView)tControlElementParentView.getChildAt(viewIndex);
 		Set<String> keySet = rcw.getProtocolMap().keySet();
 		for(String key : keySet){
 			Log.d(""+key, ""+editChannelIntent.getStringExtra(key));
@@ -253,7 +252,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	@Override
 	public void viewChanged(View view){
 		try{
-			tViewChangeListener.onViewChange(((IRCWidget)view).getWidgetConfig());
+			tViewChangeListener.onViewChange(((ICustomizableView)view).getWidgetConfig());
 		}catch(Exception e){
 		}
 	}
