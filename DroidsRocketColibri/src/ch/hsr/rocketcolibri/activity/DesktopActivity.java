@@ -171,6 +171,7 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 	}
 	
 	public void openModelListActivity(){
+		tDesktopMenu.onModelListOpen();
 		Intent i = new Intent(this, ModelListActivity.class);
 		i.putExtra(RCConstants.FLAG_ACTIVITY_RC_MODEL, getDefaultModelName());
 		startActivityForResult(i, RCConstants.RC_MODEL_RESULT_CODE);
@@ -202,7 +203,8 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 	@Override
 	protected void onServiceReady() {
 		tDB = rcService.getRocketColibriDB();
-		tDesktopMenu.setService(rcService) ;
+		tDesktopMenu.setService(rcService);
+		tDesktopMenu.onResume();
 		setupDesktop();
 	}
     
