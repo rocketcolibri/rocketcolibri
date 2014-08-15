@@ -3,19 +3,20 @@
     android:id="@+id/controlModusContent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/desktop_menu_control_mode_margin"
+    android:layout_marginRight="@dimen/desktop_menu_control_mode_margin"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content" >
 
-        <GridLayout
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:columnCount="5"
-            android:orientation="horizontal"
-            android:rowCount="5" >
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:orientation="horizontal" >
 
             <ToggleButton
                 android:id="@+id/menu_action_main_wifi"
@@ -52,36 +53,57 @@
                 android:textOff="Operate"
                 android:textOn="Operate" >
             </ToggleButton>
-        </GridLayout>
+        </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="5dp"
             android:orientation="horizontal" >
 
-            <ToggleButton
-                android:id="@+id/modelListBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:button="@drawable/ic_action_model"
-                android:checked="false"
-                android:textOff="Model"
-                android:textOn="Model" >
-            </ToggleButton>
+            <!-- <ToggleButton -->
+            <!-- android:id="@+id/modelListBtn" -->
+            <!-- android:layout_width="wrap_content" -->
+            <!-- android:layout_height="wrap_content" -->
+            <!-- android:background="@null" -->
+            <!-- android:button="@drawable/ic_action_model" -->
+            <!-- android:checked="false" -->
+            <!-- android:textOff="Model" -->
+            <!-- android:textOn="Model" > -->
+            <!-- </ToggleButton> -->
 
-            <ToggleButton
+
+            <!-- <ToggleButton -->
+            <!-- android:id="@+id/shareModelsBtn" -->
+            <!-- android:layout_width="wrap_content" -->
+            <!-- android:layout_height="wrap_content" -->
+            <!-- android:background="@null" -->
+            <!-- android:button="@drawable/ic_menu_share_holo_dark" -->
+            <!-- android:checked="false" -->
+            <!-- android:textOff="Share" -->
+            <!-- android:textOn="Share" > -->
+
+
+            <!-- </ToggleButton> -->
+
+            <ImageView
+                android:id="@+id/modelListBtn"
+                android:layout_width="@dimen/desktop_menu_control_mode_icon_size"
+                android:layout_height="@dimen/desktop_menu_control_mode_icon_size"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_action_model" />
+
+            <ImageView
                 android:id="@+id/shareModelsBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:button="@drawable/ic_menu_share_holo_dark"
-                android:checked="false"
-                android:textOff="Share"
-                android:textOn="Share" >
-            </ToggleButton>
+                android:layout_width="@dimen/desktop_menu_control_mode_icon_size"
+                android:layout_height="@dimen/desktop_menu_control_mode_icon_size"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_menu_share_holo_dark" />
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
 </ch.hsr.rocketcolibri.menu.desktop.ControlModusContent>

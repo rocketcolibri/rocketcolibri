@@ -3,6 +3,8 @@
     android:id="@+id/customizeModusContent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/desktop_menu_control_mode_margin"
+    android:layout_marginRight="@dimen/desktop_menu_control_mode_margin"
     android:orientation="vertical" >
 
     <GridView

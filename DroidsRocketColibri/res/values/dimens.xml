@@ -22,5 +22,7 @@
     <dimen name="list_row_edit_mode_icon">32dp</dimen>
     
     <dimen name="desktop_menu_customize_mode_widget_size">80dp</dimen>
+    <dimen name="desktop_menu_control_mode_icon_size">50dp</dimen>
+    <dimen name="desktop_menu_control_mode_margin">20dp</dimen>
     
 </resources>
