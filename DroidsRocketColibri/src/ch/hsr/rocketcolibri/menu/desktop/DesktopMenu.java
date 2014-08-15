@@ -28,7 +28,7 @@ public class DesktopMenu {
 	private Context tContext;
 	private DesktopViewManager tDesktopViewManager;
 	private RocketColibriService tService;
-	private int[] tServiceDependentItemIds = {R.id.menu_action_main_settings,R.id.menu_action_main_wifi, R.id.menu_action_observe_mode, R.id.menu_action_operate_mode};
+	private int[] tServiceDependentItemIds = {R.id.menu_action_main_settings,R.id.menu_action_main_wifi, R.id.menu_action_observe_mode, R.id.menu_action_operate_mode, R.id.shareModelsBtn};
 	private View[] tServiceDependentItems;
 	private ControlModusContent tControlModusContent;
 	private CustomizeModusContent tCustomizeModusContent;
