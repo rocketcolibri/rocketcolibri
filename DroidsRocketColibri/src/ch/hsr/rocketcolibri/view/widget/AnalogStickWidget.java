@@ -585,6 +585,8 @@ public class AnalogStickWidget extends View implements ICustomizableView, IRCWid
 			tChannelV.setChannelTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
 			tChannelV.setWidgetSticky(getProtocolMapBoolean(RCConstants.STICKY_V));
 			tDebug = getProtocolMapBoolean(RCConstants.DEBUG);
+			returnHandleToInitialPosition();
+			postInvalidate();
 		}catch(Exception e){
 			e.printStackTrace();
 		}

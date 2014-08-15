@@ -473,6 +473,7 @@ public final class Circle extends View implements ICustomizableView, IRCWidget, 
 			tChannelV.setWidgetSticky(getProtocolMapBoolean(RCConstants.STICKY_V));
 			tDebug = getProtocolMapBoolean(RCConstants.DEBUG);	
 			updateInnerCircleAndCheckSticky(-1,-1);
+			postInvalidate();
 		}catch(Exception e){
 			e.printStackTrace();
 		}

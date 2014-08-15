@@ -139,6 +139,7 @@ public class SwitchWidget extends Switch implements ICustomizableView,
 			tChannel.setChannelDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION));
 			tChannel.setChannelInverted(getProtocolMapBoolean(RCConstants.INVERTED));
 			tDebug = getProtocolMapBoolean(RCConstants.DEBUG);
+			postInvalidate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
