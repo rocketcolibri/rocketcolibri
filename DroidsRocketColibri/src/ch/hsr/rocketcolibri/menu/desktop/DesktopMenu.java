@@ -107,7 +107,6 @@ public class DesktopMenu {
 	}
 	
 	public void onResume(){
-		System.out.println("on resume desktop menu");
 		RelativeLayout.LayoutParams lp = (LayoutParams) tDesktopMenuBottomTv.getLayoutParams();
 		lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
 		tDesktopMenuBottomTv.requestLayout();
