@@ -19,7 +19,6 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.HoldImageView.OnHoldListener;
 import ch.hsr.rocketcolibri.view.HoldImageView;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
-import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.popup.PopupWindow;
 import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;

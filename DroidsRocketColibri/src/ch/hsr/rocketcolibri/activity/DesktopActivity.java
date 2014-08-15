@@ -4,9 +4,7 @@
 package ch.hsr.rocketcolibri.activity;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -17,14 +15,10 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import ch.futuretek.json.JsonTransformer;
-import ch.futuretek.json.exception.TransformException;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
-import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.db.RocketColibriDB;
 import ch.hsr.rocketcolibri.db.model.Defaults;
-import ch.hsr.rocketcolibri.db.model.JsonRCModel;
 import ch.hsr.rocketcolibri.db.model.RCModel;
 import ch.hsr.rocketcolibri.manager.DesktopViewManager;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
@@ -43,7 +37,6 @@ import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
  * @author Artan Veliju
  */
 public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeObserver{
-	private static final String TAG = "DesktopActivity";
 	private RCModel tModel;
 	private SurfaceView surface_view;
 	private RocketColibriDB tDB;
@@ -238,22 +231,22 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
     	}catch(Exception e){}
 	}
 	
-	private void printOutJson(){
-		List<JsonRCModel> jsons = new ArrayList<JsonRCModel>();
-		JsonRCModel j = new JsonRCModel();
-		j.model = tModel;
-		for(RCWidgetConfig w : tModel.getWidgetConfigs()){
-			RocketColibriDefaults.pixelToDp(this.getResources().getDisplayMetrics(), w.viewElementConfig);
-		}
-		j.process = "insert";
-		j.timestamp = "04.07.2014 21:16:00";
-		jsons.add(j);
-		try {
-			Log.d("", new JsonTransformer().transform(jsons));
-		} catch (TransformException e) {
-			e.printStackTrace();
-		}
-	}
+//	private void printOutJson(){
+//		List<JsonRCModel> jsons = new ArrayList<JsonRCModel>();
+//		JsonRCModel j = new JsonRCModel();
+//		j.model = tModel;
+//		for(RCWidgetConfig w : tModel.getWidgetConfigs()){
+//			RocketColibriDefaults.pixelToDp(this.getResources().getDisplayMetrics(), w.viewElementConfig);
+//		}
+//		j.process = "insert";
+//		j.timestamp = "04.07.2014 21:16:00";
+//		jsons.add(j);
+//		try {
+//			Log.d("", new JsonTransformer().transform(jsons));
+//		} catch (TransformException e) {
+//			e.printStackTrace();
+//		}
+//	}
 
 	@Override
 	protected String getClassName() {

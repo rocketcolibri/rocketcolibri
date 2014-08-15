@@ -28,7 +28,6 @@ import ch.hsr.rocketcolibri.RocketColibriDefaults;
 import ch.hsr.rocketcolibri.db.model.JsonRCModel;
 import ch.hsr.rocketcolibri.db.model.LastUpdateFromFile;
 import ch.hsr.rocketcolibri.db.model.RCModel;
-import ch.hsr.rocketcolibri.view.widget.Circle;
 import ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget;
 import ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
@@ -192,7 +191,7 @@ public class RocketColibriDataHandler {
 		tProtocolMap.put(RCConstants.MIN_RANGE_V, "1");
 		tProtocolMap.put(RCConstants.DEFAULT_POSITION_V, "");
 		tProtocolMap.put(RCConstants.TRIMM_V, "");
-		widgetConfigs.add(new RCWidgetConfig(tProtocolMap, Circle.getDefaultViewElementConfig()));
+
 		widgetConfigs.add(new RCWidgetConfig(ConnectionStatusWidget.getDefaultViewElementConfig()));
 		widgetConfigs.add(new RCWidgetConfig(ConnectedUserInfoWidget.getDefaultViewElementConfig()));
 		model.setWidgetConfigs(widgetConfigs);
@@ -213,7 +212,7 @@ public class RocketColibriDataHandler {
 		tProtocolMap.put(RCConstants.MIN_RANGE, "");
 		tProtocolMap.put(RCConstants.DEFAULT_POSITION, "");
 		tProtocolMap.put(RCConstants.TRIMM, "");
-		widgetConfigs.add(new RCWidgetConfig(tProtocolMap, Circle.getDefaultViewElementConfig()));
+
 		widgetConfigs.add(new RCWidgetConfig(ConnectionStatusWidget.getDefaultViewElementConfig()));
 		model.setWidgetConfigs(widgetConfigs);
 		

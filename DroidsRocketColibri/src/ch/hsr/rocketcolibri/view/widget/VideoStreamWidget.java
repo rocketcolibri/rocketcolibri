@@ -1,12 +1,10 @@
 package ch.hsr.rocketcolibri.view.widget;
 
 import java.io.IOException;
-import java.util.List;
+
 import java.util.Map;
 
 import ch.hsr.rocketcolibri.R;
-import ch.hsr.rocketcolibri.RocketColibriService;
-import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObserver;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.ui_data.output.VideoUrl;
@@ -15,8 +13,6 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ModusChangeListener;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
-import ch.hsr.rocketcolibri.view.resizable.ResizeConfig;
-import android.app.Service;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

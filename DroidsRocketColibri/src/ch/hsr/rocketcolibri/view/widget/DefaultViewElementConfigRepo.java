@@ -23,28 +23,16 @@ public class DefaultViewElementConfigRepo {
 		
 	private DefaultViewElementConfigRepo(Context context){
 		DisplayMetrics density = context.getResources().getDisplayMetrics();
-		//>>>>>>>>>>>>>>>>>>>>>>>>>>> Circle >>>>>>>>>>>>>>>>>>>>>>>>>>
+
+		//>>>>>>>>>>>>>>>>>>>>>>>>>>> Analog Stick >>>>>>>>>>>>>>>>>>>>>>>>>>
 		ResizeConfig rc = new ResizeConfig();
 	    rc.keepRatio=true;
 	    rc.maxHeight=200;
 	    rc.minHeight=50;
 	    rc.maxWidth=200;
 	    rc.minWidth=50;
-	    LayoutParams lp = new LayoutParams(180, 180 , 100, 300);
-	    ViewElementConfig elementConfig = new ViewElementConfig(Circle.class.getName(), lp, rc);
-	    dpToPixel(density, elementConfig);
-	    repo.put(Circle.class, elementConfig);
-		//<<<<<<<<<<<<<<<<<<<<<<<<<<< Circle <<<<<<<<<<<<<<<<<<<<<<<<<<
-
-		//>>>>>>>>>>>>>>>>>>>>>>>>>>> Analog Stick >>>>>>>>>>>>>>>>>>>>>>>>>>
-		rc = new ResizeConfig();
-	    rc.keepRatio=true;
-	    rc.maxHeight=200;
-	    rc.minHeight=50;
-	    rc.maxWidth=200;
-	    rc.minWidth=50;
-	    lp = new LayoutParams(180, 180 , 100, 300);
-	    elementConfig = new ViewElementConfig(AnalogStickWidget.class.getName(), lp, rc);
+	    LayoutParams  lp = new LayoutParams(180, 180 , 100, 300);
+	    ViewElementConfig elementConfig = new ViewElementConfig(AnalogStickWidget.class.getName(), lp, rc);
 	    dpToPixel(density, elementConfig);
 	    repo.put(AnalogStickWidget.class, elementConfig);
 		//<<<<<<<<<<<<<<<<<<<<<<<<<<< Analog Stick <<<<<<<<<<<<<<<<<<<<<<<<<<

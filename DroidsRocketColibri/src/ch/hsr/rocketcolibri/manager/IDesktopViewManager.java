@@ -9,7 +9,6 @@ import ch.hsr.rocketcolibri.view.AbsoluteLayout;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
-import android.app.Service;
 import android.content.Intent;
 import android.view.View;
 

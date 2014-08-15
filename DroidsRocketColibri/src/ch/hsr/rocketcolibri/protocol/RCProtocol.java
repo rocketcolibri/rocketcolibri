@@ -19,8 +19,6 @@ import ch.hsr.rocketcolibri.ui_data.output.UiOutputData;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
 import ch.hsr.rocketcolibri.ui_data.output.UserData;
 import ch.hsr.rocketcolibri.ui_data.output.VideoUrl;
-import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
-
 
 
 public class RCProtocol implements IUiOutputSinkChangeObservable{

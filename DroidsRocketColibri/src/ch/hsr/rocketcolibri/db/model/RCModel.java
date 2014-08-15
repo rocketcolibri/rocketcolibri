@@ -5,7 +5,6 @@ package ch.hsr.rocketcolibri.db.model;
 
 import java.util.List;
 
-import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 /**
  * @author Artan Veliju

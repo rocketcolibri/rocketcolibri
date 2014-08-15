@@ -13,7 +13,6 @@ import android.widget.ToggleButton;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RocketColibriService;
 import ch.hsr.rocketcolibri.manager.DesktopViewManager;
-import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.view.widget.SwipeInMenu;
 import ch.hsr.rocketcolibri.view.widget.SwipeInMenu.OnDrawerOpenListener;
