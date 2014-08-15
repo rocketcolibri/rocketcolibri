@@ -1,11 +1,12 @@
 /**
- * Rocket Colibri Â© 2014
+ * Rocket Colibri © 2014
  */
 package ch.hsr.rocketcolibri.db.model;
 
 import java.util.ArrayList;
 import java.util.List;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
+
 /**
  * @author Artan Veliju
  */

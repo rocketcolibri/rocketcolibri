@@ -3,10 +3,8 @@
  */
 package ch.hsr.rocketcolibri.view.widget;
 
-import java.util.List;
 import java.util.Map;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,17 +14,10 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Shader;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
-import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObserver;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
@@ -49,7 +40,7 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 	private Paint connectionIconPaint;
 	private Bitmap connectionIconBitmap;
 	private boolean tCustomizeModusActive = false;
-	private Context tContext;
+
 	// to avoid null check
 	private ModusChangeListener tModusChangeListener = new ModusChangeListener()
 	{public void customizeModeDeactivated(){}public void customizeModeActivated(){}};
@@ -60,7 +51,6 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 	
 	public ConnectionStatusWidget(Context context, RCWidgetConfig widgetConfig) {
 		super(context);
-		tContext = context;
 		tViewElementConfig = widgetConfig.viewElementConfig;
 		tWidgetConfig = widgetConfig;
 		setLayoutParams(tViewElementConfig.getLayoutParams());
@@ -201,17 +191,5 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 		tWidgetConfig.viewElementConfig.setAlpha(getAlpha());
 		return tWidgetConfig.viewElementConfig;
 	}
-	
-	private void setupConnectionStateReceiver(){
-		AsyncTask<Void, Void, Void> connectionStatusUpdater = new AsyncTask<Void, Void, Void>(){
-			protected Void doInBackground(Void... params) {
-				ConnectivityManager myConnManager = (ConnectivityManager) tContext.getSystemService(Activity.CONNECTIVITY_SERVICE);
-				NetworkInfo myNetworkInfo = myConnManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-				WifiManager myWifiManager = (WifiManager)tContext.getSystemService(Context.WIFI_SERVICE);
-				WifiInfo myWifiInfo = myWifiManager.getConnectionInfo();  
-				Log.d("",String.valueOf(myWifiInfo.getLinkSpeed()) + " " + WifiInfo.LINK_SPEED_UNITS);
-				return null;
-			}
-		};
-	}
+
 }

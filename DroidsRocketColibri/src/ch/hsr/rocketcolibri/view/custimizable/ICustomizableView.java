@@ -1,17 +1,18 @@
 package ch.hsr.rocketcolibri.view.custimizable;
 
-import java.util.List;
 import java.util.Map;
-
 import android.view.View.OnTouchListener;
-import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.view.widget.RCWidgetConfig;
 
 public interface ICustomizableView {
-    /**This Method will be called on loading the whole Model at startup*/
+    /**
+     * This Method will be called on loading the whole Model at startup
+     */
     void create(RCWidgetConfig rcWidgetConfig);
     
-    /**This Method will be called on runtime in customize Mode by creating a new Widget*/
+    /**
+     * This Method will be called on runtime in customize Mode by creating a new Widget
+     */
     void create(ViewElementConfig vElementConfig);
     
     /**

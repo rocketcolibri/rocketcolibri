@@ -5,7 +5,7 @@ package ch.hsr.rocketcolibri.view.widget;
 
 import java.util.List;
 import java.util.Map;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,7 +16,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
-import android.graphics.Shader;
 import android.graphics.Shader.TileMode;
 import android.util.AttributeSet;
 import android.view.View;
@@ -34,6 +33,7 @@ import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 /**
  * @short widget to display the user data received from the ServoController 
  */
+@SuppressLint("DrawAllocation")
 public class ConnectedUserInfoWidget extends View implements ICustomizableView, IUiOutputSinkChangeObserver {
 	
 	protected RCWidgetConfig tWidgetConfig;
