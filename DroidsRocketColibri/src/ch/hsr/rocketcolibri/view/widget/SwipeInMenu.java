@@ -104,8 +104,10 @@ public class SwipeInMenu extends ViewGroup {
 	private View tContent;
 	private float tHeadDefaultAlpha;
 
-	private final Rect tFrame = new Rect();
-	private final Rect tRegion = new Rect();
+	private final Rect tHeadDragArea = new Rect();
+	private final Rect tHeadRegion = new Rect();
+	private final Rect tContentDragArea = new Rect();
+	private final Rect tContentRegion = new Rect();
 	private boolean mTracking;
 	private boolean mLocked;
 
@@ -235,6 +237,11 @@ public class SwipeInMenu extends ViewGroup {
 //        a.recycle();
 
 		setAlwaysDrawnWithCacheEnabled(false);
+		setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				animateClose();
+			}
+		});
 	}
 	
 	private void setVelocityAndThreshold(){
@@ -474,17 +481,17 @@ public class SwipeInMenu extends ViewGroup {
 			return false;
 		}
 
-		final int action = event.getAction();
-
-		float x = event.getX();
-		float y = event.getY();
-
-		tHead.getHitRect(tFrame);
-		if (!mTracking && !tFrame.contains((int) x, (int) y)) {
-			return false;
+		tHead.getHitRect(tHeadDragArea);
+		if (!mTracking && (!tHeadDragArea.contains((int) event.getX(), (int) event.getY()) )) {
+			tContent.getHitRect(tHeadDragArea);
+			tContent.getDrawingRect(tContentDragArea);
+			if (!mTracking && (tContentDragArea.contains((int) event.getX(), (int) event.getY())
+					|| !tHeadDragArea.contains((int) event.getX(), (int) event.getY()))) {
+				return false;
+			}
 		}
 
-		if (action == MotionEvent.ACTION_DOWN) {
+		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			mTracking = true;
 
 			tHead.setPressed(true);
@@ -497,7 +504,7 @@ public class SwipeInMenu extends ViewGroup {
 			}
 
 			final int pt = getSide();
-			mTouchDelta = (int)(y - pt);
+			mTouchDelta = (int)(event.getY() - pt);
 			prepareTracking(pt);
 			mVelocityTracker.addMovement(event);
 		}
@@ -719,24 +726,24 @@ public class SwipeInMenu extends ViewGroup {
 	private void regionUnionXAndInvalidate(int deltaX){
 		tHead.offsetLeftAndRight(deltaX);
 
-		tHead.getHitRect(tFrame);
-		tRegion.set(tFrame);
+		tHead.getHitRect(tHeadDragArea);
+		tHeadRegion.set(tHeadDragArea);
 
-		tRegion.union(tFrame.left - deltaX, tFrame.top, tFrame.right - deltaX, tFrame.bottom);
-		tRegion.union(tFrame.right - deltaX, 0, tFrame.right - deltaX + tContent.getWidth(), getHeight());
+		tHeadRegion.union(tHeadDragArea.left - deltaX, tHeadDragArea.top, tHeadDragArea.right - deltaX, tHeadDragArea.bottom);
+		tHeadRegion.union(tHeadDragArea.right - deltaX, 0, tHeadDragArea.right - deltaX + tContent.getWidth(), getHeight());
 
-		invalidate(tRegion);
+		invalidate(tHeadRegion);
 	}
 	
 	private void regionUnionYAndInvalidate(int deltaY){
 		tHead.offsetTopAndBottom(deltaY);
-		tHead.getHitRect(tFrame);
-		tRegion.set(tFrame);
+		tHead.getHitRect(tHeadDragArea);
+		tHeadRegion.set(tHeadDragArea);
 
-		tRegion.union(tFrame.left, tFrame.top - deltaY, tFrame.right, tFrame.bottom - deltaY);
-		tRegion.union(0, tFrame.bottom - deltaY, getWidth(), tFrame.bottom - deltaY + tContent.getHeight());
+		tHeadRegion.union(tHeadDragArea.left, tHeadDragArea.top - deltaY, tHeadDragArea.right, tHeadDragArea.bottom - deltaY);
+		tHeadRegion.union(0, tHeadDragArea.bottom - deltaY, getWidth(), tHeadDragArea.bottom - deltaY + tContent.getHeight());
 
-		invalidate(tRegion);
+		invalidate(tHeadRegion);
 	}
 	
 	private void changeHeadOnOpen() {
@@ -1090,7 +1097,7 @@ public class SwipeInMenu extends ViewGroup {
 	 * @return The View reprenseting the handle of the drawer, identified by
 	 *         the "handle" id in XML.
 	 */
-	public View getHandle() {
+	public View getHead() {
 		return tHead;
 	}
 
