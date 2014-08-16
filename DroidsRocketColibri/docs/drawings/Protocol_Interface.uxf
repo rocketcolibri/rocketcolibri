@@ -4,49 +4,47 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>520</x>
-      <y>110</y>
+      <x>650</x>
+      <y>270</y>
       <w>490</w>
       <h>240</h>
     </coordinates>
-    <panel_attributes>/Protocol/
+    <panel_attributes>RCProtocol
 --
+This are the function for the user/connection events
 +eventConnectionEstablished()
 +eventConnectionDown
 +eventUserStartControl()
 +eventUserStopControl()
 
 --
-diese sind jetzt im RocketColibriService
-+registerUiOutputSinkChangeObserver(RCWidget observer);
-+unregisterUiOutputSinkChangeObserver(RCWidget observer);
- 
 This is the function to register an assign a channel to the protocol
-+registerUiInputSource(ch: Channel, channelNumber: integer)</panel_attributes>
++registerUiInputSource(uiInputSource : IUiInputSource):boolean
++unregisterUiInputSource(uiInputSource : IUiInputSource):boolean</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>60</x>
-      <y>290</y>
-      <w>210</w>
+      <x>80</x>
+      <y>630</y>
+      <w>310</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>Channel
 --
-+ getChannelValue():int</panel_attributes>
+</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>60</x>
-      <y>220</y>
-      <w>210</w>
+      <x>100</x>
+      <y>380</y>
+      <w>300</w>
       <h>50</h>
     </coordinates>
-    <panel_attributes>RCWidget
+    <panel_attributes>EinWidget
 --
 getUiOutputSinkType</panel_attributes>
     <additional_attributes/>
@@ -54,8 +52,8 @@ getUiOutputSinkType</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>240</x>
-      <y>190</y>
+      <x>370</x>
+      <y>350</y>
       <w>300</w>
       <h>70</h>
     </coordinates>
@@ -67,38 +65,176 @@ notifies UiOutputSink</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>240</x>
-      <y>250</y>
-      <w>300</w>
-      <h>70</h>
+      <x>360</x>
+      <y>430</y>
+      <w>310</w>
+      <h>230</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
-m1=8
-get UiInputSource</panel_attributes>
-    <additional_attributes>30;50;280;50</additional_attributes>
+m1=*
+</panel_attributes>
+    <additional_attributes>30;210;290;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>520</x>
-      <y>440</y>
+      <x>650</x>
+      <y>600</y>
       <w>490</w>
-      <h>170</h>
+      <h>110</h>
     </coordinates>
-    <panel_attributes>RocketColibriProtocol
+    <panel_attributes>RCProtocolUdp
 --
+Implenetation of the UDP based RocketColibri Protocol
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>740</x>
-      <y>320</y>
+      <x>870</x>
+      <y>480</y>
       <w>50</w>
       <h>140</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>30;30;30;120</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>100</x>
+      <y>170</y>
+      <w>330</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>IUiOutputSinkChangeObserver
+--
++ onNotifyUiOutputSink(Object data)
++ getType():UiOutputDataType</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>660</x>
+      <y>140</y>
+      <w>480</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>IUiOutputSinkChangeObservable
+--
++ registerUiOutputSinkChangeObserver(IUiOutputSinkChangeObserver observer)
++ unregisterUiOutputSinkChangeObserver(IUiOutputSinkChangeObserver observer)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>790</x>
+      <y>150</y>
+      <w>186</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>100;30;100;120</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>140</x>
+      <y>250</y>
+      <w>186</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>100;30;100;130</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>90</x>
+      <y>490</y>
+      <w>310</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>IUiInputSource
+--
++getUiInputSourceList()
+  :List&lt;UiInputSourceChannel&gt;</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>140</x>
+      <y>540</y>
+      <w>186</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>100;30;100;90</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>210</x>
+      <y>400</y>
+      <w>58</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=      *
+</panel_attributes>
+    <additional_attributes>30;90;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1110</x>
+      <y>620</y>
+      <w>190</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;170;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1280</x>
+      <y>600</y>
+      <w>310</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>RocketColibriProtocolFsm
+--
+- StateMachinePlan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1410</x>
+      <y>520</y>
+      <w>50</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;30;80</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1280</x>
+      <y>520</y>
+      <w>310</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>StateMachine</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>

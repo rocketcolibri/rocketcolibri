@@ -37,8 +37,7 @@ import ch.hsr.rocketcolibri.widgetdirectory.WidgetEntry;
  */
 public class RocketColibriService extends Service  {
 	final String TAG = this.getClass().getName();
-	public static final int NOF_CHANNEL = 8;
-
+	
 	public static volatile boolean tRunning;
 	private final IBinder tBinder = new RocketColibriServiceBinder();
 
