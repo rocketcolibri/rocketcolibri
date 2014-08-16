@@ -106,8 +106,8 @@ public class SwipeInMenu extends ViewGroup {
 
 	private final Rect tHeadDragArea = new Rect();
 	private final Rect tHeadRegion = new Rect();
-	private final Rect tContentDragArea = new Rect();
-	private final Rect tContentRegion = new Rect();
+//	private final Rect tContentDragArea = new Rect();
+//	private final Rect tContentRegion = new Rect();
 	private boolean mTracking;
 	private boolean mLocked;
 
@@ -130,6 +130,13 @@ public class SwipeInMenu extends ViewGroup {
 	private OnDrawerOpenListener mOnDrawerOpenListener;
 	private OnDrawerCloseListener mOnDrawerCloseListener;
 	private OnDrawerScrollListener mOnDrawerScrollListener;
+	
+//	private View.OnClickListener closeOneClickListener = new OnClickListener() {
+//		public void onClick(View v) {
+//			if(tIsOpen)
+//				animateClose();
+//		}
+//	};
 
 	private final Handler mHandler = new SlidingHandler();
 	private float mAnimatedAcceleration;
@@ -237,11 +244,7 @@ public class SwipeInMenu extends ViewGroup {
 //        a.recycle();
 
 		setAlwaysDrawnWithCacheEnabled(false);
-		setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				animateClose();
-			}
-		});
+//		setOnClickListener(closeOneClickListener);
 	}
 	
 	private void setVelocityAndThreshold(){
@@ -483,12 +486,12 @@ public class SwipeInMenu extends ViewGroup {
 
 		tHead.getHitRect(tHeadDragArea);
 		if (!mTracking && (!tHeadDragArea.contains((int) event.getX(), (int) event.getY()) )) {
-			tContent.getHitRect(tHeadDragArea);
-			tContent.getDrawingRect(tContentDragArea);
-			if (!mTracking && (tContentDragArea.contains((int) event.getX(), (int) event.getY())
-					|| !tHeadDragArea.contains((int) event.getX(), (int) event.getY()))) {
+//			tContent.getHitRect(tHeadDragArea);
+//			tContent.getDrawingRect(tContentDragArea);
+//			if (!mTracking && (tContentDragArea.contains((int) event.getX(), (int) event.getY())
+//					|| !tHeadDragArea.contains((int) event.getX(), (int) event.getY()))) {
 				return false;
-			}
+//			}
 		}
 
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
