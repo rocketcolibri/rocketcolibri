@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="12.2">
-  <zoom_level>10</zoom_level>
+  <zoom_level>3</zoom_level>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>110</x>
-      <y>80</y>
-      <w>270</w>
-      <h>70</h>
+      <x>372</x>
+      <y>6</y>
+      <w>81</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>Activity
 --
@@ -17,21 +17,21 @@ Android Activity</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>210</x>
-      <y>120</y>
-      <w>50</w>
-      <h>110</h>
+      <x>402</x>
+      <y>18</y>
+      <w>14</w>
+      <h>32</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>30;30;30;90</additional_attributes>
+    <additional_attributes>9;9;9;27</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>110</x>
-      <y>210</y>
-      <w>270</w>
-      <h>70</h>
+      <x>372</x>
+      <y>45</y>
+      <w>81</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>DesktopActivity
 --
@@ -41,21 +41,21 @@ RocketColibri main Activity</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>350</x>
-      <y>210</y>
-      <w>150</w>
-      <h>50</h>
+      <x>444</x>
+      <y>45</y>
+      <w>44</w>
+      <h>14</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-</panel_attributes>
-    <additional_attributes>30;30;130;30</additional_attributes>
+    <additional_attributes>9;9;39;9</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>480</x>
-      <y>210</y>
-      <w>270</w>
-      <h>70</h>
+      <x>483</x>
+      <y>45</y>
+      <w>81</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>DesktopViewManager
 --
@@ -65,10 +65,10 @@ RocketColibri main Activity</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>110</x>
-      <y>1020</y>
-      <w>270</w>
-      <h>110</h>
+      <x>357</x>
+      <y>96</y>
+      <w>81</w>
+      <h>33</h>
     </coordinates>
     <panel_attributes>View
 --
@@ -79,10 +79,10 @@ Eine Android View (beliebigen Typs)</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>100</x>
-      <y>1190</y>
-      <w>1160</w>
-      <h>80</h>
+      <x>354</x>
+      <y>147</y>
+      <w>348</w>
+      <h>24</h>
     </coordinates>
     <panel_attributes>RocketColibriWidget
 --
@@ -93,10 +93,10 @@ Implementiert das UI Element.</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>400</x>
-      <y>1020</y>
-      <w>270</w>
-      <h>110</h>
+      <x>444</x>
+      <y>96</y>
+      <w>81</w>
+      <h>33</h>
     </coordinates>
     <panel_attributes>ICustomizableView
 --
@@ -108,10 +108,10 @@ Framework</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>700</x>
-      <y>1020</y>
-      <w>270</w>
-      <h>130</h>
+      <x>534</x>
+      <y>96</y>
+      <w>81</w>
+      <h>39</h>
     </coordinates>
     <panel_attributes>IUiInputSource
 --
@@ -127,10 +127,10 @@ ist.</panel_attributes>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>990</x>
-      <y>1020</y>
-      <w>270</w>
-      <h>130</h>
+      <x>621</x>
+      <y>96</y>
+      <w>81</w>
+      <h>39</h>
     </coordinates>
     <panel_attributes>IUiOutputSinkChangeObserver
 --
@@ -145,48 +145,828 @@ ist.</panel_attributes>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>200</x>
-      <y>1100</y>
-      <w>50</w>
-      <h>110</h>
+      <x>384</x>
+      <y>120</y>
+      <w>14</w>
+      <h>32</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>30;30;30;90</additional_attributes>
+    <additional_attributes>9;9;9;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>453</x>
+      <y>120</y>
+      <w>51</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>27;9;27;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>543</x>
+      <y>126</y>
+      <w>51</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>27;9;27;21</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>630</x>
+      <y>126</y>
+      <w>51</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>27;9;27;21</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>459</x>
+      <y>228</y>
+      <w>186</w>
+      <h>99</h>
+    </coordinates>
+    <panel_attributes>AnalogStickWidget
+--
+H-Channel Attributes
++CHANNEL_ASSIGNMENT_H
++INVERTED_H
++MAX_RANGE_H
++MIN_RANGE_H
++DEFAULT_POSITION_H
++TRIMM_H
++STICKY_H
+V-Channel Attributes			
++CHANNEL_ASSIGNMENT_V
++INVERTED_V
++MAX_RANGE_V
++MIN_RANGE_V
++DEFAULT_POSITION_V
++TRIMM_V
++STICKY_V
+ 
++DEBUG
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>366</x>
+      <y>198</y>
+      <w>81</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>View
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>453</x>
+      <y>198</y>
+      <w>81</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>ICustomizableView
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>627</x>
+      <y>198</y>
+      <w>81</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>IUiInputSource
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>606</x>
+      <y>207</y>
+      <w>53</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>39;9;18;21</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>558</x>
+      <y>207</y>
+      <w>51</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>27;9;27;21</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>465</x>
+      <y>207</y>
+      <w>51</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>27;9;27;21</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>405</x>
+      <y>204</y>
+      <w>59</w>
+      <h>29</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;</panel_attributes>
+    <additional_attributes>9;9;54;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>702</x>
+      <y>228</y>
+      <w>57</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>UiInputSourceChannel
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>636</x>
+      <y>225</y>
+      <w>71</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=1
+V channel</panel_attributes>
+    <additional_attributes>9;15;66;15</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>543</x>
+      <y>198</y>
+      <w>81</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>IUiOutputSinkChangeObserver
+--
+type: ConnectionState
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>636</x>
+      <y>216</y>
+      <w>71</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=1
+H channel</panel_attributes>
+    <additional_attributes>9;15;66;15</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>411</x>
+      <y>375</y>
+      <w>186</w>
+      <h>51</h>
+    </coordinates>
+    <panel_attributes>RotaryKnowWidget
+--
+Channel Attributes			
++CHANNEL_ASSIGNMENT
++INVERTED
++MAX_RANGE
++MIN_RANGE
++DEFAULT_POSITION
+ 
++DEBUG
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>318</x>
+      <y>345</y>
+      <w>81</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>View
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>405</x>
+      <y>345</y>
+      <w>81</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>ICustomizableView
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>579</x>
+      <y>345</y>
+      <w>81</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>IUiInputSource
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>558</x>
+      <y>354</y>
+      <w>53</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>39;9;18;21</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>417</x>
+      <y>354</y>
+      <w>51</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>27;9;27;21</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>357</x>
+      <y>351</y>
+      <w>59</w>
+      <h>29</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;</panel_attributes>
+    <additional_attributes>9;9;54;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>654</x>
+      <y>375</y>
+      <w>57</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>UiInputSourceChannel
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>588</x>
+      <y>372</y>
+      <w>71</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=1
+channel</panel_attributes>
+    <additional_attributes>9;15;66;15</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>402</x>
+      <y>486</y>
+      <w>186</w>
+      <h>57</h>
+    </coordinates>
+    <panel_attributes>SwitchWidget
+--
+Channel Attributes			
++CHANNEL_ASSIGNMENT
++INVERTED
++MAX_RANGE
++MIN_RANGE
++DEFAULT_POSITION
+ 
++DEBUG
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>309</x>
+      <y>456</y>
+      <w>81</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>View
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>396</x>
+      <y>456</y>
+      <w>81</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>ICustomizableView
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>570</x>
+      <y>456</y>
+      <w>81</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>IUiInputSource
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>549</x>
+      <y>465</y>
+      <w>53</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>39;9;18;21</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>408</x>
+      <y>465</y>
+      <w>51</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>27;9;27;21</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>348</x>
+      <y>462</y>
+      <w>59</w>
+      <h>29</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;</panel_attributes>
+    <additional_attributes>9;9;54;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>645</x>
+      <y>486</y>
+      <w>57</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>UiInputSourceChannel
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>579</x>
+      <y>483</y>
+      <w>71</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=1
+channel</panel_attributes>
+    <additional_attributes>9;15;66;15</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>381</x>
+      <y>603</y>
+      <w>186</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>ConnectedUserInfoWidget
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>288</x>
+      <y>573</y>
+      <w>81</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>View
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>375</x>
+      <y>573</y>
+      <w>81</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>ICustomizableView
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>480</x>
+      <y>582</y>
+      <w>51</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>27;9;27;21</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>387</x>
+      <y>582</y>
+      <w>51</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>27;9;27;21</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>327</x>
+      <y>579</y>
+      <w>59</w>
+      <h>29</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;
+</panel_attributes>
+    <additional_attributes>9;9;54;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>465</x>
+      <y>573</y>
+      <w>81</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>IUiOutputSinkChangeObserver
+--
+type: ConnectionUsers
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>378</x>
+      <y>801</y>
+      <w>186</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>VideoStreamWidget
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>285</x>
+      <y>771</y>
+      <w>81</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>SurfaceView
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>510</x>
+      <y>765</y>
+      <w>81</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>ICustomizableView
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>549</x>
+      <y>774</y>
+      <w>98</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>93;9;9;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>522</x>
+      <y>774</y>
+      <w>51</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>27;9;27;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>324</x>
+      <y>774</y>
+      <w>59</w>
+      <h>32</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;
+</panel_attributes>
+    <additional_attributes>9;9;54;27</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>600</x>
+      <y>765</y>
+      <w>81</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>IUiOutputSinkChangeObserver
+--
+type: Video
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>306</x>
+      <y>750</y>
+      <w>81</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>SurfaceHolder.Callback
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>396</x>
+      <y>750</y>
+      <w>54</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>OnPreparedListener
+bg=pink</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>417</x>
+      <y>768</y>
+      <w>54</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>OnErrorListener
+bg=pink</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>453</x>
+      <y>750</y>
+      <w>66</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>OnBufferingUpdateListener
+bg=pink</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>465</x>
+      <y>753</y>
+      <w>51</w>
+      <h>53</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>27;9;27;48</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
       <x>420</x>
-      <y>1100</y>
-      <w>186</w>
-      <h>110</h>
+      <y>771</y>
+      <w>51</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.
 &lt;&lt;implements&gt;&gt;</panel_attributes>
-    <additional_attributes>100;30;100;90</additional_attributes>
+    <additional_attributes>27;9;27;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>720</x>
-      <y>1120</y>
-      <w>186</w>
-      <h>90</h>
+      <x>381</x>
+      <y>753</y>
+      <w>51</w>
+      <h>53</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.
 &lt;&lt;implements&gt;&gt;</panel_attributes>
-    <additional_attributes>100;30;100;70</additional_attributes>
+    <additional_attributes>27;9;27;48</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>1010</x>
-      <y>1120</y>
-      <w>186</w>
-      <h>90</h>
+      <x>357</x>
+      <y>753</y>
+      <w>53</w>
+      <h>53</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.
 &lt;&lt;implements&gt;&gt;</panel_attributes>
-    <additional_attributes>100;30;100;70</additional_attributes>
+    <additional_attributes>21;9;36;48</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>435</x>
+      <y>726</y>
+      <w>42</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>MediaPlayer
+Callbacks
+bg=pink</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>342</x>
+      <y>726</y>
+      <w>42</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>SurfaceView
+Callbacks
+bg=yellow</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>378</x>
+      <y>672</y>
+      <w>186</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>ConnectionStatusWidget
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>285</x>
+      <y>642</y>
+      <w>81</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>View
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>372</x>
+      <y>642</y>
+      <w>81</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>ICustomizableView
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>477</x>
+      <y>651</y>
+      <w>51</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>27;9;27;21</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>384</x>
+      <y>651</y>
+      <w>51</w>
+      <h>26</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+&lt;&lt;implements&gt;&gt;</panel_attributes>
+    <additional_attributes>27;9;27;21</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>324</x>
+      <y>648</y>
+      <w>59</w>
+      <h>29</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;
+</panel_attributes>
+    <additional_attributes>9;9;54;24</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>462</x>
+      <y>642</y>
+      <w>81</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>IUiOutputSinkChangeObserver
+--
+type: ConnectionState
+</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>
