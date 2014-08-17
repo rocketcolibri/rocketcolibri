@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
@@ -101,12 +102,12 @@ public class SwipeInMenu extends ViewGroup {
 	private final int tContentId;
 
 	private View tHead;
-	private View tContent;
+	private ViewGroup tContent;
 	private float tHeadDefaultAlpha;
 
 	private final Rect tHeadDragArea = new Rect();
 	private final Rect tHeadRegion = new Rect();
-//	private final Rect tContentDragArea = new Rect();
+	private final Rect tContentDragArea = new Rect();
 //	private final Rect tContentRegion = new Rect();
 	private boolean mTracking;
 	private boolean mLocked;
@@ -130,13 +131,6 @@ public class SwipeInMenu extends ViewGroup {
 	private OnDrawerOpenListener mOnDrawerOpenListener;
 	private OnDrawerCloseListener mOnDrawerCloseListener;
 	private OnDrawerScrollListener mOnDrawerScrollListener;
-	
-//	private View.OnClickListener closeOneClickListener = new OnClickListener() {
-//		public void onClick(View v) {
-//			if(tIsOpen)
-//				animateClose();
-//		}
-//	};
 
 	private final Handler mHandler = new SlidingHandler();
 	private float mAnimatedAcceleration;
@@ -178,7 +172,7 @@ public class SwipeInMenu extends ViewGroup {
 		// content
 		if (content == null)
 			throw new IllegalArgumentException("Content cannot be null.");
-		addView( tContent = content );
+		addView( tContent = (ViewGroup) content );
 		tContent.setVisibility(View.GONE);
 
 		tHeadId = tContentId = 0;
@@ -244,7 +238,8 @@ public class SwipeInMenu extends ViewGroup {
 //        a.recycle();
 
 		setAlwaysDrawnWithCacheEnabled(false);
-//		setOnClickListener(closeOneClickListener);
+		setOnClickListener(new DrawerToggler());
+		setClickable(false);
 	}
 	
 	private void setVelocityAndThreshold(){
@@ -337,12 +332,13 @@ public class SwipeInMenu extends ViewGroup {
 		}
 
 		if (tContentId > 0) {
-			tContent = findViewById(tContentId);
+			tContent = (ViewGroup) findViewById(tContentId);
 			if (tContent == null) {
 				throw new IllegalArgumentException("The content attribute is must refer to an existing child.");
 			}
 			tContent.setVisibility(View.GONE);
 		}
+		tContent.setClickable(true);
 	}
 
 	@Override
@@ -477,21 +473,23 @@ public class SwipeInMenu extends ViewGroup {
 
 		tHead.layout(childLeft, childTop, childLeft + childWidth, childTop + childHeight);
 	}
-
+	
 	@Override
 	public boolean onInterceptTouchEvent(MotionEvent event) {
 		if (mLocked) {
 			return false;
 		}
-
 		tHead.getHitRect(tHeadDragArea);
-		if (!mTracking && (!tHeadDragArea.contains((int) event.getX(), (int) event.getY()) )) {
-//			tContent.getHitRect(tHeadDragArea);
-//			tContent.getDrawingRect(tContentDragArea);
-//			if (!mTracking && (tContentDragArea.contains((int) event.getX(), (int) event.getY())
-//					|| !tHeadDragArea.contains((int) event.getX(), (int) event.getY()))) {
+		if (!mTracking && (!tHeadDragArea.contains((int) event.getX(),(int) event.getY()))){
+			if(tIsOpen){
+				tContent.getHitRect(tHeadDragArea);
+				tContent.getDrawingRect(tContentDragArea);
+				if (!mTracking && (tContentDragArea.contains((int) event.getX(), (int) event.getY()) || !tHeadDragArea.contains((int) event.getX(), (int) event.getY()))) {
+						return false;
+				}
+			}else{
 				return false;
-//			}
+			}
 		}
 
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -514,7 +512,7 @@ public class SwipeInMenu extends ViewGroup {
 
 		return true;
 	}
-
+	
 	private int getSide () {
 		return tVertical ? tHead.getTop() : tHead.getLeft();
 	}
@@ -766,7 +764,6 @@ public class SwipeInMenu extends ViewGroup {
 	private Animation in;
 	private Animation out;
 	private void createHeadAnimations(){
-		Log.d("createAnimations", "createAnimations");
 		in = new ScaleAnimation(-1f, -1f, 0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 1.0f);
 		in.setFillAfter(true);
 		in.setDuration(100);
@@ -1037,13 +1034,16 @@ public class SwipeInMenu extends ViewGroup {
 		tOSpecific.moveHead( COLLAPSED_FULL_CLOSED );
 		tContent.setVisibility( View.GONE );
 		tContent.destroyDrawingCache();
+		
+		
 
 		if (!tIsOpen) {
 			return;
 		}
-
+		
+		setClickable(false);
 		tIsOpen = false;
- 
+		
 		if (mOnDrawerCloseListener != null) {
 			mOnDrawerCloseListener.onDrawerClosed();
 		}
@@ -1056,6 +1056,8 @@ public class SwipeInMenu extends ViewGroup {
 		if (tIsOpen) {
 			return;
 		}
+		
+		setClickable(true);
 
 		tIsOpen = true;
 

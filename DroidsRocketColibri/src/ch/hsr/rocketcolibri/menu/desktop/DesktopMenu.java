@@ -4,6 +4,7 @@
 package ch.hsr.rocketcolibri.menu.desktop;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.app.Activity;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -27,6 +28,7 @@ import ch.hsr.rocketcolibri.view.widget.SwipeInMenu.OnDrawerOpenListener;
  */
 public class DesktopMenu {
 	private SwipeInMenu tSwipeInMenu;
+	private View tDragLine;
 	private Context tContext;
 	private DesktopViewManager tDesktopViewManager;
 	private RocketColibriService tService;
@@ -114,6 +116,15 @@ public class DesktopMenu {
 	
 	private void onCreate(){
 		initServiceDependentItems();
+		tDragLine = tSwipeInMenu.findViewById(R.id.drag_line);
+		tSwipeInMenu.setOnDrawerScrollListener(new SwipeInMenu.OnDrawerScrollListener() {
+			public void onScrollStarted() {
+				tDragLine.setBackgroundColor(Color.parseColor("#ffffff"));
+			}
+			public void onScrollEnded() {
+				tDragLine.setBackgroundColor(Color.parseColor("#8F8F8F"));
+			}
+		});
 		tModeSwitcher = (Switch)findViewById(R.id.menu_action_main_settings);
 		tModeSwitcher.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
