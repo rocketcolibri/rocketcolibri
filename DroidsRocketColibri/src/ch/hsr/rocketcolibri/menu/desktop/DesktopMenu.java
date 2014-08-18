@@ -88,14 +88,13 @@ public class DesktopMenu {
 		if(initOnce){
 			initOnce = false;
 			initContents();
-			
-			//There is no way to set something like match_parent on the default Android Switch
-			//and no way to get the size of the screen in xml for setting switchMinWidth
-			//Therefore we set the switchMinWidth programmatically to stretch the Switch on a
-			// time after layouting. This is a good place to do it!
-			tModeSwitcher.setSwitchMinWidth(((View)tModeSwitcher.getParent()).getWidth());
 		}
 		setServiceDependentButtonsEnabled(true);
+		//There is no way to set something like match_parent on the default Android Switch
+		//and no way to get the size of the screen in xml for setting switchMinWidth
+		//Therefore we set the switchMinWidth programmatically to stretch the Switch on a
+		// time after layouting. This is a good place to do it!
+		tModeSwitcher.setSwitchMinWidth(((View)tModeSwitcher.getParent()).getWidth());
 	}
 	
 	public void setTextOnBottom(String text){
