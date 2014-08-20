@@ -18,6 +18,7 @@
 	<permission-group android:name="android.permission-group.STORAGE" />
 
 	<application android:allowBackup="true" android:largeHeap="true"
+	    android:theme="@style/AppBaseTheme"
 		android:icon="@drawable/ic_launcher" android:label="@string/app_name">
 		<activity android:name=".activity.DesktopActivity"
 			android:label="@string/app_name" android:launchMode="singleTask"
