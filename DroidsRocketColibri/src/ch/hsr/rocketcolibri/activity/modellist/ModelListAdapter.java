@@ -50,6 +50,7 @@ public class ModelListAdapter extends BaseAdapter {
             holder.icon = (ImageView) convertView.findViewById(R.id.model_row_icon);
             holder.title = (EditText) convertView.findViewById(R.id.model_row_title);
             holder.description = (TextView) convertView.findViewById(R.id.model_row_description);
+            holder.camBtn = (ImageView) convertView.findViewById(R.id.model_row_camBtn);
             holder.editBtn = (ImageView) convertView.findViewById(R.id.model_row_editBtn);
             holder.deleteBtn = (ImageView) convertView.findViewById(R.id.model_row_deleteBtn);
             holder.acceptEditBtn = (ImageView) convertView.findViewById(R.id.model_row_acceptEditBtn);
@@ -65,7 +66,7 @@ public class ModelListAdapter extends BaseAdapter {
         holder.title.setText(item.getName());
         holder.description.setText(item.getDescription());
         
-        holder.icon.setOnClickListener(new View.OnClickListener() {
+        holder.camBtn.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				actionListener.icon(position);
 			} 
@@ -123,6 +124,7 @@ public class ModelListAdapter extends BaseAdapter {
         ImageView icon;
         EditText title;
         TextView description;
+        ImageView camBtn;
         ImageView editBtn;
         ImageView deleteBtn;
         ImageView acceptEditBtn;

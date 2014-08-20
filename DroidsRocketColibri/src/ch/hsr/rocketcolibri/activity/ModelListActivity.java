@@ -230,9 +230,9 @@ public class ModelListActivity extends RCActivity {
     private ModelRowActionListener createRowActionListener(){
     	return new ModelRowActionListener() {
 			public void icon(int position){
+				tSwipeListView.closeAnimate(position);
 				tSelectedRow = tAdapter.getItem(position);
-				Intent cameraIntent = new Intent(
-						android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+				Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 				startActivityForResult(cameraIntent, RCConstants.CAPTURE_RESULT_CODE);
 			}
 
