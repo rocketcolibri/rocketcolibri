@@ -140,6 +140,8 @@ public class DesktopMenu {
 	    			// If WiFi is enabled, we are in observer mode by default
 	    			// setting observer button active and disabling click because
 	    			// in this case only operate button can be clicked
+		        	tObserveMode.setVisibility(View.VISIBLE);
+		        	tOperateMode.setVisibility(View.VISIBLE);
 		        	tObserveMode.setChecked(true);
 		        	tObserveMode.setClickable(false);
 
@@ -149,6 +151,8 @@ public class DesktopMenu {
 
 		        	// If WiFi is disabled, none of the modes
 		        	// can be active, disabling both buttons
+		        	tObserveMode.setVisibility(View.GONE);
+		        	tOperateMode.setVisibility(View.GONE);
 		        	tObserveMode.setChecked(false);
 		        	tOperateMode.setChecked(false);
 		        	tObserveMode.setClickable(false);
@@ -171,6 +175,7 @@ public class DesktopMenu {
 		        }
 		    }
 		});
+    	tObserveMode.setVisibility(View.GONE);
 		tObserveMode.setClickable(false);
 		tObserveMode.setChecked(false);
 
@@ -198,6 +203,7 @@ public class DesktopMenu {
 		        }
 		    }
 		});
+    	tOperateMode.setVisibility(View.GONE);
 		tOperateMode.setClickable(false);
 		tOperateMode.setChecked(false);
 		
