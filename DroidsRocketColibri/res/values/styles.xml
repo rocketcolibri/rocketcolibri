@@ -1,7 +1,7 @@
 <resources>
 
 <!--     <style name="AppBaseTheme" parent="android:Theme.Light"></style> -->
-    <style name="AppBaseTheme" parent="android:Theme.Holo.Light"/>
+    <style name="AppBaseTheme" parent="android:Theme.Light"/>
 
     <style name="FullscreenTheme" parent="android:Theme.NoTitleBar">
         <item name="android:windowContentOverlay">@null</item>
@@ -107,7 +107,7 @@
         <item name="android:padding">@dimen/padding_new_tag</item>
     </style>
 
-    <style name="Dialog.NoActionBar" parent="@android:Theme.DeviceDefault.Light.Dialog.NoActionBar">
+    <style name="Dialog.NoActionBar" parent="@android:Theme.Holo.Light.Dialog.NoActionBar">
 <!--         <item name="android:windowAnimationStyle">@style/Dialog_Slide_Animation</item> -->
     </style>
 

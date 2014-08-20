@@ -3,7 +3,7 @@
     <color name="black_overlay">#66000000</color>
     <color name="background_app">#dedede</color>
     <color name="background_list_back">#e3e3e3</color>
-    <color name="background_list_front">#ffffff</color>
+    <color name="background_list_front">#FCFCFC</color>
     <color name="text_title">#444444</color>
     <color name="text_description">#7e7e7e</color>
     <color name="line">#ffbcbcbc</color>

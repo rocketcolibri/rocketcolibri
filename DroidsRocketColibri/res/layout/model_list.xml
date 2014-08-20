@@ -5,11 +5,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <Button
+    <ImageView
         android:id="@+id/newBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/create_new" />
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_menu_btn_add" />
 
     <com.fortysevendeg.swipelistview.SwipeListView
         android:id="@+id/listView"
