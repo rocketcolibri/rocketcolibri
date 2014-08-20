@@ -13,6 +13,8 @@ import org.neodatis.odb.Objects;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -22,6 +24,8 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
+import android.widget.ImageView;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.RocketColibriDefaults;
@@ -51,7 +55,6 @@ public class ModelListActivity extends RCActivity {
     private long tLoastLeaveToast;
     private long tOutsideDown;
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,13 +64,22 @@ public class ModelListActivity extends RCActivity {
         tCacheUtil = new CacheUtil(ModelListActivity.this);
         tSwipeListView = (SwipeListView) findViewById(R.id.listView);
         tAdapter = new ModelListAdapter(this, tData, createRowActionListener());
-
-        findViewById(R.id.newBtn).setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				createItem();
+        final ImageView newBtn = (ImageView) findViewById(R.id.newBtn);
+        final ColorFilter cf = newBtn.getColorFilter();
+        newBtn.setOnTouchListener(new OnTouchListener() {
+			public boolean onTouch(View v, MotionEvent event) {
+				if(event.getAction()==MotionEvent.ACTION_DOWN){
+					newBtn.setColorFilter(Color.BLACK);
+					return true;
+				}
+				if(event.getAction()==MotionEvent.ACTION_UP){
+					newBtn.setColorFilter(cf);
+					createItem();
+					return true;
+				}
+				return false;
 			}
 		});
-
         tSwipeListView.setSwipeListViewListener(new BaseSwipeListViewListener() {
             public void onOpened(int position, boolean toRight) {}
             public void onClosed(int position, boolean fromRight) {}

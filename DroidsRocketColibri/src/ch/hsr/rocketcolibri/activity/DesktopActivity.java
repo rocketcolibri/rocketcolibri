@@ -4,15 +4,18 @@
 package ch.hsr.rocketcolibri.activity;
 
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
+
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
@@ -44,6 +47,11 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 	SurfaceHolder surface_holder = null;
 	SurfaceHolder.Callback sh_callback = null;
 	private DesktopViewManager tDesktopViewManager;
+	
+	//sometimes when you come back to this activity and your orientation where in portrait mode
+	//the views are setting up on resume while the activity is still animating to landscape
+	//therefore we wait until we are in landscape and resume correctly
+	private Semaphore orientationChangeLock = new Semaphore(0);
 	
 	public static final boolean Debugging = false;
 	private boolean tIsControlling = false;
@@ -101,7 +109,18 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 	    System.gc();
 	}
 	
-	//tmp var
+	@Override
+	protected void onResume() {
+		super.onResume();
+	    if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+	    	try {
+				orientationChangeLock.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+	    }
+	}
+	
 	boolean setupViewsOnce=true;
 	/**
 	 * Finds all the views we need and configure them to send click events to the activity.
@@ -210,6 +229,7 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
     
 	@Override
 	protected void onPause(){
+		orientationChangeLock.drainPermits();
 		releaseDesktop();
     	super.onPause();
 	}
@@ -264,4 +284,13 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 		}});
 	}
 	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+	    super.onConfigurationChanged(newConfig);
+	    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+	    	orientationChangeLock.release();
+	    } else {
+	    	orientationChangeLock.drainPermits();
+	    }
+	}
 }
