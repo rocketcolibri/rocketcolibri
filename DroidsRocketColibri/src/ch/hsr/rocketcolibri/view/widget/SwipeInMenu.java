@@ -150,6 +150,7 @@ public class SwipeInMenu extends ViewGroup {
 	private int mMaximumMajorVelocity;
 	private int mMaximumAcceleration;
 	private int mVelocityUnits;
+	private Object animLock = new Object();
 
 	/**
 	 * Construct a <code>SwipeInMenu</code> object programmatically with the specified
@@ -433,16 +434,16 @@ public class SwipeInMenu extends ViewGroup {
 		}else{
 			tHead.getHitRect(tHeadDragArea);
 			if (!mTracking && (!tHeadDragArea.contains(iteX, iteY))){
-				if(tIsOpen){
-					tContent.getHitRect(tHeadDragArea);
-					tContent.getDrawingRect(tContentDragArea);
-					if (!mTracking && (tContentDragArea.contains(iteX, iteY)
-							||!tHeadDragArea.contains(iteX, iteY))){
-						return false;
-					}
-				}else{
+//				if(tIsOpen){
+//					tContent.getHitRect(tHeadDragArea);
+//					tContent.getDrawingRect(tContentDragArea);
+//					if (!mTracking && (tContentDragArea.contains(iteX, iteY)
+//							||!tHeadDragArea.contains(iteX, iteY))){
+//						return false;
+//					}
+//				}else{
 					return false;
-				}
+//				}
 			}
 		}
 
@@ -687,20 +688,28 @@ public class SwipeInMenu extends ViewGroup {
 
 		invalidate(tHeadRegion);
 	}
+	private boolean headInAnimEnded = true;
 	private boolean headOutAnimEnded = true;
 	private void changeHeadOnOpen() {
-		tHead.startAnimation(in);
+		synchronized(animLock){
+			if(headInAnimEnded){
+				headInAnimEnded = false;
+				tHead.startAnimation(in);
+			}
+		}
 	}
 
 	private void changeHeadOnClose(){
-		if(headOutAnimEnded){
-			headOutAnimEnded = false;
-			tHead.startAnimation(out);
+		synchronized(animLock){
+			if(headOutAnimEnded){
+				headOutAnimEnded = false;
+				tHead.startAnimation(out);
+			}
 		}
 	}
 	
 	private void finishHeadOpenAnimation(){
-		tHead.clearAnimation();
+//		tHead.clearAnimation();
 	}
 	
 	private Animation in;
@@ -710,21 +719,34 @@ public class SwipeInMenu extends ViewGroup {
 		in.setFillAfter(true);
 		in.setDuration(100);
 		out = new ScaleAnimation(-1f, -1f, 1.0f, 0.05f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 1.0f);
-		out.setDuration(100);
+		out.setDuration(200);
 		out.setFillAfter(true);
 		out.setAnimationListener(new AnimationListener() {
 		    public void onAnimationEnd(Animation animation) {
-		    	headOutAnimEnded=true;
-		    	tHead.setAlpha(0f);
+				synchronized(animLock){
+					headOutAnimEnded=true;
+//					tHead.setAlpha(0f);
+				}
 		    }
 			public void onAnimationRepeat(Animation animation) {}
-			public void onAnimationStart(Animation animation) {}
+			public void onAnimationStart(Animation animation) {
+				synchronized(animLock){
+					headInAnimEnded=true;
+				}
+			}
 		});
 		in.setAnimationListener(new AnimationListener() {
-		    public void onAnimationEnd(Animation animation) {}
+		    public void onAnimationEnd(Animation animation) {
+				synchronized(animLock){
+					headInAnimEnded=true;
+				}
+		    }
 			public void onAnimationRepeat(Animation animation) {}
 			public void onAnimationStart(Animation animation) {
-				tHead.setAlpha(tHeadDefaultAlpha);
+				synchronized(animLock){
+					headOutAnimEnded=true;
+//					tHead.setAlpha(tHeadDefaultAlpha);
+				}
 			}
 		});
 		changeHeadOnClose();
@@ -927,6 +949,7 @@ public class SwipeInMenu extends ViewGroup {
 		if (!tIsOpen) {
 			return;
 		}
+		tHeadDragArea.set(closedRect);
 		
 		setClickable(false);
 		tIsOpen = false;
@@ -1123,7 +1146,7 @@ public class SwipeInMenu extends ViewGroup {
 		protected abstract void layoutContent(int width, int height);
 		protected void setClosedRect(){}
 	}
-	
+	private final int CLOSED_SIZE = 10;
 	private abstract class TopBottomOS extends OrientationSpecific{
 		protected int calculateHeightForMeasure(){
 			int height = getBottom() - getTop() - tHead.getHeight() - mTopOffset;
@@ -1132,7 +1155,7 @@ public class SwipeInMenu extends ViewGroup {
 			return height;
 		}
 		protected void setClosedRect(){
-			closedRect.set(0, tScreenHeight-1, tScreenWidth, tScreenHeight);
+			closedRect.set(0, tScreenHeight-CLOSED_SIZE, tScreenWidth, tScreenHeight);
 		}
 	}
 	
@@ -1144,7 +1167,7 @@ public class SwipeInMenu extends ViewGroup {
 			return width;
 		}
 		protected void setClosedRect(){
-			closedRect.set(0, 0, 1, tScreenHeight);
+			closedRect.set(0, 0, CLOSED_SIZE, tScreenHeight);
 		}
 	}
 	
@@ -1199,11 +1222,10 @@ public class SwipeInMenu extends ViewGroup {
 				invalidate();
 			} else {
 				
-				if(tScreenHeight-tHead.getY()>tHead.getHeight()*2.5){
+				int deltaY = position - tHead.getTop();
+				if(deltaY>tHead.getHeight()*2.5){
 					finishHeadOpenAnimation();
 				}
-				
-				int deltaY = position - tHead.getTop();
 				if (position < mTopOffset) {
 					deltaY = mTopOffset - tHead.getTop();
 				} else if (deltaY > mBottomOffset + getBottom() - getTop() - tHead.getHeight() - tHead.getTop()) {

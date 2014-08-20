@@ -55,6 +55,9 @@ public class OpenWithFileActivity extends RCActivity{
 					startRocketColibri();
 				} catch (Exception e) {
 					e.printStackTrace();
+					uitoast(getString(R.string.import_failed_toast));
+					hideLoading();
+					finish();
 				}
 			}}.start();
 		}catch(Exception e){
