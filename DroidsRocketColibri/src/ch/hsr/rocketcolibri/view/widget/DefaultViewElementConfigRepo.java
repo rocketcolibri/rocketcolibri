@@ -27,9 +27,9 @@ public class DefaultViewElementConfigRepo {
 		//>>>>>>>>>>>>>>>>>>>>>>>>>>> Analog Stick >>>>>>>>>>>>>>>>>>>>>>>>>>
 		ResizeConfig rc = new ResizeConfig();
 	    rc.keepRatio=true;
-	    rc.maxHeight=200;
+	    rc.maxHeight=context.getResources().getDisplayMetrics().heightPixels;
 	    rc.minHeight=50;
-	    rc.maxWidth=200;
+	    rc.maxWidth=context.getResources().getDisplayMetrics().heightPixels;
 	    rc.minWidth=50;
 	    LayoutParams  lp = new LayoutParams(180, 180 , 100, 300);
 	    ViewElementConfig elementConfig = new ViewElementConfig(AnalogStickWidget.class.getName(), lp, rc);
