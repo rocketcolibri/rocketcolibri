@@ -18,6 +18,7 @@
     <string name="popup_menu_delete_element_btn">Delete Element</string>
     
     <!-- Edit Channel -->
+    <string name="edit_activity_title">Edit Widget Values</string>
     <string name="rc_channel_assignment_h">Assign Channel H</string>
     <string name="rc_inverted_h">Inverted H</string>
     <string name="rc_min_range_h">Min Range H</string>
@@ -40,6 +41,7 @@
     <string name="rc_trimm">Trimm</string>
     <string name="rc_sticky">Sticky</string>
     <string name="rc_debug">Debug</string>
+    <string name="edit_acivity_saved">saved!</string>
     
     <string name="loading">Loading</string>
     <string name="create_new">New</string>

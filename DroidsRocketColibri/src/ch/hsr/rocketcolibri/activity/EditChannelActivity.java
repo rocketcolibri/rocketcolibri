@@ -5,9 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
@@ -27,6 +25,7 @@ public class EditChannelActivity extends RCActivity{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		tFullscreen = false;
 		super.onCreate(savedInstanceState);
 		showLoading();
 		setContentView(R.layout.edit_channel);
@@ -111,15 +110,7 @@ public class EditChannelActivity extends RCActivity{
 	
 	@Override
 	protected void onServiceReady() {
-		//just to test the loading sequence
-		new AsyncTask<Void, Void, Void>() {
-			@Override
-			protected Void doInBackground(Void... params) {
-				SystemClock.sleep(500);
-				hideLoading();				
-				return null;
-			}
-		}.execute();
+		hideLoading();
 	}
 	
 	private void initFooterButtons(){
@@ -135,7 +126,7 @@ public class EditChannelActivity extends RCActivity{
 		b.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(EditChannelActivity.this, "saved!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(EditChannelActivity.this, getString(R.string.edit_acivity_saved), Toast.LENGTH_SHORT).show();
 				fillResultIntent();
 				finish();
 			}

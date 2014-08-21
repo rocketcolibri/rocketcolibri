@@ -38,7 +38,7 @@ import ch.hsr.rocketcolibri.RocketColibriService;
 public abstract class RCActivity extends Activity {
 	protected RocketColibriService rcService;
 	protected ProgressDialog mDialog;
-	
+	protected boolean tFullscreen = true;
 	private ServiceConnection bindableServiceConnection = new ServiceConnection() {
 		@Override 
 		public void onServiceDisconnected(ComponentName componentName) {
@@ -91,27 +91,31 @@ public abstract class RCActivity extends Activity {
 	protected abstract void onServiceReady();
 	
 	protected void setWindowSettings(){
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		RocketColibriDefaults.setDefaultViewSettings(getWindow().getDecorView().getRootView());
-		getWindow().getDecorView()
-        .setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                	RocketColibriDefaults.setDefaultViewSettings(getWindow().getDecorView());
-                }
-            }
-        });
+		if(tFullscreen){
+			requestWindowFeature(Window.FEATURE_NO_TITLE);
+			getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+			RocketColibriDefaults.setDefaultViewSettings(getWindow().getDecorView().getRootView());
+			getWindow().getDecorView()
+	        .setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+	            @Override
+	            public void onSystemUiVisibilityChange(int visibility) {
+	                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+	                	RocketColibriDefaults.setDefaultViewSettings(getWindow().getDecorView());
+	                }
+	            }
+	        });
+		}
 	}
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
-	        super.onWindowFocusChanged(hasFocus);
-	        View mDecorView = getWindow().getDecorView().findViewById(android.R.id.content);
-	    if (hasFocus) {
-	    	RocketColibriDefaults.setDefaultViewSettings(mDecorView);
-	    }
+        super.onWindowFocusChanged(hasFocus);
+        if(tFullscreen){
+		    View mDecorView = getWindow().getDecorView().findViewById(android.R.id.content);
+		    if (hasFocus) {
+		    	RocketColibriDefaults.setDefaultViewSettings(mDecorView);
+		    }
+        }
 	}
 	
 	protected void showLoading(boolean showOnUiThread){
