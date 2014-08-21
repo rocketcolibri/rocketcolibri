@@ -5,6 +5,7 @@ package ch.hsr.rocketcolibri.activity;
 
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -12,10 +13,8 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.WindowManager;
 import android.widget.Toast;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
@@ -219,7 +218,7 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 	    if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
 	    	try {
 	    		showLoading();
-				orientationChangeLock.acquire();
+				orientationChangeLock.tryAcquire(200, TimeUnit.MILLISECONDS);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

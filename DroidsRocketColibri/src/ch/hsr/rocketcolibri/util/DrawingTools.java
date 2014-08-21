@@ -101,20 +101,20 @@ public class DrawingTools {
 	public static LayoutParams checkMaxSize(LayoutParams lParam, AbsoluteLayout parent) {
 		LayoutParams maxSizeLP = lParam;
 
-		if(maxSizeLP.height + maxSizeLP.y > parent.getHeight()) {
-			maxSizeLP.y = parent.getHeight() - maxSizeLP.height;
+		if(maxSizeLP.height + maxSizeLP.getY() > parent.getHeight()) {
+			maxSizeLP.setY(parent.getHeight() - maxSizeLP.height);
 		}
 
-		if(lParam.width + lParam.x > parent.getWidth()) {
-			maxSizeLP.x = parent.getWidth() - maxSizeLP.width;
+		if(lParam.width + lParam.getX() > parent.getWidth()) {
+			maxSizeLP.setX(parent.getWidth() - maxSizeLP.width);
 		}
 		
-		if (maxSizeLP.y < 0) {
-			maxSizeLP.y = 0;
+		if (maxSizeLP.getY() < 0) {
+			maxSizeLP.setY(0);
 		}
 
-		if (maxSizeLP.x < 0) {
-			maxSizeLP.x = 0;
+		if (maxSizeLP.getX() < 0) {
+			maxSizeLP.setX(0);
 		}
 
 		if (maxSizeLP.height > parent.getHeight()) {

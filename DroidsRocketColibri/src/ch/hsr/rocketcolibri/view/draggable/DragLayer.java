@@ -139,8 +139,8 @@ public void onDrop(IDragSource source, int x, int y, int xOffset, int yOffset,
     View v = (View) dragInfo;
     DragLayer.LayoutParams lpOrg = ((DragLayer.LayoutParams)v.getLayoutParams());
     DragLayer.LayoutParams lpDrag = ((DragLayer.LayoutParams)dragView.getLayoutParams());
-    lpOrg.x = lpDrag.x;
-    lpOrg.y = lpDrag.y;
+    lpOrg.setX(lpDrag.getX());
+    lpOrg.setY(lpDrag.getY());
     this.updateViewLayout(v, lpOrg);
 }
 

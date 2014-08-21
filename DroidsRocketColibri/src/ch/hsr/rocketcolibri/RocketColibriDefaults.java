@@ -7,7 +7,6 @@ import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.View;
 
 /**
@@ -36,8 +35,8 @@ public class RocketColibriDefaults {
 	public static void dpToPixel(DisplayMetrics density, ViewElementConfig viewElementConfig) {
 		viewElementConfig.getLayoutParams().height = dpToPixelY(density, viewElementConfig.getLayoutParams().height);
 		viewElementConfig.getLayoutParams().width = dpToPixelX(density, viewElementConfig.getLayoutParams().width);
-		viewElementConfig.getLayoutParams().x = dpToPixelX(density, viewElementConfig.getLayoutParams().x);
-		viewElementConfig.getLayoutParams().y = dpToPixelY(density, viewElementConfig.getLayoutParams().y);
+		viewElementConfig.getLayoutParams().setX(dpToPixelX(density, viewElementConfig.getLayoutParams().getX()));
+		viewElementConfig.getLayoutParams().setY(dpToPixelY(density, viewElementConfig.getLayoutParams().getY()));
 		viewElementConfig.getResizeConfig().maxHeight = dpToPixelY(density, viewElementConfig.getResizeConfig().maxHeight);
 		viewElementConfig.getResizeConfig().minHeight = dpToPixelY(density, viewElementConfig.getResizeConfig().minHeight);
 		viewElementConfig.getResizeConfig().maxWidth = dpToPixelX(density, viewElementConfig.getResizeConfig().maxWidth);
@@ -47,8 +46,8 @@ public class RocketColibriDefaults {
 	public static void pixelToDp(DisplayMetrics density, ViewElementConfig viewElementConfig) {
 		viewElementConfig.getLayoutParams().height = pixelToDpY(density, viewElementConfig.getLayoutParams().height);
 		viewElementConfig.getLayoutParams().width = pixelToDpX(density, viewElementConfig.getLayoutParams().width);
-		viewElementConfig.getLayoutParams().x = pixelToDpX(density, viewElementConfig.getLayoutParams().x);
-		viewElementConfig.getLayoutParams().y = pixelToDpY(density, viewElementConfig.getLayoutParams().y);
+		viewElementConfig.getLayoutParams().setX(pixelToDpX(density, viewElementConfig.getLayoutParams().getX()));
+		viewElementConfig.getLayoutParams().setY(pixelToDpY(density, viewElementConfig.getLayoutParams().getY()));
 		viewElementConfig.getResizeConfig().maxHeight = pixelToDpY(density, viewElementConfig.getResizeConfig().maxHeight);
 		viewElementConfig.getResizeConfig().minHeight = pixelToDpY(density, viewElementConfig.getResizeConfig().minHeight);
 		viewElementConfig.getResizeConfig().maxWidth = pixelToDpX(density, viewElementConfig.getResizeConfig().maxWidth);

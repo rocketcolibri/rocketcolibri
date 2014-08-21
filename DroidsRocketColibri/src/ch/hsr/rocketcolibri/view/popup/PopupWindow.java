@@ -390,8 +390,8 @@ public class PopupWindow {
             gravity = Gravity.TOP | Gravity.LEFT;
         }
 
-        p.x = x;
-        p.y = y;
+        p.setX(x);
+        p.setY(y);
         if (mHeightMode < 0) p.height = mLastHeight = mHeightMode;
         if (mWidthMode < 0) p.width = mLastWidth = mWidthMode;
         invokePopup(p);
@@ -492,24 +492,24 @@ public class PopupWindow {
     private void findPosition(View anchor){
     	int targetPos = 0;
         if ((targetPos=anchor.getTop()-getHeight()) >= 0 && anchor.getLeft()+getWidth() <= mWindowManager.getWidth()) { //top
-        	tLayoutParams.x = (int) anchor.getX();
-        	tLayoutParams.y = targetPos;
+        	tLayoutParams.setX((int) anchor.getX());
+        	tLayoutParams.setY(targetPos);
         } else if (anchor.getRight()+getWidth() <= mWindowManager.getWidth()) { //right
-        	tLayoutParams.y = (int) anchor.getY();
-        	tLayoutParams.x = anchor.getRight();
+        	tLayoutParams.setY((int) anchor.getY());
+        	tLayoutParams.setX(anchor.getRight());
         } else if (anchor.getBottom()+getHeight() <= mWindowManager.getHeight() && anchor.getLeft()+getWidth() <= mWindowManager.getWidth()) { //bottom
-        	tLayoutParams.x = (int) anchor.getX();
-        	tLayoutParams.y = anchor.getBottom();
+        	tLayoutParams.setX((int) anchor.getX());
+        	tLayoutParams.setY(anchor.getBottom());
         } else if ((targetPos=anchor.getLeft()-getWidth()) >= 0){ //left
-        	tLayoutParams.y = (int) anchor.getY();
+        	tLayoutParams.setY((int) anchor.getY());
 
         	// The popup window must be visible on the bottom right corner of the display. If
         	// the only available place is on left and popup window is bigger than the widget.
-        	if (tLayoutParams.y + getHeight() > mWindowManager.getHeight()) {
-        		tLayoutParams.y = mWindowManager.getHeight() - getHeight();
+        	if (tLayoutParams.getY() + getHeight() > mWindowManager.getHeight()) {
+        		tLayoutParams.setY(mWindowManager.getHeight() - getHeight());
         	}
 
-        	tLayoutParams.x = targetPos;
+        	tLayoutParams.setX(targetPos);
         }
     }
 
@@ -583,13 +583,13 @@ public class PopupWindow {
             update = true;
         }
 
-        if (p.x != x) {
-            p.x = x;
+        if (p.getX() != x) {
+            p.setX(x);
             update = true;
         }
 
-        if (p.y != y) {
-            p.y = y;
+        if (p.getY() != y) {
+            p.setY(y);
             update = true;
         }
 

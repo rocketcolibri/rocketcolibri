@@ -110,8 +110,8 @@ public class CustomizeModusContent extends ModusContent{
 		AbsoluteLayout.LayoutParams lp = vec.getLayoutParams();
 		AbsoluteLayout rootView = tDesktopMenu.getDesktopViewManager()
 				.getRootView();
-		lp.x = (int) (rootView.getWidth() / 2) - lp.width / 2;
-		lp.y = (int) (rootView.getHeight() / 2) - lp.height / 2;
+		lp.setX((int) (rootView.getWidth() / 2) - lp.width / 2);
+		lp.setY((int) (rootView.getHeight() / 2) - lp.height / 2);
 		ICustomizableView v1 = (ICustomizableView) tDesktopMenu
 				.getDesktopViewManager().createAndAddView(vec);
 		v1.setCustomizeModus(true);

@@ -87,8 +87,8 @@ public class CustomizeModusPopupMenu extends PopupWindow{
 					RCWidgetConfig rcwc = ((ICustomizableView)tTargetView).getWidgetConfig().copy();
 					AbsoluteLayout.LayoutParams lp = rcwc.viewElementConfig.getLayoutParams();
 					AbsoluteLayout rootView = tDesktopViewManager.getRootView();
-					lp.x = (int) (rootView.getWidth()/2)-lp.width/2;
-					lp.y = (int) (rootView.getHeight()/2)-lp.height/2;
+					lp.setX((int) (rootView.getWidth()/2)-lp.width/2);
+					lp.setY((int) (rootView.getHeight()/2)-lp.height/2);
 					ICustomizableView v1 = (ICustomizableView) tDesktopViewManager.createAndAddView(rcwc);
 					v1.setCustomizeModus(true);
 				}catch(Exception e){

@@ -102,7 +102,7 @@ public class ViewElementConfig {
 		vec.setAlpha(alpha);
 		vec.setId(id);
 		vec.setClassPath(classPath);
-		vec.setLayoutParams(new AbsoluteLayout.LayoutParams(layoutParams.width, layoutParams.height, layoutParams.x, layoutParams.y));
+		vec.setLayoutParams(new AbsoluteLayout.LayoutParams(layoutParams.width, layoutParams.height, layoutParams.getX(), layoutParams.getY()));
 		vec.setResizeConfig(resizeConfig.copy());
 		return vec;
 	}

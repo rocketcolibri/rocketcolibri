@@ -163,9 +163,9 @@ public class RCDBProcessor {
 		if (lp.width > tRealScreenSize.x) {lp.width = tRealScreenSize.x;}
 		else if(lp.width < vec.getResizeConfig().minWidth ){lp.width = vec.getResizeConfig().minWidth;}
 		
-		if(lp.height+lp.y>tRealScreenSize.y){lp.y=tRealScreenSize.y-lp.height;}
-		if(lp.width+lp.x>tRealScreenSize.x){lp.x=tRealScreenSize.x-lp.width;}
-		if (lp.y < 0) {lp.y = 0;}
-		if (lp.x < 0) {lp.x = 0;}
+		if(lp.height+lp.getY()>tRealScreenSize.y){lp.setY(tRealScreenSize.y-lp.height);}
+		if(lp.width+lp.getX()>tRealScreenSize.x){lp.setX(tRealScreenSize.x-lp.width);}
+		if (lp.getY() < 0) {lp.setY(0);}
+		if (lp.getX() < 0) {lp.setX(0);}
 	}
 }

@@ -40,7 +40,7 @@ public class HelplineDrawer{
 		tContext = context;
 		tMovableViewLP = (LayoutParams) movableView.getLayoutParams();
         tParentLP = (LayoutParams) parent.getLayoutParams();
-        tParentLP = new LayoutParams(parent.getWidth(), parent.getHeight(), tParentLP.x, tParentLP.y);
+        tParentLP = new LayoutParams(parent.getWidth(), parent.getHeight(), tParentLP.getX(), tParentLP.getY());
 		HELPLINE_OFFSET = offset;
 		HELPDISTANCELINE_WIDTH_AND_HEIGHT = distanceWidth;
 		tXPositions = new int[parent.getChildCount()*2];
@@ -53,28 +53,28 @@ public class HelplineDrawer{
         AbsoluteLayout.LayoutParams childViewLp = null;
         for(int i = 0, j = 0; j < parent.getChildCount();++j,i+=2){
         	childViewLp = (AbsoluteLayout.LayoutParams) parent.getChildAt(j).getLayoutParams();
-        	tXPositions[i] = childViewLp.x;
-        	if(tXPositions[i]>tParentLP.x+offset){
+        	tXPositions[i] = childViewLp.getX();
+        	if(tXPositions[i]>tParentLP.getX()+offset){
         		distanceTmp = Integer.valueOf(tParentLP.width-tXPositions[i]);
         		if(tParentLP.width/2>distanceTmp.intValue()){
         			leftDistances.add(distanceTmp);
         		}else{rightDistances.add(distanceTmp);}
         	}
-        	tXPositions[i+1] = childViewLp.x+childViewLp.width;
+        	tXPositions[i+1] = childViewLp.getX()+childViewLp.width;
         	if(tXPositions[i+1]<tParentLP.width-offset){
          		distanceTmp = Integer.valueOf(tParentLP.width-tXPositions[i+1]);
          		if(tParentLP.width/2>distanceTmp.intValue()){
          			leftDistances.add(distanceTmp);
          		}else{rightDistances.add(distanceTmp);}
         	}
-        	tYPositions[i] = childViewLp.y;
-        	if(tYPositions[i]>tParentLP.y+offset){
+        	tYPositions[i] = childViewLp.getY();
+        	if(tYPositions[i]>tParentLP.getY()+offset){
          		distanceTmp = Integer.valueOf(tParentLP.height-tYPositions[i]);
          		if(tParentLP.height/2>distanceTmp.intValue()){
          			topDistances.add(distanceTmp);
          		}else{bottomDistances.add(distanceTmp);}
         	}
-        	tYPositions[i+1] = childViewLp.y+childViewLp.height;
+        	tYPositions[i+1] = childViewLp.getY()+childViewLp.height;
         	if(tYPositions[i+1]<tParentLP.height-offset){
          		distanceTmp = Integer.valueOf(tParentLP.height-tYPositions[i+1]);
          		if(tParentLP.height/2>distanceTmp.intValue()){
@@ -107,7 +107,7 @@ public class HelplineDrawer{
     	if(tLeftDistances.length>0 && Math.abs(tLeftDistances[tClosestIndex=findClosest(tLeftDistances, tTargetTouchPosition=xy[0])]-tTargetTouchPosition)<=HELPLINE_OFFSET){
     		horizontalDistanceTriggert = true;
     		AbsoluteLayout.LayoutParams lp = ((AbsoluteLayout.LayoutParams)horizontalDistanceLine.getLayoutParams());
-    		lp.x = 0;lp.height=HELPDISTANCELINE_WIDTH_AND_HEIGHT;lp.y=(tMovableViewLP.y+(tMovableViewLP.height/2-lp.height/2));lp.width=tLeftDistances[tClosestIndex];
+    		lp.setX(0);lp.height=HELPDISTANCELINE_WIDTH_AND_HEIGHT;lp.setY(tMovableViewLP.getY()+(tMovableViewLP.height/2-lp.height/2));lp.width=tLeftDistances[tClosestIndex];
     		horizontalDistanceLine.setVisibility(View.VISIBLE);
 			xy[0] = tLeftDistances[tClosestIndex];
 			leftVerticalLine.setVisibility(View.INVISIBLE);
@@ -116,7 +116,7 @@ public class HelplineDrawer{
     		horizontalDistanceLine.setVisibility(View.INVISIBLE);
 			if(Math.abs(tXPositions[tClosestIndex=findClosest(tXPositions, tTargetTouchPosition=xy[0])]-tTargetTouchPosition)<=HELPLINE_OFFSET){
 				oppositLineTriggert = true;
-				((AbsoluteLayout.LayoutParams)leftVerticalLine.getLayoutParams()).x = tXPositions[tClosestIndex];
+				((AbsoluteLayout.LayoutParams)leftVerticalLine.getLayoutParams()).setX(tXPositions[tClosestIndex]);
 				leftVerticalLine.setVisibility(View.VISIBLE);
 				xy[0] = tXPositions[tClosestIndex];
 	    	}else leftVerticalLine.setVisibility(View.INVISIBLE);
@@ -124,13 +124,13 @@ public class HelplineDrawer{
     	//right
     	if(!horizontalDistanceTriggert && tRightDistances.length>0 && Math.abs(tRightDistances[tClosestIndex=findClosest(tRightDistances, tTargetTouchPosition=xy[0]+tMovableViewLP.width)]-tTargetTouchPosition)<=HELPLINE_OFFSET){
     		AbsoluteLayout.LayoutParams lp = ((AbsoluteLayout.LayoutParams)horizontalDistanceLine.getLayoutParams());
-    		lp.height=HELPDISTANCELINE_WIDTH_AND_HEIGHT;lp.x = tRightDistances[tClosestIndex];lp.y=(tMovableViewLP.y+(tMovableViewLP.height/2-lp.height/2));lp.width=tParentLP.width-tRightDistances[tClosestIndex];
+    		lp.height=HELPDISTANCELINE_WIDTH_AND_HEIGHT;lp.setX(tRightDistances[tClosestIndex]);lp.setY(tMovableViewLP.getY()+(tMovableViewLP.height/2-lp.height/2));lp.width=tParentLP.width-tRightDistances[tClosestIndex];
     		horizontalDistanceLine.setVisibility(View.VISIBLE);
     		xy[0] = tRightDistances[tClosestIndex]-tMovableViewLP.width;
     		rightVerticalLine.setVisibility(View.INVISIBLE);
     	}else if(tXPositions.length>0){
 			if(Math.abs(tXPositions[tClosestIndex=findClosest(tXPositions, tTargetTouchPosition=xy[0]+tMovableViewLP.width)]-tTargetTouchPosition)<=(oppositLineTriggert?0:HELPLINE_OFFSET)){
-				((AbsoluteLayout.LayoutParams)rightVerticalLine.getLayoutParams()).x = tXPositions[tClosestIndex];
+				((AbsoluteLayout.LayoutParams)rightVerticalLine.getLayoutParams()).setX(tXPositions[tClosestIndex]);
 				rightVerticalLine.setVisibility(View.VISIBLE);
 				xy[0] = tXPositions[tClosestIndex]-tMovableViewLP.width;
 			}else rightVerticalLine.setVisibility(View.INVISIBLE);
@@ -140,7 +140,7 @@ public class HelplineDrawer{
     	if(tTopDistances.length>0 && Math.abs(tTopDistances[tClosestIndex=findClosest(tTopDistances, tTargetTouchPosition=xy[1])]-tTargetTouchPosition)<=HELPLINE_OFFSET){
     		verticalDistanceTriggert = true;
     		AbsoluteLayout.LayoutParams lp = ((AbsoluteLayout.LayoutParams)verticalDistanceLine.getLayoutParams());
-    		lp.width=HELPDISTANCELINE_WIDTH_AND_HEIGHT;lp.x=tMovableViewLP.x+(tMovableViewLP.width/2-lp.width/2);lp.y=0;lp.height=tTopDistances[tClosestIndex];
+    		lp.width=HELPDISTANCELINE_WIDTH_AND_HEIGHT;lp.setX(tMovableViewLP.getX()+(tMovableViewLP.width/2-lp.width/2));lp.setY(0);lp.height=tTopDistances[tClosestIndex];
     		verticalDistanceLine.setVisibility(View.VISIBLE);
     		xy[1] = tTopDistances[tClosestIndex];
     		topHorizontalLine.setVisibility(View.INVISIBLE);
@@ -149,7 +149,7 @@ public class HelplineDrawer{
     		verticalDistanceLine.setVisibility(View.INVISIBLE);
     		if(Math.abs(tYPositions[tClosestIndex=findClosest(tYPositions, tTargetTouchPosition=xy[1])]-tTargetTouchPosition)<=HELPLINE_OFFSET){
     			oppositLineTriggert = true;
-    			((AbsoluteLayout.LayoutParams)topHorizontalLine.getLayoutParams()).y = tYPositions[tClosestIndex];
+    			((AbsoluteLayout.LayoutParams)topHorizontalLine.getLayoutParams()).setY(tYPositions[tClosestIndex]);
     			topHorizontalLine.setVisibility(View.VISIBLE);
     			xy[1] = tYPositions[tClosestIndex];
         	}else topHorizontalLine.setVisibility(View.INVISIBLE);
@@ -157,13 +157,13 @@ public class HelplineDrawer{
     	//bottom
     	if(!verticalDistanceTriggert && tBottomDistances.length>0 && Math.abs(tBottomDistances[tClosestIndex=findClosest(tBottomDistances, tTargetTouchPosition=xy[1]+tMovableViewLP.height)]-tTargetTouchPosition)<=HELPLINE_OFFSET){
     		AbsoluteLayout.LayoutParams lp = ((AbsoluteLayout.LayoutParams)verticalDistanceLine.getLayoutParams());
-    		lp.width=HELPDISTANCELINE_WIDTH_AND_HEIGHT;lp.x=(tMovableViewLP.x+(tMovableViewLP.width/2-lp.width/2));lp.height=tParentLP.height-tBottomDistances[tClosestIndex];lp.y=tBottomDistances[tClosestIndex];
+    		lp.width=HELPDISTANCELINE_WIDTH_AND_HEIGHT;lp.setX(tMovableViewLP.getX()+(tMovableViewLP.width/2-lp.width/2));lp.height=tParentLP.height-tBottomDistances[tClosestIndex];lp.setY(tBottomDistances[tClosestIndex]);
     		verticalDistanceLine.setVisibility(View.VISIBLE);
     		xy[1] = tBottomDistances[tClosestIndex]-tMovableViewLP.height;
     		bottomHorizontalLine.setVisibility(View.INVISIBLE);
     	}else if(tYPositions.length>0){
 			if(Math.abs(tYPositions[tClosestIndex=findClosest(tYPositions, tTargetTouchPosition=xy[1]+tMovableViewLP.height)]-tTargetTouchPosition)<=(oppositLineTriggert?0:HELPLINE_OFFSET)){
-				((AbsoluteLayout.LayoutParams)bottomHorizontalLine.getLayoutParams()).y = tYPositions[tClosestIndex];
+				((AbsoluteLayout.LayoutParams)bottomHorizontalLine.getLayoutParams()).setY(tYPositions[tClosestIndex]);
 				bottomHorizontalLine.setVisibility(View.VISIBLE);
 				xy[1] = tYPositions[tClosestIndex]-tMovableViewLP.height;
 			}else bottomHorizontalLine.setVisibility(View.INVISIBLE);

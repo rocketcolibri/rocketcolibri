@@ -74,7 +74,7 @@ public class DragView extends View
         super(context);
         tParent = parent;
         tParentLP = (LayoutParams) parent.getLayoutParams();
-        tParentLP = new LayoutParams(tParent.getWidth(), tParent.getHeight(), tParentLP.x, tParentLP.y);
+        tParentLP = new LayoutParams(tParent.getWidth(), tParent.getHeight(), tParentLP.getX(), tParentLP.getY());
         Matrix scale = new Matrix();
         float scaleFactor = width;
         scaleFactor = (scaleFactor + DRAG_SCALE) / scaleFactor;
@@ -129,8 +129,8 @@ public class DragView extends View
      * @param touchY the y coordinate the user touched in screen coordinates
      */
     public void show(IBinder windowToken, int touchX, int touchY) {
-        tLayoutParams.x = touchX-tRegistrationX;
-        tLayoutParams.y = touchY-tRegistrationY;
+        tLayoutParams.setX(touchX-tRegistrationX);
+        tLayoutParams.setY(touchY-tRegistrationY);
         tParent.addView(this, tLayoutParams);
         tHelplineDrawer.addLinesTo(tParent);
     }
@@ -145,7 +145,7 @@ public class DragView extends View
     	tTouchXY[0]=touchX - tRegistrationX;tTouchXY[1]=touchY - tRegistrationY;
     	makeSureXYAreOnVisibleArea();
     	tHelplineDrawer.drawAndFillStickyPosition(tTouchXY);
-    	tLayoutParams.x = tTouchXY[0];tLayoutParams.y = tTouchXY[1];
+    	tLayoutParams.setX(tTouchXY[0]);tLayoutParams.setY(tTouchXY[1]);
     	tParent.updateViewLayout(this, tLayoutParams);
     }
 

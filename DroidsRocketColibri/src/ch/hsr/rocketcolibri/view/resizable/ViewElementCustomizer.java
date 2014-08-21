@@ -28,12 +28,12 @@ public class ViewElementCustomizer {
 			resizeTargetLP.width = config.maxWidth;
 		}
 		
-		if(resizeTargetLP.height+resizeTargetLP.y>parent.getHeight())
-			resizeTargetLP.y=parent.getHeight()-resizeTargetLP.height;
-		if(resizeTargetLP.width+resizeTargetLP.x>parent.getWidth())
-			resizeTargetLP.x=parent.getWidth()-resizeTargetLP.width;
-		if (resizeTargetLP.y < 0) {resizeTargetLP.y = 0;}
-		if (resizeTargetLP.x < 0) {resizeTargetLP.x = 0;}
+		if(resizeTargetLP.height+resizeTargetLP.getY()>parent.getHeight())
+			resizeTargetLP.setY(parent.getHeight()-resizeTargetLP.height);
+		if(resizeTargetLP.width+resizeTargetLP.getX()>parent.getWidth())
+			resizeTargetLP.setX(parent.getWidth()-resizeTargetLP.width);
+		if (resizeTargetLP.getY() < 0) {resizeTargetLP.setY(0);}
+		if (resizeTargetLP.getX() < 0) {resizeTargetLP.setX(0);}
 
 		parent.updateViewLayout(tTargetView, resizeTargetLP);
 	}
