@@ -83,7 +83,17 @@ public class DesktopMenu {
 		return tDesktopViewManager;
 	}
 	
-	public void setService(RocketColibriService rcService) {
+	public void setTextOnBottom(String text){
+		tDesktopMenuBottomTv.setText(text);
+	}
+	
+	public void onModelListOpen(){
+		RelativeLayout.LayoutParams lp = (LayoutParams) tDesktopMenuBottomTv.getLayoutParams();
+		lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 1);
+		tDesktopMenuBottomTv.requestLayout();
+	}
+	
+	public void onResume(RocketColibriService rcService){
 		tService = rcService;
 		if(initOnce){
 			initOnce = false;
@@ -95,19 +105,7 @@ public class DesktopMenu {
 		//Therefore we set the switchMinWidth programmatically to stretch the Switch on a
 		// time after layouting. This is a good place to do it!
 		tModeSwitcher.setSwitchMinWidth(((View)tModeSwitcher.getParent()).getWidth());
-	}
-	
-	public void setTextOnBottom(String text){
-		tDesktopMenuBottomTv.setText(text);
-	}
-	
-	public void onModelListOpen(){
-		RelativeLayout.LayoutParams lp = (LayoutParams) tDesktopMenuBottomTv.getLayoutParams();
-		lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 1);
-		tDesktopMenuBottomTv.requestLayout();
-	}
-	
-	public void onResume(){
+		
 		RelativeLayout.LayoutParams lp = (LayoutParams) tDesktopMenuBottomTv.getLayoutParams();
 		lp.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
 		tDesktopMenuBottomTv.requestLayout();

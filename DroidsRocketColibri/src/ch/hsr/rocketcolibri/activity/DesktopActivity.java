@@ -109,18 +109,6 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 	    System.gc();
 	}
 	
-	@Override
-	protected void onResume() {
-		super.onResume();
-	    if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-	    	try {
-				orientationChangeLock.acquire();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-	    }
-	}
-	
 	boolean setupViewsOnce=true;
 	/**
 	 * Finds all the views we need and configure them to send click events to the activity.
@@ -221,10 +209,22 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 
 	@Override
 	protected void onServiceReady() {
+		preventOrientationBug();
 		tDB = rcService.getRocketColibriDB();
-		tDesktopMenu.setService(rcService);
-		tDesktopMenu.onResume();
+		tDesktopMenu.onResume(rcService);
 		setupDesktop();
+	}
+	
+	private void preventOrientationBug(){
+	    if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+	    	try {
+	    		showLoading();
+				orientationChangeLock.acquire();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+	    	hideLoading();
+	    }
 	}
     
 	@Override
