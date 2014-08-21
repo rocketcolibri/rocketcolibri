@@ -47,11 +47,6 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 	SurfaceHolder.Callback sh_callback = null;
 	private DesktopViewManager tDesktopViewManager;
 	
-	//sometimes when you come back to this activity and your orientation where in portrait mode
-	//the views are setting up on resume while the activity is still animating to landscape
-	//therefore we wait until we are in landscape and resume correctly
-	private Semaphore orientationChangeLock = new Semaphore(0);
-	
 	public static final boolean Debugging = false;
 	private boolean tIsControlling = false;
 	private DesktopMenu tDesktopMenu;
@@ -128,10 +123,8 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 				displayModelNameOnDesktopMenu(tModel.getName());
 				for (RCWidgetConfig vec : tModel.getWidgetConfigs()) {
 					try {
-						Log.d(getClassName(), "initCreateAndAddView: "+vec.viewElementConfig.getClassPath());
 						tDesktopViewManager.initCreateAndAddView(vec);
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -156,32 +149,11 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 		return tDesktopViewManager;
 	}
 	
-	/**
-	 * Show a string on the screen via Toast.
-	 * 
-	 * @param msg String
-	 * @return void
-	 */
-	
-	public void toast (String msg){
-	    Toast.makeText (getApplicationContext(), msg, Toast.LENGTH_SHORT).show ();
-	}
-	/**
-	 * Send a message to the debug log and display it using Toast.
-	 */
-	
-	public void trace (String msg) {
-	    if (!Debugging) return;
-	    Log.d ("DesktopActivity", msg);
-	    toast (msg);
-	}
-	
 	public void openModelListActivity(){
 		tDesktopMenu.onModelListOpen();
 		Intent i = new Intent(this, ModelListActivity.class);
 		i.putExtra(RCConstants.FLAG_ACTIVITY_RC_MODEL, getDefaultModelName());
 		startActivityForResult(i, RCConstants.RC_MODEL_RESULT_CODE);
-
 	}
 	
 	@Override
@@ -208,27 +180,13 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 
 	@Override
 	protected void onServiceReady() {
-		preventOrientationBug();
 		tDB = rcService.getRocketColibriDB();
 		tDesktopMenu.onResume(rcService);
 		setupDesktop();
 	}
 	
-	private void preventOrientationBug(){
-	    if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-	    	try {
-	    		showLoading();
-				orientationChangeLock.tryAcquire(200, TimeUnit.MILLISECONDS);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-	    	hideLoading();
-	    }
-	}
-    
 	@Override
 	protected void onPause(){
-		orientationChangeLock.drainPermits();
 		releaseDesktop();
     	super.onPause();
 	}
@@ -281,15 +239,5 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 		runOnUiThread(new Runnable() {public void run() {
 			tDesktopMenu.setTextOnBottom(text);	
 		}});
-	}
-	
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-	    super.onConfigurationChanged(newConfig);
-	    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-	    	orientationChangeLock.release();
-	    } else {
-	    	orientationChangeLock.drainPermits();
-	    }
 	}
 }
