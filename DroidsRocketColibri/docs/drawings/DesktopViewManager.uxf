@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.2">
+  <zoom_level>6</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>414</x>
+      <y>324</y>
+      <w>330</w>
+      <h>228</h>
+    </coordinates>
+    <panel_attributes>DesktopViewManager
+--
+_Responsibilites_
+Handles the inputs from the CustomizedModeListener and interacts
+with the helper classes according to the inputs of the user.
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>834</x>
+      <y>324</y>
+      <w>216</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>ResizeController
+--
+_Responsibilities_
+Is responsible for the resizing of a customizable
+view.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>726</x>
+      <y>336</y>
+      <w>120</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=1</panel_attributes>
+    <additional_attributes>18;18;108;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>834</x>
+      <y>480</y>
+      <w>216</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>DragController
+--
+_Responisbilities_
+This class is responsible for the draging
+a customizable view on the screen.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>726</x>
+      <y>486</y>
+      <w>120</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=1</panel_attributes>
+    <additional_attributes>18;18;108;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>834</x>
+      <y>402</y>
+      <w>216</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>CustomizedModeListener
+--
+_Responsibilites_
+Hanling of the user inputs when the customizable
+mode is active.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>726</x>
+      <y>402</y>
+      <w>120</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-
+m2=1</panel_attributes>
+    <additional_attributes>18;18;108;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>480</x>
+      <y>636</y>
+      <w>216</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>AbsoluteLayout
+--
+_Responsibilities_
+responsible for absolute positioning of 
+Views on the parent view.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>468</x>
+      <y>534</y>
+      <w>82</w>
+      <h>114</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+parent view</panel_attributes>
+    <additional_attributes>42;102;42;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>414</x>
+      <y>42</y>
+      <w>414</w>
+      <h>228</h>
+    </coordinates>
+    <panel_attributes>DesktopViewManager
+--
+
+_create add delete methods_
++createAndAddView(vElementConfig:RCWidgetConfig ) : ICustomizableView
++createAndAddView(vElementConfig:ViewElementConfig) : ICustomizableView
++initCreateAndAddView(widgetConfig:RCWidgetConfig) : ICustomizableView
++createView(vElementConfig: ViewElementConfig): ICustomizableView
++createView(rcWidgetConfig : RCWidgetConfig ):ICustomizableView
++viewChanged(view:View)
++deleteView(view:View)
+ 
+_resize methods_
+resizeView(resizeTarget:View)
+ 
+_Drag methods_
+dragView(dagTarget:View ):boolean
+ 
+_Set reset customized mode_
+enableCustomizeModus(enabled:boolean)
+isInCustomizeModus():boolean
+ 
+_Edit parameter_
+startEditActivity(targetView:View)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>546</x>
+      <y>252</y>
+      <w>30</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>18;18;18;72</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>474</x>
+      <y>780</y>
+      <w>216</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>CustomizableView
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>456</x>
+      <y>684</y>
+      <w>104</w>
+      <h>108</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=*
+parent view
+customiziable list</panel_attributes>
+    <additional_attributes>54;96;54;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>606</x>
+      <y>534</y>
+      <w>66</w>
+      <h>114</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=1
+root view</panel_attributes>
+    <additional_attributes>36;102;36;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>54</x>
+      <y>366</y>
+      <w>216</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>EditChannelActivity
+--
+_Responsibilites_
+Responsible for the parameter configuration
+of the customizable view parameters</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>54</x>
+      <y>474</y>
+      <w>216</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>DesktopMenu
+--
+_Responsibilites_
+Responsible for the SwipeIn menu</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>252</x>
+      <y>378</y>
+      <w>174</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..1</panel_attributes>
+    <additional_attributes>18;18;162;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>252</x>
+      <y>474</y>
+      <w>174</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+m1=0..1</panel_attributes>
+    <additional_attributes>18;18;162;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>678</x>
+      <y>528</y>
+      <w>226</w>
+      <h>156</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+drag layer</panel_attributes>
+    <additional_attributes>18;144;192;144;192;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>678</x>
+      <y>528</y>
+      <w>344</w>
+      <h>174</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-
+drag target</panel_attributes>
+    <additional_attributes>18;162;306;162;306;18</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>828</x>
+      <y>714</y>
+      <w>216</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>Drag layer is the same as the drag target
+
+The customizable view is moved on the
+same screen.</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
