@@ -135,14 +135,17 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
     	ICustomizableView view = null;
     	for(int i = 0; i < size; ++i){
     		try{
-    			view = (ICustomizableView) tDesktopViewManager.getControlElementParentView().getChildAt(i);
-    			if (view instanceof IUiOutputSinkChangeObserver)
-    				rcService.tProtocol.registerUiOutputSinkChangeObserver((IUiOutputSinkChangeObserver)view);
-    			if (view instanceof IUiInputSource)
-    				rcService.tProtocol.registerUiInputSource((IUiInputSource)view);
+    			registerView((ICustomizableView) tDesktopViewManager.getControlElementParentView().getChildAt(i));
     		} catch (Exception e) {e.printStackTrace();}
     	}
     	rcService.tProtocol.registerUiOutputSinkChangeObserver(this);
+	}
+	
+	public void registerView(ICustomizableView view)	{
+		if (view instanceof IUiOutputSinkChangeObserver)
+			rcService.tProtocol.registerUiOutputSinkChangeObserver((IUiOutputSinkChangeObserver)view);
+		if (view instanceof IUiInputSource)
+			rcService.tProtocol.registerUiInputSource((IUiInputSource)view);
 	}
 	
 	public IDesktopViewManager getDesktopViewManager(){

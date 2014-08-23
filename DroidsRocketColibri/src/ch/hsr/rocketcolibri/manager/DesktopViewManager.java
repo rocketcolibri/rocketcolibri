@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.activity.DesktopActivity;
 import ch.hsr.rocketcolibri.activity.EditChannelActivity;
 import ch.hsr.rocketcolibri.manager.listener.CustomizeModusListener;
 import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
@@ -125,8 +126,13 @@ public class DesktopViewManager implements IDesktopViewManager{
 	
 	private void processRCWidget(ICustomizableView widget){
 		widget.setCustomizeModusListener(tCustomizeModusListener);
-		widget.setCustomizeModus(tCustomizeModus);
+		widget.setCustomizeModus(tCustomizeModus);	
 		tControlElementParentView.addView((View)widget);
+		try {
+			((DesktopActivity) tContext).registerView(widget);	
+		} catch (Exception e) {e.printStackTrace();} 
+		
+		
 	}
 	
 	@Override
