@@ -244,6 +244,10 @@ public class AnalogStickWidget extends View implements ICustomizableView, IUiInp
 			int bottom) {
 		super.onLayout(changed, left, top, right, bottom);
 
+		calculateDimensions();
+	}
+
+	private void calculateDimensions() {
 		int d = Math.min(getLayoutParams().width, getLayoutParams().height);
 		dimX = d;
 		dimY = d;
@@ -586,7 +590,7 @@ public class AnalogStickWidget extends View implements ICustomizableView, IUiInp
 			tChannelV.setChannelTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
 			tChannelV.setWidgetSticky(getProtocolMapBoolean(RCConstants.STICKY_V));
 			tDebug = getProtocolMapBoolean(RCConstants.DEBUG);
-			returnHandleToInitialPosition();
+			calculateDimensions();
 			postInvalidate();
 		}catch(Exception e){
 			e.printStackTrace();
