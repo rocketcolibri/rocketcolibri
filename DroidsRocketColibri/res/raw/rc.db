@@ -1,103 +1,126 @@
-[  
-   {  
-      "model":{  
-         "name":"Test Model",
-         "widgetConfigs":[  
-            {  
-               "protocolMap":{  
-                  "rc_max_range_v":"1000",
-                  "rc_channel_assignment_h":"0",
-                  "rc_inverted_h":"false",
-                  "rc_trimm_v":"",
-                  "rc_min_range_v":"-1000",
-                  "rc_max_range_h":"1000",
-                  "rc_channel_assignment_v":"1",
-                  "rc_inverted_v":"false",
-                  "rc_debug":"true",
-                  "rc_trimm_h":"",
-                  "rc_sticky":"false",
-                  "rc_min_range_h":"-1000"
-               },
-               "viewElementConfig":{  
-                  "resizeConfig":{  
-                     "keepRatio":true,
-                     "maxHeight":200,
-                     "maxWidth":200,
-                     "minHeight":40,
-                     "minWidth":40
-                  },
-                  "classPath":"ch.hsr.rocketcolibri.view.widget.AnalogStickWidget",
-                  "layoutParams":{  
-                     "layoutAnimationParameters":null,
-                     "height":198,
-                     "width":198,
-                     "x":476,
-                     "y":175
-                  },
-                  "id":0,
-                  "alpha":1.0
-               }
+[{
+    "model": {
+        "name": "Test Model",
+        "widgetConfigs": [{
+            "protocolMap": {
+                "rc_max_range_v": "1000",
+                "rc_channel_assignment_h": "3",
+                "rc_inverted_h": "false",
+                "rc_trimm_v": "0",
+                "rc_default_position_h": "500",
+                "rc_min_range_v": "1",
+                "rc_max_range_h": "1000",
+                "rc_channel_assignment_v": "2",
+                "rc_inverted_v": "true",
+                "rc_sticky_v": "true",
+                "rc_debug": "false",
+                "rc_trimm_h": "0",
+                "rc_default_position_v": "1000",
+                "rc_min_range_h": "1",
+                "rc_sticky_h": "false"
             },
-            {  
-               "protocolMap":{  
-                  "rc_max_range_v":"",
-                  "rc_channel_assignment_h":"0",
-                  "rc_trimm_v":"",
-                  "rc_inverted_h":"false",
-                  "rc_min_range_v":"",
-                  "rc_max_range_h":"",
-                  "rc_channel_assignment_v":"1",
-                  "rc_inverted_v":"false",
-                  "rc_debug":"false",
-                  "rc_trimm_h":"",
-                  "rc_sticky":"false",
-                  "rc_min_range_h":""
-               },
-               "viewElementConfig":{  
-                  "resizeConfig":{  
-                     "keepRatio":true,
-                     "maxHeight":200,
-                     "maxWidth":200,
-                     "minHeight":40,
-                     "minWidth":40
-                  },
-                  "classPath":"ch.hsr.rocketcolibri.view.widget.AnalogStickWidget",
-                  "layoutParams":{  
-                     "layoutAnimationParameters":null,
-                     "height":180,
-                     "width":180,
-                     "x":20,
-                     "y":193
-                  },
-                  "id":0,
-                  "alpha":1.0
-               }
-            },
-            {  
-               "protocolMap":null,
-               "viewElementConfig":{  
-                  "resizeConfig":{  
-                     "keepRatio":false,
-                     "maxHeight":9000,
-                     "maxWidth":9000,
-                     "minHeight":100,
-                     "minWidth":180
-                  },
-                  "classPath":"ch.hsr.rocketcolibri.view.widget.VideoStreamWidget",
-                  "layoutParams":{  
-                     "layoutAnimationParameters":null,
-                     "height":300,
-                     "width":400,
-                     "x":147,
-                     "y":45
-                  },
-                  "id":0,
-                  "alpha":1.0
-               }
+            "viewElementConfig": {
+                "resizeConfig": {
+                    "keepRatio": true,
+                    "maxHeight": 320,
+                    "maxWidth": 320,
+                    "minHeight": 50,
+                    "minWidth": 50
+                },
+                "classPath": "ch.hsr.rocketcolibri.view.widget.AnalogStickWidget",
+                "layoutParams": {
+                    "layoutAnimationParameters": null,
+                    "height": 180,
+                    "width": 180,
+                    "x": 35,
+                    "y": 188
+                },
+                "id": 0,
+                "alpha": 1.0
             }
-         ]
-      },
-      "process":"insert",
-      "timestamp":"14.08.2014 10:39:15"
-   }
-]
+        }, {
+            "protocolMap": {
+                "rc_max_range_v": "1000",
+                "rc_channel_assignment_h": "0",
+                "rc_trimm_v": "0",
+                "rc_inverted_h": "false",
+                "rc_default_position_h": "500",
+                "rc_min_range_v": "1",
+                "rc_channel_assignment_v": "1",
+                "rc_max_range_h": "1000",
+                "rc_inverted_v": "false",
+                "rc_sticky_v": "false",
+                "rc_debug": "false",
+                "rc_trimm_h": "0",
+                "rc_default_position_v": "500",
+                "rc_min_range_h": "1",
+                "rc_sticky_h": "false"
+            },
+            "viewElementConfig": {
+                "resizeConfig": {
+                    "keepRatio": true,
+                    "maxHeight": 320,
+                    "maxWidth": 320,
+                    "minHeight": 50,
+                    "minWidth": 50
+                },
+                "classPath": "ch.hsr.rocketcolibri.view.widget.AnalogStickWidget",
+                "layoutParams": {
+                    "layoutAnimationParameters": null,
+                    "height": 180,
+                    "width": 180,
+                    "x": 615,
+                    "y": 188
+                },
+                "id": 0,
+                "alpha": 1.0
+            }
+        }, {
+            "protocolMap": null,
+            "viewElementConfig": {
+                "resizeConfig": {
+                    "keepRatio": true,
+                    "maxHeight": 120,
+                    "maxWidth": 120,
+                    "minHeight": 50,
+                    "minWidth": 50
+                },
+                "classPath": "ch.hsr.rocketcolibri.view.widget.ConnectionStatusWidget",
+                "layoutParams": {
+                    "layoutAnimationParameters": null,
+                    "height": 50,
+                    "width": 50,
+                    "x": 0,
+                    "y": 0
+                },
+                "id": 0,
+                "alpha": 1.0
+            }
+        }, {
+            "protocolMap": null,
+            "viewElementConfig": {
+                "resizeConfig": {
+                    "keepRatio": false,
+                    "maxHeight": 300,
+                    "maxWidth": 800,
+                    "minHeight": 50,
+                    "minWidth": 500
+                },
+                "classPath": "ch.hsr.rocketcolibri.view.widget.ConnectedUserInfoWidget",
+                "layoutParams": {
+                    "layoutAnimationParameters": null,
+                    "height": 50,
+                    "width": 500,
+                    "x": 295,
+                    "y": 0
+                },
+                "id": 0,
+                "alpha": 0.5
+            }
+        }]
+    },
+    "timestamp": "24.08.2014 17:38:55",
+    "process": "insert",
+    "pixelWidth": 1920,
+    "pixelHeight": 1080
+}]

@@ -50,6 +50,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 	private ViewChangedListener tViewChangeListener;
 	private CustomizeModusPopupMenu tCustomizeModusPopupMenu;
 	private DesktopMenu tDesktopMenu;
+	private DVMViewListener dvmViewListener;
 	
 	public DesktopViewManager(Activity context, AbsoluteLayout rootView, AbsoluteLayout controlElementParentView,  ViewChangedListener vcListener){
 		tContext = context;
@@ -68,6 +69,11 @@ public class DesktopViewManager implements IDesktopViewManager{
 		tCustomizeModusPopupMenu = new CustomizeModusPopupMenu(this, ll);
 	    tCustomizeModusListener = new CustomizeModusListener(this);
 	    tDesktopMenu = new DesktopMenu(tContext, this);
+	}
+	
+	@Override
+	public void setDVMViewListener(DVMViewListener dvmVl){
+		dvmViewListener = dvmVl;
 	}
 
 	@Override
@@ -128,11 +134,7 @@ public class DesktopViewManager implements IDesktopViewManager{
 		widget.setCustomizeModusListener(tCustomizeModusListener);
 		widget.setCustomizeModus(tCustomizeModus);	
 		tControlElementParentView.addView((View)widget);
-		try {
-			((DesktopActivity) tContext).registerView(widget);	
-		} catch (Exception e) {e.printStackTrace();} 
-		
-		
+		onAdd((View)widget);
 	}
 	
 	@Override
@@ -153,6 +155,17 @@ public class DesktopViewManager implements IDesktopViewManager{
 	public void deleteView(View view){
 		tViewChangeListener.onViewDelete(((ICustomizableView)view).getWidgetConfig());
 		tControlElementParentView.removeView(view);
+		onDelete(view);
+	}
+	
+	private void onAdd(View view){
+		if(dvmViewListener!=null)
+			dvmViewListener.onAdd(view);
+	}
+	
+	private void onDelete(View view){
+		if(dvmViewListener!=null)
+			dvmViewListener.onDelete(view);
 	}
 
 	@Override

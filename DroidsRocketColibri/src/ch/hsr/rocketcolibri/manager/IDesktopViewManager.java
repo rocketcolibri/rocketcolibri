@@ -16,6 +16,7 @@ import android.view.View;
  * @author Artan Veliju
  */
 public interface IDesktopViewManager {
+	void setDVMViewListener(DVMViewListener dvmVl);
 	void resizeView(View resizeTarget);
 	boolean dragView(View dagTarget);
 	ICustomizableView createAndAddView(RCWidgetConfig vElementConfig) throws Exception;

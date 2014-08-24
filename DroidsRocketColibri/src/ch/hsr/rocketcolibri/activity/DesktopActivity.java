@@ -15,12 +15,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.Toast;
 import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.db.RocketColibriDB;
 import ch.hsr.rocketcolibri.db.model.Defaults;
 import ch.hsr.rocketcolibri.db.model.RCModel;
+import ch.hsr.rocketcolibri.manager.DVMViewListener;
 import ch.hsr.rocketcolibri.manager.DesktopViewManager;
 import ch.hsr.rocketcolibri.manager.IDesktopViewManager;
 import ch.hsr.rocketcolibri.manager.listener.ViewChangedListener;
@@ -89,6 +91,25 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 		//this line is needed because of the SwipeInMenu,
 		//there is a bug if no color is set on the surface view
 		surface_view.setBackgroundColor(Color.TRANSPARENT);
+		
+		tDesktopViewManager.setDVMViewListener(new DVMViewListener() {
+			public void onDelete(View view) {
+				try{
+					if (view instanceof IUiOutputSinkChangeObserver)
+						rcService.tProtocol.unregisterUiOutputSinkChangeObserver((IUiOutputSinkChangeObserver)view);
+					if (view instanceof IUiInputSource)
+						rcService.tProtocol.unregisterUiInputSource((IUiInputSource)view);
+				} catch (Exception e) {e.printStackTrace();}
+			}
+			public void onAdd(View view) {
+				try{
+					if (view instanceof IUiOutputSinkChangeObserver)
+						rcService.tProtocol.registerUiOutputSinkChangeObserver((IUiOutputSinkChangeObserver)view);
+					if (view instanceof IUiInputSource)
+						rcService.tProtocol.registerUiInputSource((IUiInputSource)view);
+				} catch (Exception e) {e.printStackTrace();}
+			}
+		});
 	}
 	
 	@Override
@@ -113,7 +134,7 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 				String defaultModelName = getDefaultModelName();
 				if(defaultModelName!=null){
 					tModel = tDB.fetchRCModelByName(defaultModelName);
-					displayModelNameOnDesktopMenu(tModel.getName());
+					displayModelNameOnDesktopMenu(defaultModelName);
 				}else{
 					openModelListActivity();
 					return;
@@ -131,21 +152,6 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 			}
 			setupViewsOnce = false;
 		}
-		int size = tDesktopViewManager.getControlElementParentView().getChildCount();
-    	ICustomizableView view = null;
-    	for(int i = 0; i < size; ++i){
-    		try{
-    			registerView((ICustomizableView) tDesktopViewManager.getControlElementParentView().getChildAt(i));
-    		} catch (Exception e) {e.printStackTrace();}
-    	}
-    	rcService.tProtocol.registerUiOutputSinkChangeObserver(this);
-	}
-	
-	public void registerView(ICustomizableView view)	{
-		if (view instanceof IUiOutputSinkChangeObserver)
-			rcService.tProtocol.registerUiOutputSinkChangeObserver((IUiOutputSinkChangeObserver)view);
-		if (view instanceof IUiInputSource)
-			rcService.tProtocol.registerUiInputSource((IUiInputSource)view);
 	}
 	
 	public IDesktopViewManager getDesktopViewManager(){
@@ -187,7 +193,9 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 
 	@Override
 	protected void onServiceReady() {
+    	rcService.tProtocol.registerUiOutputSinkChangeObserver(this);
 		tDB = rcService.getRocketColibriDB();
+		displayModelNameOnDesktopMenu(getDefaultModelName());
 		tDesktopMenu.onResume(rcService);
 		setupDesktop();
 	}
@@ -200,7 +208,8 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 	
 	private void releaseDesktop(){
     	try{
-    		rcService.tProtocol.release();
+//    		rcService.tProtocol.release();
+        	rcService.tProtocol.unregisterUiOutputSinkChangeObserver(this);
     	}catch(Exception e){}
 	}
 

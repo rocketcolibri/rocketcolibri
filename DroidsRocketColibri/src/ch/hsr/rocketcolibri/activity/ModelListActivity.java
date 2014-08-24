@@ -247,6 +247,7 @@ public class ModelListActivity extends RCActivity {
 			}
 
 			public boolean saveItem(int position, String newName) {
+				System.out.println("hallo_:"+ newName);
 				ModelRow pi = tAdapter.getItem(position);
 				if(newName.equals(pi.getName()))return true;
 				RCModel m = (RCModel) db.getOdb().getObjectFromId(pi.getId());
@@ -261,6 +262,12 @@ public class ModelListActivity extends RCActivity {
 					m.setName(newName);
 					db.store(m);
 					pi.setName(newName);
+					try{
+						Defaults def = (Defaults) db.fetch(Defaults.class).getFirst();
+						def.modelName = newName;
+						db.store(def);
+						tFirstTime = false;
+					}catch(Exception e){}
 				}
 				tAdapter.notifyDataSetChanged();
 				return true;
