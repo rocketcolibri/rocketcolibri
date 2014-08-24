@@ -202,14 +202,13 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 	
 	@Override
 	protected void onPause(){
-		releaseDesktop();
+		rcService.tProtocol.unregisterUiOutputSinkChangeObserver(this);
     	super.onPause();
 	}
 	
 	private void releaseDesktop(){
     	try{
-//    		rcService.tProtocol.release();
-        	rcService.tProtocol.unregisterUiOutputSinkChangeObserver(this);
+    		rcService.tProtocol.release();
     	}catch(Exception e){}
 	}
 
