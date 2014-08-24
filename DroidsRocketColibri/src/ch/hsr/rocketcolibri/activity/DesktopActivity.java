@@ -164,13 +164,7 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 		if (requestCode == RCConstants.RC_MODEL_RESULT_CODE && editChannelIntent!=null) {
 			String modelName = editChannelIntent.getStringExtra(RCConstants.FLAG_ACTIVITY_RC_MODEL);
 			if(modelName!=null){
-				setDefaultModelName(modelName);
-				releaseDesktop();
-				tDesktopViewManager.getControlElementParentView().removeAllViews();
-				tModel = tDB.fetchRCModelByName(modelName);
-				setupViewsOnce = true;
-				setupDesktop();
-				tDesktopMenu.animateClose();
+				onModelSelected(modelName);
 				System.gc();
 			}
 		}else{
@@ -179,6 +173,16 @@ public class DesktopActivity extends RCActivity implements IUiOutputSinkChangeOb
 	            tDesktopViewManager.editActivityResult(requestCode, editChannelIntent);
 	        }
 		}
+	}
+	
+	private void onModelSelected(String modelName){
+		setDefaultModelName(modelName);
+		releaseDesktop();
+		tDesktopViewManager.getControlElementParentView().removeAllViews();
+		tModel = tDB.fetchRCModelByName(modelName);
+		setupViewsOnce = true;
+		setupDesktop();
+		tDesktopMenu.animateClose();
 	}
 
 	@Override

@@ -719,7 +719,7 @@ public class SwipeInMenu extends ViewGroup {
 		in.setFillAfter(true);
 		in.setDuration(100);
 		out = new ScaleAnimation(-1f, -1f, 1.0f, 0.05f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 1.0f);
-		out.setDuration(200);
+		out.setDuration(100);
 		out.setFillAfter(true);
 		out.setAnimationListener(new AnimationListener() {
 		    public void onAnimationEnd(Animation animation) {
@@ -778,7 +778,6 @@ public class SwipeInMenu extends ViewGroup {
 		if (mOnDrawerScrollListener != null) {
 			mOnDrawerScrollListener.onScrollEnded();
 		}
-
 		if (mVelocityTracker != null) {
 			mVelocityTracker.recycle();
 			mVelocityTracker = null;
@@ -945,7 +944,7 @@ public class SwipeInMenu extends ViewGroup {
 		tContent.setVisibility( View.GONE );
 		tContent.destroyDrawingCache();
 		
-		changeHeadOnClose();
+		
 		if (!tIsOpen) {
 			return;
 		}
@@ -1220,6 +1219,8 @@ public class SwipeInMenu extends ViewGroup {
 			} else if (position == COLLAPSED_FULL_CLOSED) {
 				tHead.offsetTopAndBottom( mBottomOffset + getBottom() - getTop() - tHead.getHeight() - tHead.getTop());
 				invalidate();
+				changeHeadOnClose();
+				requestLayout();
 			} else {
 				
 				int deltaY = position - tHead.getTop();

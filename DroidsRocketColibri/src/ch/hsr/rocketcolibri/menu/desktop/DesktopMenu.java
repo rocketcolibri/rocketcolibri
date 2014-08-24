@@ -210,13 +210,15 @@ public class DesktopMenu {
 	}
 	
 	private void switchModusContent() {
-		if(tDesktopViewManager.isInCustomizeModus()){
-			tControlModusContent.setVisibility(View.GONE);
-			tCustomizeModusContent.setVisibility(View.VISIBLE);
-		}else{
-			tCustomizeModusContent.setVisibility(View.GONE);
-			tControlModusContent.setVisibility(View.VISIBLE);
-		}
+		try{
+			if(tDesktopViewManager.isInCustomizeModus()){
+				tControlModusContent.setVisibility(View.GONE);
+				tCustomizeModusContent.setVisibility(View.VISIBLE);
+			}else{
+				tCustomizeModusContent.setVisibility(View.GONE);
+				tControlModusContent.setVisibility(View.VISIBLE);
+			}
+		}catch(Exception e){}
 	}
 	
 	private void initServiceDependentItems(){
