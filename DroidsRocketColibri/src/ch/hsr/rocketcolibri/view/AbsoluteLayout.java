@@ -24,16 +24,26 @@ package ch.hsr.rocketcolibri.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.RemoteViews.RemoteView;
 
 /**
+ * A layout that lets you specify exact locations (x/y coordinates) of its
+ * children. Absolute layouts are less flexible and harder to maintain than
+ * other types of layouts without absolute positioning.
+ *
+ * <p><strong>XML attributes</strong></p> <p> See {@link
+ * android.R.styleable#ViewGroup ViewGroup Attributes}, {@link
+ * android.R.styleable#View View Attributes}</p>
+ * 
+ * <p>Note: This class is a clone of AbsoluteLayout, which is now deprecated.
+ * 
  * @author Artan Veliju
  */
 
 @RemoteView
-public class AbsoluteLayout extends RelativeLayout {
+public class AbsoluteLayout extends ViewGroup {
     public AbsoluteLayout(Context context) {
         super(context);
     }
@@ -47,6 +57,50 @@ public class AbsoluteLayout extends RelativeLayout {
         super(context, attrs, defStyle);
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int count = getChildCount();
+
+        int maxHeight = 0;
+        int maxWidth = 0;
+
+        // Find out how big everyone wants to be
+        measureChildren(widthMeasureSpec, heightMeasureSpec);
+
+        // Find rightmost and bottom-most child
+        for (int i = 0; i < count; i++) {
+            View child = getChildAt(i);
+            if (child.getVisibility() != GONE) {
+                int childRight;
+                int childBottom;
+
+                AbsoluteLayout.LayoutParams lp
+                        = (AbsoluteLayout.LayoutParams) child.getLayoutParams();
+
+                childRight = lp.x + child.getMeasuredWidth();
+                childBottom = lp.y + child.getMeasuredHeight();
+
+                maxWidth = Math.max(maxWidth, childRight);
+                maxHeight = Math.max(maxHeight, childBottom);
+            }
+        }
+
+        // Account for padding too
+        maxWidth += getPaddingLeft () + getPaddingRight ();
+        maxHeight += getPaddingTop () + getPaddingBottom ();
+        /* original
+        maxWidth += mPaddingLeft + mPaddingRight;
+        maxHeight += mPaddingTop + mPaddingBottom;
+        */
+
+        // Check against minimum height and width
+        maxHeight = Math.max(maxHeight, getSuggestedMinimumHeight());
+        maxWidth = Math.max(maxWidth, getSuggestedMinimumWidth());
+        
+        setMeasuredDimension(resolveSize(maxWidth, widthMeasureSpec),
+                resolveSize(maxHeight, heightMeasureSpec));
+    }
+
     /**
      * Returns a set of layout parameters with a width of
      * {@link android.view.ViewGroup.LayoutParams#WRAP_CONTENT},
@@ -54,12 +108,40 @@ public class AbsoluteLayout extends RelativeLayout {
      * and with the coordinates (0, 0).
      */
     @Override
-    protected RelativeLayout.LayoutParams generateDefaultLayoutParams() {
+    protected ViewGroup.LayoutParams generateDefaultLayoutParams() {
         return new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0, 0);
     }
 
     @Override
-    public RelativeLayout.LayoutParams generateLayoutParams(AttributeSet attrs) {
+    protected void onLayout(boolean changed, int l, int t,
+            int r, int b) {
+        int count = getChildCount();
+
+        int paddingL = getPaddingLeft ();
+        int paddingT = getPaddingTop ();
+        for (int i = 0; i < count; i++) {
+            View child = getChildAt(i);
+            if (child.getVisibility() != GONE) {
+
+                AbsoluteLayout.LayoutParams lp =
+                        (AbsoluteLayout.LayoutParams) child.getLayoutParams();
+
+                int childLeft = paddingL + lp.x;
+                int childTop = paddingT + lp.y;
+                /*
+                int childLeft = mPaddingLeft + lp.x;
+                int childTop = mPaddingTop + lp.y;
+                */
+                child.layout(childLeft, childTop,
+                        childLeft + child.getMeasuredWidth(),
+                        childTop + child.getMeasuredHeight());
+
+            }
+        }
+    }
+
+    @Override
+    public ViewGroup.LayoutParams generateLayoutParams(AttributeSet attrs) {
         return new AbsoluteLayout.LayoutParams(getContext(), attrs);
     }
 
@@ -69,7 +151,27 @@ public class AbsoluteLayout extends RelativeLayout {
         return p instanceof AbsoluteLayout.LayoutParams;
     }
 
-    public static class LayoutParams extends RelativeLayout.LayoutParams {
+    @Override
+    protected ViewGroup.LayoutParams generateLayoutParams(ViewGroup.LayoutParams p) {
+        return new LayoutParams(p);
+    }
+
+    /**
+     * Per-child layout information associated with MyAbsoluteLayout.
+     * See
+     * {@link android.R.styleable#MyAbsoluteLayout_Layout Absolute Layout Attributes}
+     * for a list of all child view attributes that this class supports.
+     */
+    public static class LayoutParams extends ViewGroup.LayoutParams {
+        /**
+         * The horizontal, or X, location of the child within the view group.
+         */
+        public int x;
+        /**
+         * The vertical, or Y, location of the child within the view group.
+         */
+        public int y;
+
         public LayoutParams(){
         	super(0,0);
         }
@@ -86,38 +188,50 @@ public class AbsoluteLayout extends RelativeLayout {
          */
         public LayoutParams(int width, int height, int x, int y) {
             super(width, height);
-            this.leftMargin = x;
-            this.topMargin = y;
+            this.x = x;
+            this.y = y;
         }
 
+        /**
+         * Creates a new set of layout parameters. The values are extracted from
+         * the supplied attributes set and context. The XML attributes mapped
+         * to this set of layout parameters are:
+         *
+         * <ul>
+         *   <li><code>layout_x</code>: the X location of the child</li>
+         *   <li><code>layout_y</code>: the Y location of the child</li>
+         *   <li>All the XML attributes from
+         *   {@link android.view.ViewGroup.LayoutParams}</li>
+         * </ul>
+         *
+         * @param c the application environment
+         * @param attrs the set of attributes from which to extract the layout
+         *              parameters values
+         */
         public LayoutParams(Context c, AttributeSet attrs) {
             super(c, attrs);
+            /* FIX THIS eventually. Without this, I don't think you can put x and y in layout xml files.
+            TypedArray a = c.obtainStyledAttributes(attrs,
+                    com.android.internal.R.styleable.AbsoluteLayout_Layout);
+            x = a.getDimensionPixelOffset(
+                    com.android.internal.R.styleable.AbsoluteLayout_Layout_layout_x, 0);
+            y = a.getDimensionPixelOffset(
+                    com.android.internal.R.styleable.AbsoluteLayout_Layout_layout_y, 0);
+            a.recycle();
+            */
         }
 
+        /**
+         * {@inheritDoc}
+         */
         public LayoutParams(ViewGroup.LayoutParams source) {
             super(source);
-        }
-        
-        public void setX(int x){
-        	this.leftMargin = x;
-        }
-        
-        public void setY(int y){
-        	this.topMargin = y;
-        }
-        
-        public int getX(){
-        	return this.leftMargin;
-        }
-        
-        public int getY(){
-        	return this.topMargin;
         }
 
         public String debug(String output) {
             return output + "Absolute.LayoutParams={width="
                     + sizeToString(width) + ", height=" + sizeToString(height)
-                    + " x=" + this.leftMargin + " y=" + this.topMargin + "}";
+                    + " x=" + this.x + " y=" + this.y + "}";
         }
 
       /**
@@ -137,18 +251,34 @@ public class AbsoluteLayout extends RelativeLayout {
             }
             return String.valueOf(size);
         }
+        
+        public void setX(int pX){
+        	this.x = pX;
+        }
+
+        public int getX(){
+        	return this.x;
+        }
+
+        public void setY(int pY){
+        	this.y = pY;
+        }
+
+        public int getY(){
+        	return this.y;
+        }
 
         public boolean equals(LayoutParams theParam) {
-        	if (this.leftMargin != theParam.leftMargin) {
+        	if (this.x != theParam.x) {
         		return false;
         	}
 
-        	if (this.topMargin != theParam.topMargin) {
+        	if (this.y != theParam.y) {
         		return false;
         	}
 
         	return true;
         }
-    }
+    } // end class
  
-}
+} // end class
