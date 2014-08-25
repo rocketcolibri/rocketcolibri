@@ -259,15 +259,17 @@ public class ModelListActivity extends RCActivity {
 							return false;
 						}
 					}
+					try{
+						Defaults def = (Defaults) db.fetch(Defaults.class).getFirst();
+						if(pi.getName().equals(def.modelName)){
+							def.modelName = newName;
+							db.store(def);
+							tFirstTime = false;
+						}
+					}catch(Exception e){}
 					m.setName(newName);
 					db.store(m);
 					pi.setName(newName);
-					try{
-						Defaults def = (Defaults) db.fetch(Defaults.class).getFirst();
-						def.modelName = newName;
-						db.store(def);
-						tFirstTime = false;
-					}catch(Exception e){}
 				}
 				tAdapter.notifyDataSetChanged();
 				return true;
