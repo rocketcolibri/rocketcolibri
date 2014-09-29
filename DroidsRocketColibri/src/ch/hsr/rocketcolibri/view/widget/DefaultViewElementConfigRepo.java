@@ -36,6 +36,19 @@ public class DefaultViewElementConfigRepo {
 	    dpToPixel(density, elementConfig);
 	    repo.put(AnalogStickWidget.class, elementConfig);
 		//<<<<<<<<<<<<<<<<<<<<<<<<<<< Analog Stick <<<<<<<<<<<<<<<<<<<<<<<<<<
+	    
+		//>>>>>>>>>>>>>>>>>>>>>>>>>>> Motion Control >>>>>>>>>>>>>>>>>>>>>>>>>>
+		rc = new ResizeConfig();
+	    rc.keepRatio=true;
+	    rc.maxHeight=320;
+	    rc.minHeight=50;
+	    rc.maxWidth=320;
+	    rc.minWidth=50;
+	    lp = new LayoutParams(180, 180 , 100, 300);
+	    elementConfig = new ViewElementConfig(MotionControlWidget.class.getName(), lp, rc);
+	    dpToPixel(density, elementConfig);
+	    repo.put(MotionControlWidget.class, elementConfig);
+		//<<<<<<<<<<<<<<<<<<<<<<<<<<<  Motion Control<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 		//>>>>>>>>>>>>>>>>>>>>>>>>>>> ConnectedUserInfoWidget >>>>>>>>>
 		rc = new ResizeConfig();
