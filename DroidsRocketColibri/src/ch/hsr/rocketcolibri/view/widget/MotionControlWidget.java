@@ -31,16 +31,14 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.HapticFeedbackConstants;
-import android.view.MotionEvent;
 import android.view.View;
 
 
 /**
- * whatch this as an introduction to motion sensinghttps://www.youtube.com/watch?v=C7JQ7Rpwn2k
- * 
- * use type:
- * TYPE_GAME_ROTATION_VECTOR
+ * This is a sample file on how to use the gravity sensor
+ * https://github.com/a500381/SensorBallDraw/blob/master/SensorBallDraw/src/sensorball/view/BallDraw.java
+ *
+ * Offical android documentation
  * http://developer.android.com/reference/android/hardware/SensorEvent.html
  * 
  * @author lorenz
@@ -68,9 +66,6 @@ public class MotionControlWidget extends View implements ICustomizableView, IUiI
 	private int handleRadius;
 	private int movementRadius;
 	private int handleInnerBoundaries;
-
-	private AnalogStickMovedListener moveListener;
-	private AnalogStickClickedListener clickListener;
 
 	// # of pixels movement required between reporting to the listener
 	private float moveResolution;
@@ -194,6 +189,8 @@ public class MotionControlWidget extends View implements ICustomizableView, IUiI
 					sensorZ = event.values[2];
 					touchX = 150 * sensorX;
 					touchY = 150 * sensorY;
+					tChannelH.setWidgetPosition((int)touchX);
+					tChannelV.setWidgetPosition((int)touchY);
 					postInvalidate();
 				}
 				
@@ -262,14 +259,6 @@ public class MotionControlWidget extends View implements ICustomizableView, IUiI
 		return moveResolution;
 	}
 
-	public void setOnJostickMovedListener(AnalogStickMovedListener listener) {
-		this.moveListener = listener;
-	}
-
-	public void setOnJostickClickedListener(AnalogStickClickedListener listener) {
-		this.clickListener = listener;
-	}
-
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		// Here we make sure that we have a perfect circle
@@ -335,9 +324,9 @@ public class MotionControlWidget extends View implements ICustomizableView, IUiI
 		canvas.drawCircle(handleX, handleY, handleRadius, handlePaint);
 
 		String dbgString;
-		dbgString = String.format(Locale.getDefault(), "Sensor(%.2f:%.2f:%.2f]", sensorX,sensorY,sensorZ);
-		dbgLine.setColor(Color.GREEN);
-		canvas.drawText(dbgString,0,40, dbgLine);
+//		dbgString = String.format(Locale.getDefault(), "Sensor(%.2f:%.2f:%.2f]", sensorX,sensorY,sensorZ);
+//		dbgLine.setColor(Color.GREEN);
+//		canvas.drawText(dbgString,0,40, dbgLine);
 		if (tDebug) {
 			canvas.drawCircle(cX, cY, bgRadius, dbgPaint1);
 
