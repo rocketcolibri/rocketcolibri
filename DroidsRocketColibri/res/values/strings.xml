@@ -43,6 +43,10 @@
     <string name="rc_debug">Debug</string>
     <string name="edit_acivity_saved">saved!</string>
     
+    <!-- Setup Connection -->
+    <string name="setup_connection_title">Setup Connection to ServoController</string>
+    
+    
     <string name="loading">Loading</string>
     <string name="create_new">New</string>
     <string name="model_list_leave_toast">"you need to select a model before you leave!"</string>

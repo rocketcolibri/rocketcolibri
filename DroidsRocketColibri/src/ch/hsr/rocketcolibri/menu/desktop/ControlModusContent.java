@@ -4,9 +4,13 @@ import java.io.File;
 import java.util.List;
 
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.activity.DesktopActivity;
+import ch.hsr.rocketcolibri.activity.ModelListActivity;
+import ch.hsr.rocketcolibri.activity.SetupConnectionActivity;
 import ch.hsr.rocketcolibri.db.RocketColibriDataHandler;
 import ch.hsr.rocketcolibri.widgetdirectory.WidgetEntry;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -39,6 +43,22 @@ public class ControlModusContent extends ModusContent {
 						sendIntent.setType("text/plain");
 						sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 						tContext.startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.export_models)));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		findViewById(R.id.setupConnection).setOnClickListener(new OnClickListener() {
+			public void onClick(View arg0) {
+				if(tDesktopMenu.getService()!=null){
+					try {
+						Intent i = new Intent(tContext, SetupConnectionActivity.class);
+						//i.putExtra(RCConstants.FLAG_ACTIVITY_RC_MODEL, getDefaultModelName());
+						//((DesktopActivity) tContext).startActivityForResult(i, RCConstants.RC_MODEL_RESULT_CODE);
+						tContext.startActivity(i);
+						
+						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

@@ -44,6 +44,10 @@
 			android:configChanges="keyboardHidden|orientation|screenSize"
 			android:label="@string/edit_activity_title">
 		</activity>
+				<activity android:name=".activity.SetupConnectionActivity" android:theme="@style/SetupConnectionActivity"
+			android:configChanges="keyboardHidden|orientation|screenSize"
+			android:label="@string/setup_connection_title">
+		</activity>
 
 		<service android:name=".RocketColibriService" android:enabled="true">
 		</service>
