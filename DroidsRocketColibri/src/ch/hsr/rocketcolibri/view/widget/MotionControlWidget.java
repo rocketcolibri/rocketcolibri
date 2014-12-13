@@ -424,6 +424,8 @@ public class MotionControlWidget extends View implements ICustomizableView, IUiI
 			tChannelH.setChannelMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_H));
 			tChannelH.setChannelDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION_H));
 			tChannelH.setChannelTrimm(getProtocolMapInt(RCConstants.TRIMM_H));
+			tChannelH.setWidgetExpo(getProtocolMapBoolean(RCConstants.EXPO_H));
+			tChannelH.setChannelFailsafePosition(getProtocolMapInt(RCConstants.FAILSAFE_H));
 			
 			tChannelV.setChannelAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_V));
 			tChannelV.setChannelInverted(getProtocolMapBoolean(RCConstants.INVERTED_V));
@@ -431,6 +433,8 @@ public class MotionControlWidget extends View implements ICustomizableView, IUiI
 			tChannelV.setChannelMinRange(getProtocolMapInt(RCConstants.MIN_RANGE_V));
 			tChannelV.setChannelDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION_V));
 			tChannelV.setChannelTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
+			tChannelV.setWidgetExpo(getProtocolMapBoolean(RCConstants.EXPO_V));
+			tChannelV.setChannelFailsafePosition(getProtocolMapInt(RCConstants.FAILSAFE_V));
 			tDebug = getProtocolMapBoolean(RCConstants.DEBUG);
 						
 			tDebug = getProtocolMapBoolean(RCConstants.DEBUG);

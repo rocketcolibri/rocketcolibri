@@ -89,6 +89,7 @@ public class SwitchWidget extends Switch implements ICustomizableView, IUiInputS
 		tWidgetConfig.protocolMap.put(RCConstants.MAX_RANGE, Integer.valueOf(tChannel.getChannelMaxRange()).toString());
 		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE, Integer.valueOf(tChannel.getChannelMinRange()).toString());
 		tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION, Integer.valueOf(tChannel.getChannelDefaultPosition()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.FAILSAFE, Integer.valueOf(tChannel.getChannelFailsafePosition()).toString());
 		tWidgetConfig.protocolMap.put(RCConstants.DEBUG, Boolean.valueOf(false).toString());
 	}
 
@@ -138,6 +139,7 @@ public class SwitchWidget extends Switch implements ICustomizableView, IUiInputS
 			tChannel.setChannelMinRange(getProtocolMapInt(RCConstants.MIN_RANGE));
 			tChannel.setChannelDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION));
 			tChannel.setChannelInverted(getProtocolMapBoolean(RCConstants.INVERTED));
+			tChannel.setChannelFailsafePosition(getProtocolMapInt(RCConstants.FAILSAFE));
 			tDebug = getProtocolMapBoolean(RCConstants.DEBUG);
 			postInvalidate();
 		} catch (Exception e) {

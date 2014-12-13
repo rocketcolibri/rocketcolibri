@@ -141,6 +141,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView, IU
 		tWidgetConfig.protocolMap.put(RCConstants.MIN_RANGE, Integer.valueOf(tChannel.getChannelMinRange()).toString());
 		tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION, Integer.valueOf(tChannel.getChannelDefaultPosition()).toString());
 		tWidgetConfig.protocolMap.put(RCConstants.TRIMM, Integer.valueOf(tChannel.getChannelTrimm()).toString());
+		tWidgetConfig.protocolMap.put(RCConstants.FAILSAFE, Integer.valueOf(tChannel.getChannelFailsafePosition()).toString());
 		tWidgetConfig.protocolMap.put(RCConstants.DEBUG, Boolean.valueOf(false).toString());
 	}
 
@@ -232,6 +233,7 @@ public class RotaryKnobWidget extends ImageView implements ICustomizableView, IU
 			tChannel.setChannelMinRange(getProtocolMapInt(RCConstants.MIN_RANGE));
 			tChannel.setChannelDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION));
 			tChannel.setChannelTrimm(getProtocolMapInt(RCConstants.TRIMM));
+			tChannel.setChannelFailsafePosition(getProtocolMapInt(RCConstants.FAILSAFE));
 			tDebug = getProtocolMapBoolean(RCConstants.DEBUG);
 			// Protocol values has changed recalculate the values
 			calculateKnobValues();

@@ -554,6 +554,8 @@ public class AnalogStickWidget extends View implements ICustomizableView, IUiInp
 			tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION_H, Integer.valueOf(tChannelH.getChannelDefaultPosition()).toString());
 			tWidgetConfig.protocolMap.put(RCConstants.TRIMM_H, Integer.valueOf(tChannelH.getChannelTrimm()).toString());
 			tWidgetConfig.protocolMap.put(RCConstants.STICKY_H, Boolean.valueOf(tChannelH.getWidgetSticky()).toString());
+			tWidgetConfig.protocolMap.put(RCConstants.EXPO_H, Boolean.valueOf(tChannelH.getWidgetSticky()).toString());
+			tWidgetConfig.protocolMap.put(RCConstants.FAILSAFE_H, Integer.valueOf(tChannelH.getChannelFailsafePosition()).toString());
 
 			if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelV.getChannelAssignment() )
 				tWidgetConfig.protocolMap.put(RCConstants.CHANNEL_ASSIGNMENT_V, "");
@@ -565,6 +567,8 @@ public class AnalogStickWidget extends View implements ICustomizableView, IUiInp
 			tWidgetConfig.protocolMap.put(RCConstants.DEFAULT_POSITION_V, Integer.valueOf(tChannelV.getChannelDefaultPosition()).toString());
 			tWidgetConfig.protocolMap.put(RCConstants.TRIMM_V, Integer.valueOf(tChannelV.getChannelTrimm()).toString());
 			tWidgetConfig.protocolMap.put(RCConstants.STICKY_V, Boolean.valueOf(tChannelV.getWidgetSticky()).toString());
+			tWidgetConfig.protocolMap.put(RCConstants.EXPO_V, Boolean.valueOf(tChannelV.getWidgetSticky()).toString());
+			tWidgetConfig.protocolMap.put(RCConstants.FAILSAFE_V, Integer.valueOf(tChannelV.getChannelFailsafePosition()).toString());
 			tWidgetConfig.protocolMap.put(RCConstants.DEBUG, Boolean.valueOf(false).toString());
 		}else{
 			updateProtocolMap();
@@ -581,6 +585,8 @@ public class AnalogStickWidget extends View implements ICustomizableView, IUiInp
 			tChannelH.setChannelDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION_H));
 			tChannelH.setChannelTrimm(getProtocolMapInt(RCConstants.TRIMM_H));
 			tChannelH.setWidgetSticky(getProtocolMapBoolean(RCConstants.STICKY_H));
+			tChannelH.setWidgetExpo(getProtocolMapBoolean(RCConstants.EXPO_H));
+			tChannelH.setChannelFailsafePosition(getProtocolMapInt(RCConstants.FAILSAFE_H));
 			
 			tChannelV.setChannelAssignment(getProtocolMapInt(RCConstants.CHANNEL_ASSIGNMENT_V));
 			tChannelV.setChannelInverted(getProtocolMapBoolean(RCConstants.INVERTED_V));
@@ -589,6 +595,8 @@ public class AnalogStickWidget extends View implements ICustomizableView, IUiInp
 			tChannelV.setChannelDefaultPosition(getProtocolMapInt(RCConstants.DEFAULT_POSITION_V));
 			tChannelV.setChannelTrimm(getProtocolMapInt(RCConstants.TRIMM_V));
 			tChannelV.setWidgetSticky(getProtocolMapBoolean(RCConstants.STICKY_V));
+			tChannelV.setWidgetExpo(getProtocolMapBoolean(RCConstants.EXPO_V));
+			tChannelV.setChannelFailsafePosition(getProtocolMapInt(RCConstants.FAILSAFE_V));
 			tDebug = getProtocolMapBoolean(RCConstants.DEBUG);
 			calculateDimensions();
 			postInvalidate();

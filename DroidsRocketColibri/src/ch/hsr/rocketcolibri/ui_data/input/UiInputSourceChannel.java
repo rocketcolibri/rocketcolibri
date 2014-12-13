@@ -24,10 +24,12 @@ public class UiInputSourceChannel
 	/* attributes according to the requirements */
 	int assignment;
 	int defaultPosition;
+	int failsafePosition;
 	boolean inverted;
 	int minRange;
 	int maxRange;
 	int trimm;
+	boolean expo;
 	boolean sticky;
 	
 	/* widget attributes */
@@ -50,7 +52,8 @@ public class UiInputSourceChannel
 		
 		trimm = 0;
 		inverted = false;
-		currentChannelValue = defaultPosition = 0;
+		failsafePosition = currentChannelValue = defaultPosition = 0;
+		expo = false;
 	}
 	
 	/** setter */
@@ -86,6 +89,12 @@ public class UiInputSourceChannel
 	
 	public synchronized void setWidgetSticky(boolean d){ sticky = d;}
 	
+	public synchronized void setWidgetExpo(boolean d){ expo = d;}
+
+	public synchronized void setChannelFailsafePosition(int d)	{
+		this.failsafePosition = d;
+	}
+
 	
 	public synchronized void setWidgetRange(int min, int max) {
 		assert min < max : "widget range error " + min +".." + max;
@@ -122,7 +131,8 @@ public class UiInputSourceChannel
 	public synchronized boolean getChannelInverted()	{ return inverted;	}
 	public synchronized int getChannelDefaultPosition() { return defaultPosition;	}
 	public synchronized boolean getWidgetSticky() { return sticky;	}
-		
+	public synchronized boolean getWidgetExpo() { return expo;	}
+	public synchronized int getChannelFailsafePosition() { return failsafePosition;	}		
 
 	/**
 	 * get the value to be transmit in the CDC message
