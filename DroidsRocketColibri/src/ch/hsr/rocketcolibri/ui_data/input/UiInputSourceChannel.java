@@ -143,6 +143,16 @@ public class UiInputSourceChannel
 		return currentChannelValue;
 	}
 	
+	int getExpo(int channelInt)
+	{
+		double channelRange = MAX_CHANNEL_VALUE-MIN_CHANNEL_VALUE;
+		Double c = new Double(channelInt);
+		double base = (c-(channelRange/2))/(channelRange/4);	
+		c =  Math.pow(base, 3.0)  /16*channelRange+channelRange/2-2;
+		
+		return c.intValue();		
+	}
+	
 	/**
 	 * this function is called when an attribute has been changed
 	 */
@@ -167,6 +177,11 @@ public class UiInputSourceChannel
 			if(channel >  MAX_CHANNEL_VALUE)
 				channel = MAX_CHANNEL_VALUE;
 			
+			// check if epox
+			if(expo) {
+				channel = getExpo(channel);
+			}
+				
 			// check if inverted
 			if(inverted) {
 				channel  = MAX_CHANNEL_VALUE-channel; 
@@ -178,5 +193,4 @@ public class UiInputSourceChannel
 		else
 			currentChannelValue = 0;
 	}
-
 }
