@@ -48,6 +48,17 @@ public class RCConstants {
 	public static final String EXPO = PREFIX+_EXPO;
 	public static final String DEBUG = PREFIX+_DEBUG;
 	
+	
+	// connection settings
+	private static final String _AUTOCONNECT = "autoconnect";
+	private static final String _IP_SERVOCONTROLLER = "ip_servocontroller";
+	private static final String _PORT_SERVOCONTROLLER = "port_servocontroller";
+	
+	public static final String AUTOCONNECT = PREFIX+_AUTOCONNECT;
+	public static final String IP_SERVOCONTROLLER = PREFIX+_IP_SERVOCONTROLLER;
+	public static final String PORT_SERVOCONTROLLER = PREFIX+_PORT_SERVOCONTROLLER;
+	
+	
 	/**
 	 * @return DataType is just used to
 	 * determine the data type of the RCConstants keys 
@@ -58,6 +69,7 @@ public class RCConstants {
 		if(key.contains(_STICKY)) return DataType.BOOLEAN;
 		if(key.contains(_EXPO)) return DataType.BOOLEAN;
 		if(key.contains(_DEBUG)) return DataType.BOOLEAN;
+		if(key.contains(_AUTOCONNECT)) return DataType.BOOLEAN;
 //		if(key.contains(_MIN_RANGE)) return DataType.INT;
 //		if(key.contains(_MAX_RANGE)) return DataType.INT;
 //		if(key.contains(_MAX_DEFAULT_POSITION)) return DataType.INT;
