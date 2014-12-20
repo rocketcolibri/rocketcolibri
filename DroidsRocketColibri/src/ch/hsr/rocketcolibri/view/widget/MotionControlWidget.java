@@ -9,6 +9,7 @@ import java.util.Map;
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
 import ch.hsr.rocketcolibri.ui_data.input.IUiInputSource;
+import ch.hsr.rocketcolibri.ui_data.input.UiInputData;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObserver;
@@ -518,8 +519,8 @@ public class MotionControlWidget extends View implements ICustomizableView, IUiI
 	}
 
 	@Override
-	public List<UiInputSourceChannel> getUiInputSourceList() {
-		List<UiInputSourceChannel> list = new ArrayList<UiInputSourceChannel>();
+	public List<UiInputData> getUiInputSourceList() {
+		List<UiInputData> list = new ArrayList<UiInputData>();
 		list.add(tChannelV);
 		list.add(tChannelH);
 	    return list;

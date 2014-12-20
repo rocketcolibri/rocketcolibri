@@ -3,6 +3,9 @@
  */
 package ch.hsr.rocketcolibri.view.widget;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
@@ -17,7 +20,11 @@ import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.View;
 import ch.hsr.rocketcolibri.R;
+import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.protocol.RocketColibriProtocolFsm.s;
+import ch.hsr.rocketcolibri.ui_data.input.IUiInputSource;
+import ch.hsr.rocketcolibri.ui_data.input.UiInputData;
+import ch.hsr.rocketcolibri.ui_data.input.UiInputProtocol;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObserver;
 import ch.hsr.rocketcolibri.ui_data.output.UiOutputDataType;
@@ -32,15 +39,15 @@ import ch.hsr.rocketcolibri.view.custimizable.ViewElementConfig;
  * 
  *  The status of the connection is indicated with a icon according to the Systemschnittstellen document 
  */
-public class ConnectionStatusWidget extends View implements ICustomizableView, IUiOutputSinkChangeObserver {
+public class ConnectionStatusWidget extends View implements ICustomizableView, IUiOutputSinkChangeObserver, IUiInputSource{
 
 	protected ViewElementConfig tViewElementConfig;
 	protected RCWidgetConfig tWidgetConfig;
-	private RectF connectionIconRect;
+		private RectF connectionIconRect;
 	private Paint connectionIconPaint;
 	private Bitmap connectionIconBitmap;
 	private boolean tCustomizeModusActive = false;
-
+	private UiInputProtocol tProtocolSettings = new UiInputProtocol();
 	// to avoid null check
 	private ModusChangeListener tModusChangeListener = new ModusChangeListener()
 	{public void customizeModeDeactivated(){}public void customizeModeActivated(){}};
@@ -69,6 +76,7 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 		connectionIconPaint.setFilterBitmap(false);
 		connectionIconPaint.setStyle(Paint.Style.FILL);
 		connectionIconPaint.setShader(paperShader);
+		initDefaultProtocolConfig();
 	}
 	
 	@Override
@@ -154,8 +162,30 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 	}
 
 	@Override
-	public void updateProtocolMap() {}
-
+	public void updateProtocolMap() {
+		try{
+			tProtocolSettings.setAuto(getProtocolMapBoolean(RCConstants.AUTOCONNECT));
+			tProtocolSettings.setIpAddress(RCConstants.IP_SERVOCONTROLLER);
+			tProtocolSettings.setPort(getProtocolMapInt(RCConstants.PORT_SERVOCONTROLLER));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	protected int getProtocolMapInt(String key){
+		try{
+			return Integer.parseInt(tWidgetConfig.protocolMap.get(key));
+		}catch(NumberFormatException e){
+			return -1;
+		}
+	}
+	
+	protected boolean getProtocolMapBoolean(String key){
+		try{
+			return Boolean.parseBoolean(tWidgetConfig.protocolMap.get(key));
+		}catch(Exception e){
+			return false;
+		}
+	}
 	@Override
 	public void onNotifyUiOutputSink(Object p) {
 		ConnectionState data = (ConnectionState)p;
@@ -184,12 +214,29 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 			tCustomizeModusActive = enabled;
 		}
 	}
+	private void initDefaultProtocolConfig(){
+		if(tWidgetConfig.protocolMap==null){
+			tWidgetConfig.protocolMap = new HashMap<String, String>();
+			tWidgetConfig.protocolMap.put(RCConstants.AUTOCONNECT, Boolean.valueOf(tProtocolSettings.getAutoMode()).toString());
+			tWidgetConfig.protocolMap.put(RCConstants.IP_SERVOCONTROLLER, String.valueOf(tProtocolSettings.getIpAddress()).toString());
+			tWidgetConfig.protocolMap.put(RCConstants.PORT_SERVOCONTROLLER, Integer.valueOf(tProtocolSettings.getPort()).toString());
+		}else{
+			updateProtocolMap();
+		}
+	}
 
 	@Override
 	public ViewElementConfig getViewElementConfig() {
 		tWidgetConfig.viewElementConfig.setLayoutParams((LayoutParams) getLayoutParams());
 		tWidgetConfig.viewElementConfig.setAlpha(getAlpha());
 		return tWidgetConfig.viewElementConfig;
+	}
+
+	@Override
+	public List<UiInputData> getUiInputSourceList() {
+		List<UiInputData> list = new ArrayList<UiInputData>();
+		list.add(tProtocolSettings);
+	    return list;
 	}
 
 }

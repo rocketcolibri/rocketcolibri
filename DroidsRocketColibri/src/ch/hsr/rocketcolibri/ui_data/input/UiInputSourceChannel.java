@@ -11,7 +11,7 @@ import android.util.Log;
  * Responsibilities
  * Calculates the channel value from the input value of widget control.
  */
-public class UiInputSourceChannel
+public class UiInputSourceChannel extends UiInputData
 {
 	public static final int CHANNEL_UNASSIGNED = -1;
 	public static final int MIN_WIDGET_VALUE = 0;

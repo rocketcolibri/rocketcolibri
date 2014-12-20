@@ -17,6 +17,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.ui_data.input.IUiInputSource;
+import ch.hsr.rocketcolibri.ui_data.input.UiInputData;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.util.DrawingTools;
 import ch.hsr.rocketcolibri.view.AbsoluteLayout.LayoutParams;
@@ -244,8 +245,8 @@ public class SwitchWidget extends Switch implements ICustomizableView, IUiInputS
 	}
 
 	@Override
-	public List<UiInputSourceChannel> getUiInputSourceList() {
-		List<UiInputSourceChannel> list = new ArrayList<UiInputSourceChannel>();
+	public List<UiInputData> getUiInputSourceList() {
+		List<UiInputData> list = new ArrayList<UiInputData>();
 		list.add(tChannel);
 	    return list;
 	}

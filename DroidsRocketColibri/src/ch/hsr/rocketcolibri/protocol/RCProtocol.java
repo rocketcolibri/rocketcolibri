@@ -11,6 +11,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import ch.hsr.rocketcolibri.ui_data.input.IUiInputSource;
+import ch.hsr.rocketcolibri.ui_data.input.UiInputData;
+import ch.hsr.rocketcolibri.ui_data.input.UiInputProtocol;
 import ch.hsr.rocketcolibri.ui_data.input.UiInputSourceChannel;
 import ch.hsr.rocketcolibri.ui_data.output.ConnectionState;
 import ch.hsr.rocketcolibri.ui_data.output.IUiOutputSinkChangeObservable;
@@ -25,6 +27,7 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 	static final int MAX_CHANNEL = 8;
 
 	protected List<UiInputSourceChannel> tChannelList = new ArrayList<UiInputSourceChannel>();
+	protected UiInputProtocol tProtcolConfig;
 	
 	protected Lock tUiOutputSinkChangeObserverMutex;
 	private HashMap<UiOutputDataType, List<IUiOutputSinkChangeObserver>> tUiOutputSinkChangeObserver;
@@ -152,10 +155,17 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 	 * @return true if channel has been registered successfully
 	 */
 	public boolean registerUiInputSource(IUiInputSource uiInputSource) {
-		List<UiInputSourceChannel> list = uiInputSource.getUiInputSourceList();
+		List<UiInputData> list = uiInputSource.getUiInputSourceList();
 		if(null != list) {
-			for(UiInputSourceChannel c : list)
-				tChannelList.add(c);
+			
+			for(UiInputData c : list)
+			{
+				 if (c instanceof UiInputSourceChannel) 
+				     tChannelList.add((UiInputSourceChannel)c);
+				 
+				 if (c instanceof UiInputProtocol) 
+				     tProtcolConfig =(UiInputProtocol)c;
+			}
 		}
 		return true;
 	}
@@ -165,11 +175,17 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 	 * @param channelnumber
 	 * @return true if channel has been unregistered successfully
 	 */
-	public boolean unregisterUiInputSource(IUiInputSource uiInputSource){
-		List<UiInputSourceChannel> list = uiInputSource.getUiInputSourceList();
+	public boolean unregisterUiInputSource(IUiInputSource uiInputData){
+		List<UiInputData> list = uiInputData.getUiInputSourceList();
 		if(null != list) {
-			for(UiInputSourceChannel c : list)
-				tChannelList.remove(c);
+			for(UiInputData c : list)
+			{
+				 if (c instanceof UiInputSourceChannel) 
+					 tChannelList.remove(c);
+
+				 if (c instanceof UiInputProtocol) 
+				     tProtcolConfig =null;
+			}
 		}
 		return true;
 	}

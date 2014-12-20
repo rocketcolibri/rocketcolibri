@@ -9,7 +9,6 @@ import ch.hsr.rocketcolibri.R;
 import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.activity.DesktopActivity;
 import ch.hsr.rocketcolibri.activity.ModelListActivity;
-import ch.hsr.rocketcolibri.activity.SetupConnectionActivity;
 import ch.hsr.rocketcolibri.db.RocketColibriDataHandler;
 import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.widgetdirectory.WidgetEntry;
@@ -46,29 +45,6 @@ public class ControlModusContent extends ModusContent {
 						sendIntent.setType("text/plain");
 						sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 						tContext.startActivity(Intent.createChooser(sendIntent, getResources().getText(R.string.export_models)));
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		});
-		findViewById(R.id.setupConnection).setOnClickListener(new OnClickListener() {
-			public void onClick(View arg0) {
-				if(tDesktopMenu.getService()!=null){
-					try {
-						
-						Intent i = new Intent(tContext, SetupConnectionActivity.class);
-						i.putExtra(RCConstants.FLAG_ACTIVITY_RC_MODEL, ((DesktopActivity)tContext).getDefaultModelName());
-						i.putExtra(RCConstants.AUTOCONNECT, true);
-						i.putExtra(RCConstants.IP_SERVOCONTROLLER, "192.168.200.1");
-						i.putExtra(RCConstants.PORT_SERVOCONTROLLER, "3000");
-						
-						// TODO read settings from model
-						
-						((DesktopActivity) tContext).startActivityForResult(i, RCConstants.RC_MODEL_RESULT_CODE);
-						tContext.startActivity(i);
-						
-						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

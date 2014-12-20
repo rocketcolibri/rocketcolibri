@@ -7,5 +7,5 @@ public interface IUiInputSource {
 	 * Override this function and return all Channel objects that are assigned to this Widget
 	 * @return List<Channels>
 	 */
-	public List<UiInputSourceChannel> getUiInputSourceList();
+	public List<UiInputData> getUiInputSourceList();
 }

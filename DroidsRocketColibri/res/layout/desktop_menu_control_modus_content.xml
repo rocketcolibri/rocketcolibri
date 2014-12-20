@@ -104,13 +104,7 @@
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_menu_share_holo_dark" />
             
-            <ImageView
-                android:id="@+id/setupConnection"
-                android:layout_width="@dimen/desktop_menu_control_mode_icon_size"
-                android:layout_height="@dimen/desktop_menu_control_mode_icon_size"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_action_action_settings_input_antenna" />
+
         </LinearLayout>
     </RelativeLayout>
 
