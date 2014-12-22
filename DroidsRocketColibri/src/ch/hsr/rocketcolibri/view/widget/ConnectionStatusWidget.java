@@ -165,7 +165,7 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 	public void updateProtocolMap() {
 		try{
 			tProtocolSettings.setAuto(getProtocolMapBoolean(RCConstants.AUTOCONNECT));
-			tProtocolSettings.setIpAddress(RCConstants.IP_SERVOCONTROLLER);
+			tProtocolSettings.setIpAddress(getProtocolMapString(RCConstants.IP_SERVOCONTROLLER));
 			tProtocolSettings.setPort(getProtocolMapInt(RCConstants.PORT_SERVOCONTROLLER));
 		}catch(Exception e){
 			e.printStackTrace();
@@ -178,7 +178,13 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 			return -1;
 		}
 	}
-	
+	protected String getProtocolMapString(String key){
+		try{
+			return tWidgetConfig.protocolMap.get(key);
+		}catch(NumberFormatException e){
+			return "";
+		}
+	}
 	protected boolean getProtocolMapBoolean(String key){
 		try{
 			return Boolean.parseBoolean(tWidgetConfig.protocolMap.get(key));

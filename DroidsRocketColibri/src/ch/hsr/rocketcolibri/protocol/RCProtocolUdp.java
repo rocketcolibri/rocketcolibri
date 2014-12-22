@@ -57,7 +57,10 @@ public class RCProtocolUdp extends RCProtocol{
 	{
 		this.tUsername = username;
 		this.tFsm = new RocketColibriProtocolFsm(s.DISC);
-		this.tTelemetryReceiver = new RocketColibriProtocolTelemetryReceiver( 30001, tFsm, this);
+		this.tTelemetryReceiver = new RocketColibriProtocolTelemetryReceiver( tProtcolConfig.getPort(), tFsm, this);
+		
+		// don't send any message
+		this.tFsm.getStateMachinePlan().leaveAction(s.DISC, createSocketAndUpdateSate);
 		
 		// don't send any message
 		this.tFsm.getStateMachinePlan().entryAction(s.DISC, stopSendMessage);
@@ -73,29 +76,26 @@ public class RCProtocolUdp extends RCProtocol{
 		
 		
 		// send Broadcast on every state change
-		this.tFsm.getStateMachinePlan().leaveAction(s.DISC, updateState);
+//		this.tFsm.getStateMachinePlan().leaveAction(s.DISC, updateState);
 		this.tFsm.getStateMachinePlan().leaveAction(s.TRY_CONN, updateState); 
 		this.tFsm.getStateMachinePlan().leaveAction(s.CONN_OBSERVE, updateState); 
 		this.tFsm.getStateMachinePlan().leaveAction(s.CONN_LCK_OUT,  updateState);
 		this.tFsm.getStateMachinePlan().leaveAction(s.CONN_TRY_CONTROL,  updateState);
 		this.tFsm.getStateMachinePlan().leaveAction(s.CONN_CONTROL, updateState);
-		
-		InitSocket();
+
 	}
     
 	/**
 	 * opens a UDP socket for the communication with the ServoController
 	 *  
-	 * @param port 30001
-	 * @param ia, IP address of the ServoController is normally 192.168.200.1
 	 */
 	private void InitSocket()
 	{
 		// initialize unicast datagram socket
-		this.port = 30001;
+		this.port = tProtcolConfig.getPort();
 		try 
 		{
-			this.address = InetAddress.getByName( "192.168.200.1");
+			this.address = InetAddress.getByName( tProtcolConfig.getIpAddress());
 		}
 		catch (UnknownHostException e1) 
 		{
@@ -112,7 +112,11 @@ public class RCProtocolUdp extends RCProtocol{
 			e.printStackTrace();
 		} 
 	}
-
+	private void CloseSocket()
+	{
+		channelDataSocket = null;
+	}
+	
 	private void sendJsonMsgString(String msg)
 	{
 		try {
@@ -240,6 +244,17 @@ public class RCProtocolUdp extends RCProtocol{
 			Log.d(TAG, "execute action stopSendMessage");
 			tTelemetryReceiver.setTelemetryOffline();
 			cancelOldCommandJob();
+			CloseSocket();
+			
+		}
+	};
+	
+	Action<RocketColibriProtocolFsm> createSocketAndUpdateSate = new Action<RocketColibriProtocolFsm>() {
+		public void apply(RocketColibriProtocolFsm fsm, Object event,	Object nextState) 
+		{
+			InitSocket();
+			Log.d(TAG, "execute action createSocketAndUpdateSate");
+			tConnState.setState((s)nextState);
 		}
 	};
 	

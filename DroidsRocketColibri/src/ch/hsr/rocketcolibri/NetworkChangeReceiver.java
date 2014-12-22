@@ -62,11 +62,19 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 		try{
 			IBinder serviceBinder = peekService(context, new Intent(context, RocketColibriService.class));
 			RocketColibriService rcService = ((RocketColibriService.RocketColibriServiceBinder) serviceBinder).getService();
-
-			if (getConnectivityStatus(context)) {
+			
+			if( rcService.tProtocol.tProtcolConfig.getAutoMode())
+			{
+				if (getConnectivityStatus(context)) {
+					rcService.tProtocol.eventConnectionEstablished();
+				} else {
+					rcService.tProtocol.eventConnectionInterrupted();
+				}
+			}
+			else
+			{
+				Log.d(TAG, "Autoconnect diabled execute Establish event");
 				rcService.tProtocol.eventConnectionEstablished();
-			} else {
-				rcService.tProtocol.eventConnectionInterrupted();
 			}
 		}catch(NullPointerException e){
 		}

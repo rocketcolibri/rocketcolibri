@@ -73,9 +73,11 @@ public class EditChannelActivity extends RCActivity{
 			return switc;
 		case DOUBLE:
 		case FLOAT:
-			return createEditTextWithInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL, key, value);
+			return createEditTextWithInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_CLASS_NUMBER |  InputType.TYPE_NUMBER_FLAG_SIGNED, key, value);
 		case INT:
-			return createEditTextWithInputType(InputType.TYPE_NUMBER_FLAG_SIGNED, key, value);
+			return createEditTextWithInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED, key, value);
+		case STRING:
+			return createEditTextWithInputType(InputType.TYPE_CLASS_TEXT, key, value);
 		default:
 			return createEditTextWithInputType(InputType.TYPE_CLASS_TEXT, key, value);
 		}
@@ -83,9 +85,9 @@ public class EditChannelActivity extends RCActivity{
 	
 	private View createEditTextWithInputType(int inputType, String key, String value){
 		EditText tv = new EditText(this);
-//		tv.setInputType(inputType);
+		tv.setInputType(inputType);
 //		tv.setRawInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
-		tv.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
+//		tv.setInputType();
 //		tv.setKeyListener(DigitsKeyListener.getInstance("0123456789."));
 		tv.setText(value);
 		tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));

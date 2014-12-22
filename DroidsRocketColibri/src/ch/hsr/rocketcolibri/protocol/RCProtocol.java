@@ -27,7 +27,7 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 	static final int MAX_CHANNEL = 8;
 
 	protected List<UiInputSourceChannel> tChannelList = new ArrayList<UiInputSourceChannel>();
-	protected UiInputProtocol tProtcolConfig;
+	public UiInputProtocol tProtcolConfig = new UiInputProtocol();
 	
 	protected Lock tUiOutputSinkChangeObserverMutex;
 	private HashMap<UiOutputDataType, List<IUiOutputSinkChangeObserver>> tUiOutputSinkChangeObserver;
@@ -164,7 +164,7 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 				     tChannelList.add((UiInputSourceChannel)c);
 				 
 				 if (c instanceof UiInputProtocol) 
-				     tProtcolConfig =(UiInputProtocol)c;
+				     tProtcolConfig =(UiInputProtocol)c; // replace with the values from the widget
 			}
 		}
 		return true;
@@ -184,7 +184,7 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 					 tChannelList.remove(c);
 
 				 if (c instanceof UiInputProtocol) 
-				     tProtcolConfig =null;
+				     tProtcolConfig =new UiInputProtocol(); // create a new Object with defaults
 			}
 		}
 		return true;

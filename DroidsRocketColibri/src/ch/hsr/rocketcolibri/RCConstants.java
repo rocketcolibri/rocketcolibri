@@ -70,6 +70,7 @@ public class RCConstants {
 		if(key.contains(_EXPO)) return DataType.BOOLEAN;
 		if(key.contains(_DEBUG)) return DataType.BOOLEAN;
 		if(key.contains(_AUTOCONNECT)) return DataType.BOOLEAN;
+		if(key.contains(_IP_SERVOCONTROLLER)) return DataType.STRING;
 //		if(key.contains(_MIN_RANGE)) return DataType.INT;
 //		if(key.contains(_MAX_RANGE)) return DataType.INT;
 //		if(key.contains(_MAX_DEFAULT_POSITION)) return DataType.INT;

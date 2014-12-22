@@ -133,8 +133,11 @@ public class DesktopMenu {
 		tWifi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
 	    		if (isChecked) { 
-	    			tService.tWifi.connectRocketColibriSSID(tService);
-
+	    			if(tService.tProtocol.tProtcolConfig.getAutoMode())
+	    				tService.tWifi.connectRocketColibriSSID(tService);
+	    			else
+	    				tService.tProtocol.eventConnectionEstablished();
+	    				
 	    			// If WiFi is enabled, we are in observer mode by default
 	    			// setting observer button active and disabling click because
 	    			// in this case only operate button can be clicked
@@ -145,8 +148,11 @@ public class DesktopMenu {
 
 		        	tOperateMode.setClickable(true);
 	    		} else {
-		        	tService.tWifi.disconnectRocketColibriSSID(tService);
-
+	    			if(tService.tProtocol.tProtcolConfig.getAutoMode())
+	    				tService.tWifi.disconnectRocketColibriSSID(tService);
+	    			else
+	    				tService.tProtocol.eventConnectionInterrupted();
+	    			
 		        	// If WiFi is disabled, none of the modes
 		        	// can be active, disabling both buttons
 		        	tObserveMode.setVisibility(View.GONE);

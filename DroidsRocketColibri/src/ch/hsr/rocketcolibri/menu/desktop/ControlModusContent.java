@@ -2,17 +2,10 @@ package ch.hsr.rocketcolibri.menu.desktop;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import ch.hsr.rocketcolibri.R;
-import ch.hsr.rocketcolibri.RCConstants;
 import ch.hsr.rocketcolibri.activity.DesktopActivity;
-import ch.hsr.rocketcolibri.activity.ModelListActivity;
 import ch.hsr.rocketcolibri.db.RocketColibriDataHandler;
-import ch.hsr.rocketcolibri.view.custimizable.ICustomizableView;
 import ch.hsr.rocketcolibri.widgetdirectory.WidgetEntry;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
