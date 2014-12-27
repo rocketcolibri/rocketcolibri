@@ -51,11 +51,13 @@
     
     <!-- Setup Connection -->
     <string name="setup_connection_title">Setup Connection to ServoController</string>
-    <string name="rc_autoconnect">Automatic connection to SSID \'RocketColibri\'</string>
+    <string name="rc_autoconnect">Automatic WPA connection</string>
     <string name="rc_ip_servocontroller">ServoController IP address</string>
     <string name="rc_port_servocontroller">ServoController IP port</string>
+    <string name="rc_wpa_password">ServoController WPA password</string>
+    <string name="rc_wpa_ssid">ServoController WPA SSID</string>
     
-    <string name="loading">Loading</string>
+    <string name="loading">Loading</string>SSID
     <string name="create_new">New</string>
     <string name="model_list_leave_toast">"you need to select a model before you leave!"</string>
     <string name="model_list_row_description">has {0} Control Elements</string>

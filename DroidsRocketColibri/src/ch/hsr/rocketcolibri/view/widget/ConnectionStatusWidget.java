@@ -167,6 +167,8 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 			tProtocolSettings.setAuto(getProtocolMapBoolean(RCConstants.AUTOCONNECT));
 			tProtocolSettings.setIpAddress(getProtocolMapString(RCConstants.IP_SERVOCONTROLLER));
 			tProtocolSettings.setPort(getProtocolMapInt(RCConstants.PORT_SERVOCONTROLLER));
+			tProtocolSettings.setIpAddress(getProtocolMapString(RCConstants.WPA_PASSWORD));
+			tProtocolSettings.setIpAddress(getProtocolMapString(RCConstants.WPA_SSID));
 		}catch(Exception e){
 			e.printStackTrace();
 		}
@@ -226,6 +228,8 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 			tWidgetConfig.protocolMap.put(RCConstants.AUTOCONNECT, Boolean.valueOf(tProtocolSettings.getAutoMode()).toString());
 			tWidgetConfig.protocolMap.put(RCConstants.IP_SERVOCONTROLLER, String.valueOf(tProtocolSettings.getIpAddress()).toString());
 			tWidgetConfig.protocolMap.put(RCConstants.PORT_SERVOCONTROLLER, Integer.valueOf(tProtocolSettings.getPort()).toString());
+			tWidgetConfig.protocolMap.put(RCConstants.WPA_PASSWORD, String.valueOf(tProtocolSettings.getWpaPassword()).toString());
+			tWidgetConfig.protocolMap.put(RCConstants.WPA_SSID, String.valueOf(tProtocolSettings.getWpaSsid()).toString());
 		}else{
 			updateProtocolMap();
 		}

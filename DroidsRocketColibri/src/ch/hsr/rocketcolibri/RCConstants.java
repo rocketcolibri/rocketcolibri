@@ -53,11 +53,13 @@ public class RCConstants {
 	private static final String _AUTOCONNECT = "autoconnect";
 	private static final String _IP_SERVOCONTROLLER = "ip_servocontroller";
 	private static final String _PORT_SERVOCONTROLLER = "port_servocontroller";
-	
+	private static final String _WPA_PASSWORD = "wpa_password";
+	private static final String _WPA_SSID = "wpa_ssid";
 	public static final String AUTOCONNECT = PREFIX+_AUTOCONNECT;
 	public static final String IP_SERVOCONTROLLER = PREFIX+_IP_SERVOCONTROLLER;
 	public static final String PORT_SERVOCONTROLLER = PREFIX+_PORT_SERVOCONTROLLER;
-	
+	public static final String WPA_PASSWORD = PREFIX+_WPA_PASSWORD;
+	public static final String WPA_SSID = PREFIX+_WPA_SSID;
 	
 	/**
 	 * @return DataType is just used to
@@ -71,6 +73,8 @@ public class RCConstants {
 		if(key.contains(_DEBUG)) return DataType.BOOLEAN;
 		if(key.contains(_AUTOCONNECT)) return DataType.BOOLEAN;
 		if(key.contains(_IP_SERVOCONTROLLER)) return DataType.STRING;
+		if(key.contains(_WPA_PASSWORD)) return DataType.STRING;
+		if(key.contains(_WPA_SSID)) return DataType.STRING;
 //		if(key.contains(_MIN_RANGE)) return DataType.INT;
 //		if(key.contains(_MAX_RANGE)) return DataType.INT;
 //		if(key.contains(_MAX_DEFAULT_POSITION)) return DataType.INT;
