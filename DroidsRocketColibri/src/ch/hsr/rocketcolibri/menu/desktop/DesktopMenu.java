@@ -132,11 +132,14 @@ public class DesktopMenu {
 		tWifi = (ToggleButton)findViewById(R.id.menu_action_main_wifi);
 		tWifi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
 		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
+		    	tService.tProtocol.setIsEnabled(isChecked);
 	    		if (isChecked) { 
 	    			if(tService.tProtocol.tProtcolConfig.getAutoMode())
 	    				tService.tWifi.connectRocketColibriSSID(tService);
 	    			else
-	    				tService.tProtocol.eventConnectionEstablished();
+	    			{
+    					tService.tProtocol.eventConnectionEstablished();
+	    			}
 	    				
 	    			// If WiFi is enabled, we are in observer mode by default
 	    			// setting observer button active and disabling click because

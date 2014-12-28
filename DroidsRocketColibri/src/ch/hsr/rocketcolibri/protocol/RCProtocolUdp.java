@@ -120,7 +120,7 @@ public class RCProtocolUdp extends RCProtocol{
 	private void sendJsonMsgString(String msg)
 	{
 		try {
-			Log.d("sent", msg);
+			Log.d("sent" + this.address, msg);
 			this.channelDataSocket.send(new DatagramPacket(msg.getBytes(), msg.length(), this.address, this.port));
 		} catch (IOException e) {
 			Log.d( TAG, "Failed to send UDP packet due to IOException: " + e.getMessage() ); 

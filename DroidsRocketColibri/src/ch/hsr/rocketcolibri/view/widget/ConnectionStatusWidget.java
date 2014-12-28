@@ -167,8 +167,8 @@ public class ConnectionStatusWidget extends View implements ICustomizableView, I
 			tProtocolSettings.setAuto(getProtocolMapBoolean(RCConstants.AUTOCONNECT));
 			tProtocolSettings.setIpAddress(getProtocolMapString(RCConstants.IP_SERVOCONTROLLER));
 			tProtocolSettings.setPort(getProtocolMapInt(RCConstants.PORT_SERVOCONTROLLER));
-			tProtocolSettings.setIpAddress(getProtocolMapString(RCConstants.WPA_PASSWORD));
-			tProtocolSettings.setIpAddress(getProtocolMapString(RCConstants.WPA_SSID));
+			tProtocolSettings.setWpaPassword(getProtocolMapString(RCConstants.WPA_PASSWORD));
+			tProtocolSettings.setWpaSsid(getProtocolMapString(RCConstants.WPA_SSID));
 		}catch(Exception e){
 			e.printStackTrace();
 		}

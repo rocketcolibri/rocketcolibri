@@ -6,6 +6,7 @@ package ch.hsr.rocketcolibri.protocol;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 
+import ch.hsr.rocketcolibri.RocketColibriService;
 import android.content.Context;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
@@ -28,25 +29,26 @@ import android.util.Log;
 public class WifiConnection 
 {
 	final static String TAG = "WifiConnection";
-	public final static String networkSSID = "\"RocketColibri\"";
+	public String networkSSID = "\"RocketColibri\"";
 	private String oldSSID;
 	
 	/**
 	 * Try to establish a connection to the RocketColibri network
 	 */
-	public void connectRocketColibriSSID(Context context)
+	public void connectRocketColibriSSID(RocketColibriService context)
 	{
 		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
 		
 		// get the currently connected Wifi 
 		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
 		oldSSID = wifiInfo.getSSID();
+		networkSSID = "\"" + context.tProtocol.tProtcolConfig.getWpaSsid() + "\"";
 		
 	    wifiManager.disconnect(); 
 	    // create the network configuration for the RocketColibri network
 		WifiConfiguration conf = new WifiConfiguration();
 		conf.SSID = networkSSID ;   // Please note the quotes. String should contain ssid in quotes
-		conf.preSharedKey = "\""+"1234567890"+"\"";
+		conf.preSharedKey = "\""+context.tProtocol.tProtcolConfig.getWpaPassword()+"\"";
 		conf.status = WifiConfiguration.Status.ENABLED;
 		conf.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
 		conf.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);

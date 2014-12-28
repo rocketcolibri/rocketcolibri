@@ -42,12 +42,12 @@ public class UiInputProtocol extends UiInputData {
 	
 	public String getIpAddress()
 	{
-		return tAutoMode ? tIpDefault : tIpAddressServoController;
+		return tIpAddressServoController;
 	}
 	
 	public int getPort()
 	{	 
-		return tAutoMode ? tPortDefault : tPortServoController ;
+		return tPortServoController ;
 	}
 	
 	public boolean getAutoMode()

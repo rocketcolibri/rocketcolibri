@@ -24,7 +24,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
      * Checks the connection to the ServoController which has the SSID RocketColibri
      * @return true if connected, false if not
      */
-	public boolean isConnectedToRocketColibri(Context context) {
+	public boolean isConnectedToRocketColibri(Context context, RocketColibriService rcService) {
 		WifiManager wifiManager = (WifiManager) context
 				.getSystemService(Context.WIFI_SERVICE);
 		WifiInfo currentWifi = wifiManager.getConnectionInfo();
@@ -32,7 +32,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 		if (currentWifi != null) {
 			String ssid = currentWifi.getSSID();
 			if (ssid != null)
-				connected = ssid.equals(WifiConnection.networkSSID);
+				connected = ssid.equals(rcService.tWifi.networkSSID);
 		}
 
 		if (connected)
@@ -43,14 +43,14 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 		return connected;
 	}
 
-	public boolean getConnectivityStatus(Context context) 
+	public boolean getConnectivityStatus(Context context, RocketColibriService rcService) 
     {
     	boolean retval = false;
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();       
         if (null != activeNetwork){
             if(activeNetwork.getType() == ConnectivityManager.TYPE_WIFI){
-            	retval = isConnectedToRocketColibri(context);
+            	retval = isConnectedToRocketColibri(context, rcService);
             }
         }
         return retval;
@@ -63,21 +63,24 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 			IBinder serviceBinder = peekService(context, new Intent(context, RocketColibriService.class));
 			RocketColibriService rcService = ((RocketColibriService.RocketColibriServiceBinder) serviceBinder).getService();
 			
-			if( rcService.tProtocol.tProtcolConfig.getAutoMode())
-			{
-				if (getConnectivityStatus(context)) {
+			if(rcService.tProtocol.getIsEnabled()) {
+				if( rcService.tProtocol.tProtcolConfig.getAutoMode())
+				{
+					if (getConnectivityStatus(context, rcService)) {
+						rcService.tProtocol.eventConnectionEstablished();
+					} else {
+						rcService.tProtocol.eventConnectionInterrupted();
+					}
+				}
+				else
+				{
+					Log.d(TAG, "Autoconnect diabled execute Establish event");
 					rcService.tProtocol.eventConnectionEstablished();
-				} else {
-					rcService.tProtocol.eventConnectionInterrupted();
 				}
 			}
 			else
-			{
-				Log.d(TAG, "Autoconnect diabled execute Establish event");
-				rcService.tProtocol.eventConnectionEstablished();
-			}
+				rcService.tProtocol.eventConnectionInterrupted();
 		}catch(NullPointerException e){
 		}
-
 	}
 }

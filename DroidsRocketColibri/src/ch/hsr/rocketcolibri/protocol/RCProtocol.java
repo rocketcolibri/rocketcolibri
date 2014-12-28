@@ -25,7 +25,7 @@ import ch.hsr.rocketcolibri.ui_data.output.VideoUrl;
 
 public class RCProtocol implements IUiOutputSinkChangeObservable{
 	static final int MAX_CHANNEL = 8;
-
+	boolean tIsEnabled;
 	protected List<UiInputSourceChannel> tChannelList = new ArrayList<UiInputSourceChannel>();
 	public UiInputProtocol tProtcolConfig = new UiInputProtocol();
 	
@@ -208,4 +208,14 @@ public class RCProtocol implements IUiOutputSinkChangeObservable{
 			tUiOutputSinkChangeObserver.put(type, new ArrayList<IUiOutputSinkChangeObserver>());
 	}
 
+	public void setIsEnabled(boolean state)
+	{
+		tIsEnabled = state;
+	}
+	
+	public boolean getIsEnabled()
+	{
+		return tIsEnabled;
+	}
+	
 }
