@@ -147,19 +147,31 @@ public class RCProtocolUdp extends RCProtocol{
 					cdcMsg.put("user", tUsername);
 					
 					int[] allChannels = {0, 0, 0, 0, 0, 0, 0, 0};
+					int[] allChannelsFailsafe = {0, 0, 0, 0, 0, 0, 0, 0};
 					for(UiInputSourceChannel c :tChannelList) {
 						if(c.getChannelAssignment() < NOF_CHANNELS && 
 						   c.getChannelAssignment() >= 0 && 
 						   c.getChannelValue() >= MIN_CHANNEL_VALUE &&
-						   c.getChannelValue() <= MAX_CHANNEL_VALUE) 
+						   c.getChannelValue() <= MAX_CHANNEL_VALUE) {
 							allChannels[c.getChannelAssignment()] = c.getChannelValue();
+							allChannelsFailsafe[c.getChannelAssignment()] = c.getChannelFailsafePosition();
+						}
 					}
 					
 					
 					JSONArray channels = new JSONArray();
 					for (int channel : allChannels)
-						channels.put(channel);			
+					{
+						channels.put(channel);
+					}
+
+					JSONArray failsafe = new JSONArray();
+					for (int channelFailsafe : allChannelsFailsafe)
+					{
+						failsafe.put(channelFailsafe);
+					}
 					cdcMsg.put("channels", channels);
+					cdcMsg.put("failsafe", failsafe);
 				} 
 				catch (JSONException e) 
 				{
