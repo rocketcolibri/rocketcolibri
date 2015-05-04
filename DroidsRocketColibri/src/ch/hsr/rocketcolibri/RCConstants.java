@@ -77,9 +77,35 @@ public class RCConstants {
 		if(key.contains(_WPA_SSID)) return DataType.STRING;
 //		if(key.contains(_MIN_RANGE)) return DataType.INT;
 //		if(key.contains(_MAX_RANGE)) return DataType.INT;
-//		if(key.contains(_MAX_DEFAULT_POSITION)) return DataType.INT;
+//		if(key.contains(_DEFAULT_POSITION)) return DataType.INT;
 //		if(key.contains(_FAILSAFE)) return DataType.INT;
 //		if(key.contains(_TRIMM)) return DataType.INT;
 		return DataType.INT;
+	}
+	
+	/**
+	 * @return minimum range
+	 */
+	public static int getRangeMinOfInt(String key){
+		if(key.contains(_CHANNEL_ASSIGNMENT)) return 0;
+		if(key.contains(_MIN_RANGE)) return 1;
+		if(key.contains(_MAX_RANGE)) return 1;
+		if(key.contains(_DEFAULT_POSITION)) return 1;
+		if(key.contains(_FAILSAFE)) return 0;
+		if(key.contains(_TRIMM)) return -200;
+		return 1;
+	}
+	
+	/**
+	 * @return minimum range
+	 */
+	public static int getRangeMaxOfInt(String key){
+		if(key.contains(_CHANNEL_ASSIGNMENT)) return 7;
+		if(key.contains(_MIN_RANGE)) return 1000;
+		if(key.contains(_MAX_RANGE)) return 1000;
+		if(key.contains(_DEFAULT_POSITION)) return 1000;
+		if(key.contains(_FAILSAFE)) return 1000;
+		if(key.contains(_TRIMM)) return 200;
+		return 1000;
 	}
 }

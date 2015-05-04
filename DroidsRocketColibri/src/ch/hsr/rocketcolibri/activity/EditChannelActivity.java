@@ -6,11 +6,11 @@ import java.util.Set;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridLayout;
@@ -73,25 +73,24 @@ public class EditChannelActivity extends RCActivity{
 			return switc;
 		case DOUBLE:
 		case FLOAT:
-			return createEditTextWithInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_CLASS_NUMBER |  InputType.TYPE_NUMBER_FLAG_SIGNED, key, value);
+			return createEditTextWithInputType(EditorInfo.TYPE_NUMBER_FLAG_DECIMAL | EditorInfo.TYPE_CLASS_NUMBER |  EditorInfo.TYPE_NUMBER_FLAG_SIGNED, key, value);
 		case INT:
-			return createEditTextWithInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED, key, value);
+			if(RCConstants.getRangeMinOfInt(key)<0)
+				return createEditTextWithInputType(EditorInfo.TYPE_CLASS_NUMBER | EditorInfo.TYPE_NUMBER_FLAG_SIGNED, key, value);
+			else
+				return createEditTextWithInputType(EditorInfo.TYPE_CLASS_NUMBER , key, value);
 		case STRING:
-			return createEditTextWithInputType(InputType.TYPE_CLASS_TEXT, key, value);
+			return createEditTextWithInputType(EditorInfo.TYPE_CLASS_TEXT, key, value);
 		default:
-			return createEditTextWithInputType(InputType.TYPE_CLASS_TEXT, key, value);
+			return createEditTextWithInputType(EditorInfo.TYPE_CLASS_TEXT, key, value);
 		}
 	}
 	
 	private View createEditTextWithInputType(int inputType, String key, String value){
 		EditText tv = new EditText(this);
 		tv.setInputType(inputType);
-//		tv.setRawInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_NUMBER_FLAG_SIGNED);
-//		tv.setInputType();
-//		tv.setKeyListener(DigitsKeyListener.getInstance("0123456789."));
 		tv.setText(value);
 		tv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-		
 		// set the cursor at the end..
 		int textLength = tv.getText().length();
 		tv.setSelection(textLength, textLength);
