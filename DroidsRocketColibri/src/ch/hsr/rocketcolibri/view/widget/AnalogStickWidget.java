@@ -43,6 +43,7 @@ public class AnalogStickWidget extends View implements ICustomizableView, IUiInp
 
 	private Paint bgPaint;
 	private Paint handleStick;
+	private Paint widgetCoordinates;
 	private Paint handlePaint;
 	private RectF stickBackgroundRect;
 	private int innerPadding;
@@ -155,9 +156,14 @@ public class AnalogStickWidget extends View implements ICustomizableView, IUiInp
 		handleStick.setStrokeWidth(20);
 		handleStick.setStyle(Paint.Style.FILL_AND_STROKE);
 
+		widgetCoordinates = new Paint(Paint.ANTI_ALIAS_FLAG);
+		widgetCoordinates.setColor(Color.LTGRAY);
+		widgetCoordinates.setStrokeWidth(5);
+		widgetCoordinates.setStyle(Paint.Style.FILL_AND_STROKE);
+		
 		handlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		handlePaint.setColor(Color.parseColor("#4F4F4F"));
-		handlePaint.setStrokeWidth(1);
+		handlePaint.setStrokeWidth(20);
 		handlePaint.setStyle(Paint.Style.FILL_AND_STROKE);
 		
 		stickBackgroundRect = new RectF();
@@ -260,7 +266,7 @@ public class AnalogStickWidget extends View implements ICustomizableView, IUiInp
 
 		bgRadius = dimX / 2-innerPadding;
 		stickRadius = (int) (bgRadius-bgRadius*0.1);
-		handleRadius = (int) (d * 0.15);
+		handleRadius = (int) (d * 0.13);
 		handleStick.setStrokeWidth((float) (handleRadius * 0.75));
 		handleInnerBoundaries = handleRadius;
 		movementRadius = Math.min(cX, cY) - handleInnerBoundaries;
@@ -289,60 +295,130 @@ public class AnalogStickWidget extends View implements ICustomizableView, IUiInp
 	@Override
 	protected void onDraw(Canvas canvas) {
 		canvas.save();
-		// Draw the background
-		//canvas.drawCircle(cX, cY, stickRadius, bgPaint);
-		stickBackgroundRect.set(cX-stickRadius, cY-stickRadius, cX+stickRadius, cY+stickRadius);
-		canvas.drawRoundRect(stickBackgroundRect, stickRadius/2, stickRadius/2, bgPaint);
+	
+		drawBackground(canvas);
+		drawCoordinates(canvas);
+		drawHandle(canvas);
+		if (tDebug)
+			drawDebugInfo(canvas);
+		
+		canvas.restore();
+		if (tCustomizeModusActive) 
+			DrawingTools.drawCustomizableForground(this, canvas);
+	}
+
+	private void drawDebugInfo(Canvas canvas) {
+
+		canvas.drawCircle(handleX, handleY, 3, dbgPaint1);
+		if (movementConstraint == CONSTRAIN_CIRCLE) {
+			canvas.drawCircle(cX, cY, this.movementRadius, dbgPaint1);
+		} else {
+			canvas.drawRect(cX - movementRadius, cY - movementRadius, cX
+					+ movementRadius, cY + movementRadius, dbgPaint1);
+		}
+		// Origin to touch point
+		canvas.drawLine(cX, cY, handleX, handleY, dbgLine);
+
+		String dbgString;
+		if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelH.getChannelAssignment() ){
+			dbgString = String.format(Locale.getDefault(),"H:unassigned");
+			dbgLine.setColor(Color.RED);
+		}
+		else {
+			dbgString = String.format(Locale.getDefault(), "H[%d]:%d", tChannelH.getChannelAssignment(), tChannelH.getChannelValue());
+			dbgLine.setColor(Color.GREEN);
+		}
+		canvas.drawText(dbgString,0, getHeight()/2, dbgLine);
+		if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelV.getChannelAssignment() ){
+			dbgString = String.format(Locale.getDefault(), "V:unassigned");
+			dbgLine.setColor(Color.RED);
+		}
+		else{
+			dbgString = String.format(Locale.getDefault(), "V[%d]:%d", tChannelV.getChannelAssignment(), tChannelV.getChannelValue());
+			dbgLine.setColor(Color.GREEN);
+		}
+		canvas.drawText(dbgString,getWidth()/2, dbgLine.getTextSize(), dbgLine);
+		dbgLine.setColor(Color.GREEN);
+	}
+
+	private void drawHandle(Canvas canvas) {
 		// Draw the handle
-		handleX = touchX + cX;
-		handleY = touchY + cY;
+		if ((UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelV.getChannelAssignment() ) &&
+		    (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelH.getChannelAssignment() ))
+		{
+			handleY = touchY + cY;
+			handleX = touchX + cX;
+		}
+		else
+		{
+			if (UiInputSourceChannel.CHANNEL_UNASSIGNED != tChannelV.getChannelAssignment() )
+				handleY = touchY + cY;
+			else
+				handleY = cY;
+	
+			if (UiInputSourceChannel.CHANNEL_UNASSIGNED != tChannelH.getChannelAssignment() )
+				handleX = touchX + cX;
+			else
+				handleX = cX;
+		}
 		
 		canvas.drawCircle(cX, cY, (handleStick.getStrokeWidth()/10), handleStick);
 		canvas.drawLine(cX, cY, handleX, handleY, handleStick);
 		handlePaint.setColor(tIsControlling ? Color.BLUE : Color.DKGRAY);
 		canvas.drawCircle(handleX, handleY, handleRadius, handlePaint);
+	}
 
-		if (tDebug) {
-			canvas.drawCircle(cX, cY, bgRadius, dbgPaint1);
-
-			canvas.drawCircle(handleX, handleY, 3, dbgPaint1);
-
-			if (movementConstraint == CONSTRAIN_CIRCLE) {
-				canvas.drawCircle(cX, cY, this.movementRadius, dbgPaint1);
-			} else {
-				canvas.drawRect(cX - movementRadius, cY - movementRadius, cX
-						+ movementRadius, cY + movementRadius, dbgPaint1);
-			}
-
-			// Origin to touch point
-			canvas.drawLine(cX, cY, handleX, handleY, dbgLine);
-	
-			String dbgString;
-			if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelH.getChannelAssignment() ){
-				dbgString = String.format(Locale.getDefault(),"H:unassigned");
-				dbgLine.setColor(Color.RED);
-			}
-			else {
-				dbgString = String.format(Locale.getDefault(), "H[%d]:%d", tChannelH.getChannelAssignment(), tChannelH.getChannelValue());
-				dbgLine.setColor(Color.GREEN);
-			}
-			canvas.drawText(dbgString,0, getHeight()/2, dbgLine);
-			if (UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelV.getChannelAssignment() ){
-				dbgString = String.format(Locale.getDefault(), "V:unassigned");
-				dbgLine.setColor(Color.RED);
-			}
-			else{
-				dbgString = String.format(Locale.getDefault(), "V[%d]:%d", tChannelV.getChannelAssignment(), tChannelV.getChannelValue());
-				dbgLine.setColor(Color.GREEN);
-			}
-			canvas.drawText(dbgString,getWidth()/2, dbgLine.getTextSize(), dbgLine);
-			dbgLine.setColor(Color.GREEN);
+	private void drawBackground(Canvas canvas) {
+		bgPaint.setColor(Color.GRAY);
+		float xmin, xmax, ymin, ymax ; 
+		if ((UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelV.getChannelAssignment() ) &&
+			(UiInputSourceChannel.CHANNEL_UNASSIGNED == tChannelH.getChannelAssignment() ))
+		{
+			ymin = cY-stickRadius;
+			ymax = cY+stickRadius;
+			xmin = cX-stickRadius;
+			xmax = cX+stickRadius;
 		}
-		
-		canvas.restore();
-		if (tCustomizeModusActive) 
-			DrawingTools.drawCustomizableForground(this, canvas);
+		else
+		{
+			if (UiInputSourceChannel.CHANNEL_UNASSIGNED != tChannelV.getChannelAssignment() )
+			{
+				ymin = cY-stickRadius;
+				ymax = cY+stickRadius;
+			}
+			else
+			{
+				ymin = cY-handleRadius;
+				ymax = cY+handleRadius;
+			}
+			if (UiInputSourceChannel.CHANNEL_UNASSIGNED != tChannelH.getChannelAssignment() )
+			{
+				xmin = cX-stickRadius;
+				xmax = cX+stickRadius;
+			}
+			else
+			{
+				xmin = cX-handleRadius;
+				xmax = cX+handleRadius;
+			}
+		}
+		stickBackgroundRect.set(xmin, ymin, xmax, ymax);
+		canvas.drawRoundRect(stickBackgroundRect, stickRadius/2, stickRadius/2, bgPaint);
+	}
 
+	private void drawCoordinates(Canvas canvas) {
+		if (UiInputSourceChannel.CHANNEL_UNASSIGNED != tChannelV.getChannelAssignment() )
+		{
+			canvas.drawLine(cX, cY - stickRadius,cX, cY + stickRadius, widgetCoordinates);
+			for(int i=cY-stickRadius; i<cY+stickRadius; i+=stickRadius/4)
+				canvas.drawLine(cX-10, i,cX+10, i, widgetCoordinates);
+		}
+		if (UiInputSourceChannel.CHANNEL_UNASSIGNED != tChannelH.getChannelAssignment() )
+		{
+			canvas.drawLine(cX - stickRadius, cY, cX + stickRadius, cY, widgetCoordinates);
+			for(int i=cX-stickRadius; i<cX+stickRadius; i+=stickRadius/4)
+				canvas.drawLine(i, cY-10, i,cX+10, widgetCoordinates);
+		}
 	}
 
 	// Constrain touch within a box
