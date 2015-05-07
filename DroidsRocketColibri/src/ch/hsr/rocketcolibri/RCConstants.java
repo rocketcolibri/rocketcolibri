@@ -5,7 +5,8 @@ public class RCConstants {
 	public static final int RC_MODEL_RESULT_CODE = 1777;
 	public static final String FLAG_ACTIVITY_RC_MODEL = "fa_rc_model";
 	public static final String PREFIX = "rc_";
-	
+	public static final String SUFFIX_CHANNEL_V = "_v";
+	public static final String SUFFIX_CHANNEL_H = "_h";
 	private static final String _CHANNEL_ASSIGNMENT = "channel_assignment";
 	private static final String _INVERTED = "inverted";
 	private static final String _MIN_RANGE = "min_range";
@@ -17,25 +18,25 @@ public class RCConstants {
 	private static final String _EXPO = "expo";
 	private static final String _DEBUG = "debug";
 	
-	public static final String CHANNEL_ASSIGNMENT_H = PREFIX+_CHANNEL_ASSIGNMENT+"_h";
-	public static final String INVERTED_H = PREFIX+_INVERTED+"_h";
-	public static final String MIN_RANGE_H = PREFIX+_MIN_RANGE+"_h";
-	public static final String MAX_RANGE_H = PREFIX+_MAX_RANGE+"_h";
-	public static final String DEFAULT_POSITION_H = PREFIX+_DEFAULT_POSITION+"_h";
-	public static final String TRIMM_H = PREFIX+_TRIMM+"_h";
-	public static final String STICKY_H = PREFIX+_STICKY+"_h";
-	public static final String FAILSAFE_H = PREFIX+_FAILSAFE+"_h";
-	public static final String EXPO_H = PREFIX+_EXPO+"_h";
+	public static final String CHANNEL_ASSIGNMENT_H = PREFIX+_CHANNEL_ASSIGNMENT+SUFFIX_CHANNEL_H;
+	public static final String INVERTED_H = PREFIX+_INVERTED+SUFFIX_CHANNEL_H;
+	public static final String MIN_RANGE_H = PREFIX+_MIN_RANGE+SUFFIX_CHANNEL_H;
+	public static final String MAX_RANGE_H = PREFIX+_MAX_RANGE+SUFFIX_CHANNEL_H;
+	public static final String DEFAULT_POSITION_H = PREFIX+_DEFAULT_POSITION+SUFFIX_CHANNEL_H;
+	public static final String TRIMM_H = PREFIX+_TRIMM+SUFFIX_CHANNEL_H;
+	public static final String STICKY_H = PREFIX+_STICKY+SUFFIX_CHANNEL_H;
+	public static final String FAILSAFE_H = PREFIX+_FAILSAFE+SUFFIX_CHANNEL_H;
+	public static final String EXPO_H = PREFIX+_EXPO+SUFFIX_CHANNEL_H;
 	
-	public static final String CHANNEL_ASSIGNMENT_V = PREFIX+_CHANNEL_ASSIGNMENT+"_v";
-	public static final String INVERTED_V = PREFIX+_INVERTED+"_v";
-	public static final String MIN_RANGE_V = PREFIX+_MIN_RANGE+"_v";
-	public static final String MAX_RANGE_V = PREFIX+_MAX_RANGE+"_v";
-	public static final String DEFAULT_POSITION_V = PREFIX+_DEFAULT_POSITION+"_v";
-	public static final String TRIMM_V = PREFIX+_TRIMM+"_v";
-	public static final String STICKY_V = PREFIX+_STICKY+"_v";
-	public static final String FAILSAFE_V = PREFIX+_FAILSAFE+"_v";
-	public static final String EXPO_V = PREFIX+_EXPO+"_v";
+	public static final String CHANNEL_ASSIGNMENT_V = PREFIX+_CHANNEL_ASSIGNMENT+SUFFIX_CHANNEL_V;
+	public static final String INVERTED_V = PREFIX+_INVERTED+SUFFIX_CHANNEL_V;
+	public static final String MIN_RANGE_V = PREFIX+_MIN_RANGE+SUFFIX_CHANNEL_V;
+	public static final String MAX_RANGE_V = PREFIX+_MAX_RANGE+SUFFIX_CHANNEL_V;
+	public static final String DEFAULT_POSITION_V = PREFIX+_DEFAULT_POSITION+SUFFIX_CHANNEL_V;
+	public static final String TRIMM_V = PREFIX+_TRIMM+SUFFIX_CHANNEL_V;
+	public static final String STICKY_V = PREFIX+_STICKY+SUFFIX_CHANNEL_V;
+	public static final String FAILSAFE_V = PREFIX+_FAILSAFE+SUFFIX_CHANNEL_V;
+	public static final String EXPO_V = PREFIX+_EXPO+SUFFIX_CHANNEL_V;
 	
 	public static final String CHANNEL_ASSIGNMENT = PREFIX+_CHANNEL_ASSIGNMENT;
 	public static final String INVERTED = PREFIX+_INVERTED;

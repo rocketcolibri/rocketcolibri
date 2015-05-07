@@ -7,8 +7,10 @@ import java.util.Set;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -38,12 +40,46 @@ public class EditChannelActivity extends RCActivity{
 		Intent i = getIntent();
 		Set<String> keySet = i.getExtras().keySet();
 		String labelText = null;
+		boolean addSeparator = false;
 		for(String key : keySet){
-			if(key.startsWith(RCConstants.PREFIX)){
+			if(key.startsWith(RCConstants.PREFIX) && key.endsWith(RCConstants.SUFFIX_CHANNEL_V)){
 				i.getStringExtra(key);
 				try{labelText = getString(getStringResourceIdOf(key));}catch(Exception e){labelText="undefined";};
 				contentList.addView(createLabelView(labelText));
 				contentList.addView(createInputView(key, i.getStringExtra(key)));
+				addSeparator = true;
+			}
+		}
+		keySet = i.getExtras().keySet();
+		labelText = null;
+		if(addSeparator)
+		{
+			contentList.addView(createLabelView(""));
+			contentList.addView(createLabelView(""));
+			addSeparator = false;
+		}
+		for(String key : keySet){
+			if(key.startsWith(RCConstants.PREFIX) && key.endsWith(RCConstants.SUFFIX_CHANNEL_H)){
+				i.getStringExtra(key);
+				try{labelText = getString(getStringResourceIdOf(key));}catch(Exception e){labelText="undefined";};
+				contentList.addView(createLabelView(labelText));
+				contentList.addView(createInputView(key, i.getStringExtra(key)));
+				addSeparator = true;
+			}
+		}
+		if(addSeparator)
+		{
+			contentList.addView(createLabelView(""));
+			contentList.addView(createLabelView(""));
+			addSeparator = false;
+		}
+		labelText = null;
+		for(String key : keySet){
+			if(key.startsWith(RCConstants.PREFIX) && !(key.endsWith(RCConstants.SUFFIX_CHANNEL_V)||key.endsWith(RCConstants.SUFFIX_CHANNEL_H))){
+				i.getStringExtra(key);
+				try{labelText = getString(getStringResourceIdOf(key));}catch(Exception e){labelText="undefined";};
+				contentList.addView(createLabelView(labelText));
+			contentList.addView(createInputView(key, i.getStringExtra(key)));
 			}
 		}
 	}
@@ -94,6 +130,18 @@ public class EditChannelActivity extends RCActivity{
 		// set the cursor at the end..
 		int textLength = tv.getText().length();
 		tv.setSelection(textLength, textLength);
+		tv.setOnKeyListener(new OnKeyListener() {
+		    public boolean onKey(View v, int keyCode, KeyEvent event) {
+		       if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+		    	   {
+		    		   // TODO add range check
+		    		   Toast.makeText(EditChannelActivity.this, getString(R.string.edit_acivity_saved), Toast.LENGTH_SHORT).show();  
+		    	   }    	   
+		          return true;
+		     }
+		     return false;
+		   }
+		});
 		channelViewMap.put(key, tv);
 		return tv;
 	}
@@ -135,6 +183,7 @@ public class EditChannelActivity extends RCActivity{
 	}
 
 	@Override
+	
 	protected String getClassName() {
 		return EditChannelActivity.class.getSimpleName();
 	}
