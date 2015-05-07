@@ -24,6 +24,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -43,7 +44,7 @@ public class AnalogStickWidget extends View implements ICustomizableView, IUiInp
 	private Paint bgPaint;
 	private Paint handleStick;
 	private Paint handlePaint;
-
+	private RectF stickBackgroundRect;
 	private int innerPadding;
 	private int bgRadius;
 	private int stickRadius;
@@ -159,6 +160,7 @@ public class AnalogStickWidget extends View implements ICustomizableView, IUiInp
 		handlePaint.setStrokeWidth(1);
 		handlePaint.setStyle(Paint.Style.FILL_AND_STROKE);
 		
+		stickBackgroundRect = new RectF();
 		innerPadding = 0;
 
 		setMoveResolution(1.0f);
@@ -288,8 +290,9 @@ public class AnalogStickWidget extends View implements ICustomizableView, IUiInp
 	protected void onDraw(Canvas canvas) {
 		canvas.save();
 		// Draw the background
-		canvas.drawCircle(cX, cY, stickRadius, bgPaint);
-		
+		//canvas.drawCircle(cX, cY, stickRadius, bgPaint);
+		stickBackgroundRect.set(cX-stickRadius, cY-stickRadius, cX+stickRadius, cY+stickRadius);
+		canvas.drawRoundRect(stickBackgroundRect, stickRadius/2, stickRadius/2, bgPaint);
 		// Draw the handle
 		handleX = touchX + cX;
 		handleY = touchY + cY;
