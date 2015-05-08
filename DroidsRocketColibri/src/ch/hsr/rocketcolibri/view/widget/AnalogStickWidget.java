@@ -263,14 +263,14 @@ public class AnalogStickWidget extends View implements ICustomizableView, IUiInp
 
 		cX = d / 2;
 		cY = d / 2;
-
 		bgRadius = dimX / 2-innerPadding;
 		stickRadius = (int) (bgRadius-bgRadius*0.1);
 		handleRadius = (int) (d * 0.13);
 		handleStick.setStrokeWidth((float) (handleRadius * 0.75));
 		handleInnerBoundaries = handleRadius;
 		movementRadius = Math.min(cX, cY) - handleInnerBoundaries;
-		tChannelV.setWidgetRange(-movementRadius, movementRadius);
+		
+		tChannelV.setWidgetRange(movementRadius, -movementRadius);
 		tChannelH.setWidgetRange(-movementRadius, movementRadius);
 		touchX = tChannelH.setWidgetToDefault();
 		touchY = tChannelV.setWidgetToDefault();
@@ -547,8 +547,6 @@ public class AnalogStickWidget extends View implements ICustomizableView, IUiInp
 	}
 
 	private void calcUserCoordinates() {
-		// First convert to cartesian coordinates
-
 		tChannelH.setWidgetPosition((int)touchX);
 		tChannelV.setWidgetPosition((int)touchY);
 	}

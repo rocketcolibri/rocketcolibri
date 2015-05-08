@@ -104,11 +104,9 @@ public class UiInputSourceChannel extends UiInputData
 	}
 	
 	public synchronized void setWidgetPosition(int position) {
-		if(position <= tWidgetMaxPosition && position >= tWidgetMinPosition) {
-			tWidgetPosition = position;
-			updateChannelValue();
-			Log.d("Channel", "Channel" + assignment + " widgetpos:" + tWidgetMaxPosition + "("+position+")"+ " channel:" + this.currentChannelValue);
-		}
+		tWidgetPosition = position;
+		updateChannelValue();
+		Log.d("Channel", "Channel" + assignment + " widgetpos:" + tWidgetMaxPosition + "("+position+")"+ " channel:" + this.currentChannelValue);
 	}
 	
 	/**
@@ -158,16 +156,31 @@ public class UiInputSourceChannel extends UiInputData
 	 */
 	private void updateChannelValue() {
 		if(assignment != CHANNEL_UNASSIGNED) {
-			
-			// adjust to range
-			if(tWidgetPosition < tWidgetMinPosition)
-				tWidgetPosition = tWidgetMinPosition;
-			
-			if(tWidgetPosition > tWidgetMaxPosition)
-				tWidgetPosition = tWidgetMaxPosition;
-			
-			// adapt widget ranges to channel range
-			int channel = (tWidgetPosition - tWidgetMinPosition) * (maxRange-minRange) / (tWidgetMaxPosition - tWidgetMinPosition)  + minRange;
+			int channel = 0;
+			if(tWidgetMinPosition < tWidgetMaxPosition)
+			{
+				// adjust to range
+				if(tWidgetPosition < tWidgetMinPosition)
+					tWidgetPosition = tWidgetMinPosition;
+				
+				if(tWidgetPosition > tWidgetMaxPosition)
+					tWidgetPosition = tWidgetMaxPosition;
+				
+				// adapt widget ranges to channel range
+				channel = (tWidgetPosition - tWidgetMinPosition) * (maxRange-minRange) / (tWidgetMaxPosition - tWidgetMinPosition)  + minRange;
+			}
+			else
+			{
+				// adjust to range
+				if(tWidgetPosition < tWidgetMaxPosition)
+					tWidgetPosition = tWidgetMaxPosition;
+				
+				if(tWidgetPosition > tWidgetMinPosition)
+					tWidgetPosition = tWidgetMinPosition;
+				
+				// adapt widget ranges to channel range
+				channel = (tWidgetPosition - tWidgetMaxPosition) * (maxRange-minRange) / ( tWidgetMinPosition- tWidgetMaxPosition)  + minRange;
+			}
 			
 			channel = channel + trimm;
 						
