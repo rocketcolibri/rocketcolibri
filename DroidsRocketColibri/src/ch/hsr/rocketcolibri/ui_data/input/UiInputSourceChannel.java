@@ -179,7 +179,7 @@ public class UiInputSourceChannel extends UiInputData
 					tWidgetPosition = tWidgetMinPosition;
 				
 				// adapt widget ranges to channel range
-				channel = (tWidgetPosition - tWidgetMaxPosition) * (maxRange-minRange) / ( tWidgetMinPosition- tWidgetMaxPosition)  + minRange;
+				channel = -1*(tWidgetPosition + tWidgetMaxPosition) * (maxRange-minRange) / ( tWidgetMinPosition- tWidgetMaxPosition)  + minRange;
 			}
 			
 			channel = channel + trimm;
